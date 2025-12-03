@@ -1,6 +1,7 @@
 # FastAPI and server
 fastapi>=0.109.0,<0.110.0
 uvicorn[standard]>=0.27.0,<0.28.0
+fastmcp>=2.13.0,<2.14.0
 python-multipart>=0.0.6
 python-jose[cryptography]>=3.3.0
 passlib[bcrypt]>=1.7.4
