@@ -1,6 +1,7 @@
 """
 Pydantic schemas for Todos API
 """
+
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
@@ -9,6 +10,7 @@ from models.todo import TodoPriority
 
 class TodoItemBase(BaseModel):
     """Base todo item schema"""
+
     title: str = Field(..., min_length=1, max_length=255)
     description: Optional[str] = None
     due_date: Optional[datetime] = None
@@ -20,11 +22,13 @@ class TodoItemBase(BaseModel):
 
 class TodoItemCreate(TodoItemBase):
     """Schema for creating todo items"""
+
     pass
 
 
 class TodoItemUpdate(BaseModel):
     """Schema for updating todo items (all fields optional)"""
+
     title: Optional[str] = Field(None, min_length=1, max_length=255)
     description: Optional[str] = None
     due_date: Optional[datetime] = None
@@ -37,6 +41,7 @@ class TodoItemUpdate(BaseModel):
 
 class TodoItemResponse(TodoItemBase):
     """Schema for todo item responses"""
+
     id: str
     completed: bool
     completed_at: Optional[datetime] = None
@@ -49,6 +54,7 @@ class TodoItemResponse(TodoItemBase):
 
 class TodoItemList(BaseModel):
     """Paginated list of todo items"""
+
     todos: list[TodoItemResponse]
     total: int
     page: int
@@ -57,9 +63,9 @@ class TodoItemList(BaseModel):
 
 class TodoStats(BaseModel):
     """Todo statistics"""
+
     total: int
     completed: int
     pending: int
     urgent: int
     overdue: int
-

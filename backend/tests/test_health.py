@@ -1,6 +1,8 @@
 """
 Test health check endpoint
 """
+
+
 def test_health_check(client):
     """Test the health check endpoint"""
     response = client.get("/health")
@@ -17,4 +19,3 @@ def test_root_endpoint(client):
     data = response.json()
     assert "message" in data
     assert "Vienna Life Assistant" in data["message"]
-

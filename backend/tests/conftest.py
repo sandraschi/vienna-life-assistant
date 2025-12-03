@@ -1,6 +1,7 @@
 """
 Pytest configuration and fixtures
 """
+
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -17,24 +18,26 @@ def test_db():
     # Create temporary database file
     fd, db_path = tempfile.mkstemp(suffix=".db")
     os.close(fd)
-    
+
     # Create engine and tables
-    engine = create_engine(f"sqlite:///{db_path}", connect_args={"check_same_thread": False})
+    engine = create_engine(
+        f"sqlite:///{db_path}", connect_args={"check_same_thread": False}
+    )
     TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    
+
     Base.metadata.create_all(bind=engine)
-    
+
     def override_get_db():
         db = TestingSessionLocal()
         try:
             yield db
         finally:
             db.close()
-    
+
     app.dependency_overrides[get_db] = override_get_db
-    
+
     yield TestingSessionLocal()
-    
+
     # Cleanup
     app.dependency_overrides.clear()
     os.unlink(db_path)
@@ -53,7 +56,7 @@ def sample_todo_data():
         "title": "Test Todo",
         "description": "This is a test todo",
         "priority": "normal",
-        "category": "Testing"
+        "category": "Testing",
     }
 
 
@@ -61,16 +64,17 @@ def sample_todo_data():
 def sample_calendar_event_data():
     """Sample calendar event data for testing"""
     from datetime import datetime, timedelta
+
     start = datetime.now()
     end = start + timedelta(hours=1)
-    
+
     return {
         "title": "Test Event",
         "description": "Test Description",
         "start_time": start.isoformat(),
         "end_time": end.isoformat(),
         "category": "personal",
-        "color": "#1976D2"
+        "color": "#1976D2",
     }
 
 
@@ -78,8 +82,9 @@ def sample_calendar_event_data():
 def sample_shopping_offer():
     """Sample shopping offer data"""
     from datetime import date, timedelta
+
     today = date.today()
-    
+
     return {
         "store": "spar",
         "product_name": "Test Product",
@@ -88,6 +93,5 @@ def sample_shopping_offer():
         "discount_percentage": 33,
         "category": "Test Category",
         "valid_from": today,
-        "valid_until": today + timedelta(days=7)
+        "valid_until": today + timedelta(days=7),
     }
-

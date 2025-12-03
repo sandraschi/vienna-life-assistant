@@ -1,6 +1,7 @@
 """
 Pydantic schemas for Calendar API
 """
+
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
@@ -9,6 +10,7 @@ from models.calendar import EventCategory
 
 class CalendarEventBase(BaseModel):
     """Base calendar event schema"""
+
     title: str = Field(..., min_length=1, max_length=255)
     description: Optional[str] = None
     start_time: datetime
@@ -21,11 +23,13 @@ class CalendarEventBase(BaseModel):
 
 class CalendarEventCreate(CalendarEventBase):
     """Schema for creating calendar events"""
+
     pass
 
 
 class CalendarEventUpdate(BaseModel):
     """Schema for updating calendar events (all fields optional)"""
+
     title: Optional[str] = Field(None, min_length=1, max_length=255)
     description: Optional[str] = None
     start_time: Optional[datetime] = None
@@ -38,6 +42,7 @@ class CalendarEventUpdate(BaseModel):
 
 class CalendarEventResponse(CalendarEventBase):
     """Schema for calendar event responses"""
+
     id: str
     outlook_id: Optional[str] = None
     created_at: datetime
@@ -48,8 +53,8 @@ class CalendarEventResponse(CalendarEventBase):
 
 class CalendarEventList(BaseModel):
     """Paginated list of calendar events"""
+
     events: list[CalendarEventResponse]
     total: int
     page: int
     page_size: int
-
