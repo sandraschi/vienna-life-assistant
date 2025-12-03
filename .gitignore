@@ -1,0 +1,88 @@
+# Environment
+.env
+.env.local
+.env.production
+
+# Database
+backend/vienna_life.db
+backend/vienna_life.db-shm
+backend/vienna_life.db-wal
+*.db
+*.db-shm
+*.db-wal
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+backend/venv/
+pip-log.txt
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+*.log
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+frontend/node_modules/
+
+# Build outputs
+frontend/dist/
+frontend/build/
+desktop/src-tauri/target/
+backend/test_db.py
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+.DS_Store
+Thumbs.db
+
+# Tauri
+desktop/src-tauri/target/
+desktop/src-tauri/WixTools/
+
+# Mobile
+mobile/ios/build/
+mobile/ios/Pods/
+mobile/ios/*.xcworkspace
+mobile/macos/build/
+
+# Misc
+.cache/
+*.bak
+*.tmp
+receipts/
+uploads/
+.pytest_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*~
+*.swp
+*.swo

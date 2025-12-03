@@ -1,0 +1,22 @@
+# SQLite database
+vienna_life.db
+vienna_life.db-shm
+vienna_life.db-wal
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+

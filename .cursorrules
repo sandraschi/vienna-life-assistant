@@ -1,0 +1,107 @@
+# Vienna Life Assistant - Project Rules
+
+## Overview
+Personal life management app combining calendaring, todos, and shopping/expense tracking. Built for real-world Austrian life: tracking Benny's vet appointments, Spar/Billa offers, and mundane daily tasks.
+
+## Tech Stack
+- **Frontend**: React 18 + TypeScript + Material-UI + Zustand
+- **Backend**: FastAPI + PostgreSQL + Redis + Celery
+- **Desktop**: Tauri (future)
+- **Mobile**: SwiftUI scaffolds (future)
+
+## Development Standards
+
+### TypeScript/React
+- Use functional components with hooks
+- TypeScript strict mode enabled
+- Material-UI for all UI components
+- Zustand for state management (simple, lightweight)
+- React Query for server state
+
+### Python/FastAPI
+- Python 3.11+ type hints required
+- FastAPI async/await patterns
+- Pydantic for validation
+- SQLAlchemy 2.0+ style
+- Black for formatting, Ruff for linting
+
+### API Design
+- RESTful endpoints
+- Consistent error responses
+- OpenAPI documentation
+- WebSocket for real-time updates
+
+### Database
+- PostgreSQL as primary database
+- Redis for caching and Celery
+- Alembic for migrations
+- Use UUIDs for primary keys
+
+### Security
+- Environment variables for secrets
+- JWT for authentication
+- OAuth2 for Outlook integration
+- CORS properly configured
+- Input validation on all endpoints
+
+### Testing
+- pytest for backend
+- React Testing Library for frontend
+- Minimum 70% code coverage
+- E2E tests for critical flows
+
+## Windows/PowerShell Compliance
+- No `&&` or `||` operators
+- Use semicolons `;` to chain commands
+- PowerShell cmdlets (New-Item, Remove-Item, Get-ChildItem)
+
+## Docker
+- Always rebuild after code changes: `docker compose build`
+- Use `--no-cache` ONLY for dependency changes
+- Standard rebuild takes seconds, don't waste time
+
+## File Organization
+```
+backend/
+  api/          # Route handlers
+  models/       # SQLAlchemy models
+  services/     # Business logic
+  workers/      # Celery tasks
+  
+frontend/
+  features/     # Feature modules (calendar, todos, shopping, expenses)
+  components/   # Reusable UI components
+  hooks/        # Custom React hooks
+  services/     # API clients
+  store/        # Zustand stores
+```
+
+## Austrian Locale
+- Currency: Euro (€) by default
+- Date format: DD.MM.YYYY
+- Stores: Spar, Billa, Hofer, DM, Fressnapf
+- Language: German/English toggle
+- Timezone: Europe/Vienna
+
+## Design System
+- Primary: #1976D2 (Blue)
+- Secondary: #FF6F00 (Orange)
+- Success: #2E7D32 (Green)
+- Font: Inter or Roboto
+- Mobile-first responsive design
+- Dark mode support
+
+## Phase 1 MVP Focus
+- Basic calendar view (week/month)
+- Outlook integration (read/write)
+- Simple todo CRUD
+- Manual expense entry
+- Beautiful, functional UI
+
+## Avoid
+- Over-engineering in MVP
+- Premature optimization
+- Adding features before MVP complete
+- Breaking Windows compatibility
+- Hardcoding configuration
+
