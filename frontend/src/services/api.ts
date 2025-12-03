@@ -131,6 +131,33 @@ export const llmApi = {
   getRecommended: () => api.get('/api/llm/recommended'),
 };
 
+// Media API
+export const mediaApi = {
+  getStatus: () => api.get('/api/media/status'),
+  
+  // Plex
+  getPlexContinueWatching: (limit?: number) => 
+    api.get('/api/media/plex/continue-watching', { params: { limit } }),
+  getPlexRecentlyAdded: (limit?: number) => 
+    api.get('/api/media/plex/recently-added', { params: { limit } }),
+  getPlexStats: () => api.get('/api/media/plex/stats'),
+  
+  // Calibre
+  getCalibreCurrentlyReading: () => 
+    api.get('/api/media/calibre/currently-reading'),
+  getCalibreRecent: (limit?: number) => 
+    api.get('/api/media/calibre/recent', { params: { limit } }),
+  getCalibreStats: () => api.get('/api/media/calibre/stats'),
+  searchCalibre: (query: string, limit?: number) => 
+    api.get('/api/media/calibre/search', { params: { q: query, limit } }),
+  
+  // Immich
+  getImmichRecentPhotos: () => api.get('/api/media/immich/recent-photos'),
+  
+  // Tapo
+  getTapoCameras: () => api.get('/api/media/tapo/cameras'),
+};
+
 // Health check
 export const healthApi = {
   check: () => api.get('/health'),
