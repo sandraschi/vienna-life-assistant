@@ -58,8 +58,8 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS middleware
-origins = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+# CORS middleware - Updated for port 9173
+origins = os.getenv("CORS_ORIGINS", "http://localhost:9173,http://localhost:5173").split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

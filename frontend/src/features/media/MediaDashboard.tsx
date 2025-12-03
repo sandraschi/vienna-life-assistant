@@ -1,18 +1,123 @@
-import { Box, Grid, Paper, Typography, Button, Card, CardContent, Chip, Divider } from '@mui/material';
+import { Box, Grid, Paper, Typography, Button, Card, CardContent, Chip, Divider, CircularProgress, Alert, LinearProgress } from '@mui/material';
 import {
   PlayArrow as PlexIcon,
   MenuBook as CalibreIcon,
   Photo as ImmichIcon,
   Videocam as TapoIcon,
   OpenInNew as LaunchIcon,
+  CheckCircle as ConnectedIcon,
+  Error as ErrorIcon,
+  Refresh as RefreshIcon,
 } from '@mui/icons-material';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:9001';
+
+interface MediaStatus {
+  plex: { connected: boolean; mcp_available: boolean };
+  calibre: { connected: boolean; mcp_available: boolean };
+  immich: { connected: boolean; mcp_available: boolean };
+  tapo: { connected: boolean; mcp_available: boolean };
+  ollama: { connected: boolean; mcp_available: boolean };
+}
+
+interface PlexItem {
+  title: string;
+  progress?: number;
+  remaining?: string;
+}
+
+interface CalibreBook {
+  title: string;
+  author?: string;
+  progress?: number;
+}
 
 export default function MediaDashboard() {
+  const [status, setStatus] = useState<MediaStatus | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [plexItems, setPlexItems] = useState<PlexItem[]>([]);
+  const [calibreBooks, setCalibreBooks] = useState<CalibreBook[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchMediaStatus = async () => {
+    try {
+      const response = await axios.get(`${API_BASE}/api/media/status`);
+      setStatus(response.data);
+      setError(null);
+    } catch (err) {
+      console.error('Failed to fetch media status:', err);
+      setError('Failed to connect to backend');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  const fetchPlexData = async () => {
+    try {
+      const response = await axios.get(`${API_BASE}/api/media/plex/continue-watching`);
+      setPlexItems(response.data.items || []);
+    } catch (err) {
+      console.error('Failed to fetch Plex data:', err);
+    }
+  };
+
+  const fetchCalibreData = async () => {
+    try {
+      const response = await axios.get(`${API_BASE}/api/media/calibre/currently-reading`);
+      setCalibreBooks(response.data.books || []);
+    } catch (err) {
+      console.error('Failed to fetch Calibre data:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchMediaStatus();
+    fetchPlexData();
+    fetchCalibreData();
+  }, []);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchMediaStatus();
+    fetchPlexData();
+    fetchCalibreData();
+  };
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Box>
-      <Typography variant="h5" gutterBottom sx={{ mb: 3, fontWeight: 600 }}>
-        Media & Home Control
-      </Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Typography variant="h5" sx={{ fontWeight: 600 }}>
+          Media & Home Control
+        </Typography>
+        <Button
+          variant="outlined"
+          startIcon={refreshing ? <CircularProgress size={16} /> : <RefreshIcon />}
+          onClick={handleRefresh}
+          disabled={refreshing}
+          size="small"
+          sx={{ textTransform: 'none' }}
+        >
+          Refresh
+        </Button>
+      </Box>
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {error}
+        </Alert>
+      )}
 
       <Grid container spacing={3}>
         {/* Plex Widget */}
@@ -25,8 +130,17 @@ export default function MediaDashboard() {
                   <Typography variant="h6" fontWeight={600}>
                     Plex
                   </Typography>
+                  {status?.plex.connected ? (
+                    <ConnectedIcon sx={{ color: 'success.main', fontSize: 20 }} />
+                  ) : (
+                    <ErrorIcon sx={{ color: 'error.main', fontSize: 20 }} />
+                  )}
                 </Box>
-                <Chip label="50k+ items" size="small" color="warning" />
+                <Chip 
+                  label={status?.plex.mcp_available ? "MCP Active" : "50k+ items"} 
+                  size="small" 
+                  color={status?.plex.mcp_available ? "success" : "warning"} 
+                />
               </Box>
 
               <Divider sx={{ mb: 2 }} />
@@ -35,12 +149,38 @@ export default function MediaDashboard() {
                 Continue Watching
               </Typography>
               <Box sx={{ mb: 2 }}>
-                <Typography variant="body2" color="text.secondary">
-                  📺 Connect to Plex to see your continue watching queue
-                </Typography>
-                <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
-                  50,000 anime episodes + 5,000 Western movies ready
-                </Typography>
+                {plexItems.length > 0 ? (
+                  plexItems.slice(0, 3).map((item, idx) => (
+                    <Box key={idx} sx={{ mb: 1 }}>
+                      <Typography variant="body2" fontWeight={500}>
+                        📺 {item.title}
+                      </Typography>
+                      {item.progress && (
+                        <LinearProgress 
+                          variant="determinate" 
+                          value={item.progress} 
+                          sx={{ mt: 0.5, height: 4, borderRadius: 2 }}
+                        />
+                      )}
+                      {item.remaining && (
+                        <Typography variant="caption" color="text.secondary">
+                          {item.remaining} remaining
+                        </Typography>
+                      )}
+                    </Box>
+                  ))
+                ) : (
+                  <>
+                    <Typography variant="body2" color="text.secondary">
+                      {status?.plex.connected 
+                        ? "📺 No items in continue watching queue"
+                        : "📺 Connect to Plex to see your continue watching queue"}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
+                      50,000 anime episodes + 5,000 Western movies ready
+                    </Typography>
+                  </>
+                )}
               </Box>
 
               <Button
@@ -72,8 +212,17 @@ export default function MediaDashboard() {
                   <Typography variant="h6" fontWeight={600}>
                     Calibre
                   </Typography>
+                  {status?.calibre.connected ? (
+                    <ConnectedIcon sx={{ color: 'success.main', fontSize: 20 }} />
+                  ) : (
+                    <ErrorIcon sx={{ color: 'error.main', fontSize: 20 }} />
+                  )}
                 </Box>
-                <Chip label="15k ebooks" size="small" color="success" />
+                <Chip 
+                  label={status?.calibre.mcp_available ? "MCP Active" : "15k ebooks"} 
+                  size="small" 
+                  color={status?.calibre.mcp_available ? "success" : "info"} 
+                />
               </Box>
 
               <Divider sx={{ mb: 2 }} />
@@ -82,12 +231,38 @@ export default function MediaDashboard() {
                 Currently Reading
               </Typography>
               <Box sx={{ mb: 2 }}>
-                <Typography variant="body2" color="text.secondary">
-                  📚 Connect to Calibre to see your reading progress
-                </Typography>
-                <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
-                  15,000 ebooks in your library
-                </Typography>
+                {calibreBooks.length > 0 ? (
+                  calibreBooks.slice(0, 3).map((book, idx) => (
+                    <Box key={idx} sx={{ mb: 1 }}>
+                      <Typography variant="body2" fontWeight={500}>
+                        📖 {book.title}
+                      </Typography>
+                      {book.author && (
+                        <Typography variant="caption" color="text.secondary">
+                          by {book.author}
+                        </Typography>
+                      )}
+                      {book.progress && (
+                        <LinearProgress 
+                          variant="determinate" 
+                          value={book.progress} 
+                          sx={{ mt: 0.5, height: 4, borderRadius: 2 }}
+                        />
+                      )}
+                    </Box>
+                  ))
+                ) : (
+                  <>
+                    <Typography variant="body2" color="text.secondary">
+                      {status?.calibre.connected
+                        ? "📚 No books currently being read"
+                        : "📚 Connect to Calibre to see your reading progress"}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
+                      15,000 ebooks in your library
+                    </Typography>
+                  </>
+                )}
               </Box>
 
               <Button
@@ -119,8 +294,17 @@ export default function MediaDashboard() {
                   <Typography variant="h6" fontWeight={600}>
                     Immich
                   </Typography>
+                  {status?.immich.connected ? (
+                    <ConnectedIcon sx={{ color: 'success.main', fontSize: 20 }} />
+                  ) : (
+                    <ErrorIcon sx={{ color: 'error.main', fontSize: 20 }} />
+                  )}
                 </Box>
-                <Chip label="Photos" size="small" color="info" />
+                <Chip 
+                  label={status?.immich.mcp_available ? "MCP Active" : "Photos"} 
+                  size="small" 
+                  color={status?.immich.mcp_available ? "success" : "info"} 
+                />
               </Box>
 
               <Divider sx={{ mb: 2 }} />
@@ -166,8 +350,17 @@ export default function MediaDashboard() {
                   <Typography variant="h6" fontWeight={600}>
                     Tapo Home
                   </Typography>
+                  {status?.tapo.connected ? (
+                    <ConnectedIcon sx={{ color: 'success.main', fontSize: 20 }} />
+                  ) : (
+                    <ErrorIcon sx={{ color: 'error.main', fontSize: 20 }} />
+                  )}
                 </Box>
-                <Chip label="Cameras" size="small" color="error" />
+                <Chip 
+                  label={status?.tapo.mcp_available ? "MCP Active" : "Cameras"} 
+                  size="small" 
+                  color={status?.tapo.mcp_available ? "success" : "error"} 
+                />
               </Box>
 
               <Divider sx={{ mb: 2 }} />
@@ -222,16 +415,28 @@ export default function MediaDashboard() {
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="caption">Plex: Not configured</Typography>
+            <Typography variant="caption">
+              Plex: {status?.plex.connected ? '✅ Connected' : '❌ Not connected'}
+              {status?.plex.mcp_available && ' (MCP)'}
+            </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="caption">Calibre: Not configured</Typography>
+            <Typography variant="caption">
+              Calibre: {status?.calibre.connected ? '✅ Connected' : '❌ Not connected'}
+              {status?.calibre.mcp_available && ' (MCP)'}
+            </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="caption">Immich: Not configured</Typography>
+            <Typography variant="caption">
+              Immich: {status?.immich.connected ? '✅ Connected' : '❌ Not connected'}
+              {status?.immich.mcp_available && ' (MCP)'}
+            </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="caption">Tapo: Not configured</Typography>
+            <Typography variant="caption">
+              Tapo: {status?.tapo.connected ? '✅ Connected' : '❌ Not connected'}
+              {status?.tapo.mcp_available && ' (MCP)'}
+            </Typography>
           </Grid>
         </Grid>
       </Paper>

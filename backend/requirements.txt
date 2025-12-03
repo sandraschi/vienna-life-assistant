@@ -35,6 +35,9 @@ pydantic-settings>=2.1.0
 python-dotenv>=1.0.0
 pytz>=2024.1
 
+# MCP Integration
+fastmcp>=2.13.0,<2.14.0
+
 # Optional (OCR)
 # pytesseract>=0.3.10
 # Pillow>=10.2.0

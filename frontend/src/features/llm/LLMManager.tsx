@@ -64,17 +64,26 @@ export default function LLMManager() {
   const loadData = async () => {
     try {
       setLoading(true);
+      setError(null);
+      
       const [statusRes, modelsRes, recommendedRes] = await Promise.all([
         llmApi.getStatus(),
         llmApi.listModels(),
         llmApi.getRecommended(),
       ]);
+      
       setStatus(statusRes.data);
       setModels(modelsRes.data.models || []);
       setRecommended(recommendedRes.data.models || []);
-      setError(null);
+      
+      console.log('LLM data loaded successfully:', {
+        connected: statusRes.data.connected,
+        modelCount: modelsRes.data.models?.length || 0
+      });
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to load LLM data');
+      console.error('Failed to load LLM data:', err);
+      const errorMsg = err.response?.data?.detail || err.message || 'Failed to load LLM data';
+      setError(`Error: ${errorMsg}. Check that backend is running on port 9001.`);
     } finally {
       setLoading(false);
     }

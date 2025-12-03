@@ -44,17 +44,34 @@ services:
       ENVIRONMENT: development
       MICROSOFT_CLIENT_ID: ${MICROSOFT_CLIENT_ID}
       MICROSOFT_CLIENT_SECRET: ${MICROSOFT_CLIENT_SECRET}
+      # MCP Server Paths (STDIO Transport - Correct!)
+      PLEX_MCP_PATH: ${PLEX_MCP_PATH:-/repos/plex-mcp/src/plex_mcp/server.py}
+      PLEX_URL: ${PLEX_URL:-http://goliath:32400}
+      PLEX_TOKEN: ${PLEX_TOKEN}
+      CALIBRE_MCP_PATH: ${CALIBRE_MCP_PATH:-/repos/calibre-mcp/src/calibre_mcp/server.py}
+      CALIBRE_URL: ${CALIBRE_URL:-http://goliath:8083}
+      IMMICH_MCP_PATH: ${IMMICH_MCP_PATH:-/repos/immich-mcp/src/immich_mcp/server.py}
+      IMMICH_URL: ${IMMICH_URL:-http://goliath:2283}
+      IMMICH_API_KEY: ${IMMICH_API_KEY}
+      TAPO_MCP_PATH: ${TAPO_MCP_PATH:-/repos/tapo-camera-mcp/src/tapo_camera_mcp/server.py}
+      OLLAMA_MCP_PATH: ${OLLAMA_MCP_PATH:-/repos/local-llm-mcp/src/local_llm_mcp/server.py}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2:3b}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:9173}
     ports:
       - "9001:9001"
     volumes:
       - ./backend:/app
       - /app/__pycache__
+      # Mount repos for MCP server access (stdio transport)
+      - D:/Dev/repos:/repos:ro
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
     command: uvicorn api.main:app --host 0.0.0.0 --port 9001 --reload
+    extra_hosts:
+      - "goliath:host-gateway"
 
   celery-worker:
     build:
