@@ -1,7 +1,6 @@
 """
 Test Ollama service
 """
-
 import pytest
 from services.ollama_service import OllamaService
 
@@ -30,3 +29,4 @@ async def test_list_models():
     models = await service.list_models()
     assert isinstance(models, list)
     # May be empty if Ollama not running or no models installed
+

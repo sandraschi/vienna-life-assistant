@@ -4,10 +4,12 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import PsychologyIcon from '@mui/icons-material/Psychology'
+import HomeIcon from '@mui/icons-material/Home'
 import { useState } from 'react'
 import TodoList from './features/todos/TodoList'
 import ShoppingOffers from './features/shopping/ShoppingOffers'
 import LLMManager from './features/llm/LLMManager'
+import MediaDashboard from './features/media/MediaDashboard'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -40,27 +42,32 @@ function App() {
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#f5f7fa' }}>
-      {/* Hero Header */}
+      {/* Hero Header - Mobile Optimized */}
       <Paper 
         elevation={0}
         sx={{ 
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           color: 'white',
           borderRadius: 0,
-          py: 6,
-          px: 3
+          py: { xs: 3, sm: 4, md: 6 },
+          px: { xs: 2, sm: 3 }
         }}
       >
         <Container maxWidth="lg">
           <Box sx={{ textAlign: 'center' }}>
-            <CalendarTodayIcon sx={{ fontSize: 80, mb: 2, opacity: 0.9 }} />
+            <CalendarTodayIcon sx={{ 
+              fontSize: { xs: 50, sm: 60, md: 80 }, 
+              mb: { xs: 1, sm: 2 }, 
+              opacity: 0.9 
+            }} />
             <Typography 
               variant="h2" 
               component="h1" 
               gutterBottom
               sx={{ 
                 fontWeight: 700,
-                textShadow: '2px 2px 4px rgba(0,0,0,0.2)'
+                textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+                fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3rem' }
               }}
             >
               Vienna Life Assistant
@@ -90,30 +97,33 @@ function App() {
         </Container>
       </Paper>
 
-      {/* Main Content */}
-      <Container maxWidth="lg" sx={{ mt: -4, mb: 4 }}>
+      {/* Main Content - Mobile Optimized */}
+      <Container maxWidth="lg" sx={{ mt: { xs: -2, sm: -3, md: -4 }, mb: { xs: 2, sm: 3, md: 4 }, px: { xs: 1, sm: 2, md: 3 } }}>
         <Paper 
           elevation={8}
           sx={{ 
-            borderRadius: 3,
+            borderRadius: { xs: 2, sm: 3 },
             overflow: 'hidden',
             boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
           }}
         >
-          {/* Tabs */}
+          {/* Tabs - Mobile Optimized */}
           <Tabs 
             value={activeTab} 
             onChange={handleTabChange}
-            variant="fullWidth"
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
             sx={{ 
               borderBottom: 1, 
               borderColor: 'divider',
               bgcolor: 'background.paper',
               '& .MuiTab-root': {
-                fontSize: '1rem',
+                fontSize: { xs: '0.875rem', sm: '1rem' },
                 fontWeight: 500,
-                py: 2.5,
-                minHeight: 64
+                py: { xs: 1.5, sm: 2, md: 2.5 },
+                minHeight: { xs: 48, sm: 56, md: 64 },
+                minWidth: { xs: 80, sm: 120 }
               },
               '& .Mui-selected': {
                 color: 'primary.main',
@@ -149,6 +159,12 @@ function App() {
               icon={<PsychologyIcon />} 
               iconPosition="start"
               label="LLM" 
+              sx={{ textTransform: 'none' }}
+            />
+            <Tab 
+              icon={<HomeIcon />} 
+              iconPosition="start"
+              label="Media & Home" 
               sx={{ textTransform: 'none' }}
             />
           </Tabs>
@@ -236,6 +252,10 @@ function App() {
             <TabPanel value={activeTab} index={4}>
               <LLMManager />
             </TabPanel>
+
+            <TabPanel value={activeTab} index={5}>
+              <MediaDashboard />
+            </TabPanel>
           </Box>
         </Paper>
 
@@ -257,8 +277,8 @@ function App() {
               opacity: 0.7
             }}
           >
-            🚀 Phase 2 in progress | ✅ Todos • 🛒 Shopping Offers • 🤖 Local LLM | 
-            Status: <strong>Expanding features!</strong>
+            🚀 Phase 2+ | ✅ Todos • 🛒 Shopping • 🤖 LLM • 🏠 Media Hub | 
+            Status: <strong>Your Personal Command Center!</strong>
           </Typography>
         </Paper>
       </Container>
