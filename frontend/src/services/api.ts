@@ -61,6 +61,25 @@ export const calendarApi = {
   getToday: () => api.get('/api/calendar/today/'),
 };
 
+// Wrapper for consistent naming
+export const calendarAPI = {
+  getEvents: async () => {
+    const response = await api.get('/api/calendar/?page_size=100');
+    return response.data;
+  },
+  createEvent: async (event: any) => {
+    const response = await api.post('/api/calendar/', event);
+    return response.data;
+  },
+  updateEvent: async (id: string, event: any) => {
+    const response = await api.patch(`/api/calendar/${id}`, event);
+    return response.data;
+  },
+  deleteEvent: async (id: string) => {
+    await api.delete(`/api/calendar/${id}`);
+  },
+};
+
 // Todos API
 export const todosApi = {
   list: (params?: {

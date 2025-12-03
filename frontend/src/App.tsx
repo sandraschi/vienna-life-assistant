@@ -10,6 +10,7 @@ import TodoList from './features/todos/TodoList'
 import ShoppingOffers from './features/shopping/ShoppingOffers'
 import LLMManager from './features/llm/LLMManager'
 import MediaDashboard from './features/media/MediaDashboard'
+import CalendarView from './features/calendar/CalendarView'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -172,38 +173,7 @@ function App() {
           {/* Tab Content */}
           <Box sx={{ p: { xs: 2, sm: 3, md: 4 }, minHeight: '60vh' }}>
             <TabPanel value={activeTab} index={0}>
-              <Box 
-                sx={{ 
-                  textAlign: 'center', 
-                  py: 8,
-                  px: 2
-                }}
-              >
-                <CalendarTodayIcon 
-                  sx={{ 
-                    fontSize: 80, 
-                    color: 'primary.main',
-                    opacity: 0.3,
-                    mb: 3
-                  }} 
-                />
-                <Typography 
-                  variant="h5" 
-                  color="text.primary" 
-                  gutterBottom
-                  sx={{ fontWeight: 600, mb: 1 }}
-                >
-                  📅 Calendar View Coming Soon
-                </Typography>
-                <Typography 
-                  variant="body1" 
-                  color="text.secondary"
-                  sx={{ maxWidth: 500, mx: 'auto', lineHeight: 1.7 }}
-                >
-                  Beautiful week and month views with Outlook integration. 
-                  Sync your appointments, track Benny's vet visits, and never miss an event.
-                </Typography>
-              </Box>
+              <CalendarView />
             </TabPanel>
 
             <TabPanel value={activeTab} index={1}>
