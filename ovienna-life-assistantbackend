@@ -1,0 +1,7 @@
+[33mc5735c3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m Add mobile and ecosystem integration documentation
+[33m2e5755f[m Implement media & home ecosystem integration
+[33m6dbc9e7[m Add mobile responsiveness and ecosystem integration framework
+[33m8975201[m Fix to_dict() methods for SQLite string enums
+[33m35cd742[m Fix Ruff linting issues
+[33md0cf388[m Add comprehensive test suite and SQLite documentation
+[33m28195de[m Initial commit: Vienna Life Assistant
