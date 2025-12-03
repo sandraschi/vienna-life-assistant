@@ -13,6 +13,7 @@ from api.todos.routes import router as todos_router
 from api.shopping.routes import router as shopping_router
 from api.llm.routes import router as llm_router
 from api.media.routes import router as media_router
+from api.expenses.routes import router as expenses_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -93,4 +94,5 @@ app.include_router(todos_router, prefix="/api/todos", tags=["todos"])
 app.include_router(shopping_router, prefix="/api/shopping", tags=["shopping"])
 app.include_router(llm_router, prefix="/api/llm", tags=["llm"])
 app.include_router(media_router, prefix="/api/media", tags=["media"])
+app.include_router(expenses_router)
 

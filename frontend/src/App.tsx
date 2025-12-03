@@ -11,6 +11,7 @@ import ShoppingOffers from './features/shopping/ShoppingOffers'
 import LLMManager from './features/llm/LLMManager'
 import MediaDashboard from './features/media/MediaDashboard'
 import CalendarView from './features/calendar/CalendarView'
+import ExpenseTracker from './features/expenses/ExpenseTracker'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -185,38 +186,7 @@ function App() {
             </TabPanel>
 
             <TabPanel value={activeTab} index={3}>
-              <Box 
-                sx={{ 
-                  textAlign: 'center', 
-                  py: 8,
-                  px: 2
-                }}
-              >
-                <AttachMoneyIcon 
-                  sx={{ 
-                    fontSize: 80, 
-                    color: 'success.main',
-                    opacity: 0.3,
-                    mb: 3
-                  }} 
-                />
-                <Typography 
-                  variant="h5" 
-                  color="text.primary" 
-                  gutterBottom
-                  sx={{ fontWeight: 600, mb: 1 }}
-                >
-                  💰 Expense Tracker Coming Soon
-                </Typography>
-                <Typography 
-                  variant="body1" 
-                  color="text.secondary"
-                  sx={{ maxWidth: 500, mx: 'auto', lineHeight: 1.7 }}
-                >
-                  Track your spending, categorize expenses, and visualize your budget. 
-                  Perfect for keeping track of groceries, Benny's vet bills, and more.
-                </Typography>
-              </Box>
+              <ExpenseTracker />
             </TabPanel>
 
             <TabPanel value={activeTab} index={4}>

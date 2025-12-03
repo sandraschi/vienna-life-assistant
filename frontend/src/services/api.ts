@@ -177,6 +177,36 @@ export const mediaApi = {
   getTapoCameras: () => api.get('/api/media/tapo/cameras'),
 };
 
+// Expenses API
+export const expensesAPI = {
+  getExpenses: async (params?: {
+    category?: string;
+    store?: string;
+    start_date?: string;
+    end_date?: string;
+    page?: number;
+    page_size?: number;
+  }) => {
+    const response = await api.get('/api/expenses/', { params });
+    return response.data;
+  },
+  getStats: async () => {
+    const response = await api.get('/api/expenses/stats');
+    return response.data;
+  },
+  createExpense: async (expense: any) => {
+    const response = await api.post('/api/expenses/', expense);
+    return response.data;
+  },
+  updateExpense: async (id: string, expense: any) => {
+    const response = await api.patch(`/api/expenses/${id}`, expense);
+    return response.data;
+  },
+  deleteExpense: async (id: string) => {
+    await api.delete(`/api/expenses/${id}`);
+  },
+};
+
 // Health check
 export const healthApi = {
   check: () => api.get('/health'),
