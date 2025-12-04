@@ -14,6 +14,7 @@ from api.shopping.routes import router as shopping_router
 from api.llm.routes import router as llm_router
 from api.media.routes import router as media_router
 from api.expenses.routes import router as expenses_router
+from api.chat.routes import router as chat_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -24,6 +25,8 @@ async def lifespan(app: FastAPI):
     # Initialize SQLite database
     print("💾 Initializing SQLite database...")
     try:
+        # Import models to register them with SQLAlchemy
+        from models import todo, calendar, shopping, expense, conversation
         from models.base import init_db
         init_db()
         print("✅ Database initialized")
@@ -95,4 +98,5 @@ app.include_router(shopping_router, prefix="/api/shopping", tags=["shopping"])
 app.include_router(llm_router, prefix="/api/llm", tags=["llm"])
 app.include_router(media_router, prefix="/api/media", tags=["media"])
 app.include_router(expenses_router)
+app.include_router(chat_router, prefix="/api", tags=["chat"])
 

@@ -200,8 +200,42 @@ class OllamaService:
                 "message": "Default model already available",
             }
 
-    async def generate(
+    async def generate_stream(
         self, prompt: str, model: Optional[str] = None, system: Optional[str] = None
+    ):
+        """
+        Generate text completion with streaming
+
+        Args:
+            prompt: The prompt to generate from
+            model: Model to use (defaults to default_model)
+            system: System prompt
+
+        Yields:
+            Chunks of generation result
+        """
+        try:
+            model_name = model or self.default_model
+
+            payload = {"model": model_name, "prompt": prompt, "stream": True}
+
+            if system:
+                payload["system"] = system
+
+            async with httpx.AsyncClient(timeout=120.0) as client:
+                async with client.stream("POST", f"{self.api_url}/generate", json=payload) as response:
+                    response.raise_for_status()
+                    async for line in response.aiter_lines():
+                        if line.strip():
+                            import json
+                            yield json.loads(line)
+
+        except Exception as e:
+            logger.error(f"Stream generation failed: {e}")
+            yield {"success": False, "error": str(e)}
+
+    async def generate(
+        self, prompt: str, model: Optional[str] = None, system: Optional[str] = None, stream: bool = False
     ) -> Dict[str, Any]:
         """
         Generate text completion
@@ -210,6 +244,7 @@ class OllamaService:
             prompt: The prompt to generate from
             model: Model to use (defaults to default_model)
             system: System prompt
+            stream: Whether to stream the response
 
         Returns:
             Generation result
@@ -217,7 +252,7 @@ class OllamaService:
         try:
             model_name = model or self.default_model
 
-            payload = {"model": model_name, "prompt": prompt, "stream": False}
+            payload = {"model": model_name, "prompt": prompt, "stream": stream}
 
             if system:
                 payload["system"] = system

@@ -4,6 +4,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import PsychologyIcon from '@mui/icons-material/Psychology'
+import SmartToyIcon from '@mui/icons-material/SmartToy'
 import HomeIcon from '@mui/icons-material/Home'
 import { useState } from 'react'
 import TodoList from './features/todos/TodoList'
@@ -12,6 +13,7 @@ import LLMManager from './features/llm/LLMManager'
 import MediaDashboard from './features/media/MediaDashboard'
 import CalendarView from './features/calendar/CalendarView'
 import ExpenseTracker from './features/expenses/ExpenseTracker'
+import { ChatBot } from './features/chat/ChatBot'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -93,7 +95,7 @@ function App() {
                 fontSize: '1.1rem'
               }}
             >
-              📅 Calendar • ✅ Todos • 🛒 Shopping • 💰 Expenses
+              📅 Calendar • ✅ Todos • 🛒 Shopping • 💰 Expenses • 🤖 AI Chat
             </Typography>
           </Box>
         </Container>
@@ -164,6 +166,12 @@ function App() {
               sx={{ textTransform: 'none' }}
             />
             <Tab 
+              icon={<SmartToyIcon />} 
+              iconPosition="start"
+              label="AI Chat" 
+              sx={{ textTransform: 'none' }}
+            />
+            <Tab 
               icon={<HomeIcon />} 
               iconPosition="start"
               label="Media & Home" 
@@ -194,6 +202,10 @@ function App() {
             </TabPanel>
 
             <TabPanel value={activeTab} index={5}>
+              <ChatBot />
+            </TabPanel>
+
+            <TabPanel value={activeTab} index={6}>
               <MediaDashboard />
             </TabPanel>
           </Box>
@@ -217,8 +229,8 @@ function App() {
               opacity: 0.7
             }}
           >
-            🚀 Phase 2+ | ✅ Todos • 🛒 Shopping • 🤖 LLM • 🏠 Media Hub | 
-            Status: <strong>Your Personal Command Center!</strong>
+            🚀 Phase 3 | ✅ Todos • 🛒 Shopping • 🤖 AI Chat • 🧠 LLM • 🏠 Media Hub | 
+            Status: <strong>SOTA AI Assistant Ready!</strong>
           </Typography>
         </Paper>
       </Container>
