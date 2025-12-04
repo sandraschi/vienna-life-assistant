@@ -5,6 +5,7 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: '0.0.0.0',  // Listen on all interfaces for Tailscale access
     port: 9173,
     proxy: {
       '/api': {

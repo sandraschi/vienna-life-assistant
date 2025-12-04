@@ -193,8 +193,12 @@ export const ChatBot: React.FC = () => {
       }));
       messageHistory.push({ role: 'user', content: input });
 
-      // Stream response
-      const response = await fetch('http://localhost:9001/api/chat/stream', {
+      // Stream response - dynamic URL for Tailscale support
+      const apiBaseUrl = window.location.hostname === 'goliath' 
+        ? `${window.location.protocol}//goliath:9001`
+        : 'http://localhost:9001';
+      
+      const response = await fetch(`${apiBaseUrl}/api/chat/stream`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -4,7 +4,21 @@
  */
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:9001';
+// Dynamic API URL based on hostname (supports Tailscale access)
+const getApiBaseUrl = () => {
+  const hostname = window.location.hostname;
+  const protocol = window.location.protocol;
+  
+  // If accessed via goliath (Tailscale), use goliath for backend too
+  if (hostname === 'goliath') {
+    return `${protocol}//goliath:9001`;
+  }
+  
+  // Default to localhost
+  return import.meta.env.VITE_API_URL || 'http://localhost:9001';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
