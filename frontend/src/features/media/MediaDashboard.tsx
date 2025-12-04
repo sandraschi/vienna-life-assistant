@@ -44,12 +44,20 @@ export default function MediaDashboard() {
 
   const fetchMediaStatus = async () => {
     try {
-      const response = await axios.get(`${API_BASE}/api/media/status`);
+      const response = await axios.get(`${API_BASE}/api/media/status`, { timeout: 10000 });
       setStatus(response.data);
       setError(null);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to fetch media status:', err);
-      setError('Failed to connect to backend');
+      setError(err.message || 'Failed to connect to backend');
+      // Set mock status so page still shows
+      setStatus({
+        plex: { connected: false, mcp_available: false },
+        calibre: { connected: false, mcp_available: false },
+        immich: { connected: false, mcp_available: false },
+        tapo: { connected: false, mcp_available: false },
+        ollama: { connected: false, mcp_available: false },
+      });
     } finally {
       setLoading(false);
       setRefreshing(false);

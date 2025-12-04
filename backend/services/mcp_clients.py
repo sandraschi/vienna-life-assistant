@@ -418,6 +418,7 @@ class MCPClientManager:
     
     async def check_health(self) -> Dict[str, bool]:
         """Check health of all MCP services (via stdio connection test)"""
+        import asyncio
         health = {}
         
         for name, client in [
@@ -429,8 +430,11 @@ class MCPClientManager:
             ("advanced_memory", self.advanced_memory)
         ]:
             try:
-                # Try to connect via stdio
-                health[name] = await client.connect()
+                # Try to connect via stdio with 2-second timeout per client
+                health[name] = await asyncio.wait_for(client.connect(), timeout=2.0)
+            except asyncio.TimeoutError:
+                logger.warning(f"Health check timeout for {name}")
+                health[name] = False
             except Exception as e:
                 logger.error(f"Health check failed for {name}: {e}")
                 health[name] = False
