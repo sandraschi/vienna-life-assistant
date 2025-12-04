@@ -109,6 +109,43 @@ TOOLS = [
         "parameters": {
             "days": "Days to look back (default: 7)"
         }
+    },
+    {
+        "name": "get_weather",
+        "description": "Get current weather in Vienna",
+        "parameters": {}
+    },
+    {
+        "name": "control_lights",
+        "description": "Control Philips Hue smart lights",
+        "parameters": {
+            "action": "Action to perform (on, off, dim)",
+            "room": "Room or light name (optional)"
+        }
+    },
+    {
+        "name": "list_lights",
+        "description": "List all smart lights and their status",
+        "parameters": {}
+    },
+    {
+        "name": "camera_status",
+        "description": "Get status of home security cameras",
+        "parameters": {}
+    },
+    {
+        "name": "ring_events",
+        "description": "Get recent Ring doorbell events",
+        "parameters": {
+            "limit": "Number of events (default: 5)"
+        }
+    },
+    {
+        "name": "wiener_linien",
+        "description": "Get Vienna public transport information (U-Bahn, Tram, Bus)",
+        "parameters": {
+            "query": "Station name or line number (e.g., 'U6', 'Floridsdorf', 'Alser Straße')"
+        }
     }
 ]
 
@@ -237,6 +274,94 @@ Only output the enhanced prompt, nothing else."""
                 else:
                     return f"Failed to get recent notes: {result.get('error', 'Unknown error')}"
             
+            # Tapo MCP - Weather
+            elif tool_name == "get_weather":
+                result = await mcp_clients.tapo.call_tool("mcp_tapo-mcp_weather_management", action="current")
+                if result.get("success"):
+                    weather = result.get("result", {}).get("data", {})
+                    temp = weather.get("temperature", "N/A")
+                    conditions = weather.get("conditions", "N/A")
+                    return f"Vienna Weather: {temp}°C, {conditions}"
+                else:
+                    return f"Weather unavailable: {result.get('error', 'Unknown error')}"
+            
+            # Tapo MCP - Smart Lights
+            elif tool_name == "control_lights":
+                action = parameters.get("action", "on")
+                room = parameters.get("room", None)
+                
+                # Determine what to do
+                if action.lower() in ["on", "off"]:
+                    on_state = action.lower() == "on"
+                    result = await mcp_clients.tapo.call_tool(
+                        "mcp_tapo-mcp_lighting_management",
+                        action="control_group" if room else "control_light",
+                        group_id="1" if not room else room,
+                        on=on_state
+                    )
+                    if result.get("success"):
+                        return f"Lights turned {action}"
+                    else:
+                        return f"Failed to control lights: {result.get('error', 'Unknown error')}"
+                else:
+                    return "Light control: specify 'on' or 'off'"
+            
+            elif tool_name == "list_lights":
+                result = await mcp_clients.tapo.call_tool("mcp_tapo-mcp_lighting_management", action="list_lights")
+                if result.get("success"):
+                    lights = result.get("result", {}).get("data", [])
+                    light_list = "\n".join([f"- {l.get('name', 'Unknown')}: {'ON' if l.get('on') else 'OFF'} ({l.get('brightness', 0)}%)" for l in lights[:10]])
+                    return f"Smart Lights:\n{light_list}"
+                else:
+                    return f"Failed to list lights: {result.get('error', 'Unknown error')}"
+            
+            # Tapo MCP - Cameras
+            elif tool_name == "camera_status":
+                result = await mcp_clients.tapo.call_tool("mcp_tapo-mcp_camera_management", action="list")
+                if result.get("success"):
+                    cameras = result.get("result", {}).get("data", {}).get("cameras", [])
+                    cam_list = "\n".join([f"- {c.get('name', 'Unknown')}: {c.get('status', 'Unknown')}" for c in cameras[:5]])
+                    return f"Security Cameras:\n{cam_list}"
+                else:
+                    return f"Cameras unavailable: {result.get('error', 'Unknown error')}"
+            
+            # Tapo MCP - Ring Doorbell
+            elif tool_name == "ring_events":
+                limit = parameters.get("limit", 5)
+                result = await mcp_clients.tapo.call_tool(
+                    "mcp_tapo-mcp_ring_management",
+                    action="events",
+                    limit=limit
+                )
+                if result.get("success"):
+                    events = result.get("result", {}).get("data", [])
+                    event_list = "\n".join([f"- {e.get('created_at', 'Unknown')}: {e.get('kind', 'Event')}" for e in events[:limit]])
+                    return f"Ring Doorbell Events:\n{event_list}"
+                else:
+                    return f"Ring events unavailable: {result.get('error', 'Unknown error')}"
+            
+            # Wiener Linien (if available)
+            elif tool_name == "wiener_linien":
+                query = parameters.get("query", "")
+                # Try to call Wiener Linien service
+                try:
+                    # Check if MyWienerLinien app is running on port 3079
+                    import httpx
+                    async with httpx.AsyncClient(timeout=5.0) as client:
+                        # Search for station/line
+                        response = await client.get(f"http://localhost:3079/api/stations/search?q={query}")
+                        if response.status_code == 200:
+                            data = response.json()
+                            stations = data.get("stations", [])[:3]
+                            if stations:
+                                return f"Wiener Linien results for '{query}':\n" + "\n".join([f"- {s['name']} ({s['type']})" for s in stations])
+                            else:
+                                return f"No stations found for: {query}"
+                        else:
+                            return "Wiener Linien service not available"
+                except Exception:
+                    return "Wiener Linien service not running (start MyWienerLinien app on port 3079)"
+            
             else:
                 return f"Unknown tool: {tool_name}"
                 
@@ -355,6 +480,52 @@ Only output the enhanced prompt, nothing else."""
             tool_calls.append({
                 "name": "recent_notes",
                 "parameters": {"days": 7}
+            })
+        
+        # Weather patterns
+        if re.search(r"weather|temperature|raining|forecast|umbrella|how's the weather", user_message.lower()):
+            tool_calls.append({
+                "name": "get_weather",
+                "parameters": {}
+            })
+        
+        # Smart lights patterns
+        if re.search(r"turn on.*light|turn off.*light|lights on|lights off|dim.*light|brighten.*light", user_message.lower()):
+            action = "on" if "on" in user_message.lower() else "off"
+            tool_calls.append({
+                "name": "control_lights",
+                "parameters": {"action": action}
+            })
+        
+        if re.search(r"list lights|show lights|what lights|which lights", user_message.lower()):
+            tool_calls.append({
+                "name": "list_lights",
+                "parameters": {}
+            })
+        
+        # Camera patterns
+        if re.search(r"camera status|security camera|show cameras|camera list", user_message.lower()):
+            tool_calls.append({
+                "name": "camera_status",
+                "parameters": {}
+            })
+        
+        # Ring doorbell patterns
+        if re.search(r"doorbell|ring events|who was at door|door camera|front door", user_message.lower()):
+            tool_calls.append({
+                "name": "ring_events",
+                "parameters": {"limit": 5}
+            })
+        
+        # Wiener Linien patterns
+        if re.search(r"u-bahn|u6|u4|tram|straßenbahn|bus|öffi|wiener linien|next train|departure", user_message.lower()):
+            # Extract line/station
+            query = user_message
+            for pattern in ["when's the next", "when is the next", "how do i get to"]:
+                query = query.lower().replace(pattern, "")
+            tool_calls.append({
+                "name": "wiener_linien",
+                "parameters": {"query": query.strip()[:50]}
             })
         
         return tool_calls
