@@ -7,6 +7,7 @@ from datetime import datetime
 from typing import AsyncGenerator, Dict, List, Optional
 import httpx
 from services.ollama_service import ollama_service
+from services.mcp_clients import mcp_clients
 
 # Chatbot personalities
 PERSONALITIES = {
@@ -77,6 +78,37 @@ TOOLS = [
         "parameters": {
             "days": "Number of days ahead to fetch (default: 7)"
         }
+    },
+    {
+        "name": "search_knowledge",
+        "description": "Search your Advanced Memory knowledge base (zettelkasten notes)",
+        "parameters": {
+            "query": "Search query",
+            "max_results": "Number of results (default: 5)"
+        }
+    },
+    {
+        "name": "read_note",
+        "description": "Read a specific note from your knowledge base",
+        "parameters": {
+            "identifier": "Note title or permalink"
+        }
+    },
+    {
+        "name": "create_note",
+        "description": "Create a new note in your knowledge base",
+        "parameters": {
+            "title": "Note title",
+            "content": "Note content (markdown)",
+            "tags": "Tags (comma-separated, default: 'ai-generated')"
+        }
+    },
+    {
+        "name": "recent_notes",
+        "description": "Get recently updated notes from your knowledge base",
+        "parameters": {
+            "days": "Days to look back (default: 7)"
+        }
     }
 ]
 
@@ -111,7 +143,7 @@ Only output the enhanced prompt, nothing else."""
         except Exception:
             return user_prompt
     
-    def _execute_tool(self, tool_name: str, parameters: Dict) -> str:
+    async def _execute_tool(self, tool_name: str, parameters: Dict) -> str:
         """Execute a tool and return results"""
         try:
             if tool_name == "calculator":
@@ -150,6 +182,60 @@ Only output the enhanced prompt, nothing else."""
                 days = parameters.get("days", 7)
                 # Mock - in real implementation, query database
                 return f"Calendar (next {days} days): Dec 5 - Vet appointment (Benny), Dec 7 - Coffee with Marion"
+            
+            # Advanced Memory MCP tools
+            elif tool_name == "search_knowledge":
+                query = parameters.get("query", "")
+                max_results = parameters.get("max_results", 5)
+                result = await mcp_clients.advanced_memory.search_notes(query, max_results)
+                if result.get("success"):
+                    results_data = result.get("result", [])
+                    if isinstance(results_data, list) and len(results_data) > 0:
+                        notes = "\n".join([f"- {item.get('title', 'Untitled')}: {item.get('preview', '')[:100]}..." for item in results_data[:max_results]])
+                        return f"Knowledge base search for '{query}':\n{notes}"
+                    else:
+                        return f"No notes found for: {query}"
+                else:
+                    return f"Search failed: {result.get('error', 'Unknown error')}"
+            
+            elif tool_name == "read_note":
+                identifier = parameters.get("identifier", "")
+                result = await mcp_clients.advanced_memory.read_note(identifier)
+                if result.get("success"):
+                    content = result.get("result", {})
+                    if isinstance(content, dict):
+                        title = content.get("title", identifier)
+                        body = content.get("content", "")[:500]  # First 500 chars
+                        return f"Note '{title}':\n\n{body}..."
+                    else:
+                        return f"Note content: {str(content)[:500]}"
+                else:
+                    return f"Failed to read note: {result.get('error', 'Unknown error')}"
+            
+            elif tool_name == "create_note":
+                title = parameters.get("title", "")
+                content = parameters.get("content", "")
+                tags = parameters.get("tags", "ai-generated")
+                result = await mcp_clients.advanced_memory.write_note(title, content, tags=tags)
+                if result.get("success"):
+                    return f"Created note: '{title}' in your knowledge base"
+                else:
+                    return f"Failed to create note: {result.get('error', 'Unknown error')}"
+            
+            elif tool_name == "recent_notes":
+                days = parameters.get("days", 7)
+                timeframe = f"{days}d"
+                result = await mcp_clients.advanced_memory.recent_activity(timeframe)
+                if result.get("success"):
+                    activity = result.get("result", {})
+                    if isinstance(activity, dict):
+                        notes = activity.get("results", [])[:5]
+                        note_list = "\n".join([f"- {n.get('title', 'Untitled')}" for n in notes])
+                        return f"Recent notes (last {days} days):\n{note_list}"
+                    else:
+                        return f"Recent activity: {str(activity)[:200]}"
+                else:
+                    return f"Failed to get recent notes: {result.get('error', 'Unknown error')}"
             
             else:
                 return f"Unknown tool: {tool_name}"
@@ -236,6 +322,41 @@ Only output the enhanced prompt, nothing else."""
                 "parameters": {"days": 7}
             })
         
+        # Advanced Memory - Search knowledge base
+        if re.search(r"search my notes|find in notes|knowledge base|zettelkasten|search knowledge", user_message.lower()):
+            # Extract search query (simplified)
+            query = re.sub(r"(search my notes|find in notes|knowledge base|zettelkasten|search knowledge)\s+(for|about)?\s*", "", user_message, flags=re.IGNORECASE)
+            tool_calls.append({
+                "name": "search_knowledge",
+                "parameters": {"query": query.strip()[:100], "max_results": 5}
+            })
+        
+        # Advanced Memory - Read specific note
+        if re.search(r"read note|show note|get note|open note", user_message.lower()):
+            # Extract note identifier
+            identifier = re.sub(r"(read note|show note|get note|open note)\s+", "", user_message, flags=re.IGNORECASE)
+            tool_calls.append({
+                "name": "read_note",
+                "parameters": {"identifier": identifier.strip()[:100]}
+            })
+        
+        # Advanced Memory - Create note
+        if re.search(r"create note|save note|write note|make note|remember this", user_message.lower()):
+            # Simple title/content extraction
+            title = f"AI Chat Note - {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+            content = user_message
+            tool_calls.append({
+                "name": "create_note",
+                "parameters": {"title": title, "content": content, "tags": "ai-chat,auto-generated"}
+            })
+        
+        # Advanced Memory - Recent notes
+        if re.search(r"recent notes|latest notes|new notes|what did i note", user_message.lower()):
+            tool_calls.append({
+                "name": "recent_notes",
+                "parameters": {"days": 7}
+            })
+        
         return tool_calls
     
     async def chat_stream(
@@ -275,7 +396,7 @@ Only output the enhanced prompt, nothing else."""
         if use_tools:
             tool_calls = self._detect_tool_calls(user_content)
             for tool_call in tool_calls:
-                result = self._execute_tool(tool_call["name"], tool_call["parameters"])
+                result = await self._execute_tool(tool_call["name"], tool_call["parameters"])
                 tool_results.append({
                     "tool": tool_call["name"],
                     "result": result

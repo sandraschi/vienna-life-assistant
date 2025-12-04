@@ -340,6 +340,64 @@ class TapoMCPClient(MCPClientBase):
 
 
 # ============================================================================
+# ADVANCED MEMORY CLIENT
+# ============================================================================
+
+class AdvancedMemoryMCPClient(MCPClientBase):
+    """
+    Client for Advanced Memory MCP server via stdio
+    
+    Access your zettelkasten knowledge base with 18+ powerful tools
+    """
+    
+    def __init__(self):
+        # Path to Advanced Memory MCP server script
+        server_path = os.getenv(
+            "ADVANCED_MEMORY_MCP_PATH",
+            "D:/Dev/repos/advanced-memory-mcp/src/advanced_memory/mcp/server.py"
+        )
+        super().__init__(server_path, "Advanced Memory MCP", timeout=60)  # Longer timeout for search ops
+    
+    async def search_notes(self, query: str, max_results: int = 5) -> Dict[str, Any]:
+        """Search your knowledge base"""
+        return await self.call_tool(
+            "search_notes",
+            query=query,
+            results_per_page=max_results
+        )
+    
+    async def read_note(self, identifier: str) -> Dict[str, Any]:
+        """Read a specific note"""
+        return await self.call_tool("read_note", identifier=identifier)
+    
+    async def write_note(self, title: str, content: str, folder: str = "ai-chat", tags: str = "ai-generated") -> Dict[str, Any]:
+        """Create a new note"""
+        return await self.call_tool(
+            "write_note",
+            title=title,
+            content=content,
+            folder=folder,
+            tags=tags
+        )
+    
+    async def recent_activity(self, timeframe: str = "7d", type_filter: str = "entity") -> Dict[str, Any]:
+        """Get recent notes and activity"""
+        return await self.call_tool(
+            "recent_activity",
+            timeframe=timeframe,
+            type_filter=type_filter
+        )
+    
+    async def get_status(self) -> Dict[str, Any]:
+        """Get knowledge base statistics"""
+        return await self.call_tool(
+            "mcp_advanced-memory-mcp_adn_navigation",
+            operation="status",
+            level="basic"
+        )
+
+
+# ============================================================================
 # CLIENT MANAGER
 # ============================================================================
 
@@ -356,6 +414,7 @@ class MCPClientManager:
         self.ollama = OllamaMCPClient()
         self.immich = ImmichMCPClient()
         self.tapo = TapoMCPClient()
+        self.advanced_memory = AdvancedMemoryMCPClient()
     
     async def check_health(self) -> Dict[str, bool]:
         """Check health of all MCP services (via stdio connection test)"""
@@ -366,7 +425,8 @@ class MCPClientManager:
             ("calibre", self.calibre),
             ("ollama", self.ollama),
             ("immich", self.immich),
-            ("tapo", self.tapo)
+            ("tapo", self.tapo),
+            ("advanced_memory", self.advanced_memory)
         ]:
             try:
                 # Try to connect via stdio
@@ -379,7 +439,7 @@ class MCPClientManager:
     
     async def close_all(self):
         """Close all client connections"""
-        for client in [self.plex, self.calibre, self.ollama, self.immich, self.tapo]:
+        for client in [self.plex, self.calibre, self.ollama, self.immich, self.tapo, self.advanced_memory]:
             await client.close()
 
 
