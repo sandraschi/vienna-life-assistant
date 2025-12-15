@@ -758,6 +758,269 @@ const ViennaDayTrips: React.FC = () => (
         </Card>
       </Grid>
 
+      {/* Budapest */}
+      <Grid item xs={12} md={6}>
+        <Card>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Budapest_Parliament_from_Buda_Hill.jpg/800px-Budapest_Parliament_from_Buda_Hill.jpg"
+            alt="Budapest Parliament"
+          />
+          <CardContent>
+            <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <TrainIcon /> Budapest (2.5 hours by train)
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              "Paris of the East" offers stunning architecture, thermal baths, ruin bars, and vibrant nightlife.
+              Hungary's capital combines imperial elegance with youthful energy.
+            </Typography>
+
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>🚆 Transport Options:</Typography>
+            <List dense>
+              <ListItem>
+                <ListItemText primary="• Railjet train: 2h 30min, €25-50 one-way" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• Regional trains: 2h 45min, €15-35" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• Bus: 3 hours, €12-25" />
+              </ListItem>
+            </List>
+
+            <Typography variant="subtitle2" sx={{ mb: 1, mt: 2 }}>📅 Suggested Itinerary:</Typography>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              8:30 AM departure → 11:00 AM arrive → Buda Castle → Parliament Building →
+              St. Stephen's Basilica → Thermal baths (Széchenyi) → Ruin bar evening
+            </Typography>
+
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              <Chip size="small" label="Thermal Baths" color="primary" />
+              <Chip size="small" label="Architecture" color="secondary" />
+              <Chip size="small" label="Nightlife" color="warning" />
+            </Box>
+
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              component={Link}
+              href="https://www.visitbudapest.travel"
+              target="_blank"
+              rel="noopener"
+            >
+              Visit Budapest Tourism
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Klagenfurt & Graz */}
+      <Grid item xs={12} md={6}>
+        <Card>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Klagenfurt_Lindwurm.jpg/800px-Klagenfurt_Lindwurm.jpg"
+            alt="Klagenfurt Lindwurm"
+          />
+          <CardContent>
+            <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <TrainIcon /> Klagenfurt & Graz (now fast day trips!)
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Carinthia's capital with lakes, mountains, and alpine culture. The December 2025 opening of the Koralmbahn
+              tunnel revolutionized travel times, making both Klagenfurt (2.5h) and Graz (1.5h) perfect day trips from Vienna.
+            </Typography>
+
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>🚆 Transport Revolution:</Typography>
+            <Typography variant="body2" sx={{ mb: 2, fontWeight: 'bold' }}>
+              🎉 Koralmbahn Tunnel (opened Dec 2025): Cut travel times by 30-45 minutes!
+            </Typography>
+            <List dense>
+              <ListItem>
+                <ListItemText primary="• To Klagenfurt: 2h 30min, €25-45 (was 3h 15min)" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• To Graz: 1h 30min, €15-30 (was 2h 15min)" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• Modern Railjet trains with WiFi, power outlets" />
+              </ListItem>
+            </List>
+
+            <Typography variant="subtitle2" sx={{ mb: 1, mt: 2 }}>📅 Suggested Itinerary:</Typography>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              Graz: 9:00 AM departure → 10:30 AM arrive → Schlossberg → Mur Island → City sights → Return by 6:00 PM<br/>
+              Klagenfurt: 8:00 AM departure → 10:30 AM arrive → Wörthersee lake → Minimundus → Return by 8:00 PM
+            </Typography>
+
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              <Chip size="small" label="Lakes" color="primary" />
+              <Chip size="small" label="Mountains" color="success" />
+              <Chip size="small" label="Koralmbahn" color="secondary" />
+            </Box>
+
+            <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
+              💡 The Koralmbahn is Austria's largest infrastructure project (€3.3B), connecting Vienna to Carinthia seamlessly.
+            </Typography>
+
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              component={Link}
+              href="https://www.visitklagenfurt.at"
+              target="_blank"
+              rel="noopener"
+            >
+              Visit Klagenfurt Tourism
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Munich */}
+      <Grid item xs={12} md={6}>
+        <Card>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Munich_Marienplatz.jpg/800px-Munich_Marienplatz.jpg"
+            alt="Munich Marienplatz"
+          />
+          <CardContent>
+            <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <TrainIcon /> Munich (4 hours, borderline day trip)
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Bavaria's capital offers world-class museums, beer gardens, and alpine proximity. A borderline day trip
+              that works with an early start, but overnight stay is preferable for a relaxed experience.
+            </Typography>
+
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>🚆 Transport Options:</Typography>
+            <List dense>
+              <ListItem>
+                <ListItemText primary="• Railjet train: 4 hours, €40-80 one-way" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• ICE trains: 3h 45min, €45-90" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• Bus: 5-6 hours, €20-40" />
+              </ListItem>
+            </List>
+
+            <Typography variant="subtitle2" sx={{ mb: 1, mt: 2 }}>📅 Suggested Itinerary:</Typography>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              6:00 AM departure → 10:00 AM arrive → Marienplatz → Viktualienmarkt → Nymphenburg Palace →
+              Beer garden lunch → English Garden → Return by 10:00 PM (overnight preferable)
+            </Typography>
+
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              <Chip size="small" label="Beer Gardens" color="warning" />
+              <Chip size="small" label="Museums" color="primary" />
+              <Chip size="small" label="Alps" color="success" />
+              <Chip size="small" label="Overnight Preferred" color="error" />
+            </Box>
+
+            <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
+              💡 Consider staying overnight - Munich hotels from €60, or day trip with early return. The extra time is worth it!
+            </Typography>
+
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              component={Link}
+              href="https://www.muenchen.de"
+              target="_blank"
+              rel="noopener"
+            >
+              Visit Munich Tourism
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Venice - Special Sleeper Train Section */}
+      <Grid item xs={12}>
+        <Card sx={{ border: '2px solid', borderColor: 'primary.main' }}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Venice_-_Grand_Canal_and_Rialto_Bridge.jpg/800px-Venice_-_Grand_Canal_and_Rialto_Bridge.jpg"
+            alt="Venice Grand Canal"
+          />
+          <CardContent>
+            <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              🌙 Venice (7 hours by sleeper train - MUST!)
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              The floating city demands a special approach. Take the legendary ÖBB Nightjet sleeper train from Vienna -
+              the journey itself is part of the adventure. ÖBB has revived sleeper trains across Central Europe.
+            </Typography>
+
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>🚂 Sleeper Train Experience:</Typography>
+            <Typography variant="body2" sx={{ mb: 2, fontWeight: 'bold' }}>
+              🌙 Nightjet Vienna-Venice: Depart 22:40, arrive 05:40 (7 hours overnight)
+            </Typography>
+            <List dense>
+              <ListItem>
+                <ListItemText primary="• Comfortable sleeping cars with beds (€89-159)" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• Couchette cars with seats that convert to beds (€49-89)" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• Scenic route through Alps and Italian countryside" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• Breakfast service on arrival" />
+              </ListItem>
+            </List>
+
+            <Typography variant="subtitle2" sx={{ mb: 1, mt: 2 }}>🎭 ÖBB's Sleeper Train Renaissance:</Typography>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              Austrian Federal Railways (ÖBB) has invested €500M+ reviving Europe's sleeper train network. From Vienna you can now reach:
+              Berlin, Hamburg, Zurich, Rome, Florence, Milan, Venice, and more - all by comfortable overnight train.
+              Perfect for sustainable, scenic travel while you sleep.
+            </Typography>
+
+            <Typography variant="subtitle2" sx={{ mb: 1, mt: 2 }}>📅 Suggested Itinerary:</Typography>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              Day 1: 10:00 PM departure Vienna → Sleep through Alps<br/>
+              Day 2: 5:40 AM arrive Venice → St. Mark's Square → Doge's Palace → Gondola ride →
+              Murano glass → Return next evening or extend stay
+            </Typography>
+
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              <Chip size="small" label="Sleeper Train" color="primary" />
+              <Chip size="small" label="Romantic" color="secondary" />
+              <Chip size="small" label="UNESCO" color="success" />
+              <Chip size="small" label="ÖBB Nightjet" color="warning" />
+            </Box>
+
+            <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
+              💡 Book early! Nightjet sleeper cars sell out quickly. Consider a 2-3 day stay in Venice for the full experience.
+            </Typography>
+
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              component={Link}
+              href="https://www.oebb.at/en/tickets-travelling/nightjets"
+              target="_blank"
+              rel="noopener"
+            >
+              Book ÖBB Nightjet
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
       {/* Prague */}
       <Grid item xs={12}>
         <Card>
