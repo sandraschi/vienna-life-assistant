@@ -130,6 +130,7 @@ const Vienna: React.FC = () => {
         >
           <Tab icon={<LocationIcon />} iconPosition="start" label="Attractions" />
           <Tab icon={<CafeIcon />} iconPosition="start" label="Coffee Houses" />
+          <Tab icon={<MuseumIcon />} iconPosition="start" label="Museums" />
           <Tab icon={<EuroIcon />} iconPosition="start" label="Vienna Pass" />
           <Tab icon={<TrainIcon />} iconPosition="start" label="Day Trips" />
           <Tab icon={<TransportIcon />} iconPosition="start" label="Transport" />
@@ -146,18 +147,22 @@ const Vienna: React.FC = () => {
         </TabPanel>
 
         <TabPanel value={activeTab} index={2}>
-          <ViennaPass />
+          <ViennaMuseums onAttractionClick={setSelectedAttraction} />
         </TabPanel>
 
         <TabPanel value={activeTab} index={3}>
-          <ViennaDayTrips />
+          <ViennaPass />
         </TabPanel>
 
         <TabPanel value={activeTab} index={4}>
-          <ViennaTransport />
+          <ViennaDayTrips />
         </TabPanel>
 
         <TabPanel value={activeTab} index={5}>
+          <ViennaTransport />
+        </TabPanel>
+
+        <TabPanel value={activeTab} index={6}>
           <ViennaFestivals />
         </TabPanel>
       </Paper>
@@ -450,6 +455,263 @@ const ViennaCoffeeHouses: React.FC<{ onAttractionClick: (attraction: string) => 
             <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
               <Chip size="small" label="Jugendstil" color="primary" />
               <Chip size="small" label="Architecture" color="secondary" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  </Box>
+);
+
+// Museums Component
+const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void }> = ({ onAttractionClick }) => (
+  <Box>
+    <Typography variant="h5" gutterBottom color="primary" sx={{ mb: 3 }}>
+      🏛️ Vienna's World-Class Museums
+    </Typography>
+
+    <Typography variant="body1" sx={{ mb: 3 }}>
+      Vienna boasts some of Europe's finest museums, housing priceless collections from ancient civilizations
+      to contemporary art. Many are located on the Museum Quarter (MuseumsQuartier) and offer combined tickets
+      and special exhibitions throughout the year.
+    </Typography>
+
+    <Grid container spacing={3}>
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('khm')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Kunsthistorisches_Museum_Wien.jpg/800px-Kunsthistorisches_Museum_Wien.jpg"
+            alt="Kunsthistorisches Museum"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Kunsthistorisches Museum</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              World's largest Bruegel collection and imperial art treasures. Home to masterpieces by Raphael, Rubens, and Rembrandt.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Imperial Palace" color="warning" />
+              <Chip size="small" label="€20" color="primary" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('albertina')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Albertina_Vienna.jpg/800px-Albertina_Vienna.jpg"
+            alt="Albertina Museum"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Albertina Museum</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Largest collection of graphic art worldwide. Features Dürer, Monet, and stunning rooftop views of Vienna.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Graphic Art" color="success" />
+              <Chip size="small" label="€19" color="primary" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('albertina_modern')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Albertina_Modern_Vienna.jpg/800px-Albertina_Modern_Vienna.jpg"
+            alt="Albertina Modern"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Albertina Modern</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Modern and contemporary art in historic Künstlerhaus. Features Picasso, Mondrian, and Austrian modern masters.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Modern Art" color="secondary" />
+              <Chip size="small" label="€14" color="primary" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('belvedere_upper')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Belvedere_Palace_Vienna.jpg/800px-Belvedere_Palace_Vienna.jpg"
+            alt="Upper Belvedere"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Upper Belvedere</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              World's largest Klimt collection including 'The Kiss'. Baroque masterpiece with imperial art treasures.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Klimt" color="error" />
+              <Chip size="small" label="€16" color="primary" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('belvedere_lower')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Belvedere_Lower_Vienna.jpg/800px-Belvedere_Lower_Vienna.jpg"
+            alt="Lower Belvedere"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Lower Belvedere</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Intimate Baroque palace with temporary exhibitions and beautiful garden café. More relaxed than Upper.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Contemporary Art" color="info" />
+              <Chip size="small" label="€14" color="primary" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('naturhistorisches')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Naturhistorisches_Museum_Wien.jpg/800px-Naturhistorisches_Museum_Wien.jpg"
+            alt="Natural History Museum"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Natural History Museum</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Venus of Willendorf, dinosaur skeletons, and vast mineral collections. One of Europe's finest natural history museums.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Dinosaurs" color="success" />
+              <Chip size="small" label="€14" color="primary" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('technisches')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Technisches_Museum_Wien.jpg/800px-Technisches_Museum_Wien.jpg"
+            alt="Technical Museum"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Technical Museum</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              World's largest motorcycle collection, historic cars, aircraft, and Austrian inventions. Interactive technology exhibits.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Technology" color="warning" />
+              <Chip size="small" label="€14" color="primary" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('heeresgeschichtliches')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Heeresgeschichtliches_Museum_Wien.jpg/800px-Heeresgeschichtliches_Museum_Wien.jpg"
+            alt="Army History Museum"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Army History Museum</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Habsburg military history in imperial arsenal. Weapons, armor, vehicles, and artworks from centuries of campaigns.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Military History" color="error" />
+              <Chip size="small" label="€8" color="primary" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('haus_der_musik')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Haus_der_Musik_Wien.jpg/800px-Haus_der_Musik_Wien.jpg"
+            alt="Haus der Musik"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Haus der Musik</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Interactive music museum exploring sound science and Vienna's musical heritage. Composer rooms and recording studio.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Interactive" color="secondary" />
+              <Chip size="small" label="€16" color="primary" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('haus_des_meeres')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Haus_des_Meeres_Wien.jpg/800px-Haus_des_Meeres_Wien.jpg"
+            alt="Haus des Meeres"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Haus des Meeres</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Aquarium in WWII bunker with sharks, rays, and 10,000+ marine creatures. Unique combination of military history and marine biology.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="WWII Bunker" color="error" />
+              <Chip size="small" label="€22" color="primary" />
             </Stack>
             <Button variant="outlined" size="small" fullWidth>
               View Details
@@ -1458,9 +1720,11 @@ const AttractionDetailDialog: React.FC<{
       tips: [
         "Buy tickets online to skip queues",
         "Allow 2-3 hours for both palaces",
-        "Gardens are free and beautiful for picnics",
+        "Gardens are free but picnics are NOT allowed on the lawn - stepping on grass is forbidden",
         "Thursday evening visits are quieter",
-        "Photography allowed without flash"
+        "Photography allowed without flash",
+        "Botanical Garden next door (€10) features exotic plants and greenhouses",
+        "Alpengarten Belvedere (€3) showcases Austrian alpine flora in a small garden setting"
       ]
     },
     hofburg: {
@@ -1630,6 +1894,297 @@ const AttractionDetailDialog: React.FC<{
         "Evening bars popular with young locals",
         "Take U4 to Kettenbrückengasse or Karlsplatz",
         "Great for picnic supplies and local specialties"
+      ]
+    },
+    khm: {
+      title: "Kunsthistorisches Museum (KHM)",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Kunsthistorisches_Museum_Wien.jpg/800px-Kunsthistorisches_Museum_Wien.jpg",
+      description: "Housed in a magnificent Neo-Renaissance palace opposite the Hofburg, the Kunsthistorisches Museum (Museum of Art History) boasts one of the world's finest collections of European art from the Middle Ages to the present day. The museum owns over 1.5 million objects, with highlights including works by Raphael, Rubens, Vermeer, and Rembrandt.",
+      details: [
+        "• World's largest collection of Bruegel paintings (12 works)",
+        "• Imperial Picture Gallery with masterpieces by Raphael, Rubens, Titian",
+        "• Egyptian and Near Eastern Collection: 17,000 artifacts spanning 5,000 years",
+        "• Greek and Roman Antiquities: Including the famous Artemision Bronze",
+        "• Kunstkammer: Imperial treasury with precious objects and automata",
+        "• Coin collection: 800,000 coins from antiquity to modern times",
+        "• Musical instruments collection with Stradivarius violins",
+        "• Crown Prince Rudolf's ethnographic collection from around the world"
+      ],
+      website: "https://www.khm.at",
+      price: "€20 permanent collection, €25 with special exhibitions",
+      hours: "Tue-Sun 10:00 AM - 6:00 PM, Thu until 9:00 PM",
+      tips: [
+        "Audio guide included in ticket price (€3 deposit)",
+        "Allow 3-4 hours for main collections",
+        "Visit Thursday evenings when it's less crowded",
+        "Free entry for under 19s and EU citizens under 26",
+        "Photography allowed without flash in most areas",
+        "Café in the dome offers spectacular views",
+        "Wheelchair accessible with ramps and elevators",
+        "Combined ticket with Neue Burg museums saves €6"
+      ]
+    },
+    albertina: {
+      title: "Albertina Museum",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Albertina_Vienna.jpg/800px-Albertina_Vienna.jpg",
+      description: "The Albertina houses one of the world's most important collections of graphic art, with over 65,000 drawings and 1 million prints. The museum is particularly renowned for its holdings of works on paper by artists such as Leonardo da Vinci, Michelangelo, Albrecht Dürer, and Claude Monet. Its temporary exhibitions often showcase contemporary art.",
+      details: [
+        "• Largest collection of graphic art worldwide (65,000 drawings, 1M prints)",
+        "• Dürer collection: 145 works including his famous 'Praying Hands'",
+        "• Batliner Collection: Modern art from Schiele to Baselitz (not always on display)",
+        "• State Rooms: Imperial apartments with frescoes and chandeliers",
+        "• Rooftop terrace with panoramic views of Vienna",
+        "• Rotating exhibitions of contemporary and historical art",
+        "• Photography collection spanning 200 years",
+        "• World's largest collection of Monet's works on paper"
+      ],
+      website: "https://www.albertina.at",
+      price: "€19 permanent collection, €22 with exhibitions",
+      hours: "Mon, Wed-Sun 10:00 AM - 6:00 PM, Thu until 9:00 PM",
+      tips: [
+        "Visit early or late to avoid crowds at popular exhibitions",
+        "State Rooms and terrace are free with any ticket",
+        "Audio guide available in multiple languages",
+        "Rooftop terrace perfect for photos and coffee",
+        "Combined ticket with nearby museums available",
+        "Under 19s free, students €9",
+        "Wheelchair accessible with elevators",
+        "Changing exhibitions make return visits worthwhile"
+      ]
+    },
+    albertina_modern: {
+      title: "Albertina Modern",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Albertina_Modern_Vienna.jpg/800px-Albertina_Modern_Vienna.jpg",
+      description: "Opened in 2020 in a renovated 18th-century building, Albertina Modern focuses exclusively on 20th and 21st-century art. The museum showcases works from the Albertina's permanent collection of modern and contemporary art, including pieces by Picasso, Mondrian, and contemporary Austrian artists. Its location in the former Künstlerhaus provides a unique architectural setting.",
+      details: [
+        "• Dedicated to 20th and 21st-century art in the historic Künstlerhaus",
+        "• Permanent collection includes Picasso, Mondrian, Schiele, and contemporary works",
+        "• Focus on Austrian modern art and international contemporary pieces",
+        "• Architectural highlight: Former Künstlerhaus building from 1868",
+        "• Temporary exhibitions of modern and contemporary art",
+        "• Café in the historic ballroom with frescoes",
+        "• Ground floor free access to permanent collection highlights",
+        "• Part of the expanded Albertina museum complex"
+      ],
+      website: "https://www.albertina.at/en/albertina-modern",
+      price: "€14 permanent collection, €17 with exhibitions",
+      hours: "Tue-Sun 10:00 AM - 6:00 PM, Thu until 9:00 PM",
+      tips: [
+        "Located in the historic Künstlerhaus building",
+        "Ground floor permanent collection is always free",
+        "Modern art in a beautifully restored 19th-century setting",
+        "Smaller and more intimate than main Albertina",
+        "Perfect complement to main Albertina visit",
+        "Focus on Austrian and international modern art",
+        "Café in the historic ballroom is worth visiting",
+        "Combined tickets available with other Albertina museums"
+      ]
+    },
+    belvedere_upper: {
+      title: "Belvedere Palace - Upper Belvedere",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Belvedere_Palace_Vienna.jpg/800px-Belvedere_Palace_Vienna.jpg",
+      description: "The Upper Belvedere houses the world's largest collection of Gustav Klimt paintings and is considered one of the finest Baroque palaces in Europe. Built between 1717-1723 by Johann Lucas von Hildebrandt, it was Prince Eugene's summer residence. The palace's collection focuses on Austrian art from the Middle Ages to the present, with Klimt's 'The Kiss' as its crown jewel.",
+      details: [
+        "• World's largest Klimt collection including 'The Kiss' (€30M+ value)",
+        "• Austrian art from Middle Ages to present day",
+        "• Marble Hall with spectacular ceiling frescoes by Martino Altomonte",
+        "• Golden Cabinet with gold-leaf decorations",
+        "• Ceremonial rooms with original 18th-century furnishings",
+        "• Gardens designed by Dominique Girard with fountains and sculptures",
+        "• Orangery with seasonal exhibitions",
+        "• Temporary exhibitions in adjacent halls"
+      ],
+      website: "https://www.belvedere.at",
+      price: "€16 (combined with Lower €22)",
+      hours: "Tue-Sun 10:00 AM - 6:00 PM, Thu until 9:00 PM",
+      tips: [
+        "Klimt's 'The Kiss' is the main attraction - arrive early to avoid queues",
+        "Marble Hall is one of Europe's most beautiful Baroque rooms",
+        "Gardens are free and spectacular for walking",
+        "Combined ticket with Lower Belvedere saves €8",
+        "Visit Thursday evenings for fewer crowds",
+        "Photography allowed throughout (no flash)",
+        "Audio guide available in multiple languages",
+        "Allow 1.5-2 hours for Upper Belvedere alone"
+      ]
+    },
+    belvedere_lower: {
+      title: "Belvedere Palace - Lower Belvedere",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Belvedere_Lower_Vienna.jpg/800px-Belvedere_Lower_Vienna.jpg",
+      description: "The Lower Belvedere, completed in 1716, serves as a counterpoint to the Upper Palace. While smaller and more intimate, it contains significant collections and hosts major temporary exhibitions. The palace's architecture is equally impressive, featuring ornate state rooms and a beautiful garden café. Prince Eugene used the Lower Belvedere for more private entertaining and as a guest house.",
+      details: [
+        "• Smaller, more intimate palace for private entertaining",
+        "• Hosts major temporary exhibitions",
+        "• State rooms with original Baroque furnishings",
+        "• Garden café with views of the palace gardens",
+        "• Medallion Cabinet with intricate ceiling decorations",
+        "• Grotesque Hall with playful architectural elements",
+        "• Private apartments of Prince Eugene",
+        "• Often features contemporary art installations"
+      ],
+      website: "https://www.belvedere.at",
+      price: "€14 (combined with Upper €22)",
+      hours: "Tue-Sun 10:00 AM - 6:00 PM, Thu until 9:00 PM",
+      tips: [
+        "More intimate experience than Upper Belvedere",
+        "Focus on temporary exhibitions (often contemporary art)",
+        "Garden café perfect for coffee and cakes after visiting",
+        "Combined ticket with Upper Belvedere recommended",
+        "Visit in conjunction with Upper for full experience",
+        "Smaller crowds than Upper Belvedere",
+        "Beautiful gardens connect both palaces",
+        "Photography allowed throughout"
+      ]
+    },
+    heeresgeschichtliches: {
+      title: "Heeresgeschichtliches Museum (Army History Museum)",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Heeresgeschichtliches_Museum_Wien.jpg/800px-Heeresgeschichtliches_Museum_Wien.jpg",
+      description: "Austria's Army History Museum, located in the Arsenal complex, chronicles the military history of the Habsburg Empire and the Austrian Army from the 16th century to the present. The museum houses an impressive collection of weapons, uniforms, vehicles, and artwork depicting military campaigns. Its location in the former imperial arsenal adds historical significance to the exhibits.",
+      details: [
+        "• Complete military history from Habsburg Empire to modern Austria",
+        "• Imperial Arsenal building from 1860 (still active military site)",
+        "• Extensive collection of weapons, armor, and uniforms",
+        "• Artworks depicting famous battles and campaigns",
+        "• Vehicles and equipment from WWI, WWII, and Cold War",
+        "• Aircraft collection including rare pieces",
+        "• Maria Theresa's personal artifacts and military memorabilia",
+        "• Interactive exhibits and reconstructions of battles"
+      ],
+      website: "https://www.hgm.or.at",
+      price: "€8 permanent collection, €12 with special exhibitions",
+      hours: "Tue-Sun 9:00 AM - 5:00 PM",
+      tips: [
+        "Located in active military complex - bring ID for entry",
+        "Extensive collection requires 2-3 hours",
+        "Military vehicles and aircraft outside in courtyard",
+        "Photography allowed in most areas",
+        "English information available",
+        "Wheelchair accessible with ramps",
+        "Café available on site",
+        "Special exhibits often on military technology"
+      ]
+    },
+    naturhistorisches: {
+      title: "Naturhistorisches Museum (Natural History Museum)",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Naturhistorisches_Museum_Wien.jpg/800px-Naturhistorisches_Museum_Wien.jpg",
+      description: "The Natural History Museum, opened in 1889, houses one of the world's most comprehensive natural history collections. Located opposite the Art History Museum, it features spectacular exhibits including the famous Venus of Willendorf (the world's oldest known work of art), dinosaur skeletons, and the largest collection of meteorites in Central Europe. The museum's architecture rivals its collections in splendor.",
+      details: [
+        "• World's most comprehensive natural history collection",
+        "• Venus of Willendorf (30,000 BCE) - oldest known artwork",
+        "• Largest meteorite collection in Central Europe",
+        "• Dinosaur skeletons and prehistoric exhibits",
+        "• Vast mineral collection with rare crystals",
+        "• Human evolution timeline from Australopithecus to modern humans",
+        "• Tropical butterfly house (€5 extra)",
+        "• Vast zoological collections from around the world",
+        "• Imperial furniture and architectural elements"
+      ],
+      website: "https://www.nhm-wien.ac.at",
+      price: "€14 permanent collection, €18 with special exhibitions",
+      hours: "Wed-Mon 9:00 AM - 6:30 PM, Thu until 9:00 PM",
+      tips: [
+        "Allow 3-4 hours for main collections",
+        "Venus of Willendorf is the highlight - don't miss it",
+        "Combined ticket with Kunsthistorisches Museum saves money",
+        "Butterfly house is worth the extra €5",
+        "Visit Thursday evenings for extended hours",
+        "Audio guide available in multiple languages",
+        "Wheelchair accessible with elevators",
+        "Café offers spectacular views of Maria-Theresien-Platz",
+        "Mineral collection rivals any natural history museum"
+      ]
+    },
+    technisches: {
+      title: "Technisches Museum Wien (Technical Museum)",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Technisches_Museum_Wien.jpg/800px-Technisches_Museum_Wien.jpg",
+      description: "The Technical Museum Vienna showcases the history of technology and science, with particular emphasis on Austrian inventions and technological achievements. Located in a former arsenal, the museum features interactive exhibits, historic vehicles, aircraft, and industrial machinery. It's particularly renowned for its collection of vintage cars, motorcycles, and railway locomotives.",
+      details: [
+        "• History of technology with Austrian focus (Austrian inventors honored)",
+        "• World's largest collection of vintage motorcycles",
+        "• Historic cars including Austro-Daimlers and Tatra vehicles",
+        "• Railway locomotives and carriages from imperial era",
+        "• Aviation history with aircraft from WWI and WWII",
+        "• Industrial machinery and textile production exhibits",
+        "• Interactive science exhibits for children",
+        "• Historic musical instruments and gramophones",
+        "• Ship models and maritime technology",
+        "• Mining and metallurgy exhibits"
+      ],
+      website: "https://www.technischesmuseum.at",
+      price: "€14 permanent collection, €18 with special exhibitions",
+      hours: "Tue-Sun 9:00 AM - 6:00 PM, Thu until 9:00 PM",
+      tips: [
+        "Austria's largest motorcycle collection is world-famous",
+        "Historic cars include presidential vehicles",
+        "Railway exhibits include imperial carriages",
+        "Interactive exhibits great for families",
+        "Photography allowed throughout",
+        "Audio guide available",
+        "Wheelchair accessible",
+        "Located in former imperial arsenal complex",
+        "Special exhibits on Austrian inventors and innovations"
+      ]
+    },
+    haus_des_meeres: {
+      title: "Haus des Meeres (House of the Sea)",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Haus_des_Meeres_Wien.jpg/800px-Haus_des_Meeres_Wien.jpg",
+      description: "Located in a former WWII anti-aircraft bunker in Vienna's Esterházy Park, Haus des Meeres is one of Europe's largest public aquariums. The bunker, built between 1941-1944, was converted into an aquarium in 1957. The museum features over 10,000 aquatic creatures in 50+ exhibits, including sharks, rays, and tropical fish. The building's history as a defensive structure adds a unique dimension to the aquarium experience.",
+      details: [
+        "• Built in WWII anti-aircraft bunker (1941-1944)",
+        "• Bunker history: 16m thick concrete walls, originally designed for 20,000 soldiers",
+        "• Converted to aquarium in 1957 by Viennese animal dealer Hermann Waldmann",
+        "• 50+ exhibits with over 10,000 aquatic creatures",
+        "• Shark tank with underwater tunnel viewing",
+        "• Tropical freshwater and saltwater exhibits",
+        "• Children's aquarium with touch pools",
+        "• Roof terrace with panoramic Vienna views",
+        "• Unique combination of military history and marine biology"
+      ],
+      website: "https://www.haus-des-meeres.at",
+      price: "€22 adults, €12 children, €19 online discount",
+      hours: "Daily 10:00 AM - 6:00 PM (last entry 5:00 PM)",
+      tips: [
+        "Book online for €3 discount on adult tickets",
+        "Shark tunnel is the highlight - visit during feeding times",
+        "Bunker history adds unique dimension to visit",
+        "Children's aquarium perfect for families",
+        "Roof terrace offers spectacular city views",
+        "Photography allowed throughout",
+        "Wheelchair accessible with elevators",
+        "Allow 2-3 hours for complete visit",
+        "Café available on site",
+        "Night viewing occasionally available (check website)"
+      ]
+    },
+    haus_der_musik: {
+      title: "Haus der Musik (House of Music)",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Haus_der_Musik_Wien.jpg/800px-Haus_der_Musik_Wien.jpg",
+      description: "The House of Music, opened in 2000, is an interactive museum dedicated to music and Vienna's musical heritage. Located in the former Palais Erzherzog Carl, the museum explores the science of sound, Vienna's musical history, and features interactive exhibits about famous Austrian composers. The museum is particularly engaging for families and music lovers, with hands-on exhibits that make complex musical concepts accessible.",
+      details: [
+        "• Interactive museum about music and sound science",
+        "• Vienna's musical heritage and famous composers",
+        "• Sound laboratory with interactive exhibits",
+        "• Composer rooms dedicated to Mozart, Beethoven, Schubert, etc.",
+        "• Musical instrument collection",
+        "• Recording studio experience",
+        "• Sonosphere: Spherical sound environment",
+        "• Children's area with musical games",
+        "• Café with views of Vienna State Opera"
+      ],
+      website: "https://www.hausdermusik.com",
+      price: "€16 adults, €12 students/seniors, €8 children",
+      hours: "Daily 10:00 AM - 10:00 PM (last entry 9:00 PM)",
+      tips: [
+        "Interactive exhibits make it engaging for all ages",
+        "Sonosphere creates unique sound experiences",
+        "Composer rooms bring classical music to life",
+        "Children's area perfect for families",
+        "Extended hours make evening visits possible",
+        "Photography allowed in most areas",
+        "Audio guide available",
+        "Café offers views of nearby State Opera",
+        "Recording studio lets you create your own music",
+        "Located near Karlsplatz with good transport links"
       ]
     }
   };
