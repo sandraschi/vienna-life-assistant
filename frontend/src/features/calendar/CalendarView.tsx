@@ -90,15 +90,6 @@ export default function CalendarView() {
     });
   };
 
-  const formatFullDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('de-AT', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-  };
 
   const goToToday = () => {
     setCurrentDate(new Date());
@@ -365,7 +356,7 @@ export default function CalendarView() {
           <ToggleButtonGroup
             value={timeView}
             exclusive
-            onChange={(e, newView) => newView && setTimeView(newView)}
+            onChange={(_, newView) => newView && setTimeView(newView)}
             size="small"
           >
             <ToggleButton value="day">Day</ToggleButton>
@@ -390,7 +381,7 @@ export default function CalendarView() {
           <ToggleButtonGroup
             value={viewMode}
             exclusive
-            onChange={(e, newMode) => newMode && setViewMode(newMode)}
+            onChange={(_, newMode) => newMode && setViewMode(newMode)}
             size="small"
           >
             <ToggleButton value="list">

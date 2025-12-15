@@ -27,7 +27,6 @@ import {
   Download as DownloadIcon,
   Delete as DeleteIcon,
   PlayArrow as LoadIcon,
-  Stop as UnloadIcon,
   Psychology as AIIcon,
   Refresh as RefreshIcon,
 } from '@mui/icons-material';

@@ -15,10 +15,8 @@ import {
   ListItemText,
   Card,
   CardContent,
-  CardMedia,
   Button,
   Alert,
-  Divider,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CodeIcon from '@mui/icons-material/Code';
@@ -32,7 +30,6 @@ import WebIcon from '@mui/icons-material/Web';
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import ArchitectureIcon from '@mui/icons-material/Architecture';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { Link } from 'react-router-dom';
 
 const Technical: React.FC = () => {
   return (
@@ -661,11 +658,11 @@ const Technical: React.FC = () => {
               <Button
                 variant="outlined"
                 startIcon={<GitHubIcon />}
-                component={Link}
                 href="https://github.com/sandraschi/vienna-life-assistant"
                 target="_blank"
                 rel="noopener"
                 fullWidth
+                component="a"
               >
                 Main Repository
               </Button>
@@ -674,11 +671,11 @@ const Technical: React.FC = () => {
               <Button
                 variant="outlined"
                 startIcon={<CodeIcon />}
-                component={Link}
                 href="https://github.com/sandraschi/advanced-memory-mcp"
                 target="_blank"
                 rel="noopener"
                 fullWidth
+                component="a"
               >
                 Advanced Memory MCP
               </Button>
@@ -687,11 +684,11 @@ const Technical: React.FC = () => {
               <Button
                 variant="outlined"
                 startIcon={<CodeIcon />}
-                component={Link}
                 href="https://github.com/sandraschi/tapo-camera-mcp"
                 target="_blank"
                 rel="noopener"
                 fullWidth
+                component="a"
               >
                 Tapo Camera MCP
               </Button>
@@ -700,11 +697,11 @@ const Technical: React.FC = () => {
               <Button
                 variant="outlined"
                 startIcon={<CodeIcon />}
-                component={Link}
                 href="https://github.com/sandraschi/plex-mcp"
                 target="_blank"
                 rel="noopener"
                 fullWidth
+                component="a"
               >
                 Plex MCP
               </Button>

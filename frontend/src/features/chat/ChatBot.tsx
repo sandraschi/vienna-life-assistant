@@ -18,16 +18,12 @@ import {
   ListItemIcon,
   Tooltip,
   CircularProgress,
-  Alert,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
   Switch,
   FormControlLabel,
-  Divider,
-  Card,
-  CardContent,
 } from '@mui/material';
 import {
   Send as SendIcon,
@@ -36,9 +32,7 @@ import {
   Settings as SettingsIcon,
   Add as AddIcon,
   Delete as DeleteIcon,
-  Psychology as BrainIcon,
   Construction as ToolIcon,
-  Search as SearchIcon,
   AutoFixHigh as EnhanceIcon,
 } from '@mui/icons-material';
 import api from '../../services/api';
