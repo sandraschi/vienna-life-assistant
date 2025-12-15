@@ -1,11 +1,11 @@
 # AI Chatbot Documentation
 
-**Last Updated**: 2025-12-04  
-**Status**: Production Ready ✨
+**Last Updated**: 2025-12-15
+**Status**: Beta Version 🚧
 
 ## 🤖 Overview
 
-A **state-of-the-art conversational AI** with 16 integrated tools, 6 personalities, streaming responses, and MCP server integration. Runs 100% locally on your RTX 4090 via Ollama.
+An **AI-powered conversational assistant** with 16 integrated tools, 6 personalities, streaming responses, and MCP server integration. Runs 100% locally on your RTX 4090 via Ollama.
 
 ## ✨ Features
 

@@ -1,8 +1,17 @@
 # Vienna Life Assistant
 
-**Timestamp**: 2025-12-04  
-**Status**: Production Ready ✨  
-**Version**: 3.0 - SOTA AI Integration
+[![Beta](https://img.shields.io/badge/status-beta-orange.svg)](https://github.com/sandraschi/vienna-life-assistant)
+[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
+[![React](https://img.shields.io/badge/react-18+-61dafb.svg)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/typescript-5+-3178c6.svg)](https://www.typescriptlang.org/)
+[![FastAPI](https://img.shields.io/badge/fastapi-0.109+-009688.svg)](https://fastapi.tiangolo.com/)
+[![Material--UI](https://img.shields.io/badge/material--ui-5+-007acc.svg)](https://mui.com/)
+[![SQLite](https://img.shields.io/badge/sqlite-3-003b57.svg)](https://sqlite.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**Timestamp**: 2025-12-15  
+**Status**: Beta Version 🚧  
+**Version**: 3.0-beta - AI-Powered Life Management
 
 A beautiful, modern personal life management app with **AI chatbot**, calendar, todos, expenses, and shopping - integrated with your entire digital ecosystem via MCP servers.
 
@@ -19,7 +28,7 @@ Your **personal command center** for Vienna life:
 - 📚 **Media Hub**: 50k anime, 15k ebooks (Plex/Calibre MCP)
 - 🚊 **Transit**: Wiener Linien integration (U-Bahn, Tram, Bus)
 
-## ✨ AI Chatbot Features (NEW!)
+## 🤖 AI Chatbot Features (Beta)
 
 ### **6 AI Personalities:**
 1. **Professional Assistant** - Helpful, accurate, professional
@@ -29,7 +38,7 @@ Your **personal command center** for Vienna life:
 5. **Concise Advisor** - Brief, direct, bullet points
 6. **Vienna Local** - Expert on Bezirke, Wiener Linien, restaurants
 
-### **16 Integrated Tools:**
+### **16 Integrated Tools (Beta):**
 
 **Core Tools (1-5):**
 - 🔢 **Calculator** - Math expressions, sqrt, powers
@@ -55,8 +64,8 @@ Your **personal command center** for Vienna life:
 - 🎬 **Plex** - 50,000 anime/movies
 - 📚 **Calibre** - 15,000 ebooks
 
-### **SOTA Features:**
-- ✨ **AI Prompt Enhancement** - Improves your questions
+### **Beta Features:**
+- ✨ **AI Prompt Enhancement** - Improves your questions (experimental)
 - 🔄 **Streaming Responses** - Real-time text generation
 - 💾 **Conversation Memory** - Save and resume chats
 - 🔧 **Auto-Tool Detection** - Smart pattern matching
@@ -284,7 +293,7 @@ $env:CALIBRE_MCP_PATH="D:/Dev/repos/calibre-mcp/src/calibre_mcp/server.py"
 
 - ✅ **Phase 1**: Project setup, database, models
 - ✅ **Phase 2**: Calendar, Todos, Shopping, Expenses
-- ✅ **Phase 3**: SOTA AI Chatbot with 16 tools
+- ✅ **Phase 3**: AI Chatbot with 16 tools (Beta)
 - ✅ **Phase 4**: MCP integrations (Advanced Memory, Tapo, Plex, Calibre)
 - ✅ **Phase 5**: Mobile responsiveness (iPhone/iPad ready)
 - ✅ **Phase 6**: Smart home integration (lights, cameras, weather)
@@ -360,9 +369,9 @@ nssm set ViennaLifeFrontend AppDirectory "D:\Dev\repos\vienna-life-assistant\fro
 - `ECOSYSTEM_INTEGRATION.md` - MCP integration architecture
 - `COMPLETE.md` - Final project summary
 
-## 🎉 Highlights
+## 🎉 Beta Highlights
 
-- **16 AI tools** across 4 MCP servers
+- **16 AI tools** across 4 MCP servers (beta)
 - **6 personalities** for different chat styles
 - **Streaming responses** with real-time updates
 - **Tool auto-detection** via smart pattern matching

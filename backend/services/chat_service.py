@@ -151,7 +151,7 @@ TOOLS = [
 
 
 class ChatService:
-    """Chat service with SOTA features"""
+    """Chat service with AI-powered features (Beta)"""
     
     def __init__(self):
         self.personalities = PERSONALITIES

@@ -229,8 +229,8 @@ function App() {
               opacity: 0.7
             }}
           >
-            🚀 Phase 3 | ✅ Todos • 🛒 Shopping • 🤖 AI Chat • 🧠 LLM • 🏠 Media Hub | 
-            Status: <strong>SOTA AI Assistant Ready!</strong>
+            🚀 Phase 3 (Beta) | ✅ Todos • 🛒 Shopping • 🤖 AI Chat • 🧠 LLM • 🏠 Media Hub |
+            Status: <strong>Beta AI Assistant</strong>
           </Typography>
         </Paper>
       </Container>
