@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   Typography,
@@ -17,7 +17,16 @@ import {
   Chip,
   Divider,
   Paper,
-  Stack
+  Stack,
+  Tabs,
+  Tab,
+  Button,
+  Link,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton
 } from '@mui/material';
 import {
   ExpandMore as ExpandMoreIcon,
@@ -32,10 +41,45 @@ import {
   Security as SecurityIcon,
   Celebration as CelebrationIcon,
   Park as ParkIcon,
-  Restaurant as RestaurantIcon
+  Restaurant as RestaurantIcon,
+  Close as CloseIcon,
+  Train as TrainIcon,
+  Flight as FlightIcon,
+  AccessTime as TimeIcon,
+  Info as InfoIcon,
+  Photo as PhotoIcon
 } from '@mui/icons-material';
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vienna-tabpanel-${index}`}
+      aria-labelledby={`vienna-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ py: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
 const Vienna: React.FC = () => {
+  const [activeTab, setActiveTab] = useState(0);
+  const [selectedAttraction, setSelectedAttraction] = useState<string | null>(null);
+
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
+
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Hero Section */}
@@ -60,90 +104,727 @@ const Vienna: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Quick Facts */}
-      <Paper elevation={3} sx={{ p: 3, mb: 4, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
-        <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>
-          🌟 Vienna at a Glance
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={3}>
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold' }}>1.9M</Typography>
-              <Typography variant="body2">Population</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold' }}>415km²</Typography>
-              <Typography variant="body2">Area</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold' }}>23</Typography>
-              <Typography variant="body2">Districts</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold' }}>€4,500</Typography>
-              <Typography variant="body2">Avg Monthly Cost</Typography>
-            </Box>
-          </Grid>
-        </Grid>
+      {/* Vienna Tabs */}
+      <Paper sx={{ mb: 4 }}>
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
+          sx={{
+            borderBottom: 1,
+            borderColor: 'divider',
+            '& .MuiTab-root': {
+              fontSize: { xs: '0.875rem', sm: '1rem' },
+              fontWeight: 500,
+              py: { xs: 1.5, sm: 2, md: 2.5 },
+              minHeight: { xs: 48, sm: 56, md: 64 },
+              minWidth: { xs: 80, sm: 120 }
+            },
+            '& .Mui-selected': {
+              color: 'primary.main',
+              fontWeight: 600
+            }
+          }}
+        >
+          <Tab icon={<LocationIcon />} iconPosition="start" label="Attractions" />
+          <Tab icon={<CafeIcon />} iconPosition="start" label="Coffee Houses" />
+          <Tab icon={<EuroIcon />} iconPosition="start" label="Vienna Pass" />
+          <Tab icon={<TrainIcon />} iconPosition="start" label="Day Trips" />
+          <Tab icon={<TransportIcon />} iconPosition="start" label="Transport" />
+          <Tab icon={<CelebrationIcon />} iconPosition="start" label="Festivals" />
+        </Tabs>
+
+        {/* Tab Content */}
+        <TabPanel value={activeTab} index={0}>
+          <ViennaAttractions onAttractionClick={setSelectedAttraction} />
+        </TabPanel>
+
+        <TabPanel value={activeTab} index={1}>
+          <ViennaCoffeeHouses onAttractionClick={setSelectedAttraction} />
+        </TabPanel>
+
+        <TabPanel value={activeTab} index={2}>
+          <ViennaPass />
+        </TabPanel>
+
+        <TabPanel value={activeTab} index={3}>
+          <ViennaDayTrips />
+        </TabPanel>
+
+        <TabPanel value={activeTab} index={4}>
+          <ViennaTransport />
+        </TabPanel>
+
+        <TabPanel value={activeTab} index={5}>
+          <ViennaFestivals />
+        </TabPanel>
       </Paper>
 
-      {/* Main Content Sections */}
-      <Grid container spacing={4}>
-        {/* Travel Guide */}
-        <Grid item xs={12} lg={8}>
-          <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h4" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <LocationIcon color="primary" />
-                Travel Guide
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ViennaTravelGuide />
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion sx={{ mt: 2 }}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h4" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <TransportIcon color="primary" />
-                Public Transport
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ViennaTransport />
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion sx={{ mt: 2 }}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h4" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <CelebrationIcon color="primary" />
-                Festivals & Events
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ViennaFestivals />
-            </AccordionDetails>
-          </Accordion>
-        </Grid>
-
-        {/* Sidebar */}
-        <Grid item xs={12} lg={4}>
-          <ViennaSidebar />
-        </Grid>
-      </Grid>
+      {/* Attraction Detail Dialog */}
+      <AttractionDetailDialog
+        attraction={selectedAttraction}
+        onClose={() => setSelectedAttraction(null)}
+      />
     </Container>
   );
 };
 
-// Travel Guide Component
+// Attractions Component
+const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => void }> = ({ onAttractionClick }) => (
+  <Box>
+    <Typography variant="h5" gutterBottom color="primary" sx={{ mb: 3 }}>
+      🎭 Must-See Vienna Attractions
+    </Typography>
+
+    <Grid container spacing={3}>
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('stephansdom')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Stephansdom_Wien_2014.jpg/800px-Stephansdom_Wien_2014.jpg"
+            alt="St. Stephen's Cathedral"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>St. Stephen's Cathedral</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Vienna's iconic Gothic cathedral, symbol of the city. Climb the south tower for panoramic views of Vienna's rooftops.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="UNESCO" color="primary" />
+              <Chip size="small" label="Free Entry" color="success" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('belvedere')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Belvedere_Palace_Vienna.jpg/800px-Belvedere_Palace_Vienna.jpg"
+            alt="Belvedere Palace"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Belvedere Palace</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Baroque palace complex housing Gustav Klimt's "The Kiss". Two palaces connected by beautiful gardens.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Klimt" color="secondary" />
+              <Chip size="small" label="€16" color="warning" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('hofburg')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Hofburg_Palace%2C_Innsbruck.jpg/800px-Hofburg_Palace%2C_Innsbruck.jpg"
+            alt="Hofburg Palace"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Hofburg Palace</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Imperial residence of Habsburg emperors. Imperial Apartments, Treasury, and Spanish Riding School.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Imperial" color="warning" />
+              <Chip size="small" label="€20" color="warning" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('schonbrunn')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Sch%C3%B6nbrunn_Palace%2C_Vienna.jpg/800px-Sch%C3%B6nbrunn_Palace%2C_Vienna.jpg"
+            alt="Schönbrunn Palace"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Schönbrunn Palace</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Summer residence of Habsburg emperors. Vast palace complex with gardens, zoo, and palm house.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="UNESCO" color="primary" />
+              <Chip size="small" label="€22" color="warning" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('prater')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Vienna_Stadtpark_01.jpg/800px-Vienna_Stadtpark_01.jpg"
+            alt="Prater Park"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Prater Park</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Vienna's largest park with the famous Riesenrad ferris wheel. Historic amusement park and recreation area.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Riesenrad" color="success" />
+              <Chip size="small" label="€12" color="warning" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('naschmarkt')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Naschmarkt_Vienna.jpg/800px-Naschmarkt_Vienna.jpg"
+            alt="Naschmarkt"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Naschmarkt</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Vienna's most famous market. Fresh produce, international cuisine, street food, and vintage shops.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Market" color="success" />
+              <Chip size="small" label="Free" color="success" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  </Box>
+);
+
+// Coffee Houses Component
+const ViennaCoffeeHouses: React.FC<{ onAttractionClick: (attraction: string) => void }> = ({ onAttractionClick }) => (
+  <Box>
+    <Typography variant="h5" gutterBottom color="primary" sx={{ mb: 3 }}>
+      ☕ Vienna Coffee House Culture
+    </Typography>
+
+    <Typography variant="body1" sx={{ mb: 3, fontStyle: 'italic' }}>
+      "The coffee house is a social institution in Vienna. It is a place where time and space are consumed, but only the coffee is found on the bill." - Peter Altenberg
+    </Typography>
+
+    <Grid container spacing={3}>
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('cafe-central')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Caf%C3%A9_Central_in_Vienna.jpg/800px-Caf%C3%A9_Central_in_Vienna.jpg"
+            alt="Café Central"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Café Central</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Vienna's most famous coffee house. Historic venue where Trotsky played chess and Freud met colleagues.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Historic" color="warning" />
+              <Chip size="small" label="Famous Queue" color="error" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('cafe-sperl')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Caf%C3%A9_Sperl_Interior.jpg/800px-Caf%C3%A9_Sperl_Interior.jpg"
+            alt="Café Sperl"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Café Sperl</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Theater district institution since 1880. Jugendstil interior, traditional Viennese atmosphere.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Theater" color="secondary" />
+              <Chip size="small" label="Jugendstil" color="primary" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('cafe-hawelka')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Caf%C3%A9_Hawelka_Interior.jpg/800px-Caf%C3%A9_Hawelka_Interior.jpg"
+            alt="Café Hawelka"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Café Hawelka</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Artists' haunt since 1939. Famous for Buchteln (sweet yeast dumplings) and intellectual atmosphere.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Artists" color="secondary" />
+              <Chip size="small" label="Buchteln" color="success" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('cafe-griensteidl')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Caf%C3%A9_Griensteidl_Interior.jpg/800px-Caf%C3%A9_Griensteidl_Interior.jpg"
+            alt="Café Griensteidl"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Café Griensteidl</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Literary coffee house since 1847. Meeting place for writers, artists, and intellectuals.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Literary" color="primary" />
+              <Chip size="small" label="Historic" color="warning" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('cafe-demel')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Demel_Logo.jpg/800px-Demel_Logo.jpg"
+            alt="Demel"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Demel</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Imperial court confectioner since 1786. Famous for Sachertorte and imperial pastries.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Imperial" color="warning" />
+              <Chip size="small" label="Pastries" color="success" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('cafe-pruckel')}>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Caf%C3%A9_Pr%C3%BCckel_Interior.jpg/800px-Caf%C3%A9_Pr%C3%BCckel_Interior.jpg"
+            alt="Café Prückel"
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Café Prückel</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Jugendstil masterpiece. Stunning interior with marble columns, stained glass, and garden.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Jugendstil" color="primary" />
+              <Chip size="small" label="Architecture" color="secondary" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  </Box>
+);
+
+// Vienna Pass Component
+const ViennaPass: React.FC = () => (
+  <Box>
+    <Typography variant="h5" gutterBottom color="primary" sx={{ mb: 3 }}>
+      🎫 Vienna Pass - Your Smart City Guide
+    </Typography>
+
+    <Grid container spacing={3}>
+      <Grid item xs={12} md={8}>
+        <Paper sx={{ p: 3 }}>
+          <Typography variant="h6" gutterBottom>What is the Vienna Pass?</Typography>
+          <Typography variant="body1" sx={{ mb: 3 }}>
+            The Vienna Pass is your all-access ticket to Vienna's top attractions. It provides free entry to over 60 museums,
+            palaces, and sights, plus unlimited public transport and fast-track entry to avoid queues.
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>What's Included:</Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <List dense>
+                <ListItem>
+                  <ListItemIcon><MuseumIcon color="primary" /></ListItemIcon>
+                  <ListItemText primary="Free entry to 60+ attractions" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><TransportIcon color="primary" /></ListItemIcon>
+                  <ListItemText primary="Unlimited public transport" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><TimeIcon color="primary" /></ListItemIcon>
+                  <ListItemText primary="Fast-track entry (skip queues)" />
+                </ListItem>
+              </List>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <List dense>
+                <ListItem>
+                  <ListItemIcon><InfoIcon color="primary" /></ListItemIcon>
+                  <ListItemText primary="Free city guide app" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><PhotoIcon color="primary" /></ListItemIcon>
+                  <ListItemText primary="Free walking tours" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon><TrainIcon color="primary" /></ListItemIcon>
+                  <ListItemText primary="Airport transfer options" />
+                </ListItem>
+              </List>
+            </Grid>
+          </Grid>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>Pricing:</Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={6} sm={3}>
+              <Paper sx={{ p: 2, textAlign: 'center', bgcolor: 'primary.light', color: 'white' }}>
+                <Typography variant="h6">1 Day</Typography>
+                <Typography variant="h4">€69</Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <Paper sx={{ p: 2, textAlign: 'center', bgcolor: 'secondary.light', color: 'white' }}>
+                <Typography variant="h6">2 Days</Typography>
+                <Typography variant="h4">€89</Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <Paper sx={{ p: 2, textAlign: 'center', bgcolor: 'success.light', color: 'white' }}>
+                <Typography variant="h6">3 Days</Typography>
+                <Typography variant="h4">€109</Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <Paper sx={{ p: 2, textAlign: 'center', bgcolor: 'warning.light', color: 'black' }}>
+                <Typography variant="h6">6 Days</Typography>
+                <Typography variant="h4">€149</Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>Top Attractions Covered:</Typography>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
+            <Chip label="Schönbrunn Palace" variant="outlined" />
+            <Chip label="Hofburg Palace" variant="outlined" />
+            <Chip label="Belvedere Palace" variant="outlined" />
+            <Chip label="St. Stephen's Cathedral" variant="outlined" />
+            <Chip label="Albertina Museum" variant="outlined" />
+            <Chip label="Kunst Haus Wien" variant="outlined" />
+            <Chip label="Haus des Meeres" variant="outlined" />
+            <Chip label="Madame Tussauds" variant="outlined" />
+            <Chip label="Vienna State Opera" variant="outlined" />
+          </Box>
+
+          <Button
+            variant="contained"
+            size="large"
+            sx={{ mt: 2 }}
+            component={Link}
+            href="https://www.viennapass.com"
+            target="_blank"
+            rel="noopener"
+          >
+            Get Vienna Pass Online
+          </Button>
+        </Paper>
+      </Grid>
+
+      <Grid item xs={12} md={4}>
+        <Paper sx={{ p: 3, bgcolor: 'success.light', color: 'white' }}>
+          <Typography variant="h6" gutterBottom>💰 Money Saving Tips</Typography>
+          <List dense sx={{ color: 'white' }}>
+            <ListItem>
+              <ListItemText primary="• Payback within 2-3 attractions" />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="• Skip-the-line saves hours" />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="• Free transport included" />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="• Best for intensive sightseeing" />
+            </ListItem>
+          </List>
+        </Paper>
+
+        <Paper sx={{ p: 3, mt: 2, bgcolor: 'info.light' }}>
+          <Typography variant="h6" gutterBottom>📱 Vienna Pass App</Typography>
+          <Typography variant="body2">
+            Download the free Vienna Pass app for:
+          </Typography>
+          <List dense>
+            <ListItem>
+              <ListItemText primary="• Interactive city map" />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="• Attraction details & hours" />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="• Real-time queue times" />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="• Personalized itineraries" />
+            </ListItem>
+          </List>
+        </Paper>
+      </Grid>
+    </Grid>
+  </Box>
+);
+
+// Day Trips Component
+const ViennaDayTrips: React.FC = () => (
+  <Box>
+    <Typography variant="h5" gutterBottom color="primary" sx={{ mb: 3 }}>
+      🚂 Day Trips from Vienna
+    </Typography>
+
+    <Grid container spacing={3}>
+      {/* Salzburg */}
+      <Grid item xs={12} md={6}>
+        <Card>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Salzburg_Mirabellgarten.jpg/800px-Salzburg_Mirabellgarten.jpg"
+            alt="Salzburg"
+          />
+          <CardContent>
+            <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <TrainIcon /> Salzburg (2.5 hours by train)
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Birthplace of Mozart, baroque architecture, and stunning alpine scenery. Perfect day trip combining culture and nature.
+            </Typography>
+
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>🚆 Transport Options:</Typography>
+            <List dense>
+              <ListItem>
+                <ListItemText primary="• Railjet train: 2h 25min, €30-60 one-way" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• Regional trains: 2h 40min, €20-40" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• Bus: 3 hours, €15-25 (cheaper but slower)" />
+              </ListItem>
+            </List>
+
+            <Typography variant="subtitle2" sx={{ mb: 1, mt: 2 }}>📅 Suggested Itinerary:</Typography>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              8:00 AM departure → 10:30 AM arrive → Mirabell Gardens → Hohensalzburg Fortress →
+              Mozart's birthplace → Evening return
+            </Typography>
+
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              <Chip size="small" label="Mozart" color="secondary" />
+              <Chip size="small" label="Baroque" color="primary" />
+              <Chip size="small" label="Alps" color="success" />
+            </Box>
+
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              component={Link}
+              href="https://www.salzburg.info"
+              target="_blank"
+              rel="noopener"
+            >
+              Visit Salzburg Tourism
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Bratislava */}
+      <Grid item xs={12} md={6}>
+        <Card>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Bratislava_Castle_from_Donau.jpg/800px-Bratislava_Castle_from_Donau.jpg"
+            alt="Bratislava Castle"
+          />
+          <CardContent>
+            <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <TrainIcon /> Bratislava (1 hour by train)
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Slovakia's capital offers stunning castle views, medieval old town, and surprisingly affordable dining. Europe's cheapest capital!
+            </Typography>
+
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>🚆 Transport Options:</Typography>
+            <List dense>
+              <ListItem>
+                <ListItemText primary="• Direct train: 1 hour, €10-15 one-way" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• Bus: 1h 15min, €8-12" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• Danube cruise: 1h 15min, €15-25 return" />
+              </ListItem>
+            </List>
+
+            <Typography variant="subtitle2" sx={{ mb: 1, mt: 2 }}>📅 Suggested Itinerary:</Typography>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              9:00 AM departure → 10:00 AM arrive → Bratislava Castle → Old Town Square →
+              UFO Bridge → Lunch (€10-15) → Return by 5:00 PM
+            </Typography>
+
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              <Chip size="small" label="Castle" color="warning" />
+              <Chip size="small" label="Budget" color="success" />
+              <Chip size="small" label="Medieval" color="primary" />
+            </Box>
+
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              component={Link}
+              href="https://www.visitbratislava.com"
+              target="_blank"
+              rel="noopener"
+            >
+              Visit Bratislava Tourism
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Prague */}
+      <Grid item xs={12}>
+        <Card>
+          <CardMedia
+            component="img"
+            height="200"
+            image="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Prague_Castle_from_Vltava.jpg/800px-Prague_Castle_from_Vltava.jpg"
+            alt="Prague Castle"
+          />
+          <CardContent>
+            <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <FlightIcon /> Prague (4 hours by train, early start recommended)
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              "City of a Hundred Spires" offers stunning Gothic architecture, world-famous beer culture, and fairy-tale charm.
+              Requires an early start for a full day trip.
+            </Typography>
+
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>🚆 Transport Options:</Typography>
+            <List dense>
+              <ListItem>
+                <ListItemText primary="• Railjet train: 4 hours, €30-60 one-way" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• Regional trains: 4h 30min, €20-40" />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="• Bus: 4-5 hours, €15-30 (overnight return option)" />
+              </ListItem>
+            </List>
+
+            <Typography variant="subtitle2" sx={{ mb: 1, mt: 2 }}>📅 Suggested Itinerary:</Typography>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              5:30 AM departure → 9:30 AM arrive → Prague Castle → Charles Bridge → Old Town Square →
+              Astronomical Clock → Beer garden lunch → Return by 8:00 PM train
+            </Typography>
+
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              <Chip size="small" label="Gothic" color="primary" />
+              <Chip size="small" label="Beer" color="warning" />
+              <Chip size="small" label="Castle" color="secondary" />
+              <Chip size="small" label="Early Start" color="error" />
+            </Box>
+
+            <Typography variant="body2" sx={{ fontStyle: 'italic', mb: 2 }}>
+              💡 Tip: Consider staying overnight in Prague for a more relaxed experience - hotels from €40.
+            </Typography>
+
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              component={Link}
+              href="https://www.prague.eu"
+              target="_blank"
+              rel="noopener"
+            >
+              Visit Prague Tourism
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  </Box>
+);
+
+// Travel Guide Component (kept for reference but now part of Attractions)
 const ViennaTravelGuide: React.FC = () => (
   <Box>
     {/* History & Geography */}
@@ -480,112 +1161,356 @@ const ViennaFestivals: React.FC = () => (
   </Box>
 );
 
-// Sidebar Component
-const ViennaSidebar: React.FC = () => (
-  <Box>
-    {/* Safety & Practical Info */}
-    <Paper sx={{ p: 2, mb: 2 }}>
-      <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#1976d2' }}>
-        <SecurityIcon /> Safety & Practical
-      </Typography>
-      <List dense>
-        <ListItem>
-          <ListItemText primary="✅ Very safe city - walk at night" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="💧 Tap water is drinkable" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="🏥 Public healthcare excellent" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="💶 Euro (€) is currency" />
-        </ListItem>
-      </List>
-    </Paper>
+// Attraction Detail Dialog Component
+const AttractionDetailDialog: React.FC<{
+  attraction: string | null;
+  onClose: () => void;
+}> = ({ attraction, onClose }) => {
+  if (!attraction) return null;
 
-    {/* Free Attractions */}
-    <Paper sx={{ p: 2, mb: 2 }}>
-      <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#388e3c' }}>
-        <ParkIcon /> Free Attractions
-      </Typography>
-      <List dense>
-        <ListItem>
-          <ListItemText primary="• St. Stephen's Cathedral" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="• Naschmarkt (food market)" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="• Stadtpark (city park)" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="• Danube Canal walks" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="• Belvedere Gardens" />
-        </ListItem>
-      </List>
-    </Paper>
+  const attractionData: Record<string, {
+    title: string;
+    image: string;
+    description: string;
+    details: string[];
+    website: string;
+    price?: string;
+    hours?: string;
+    tips?: string[];
+  }> = {
+    stephansdom: {
+      title: "St. Stephen's Cathedral (Stephansdom)",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Stephansdom_Wien_2014.jpg/800px-Stephansdom_Wien_2014.jpg",
+      description: "Vienna's iconic Gothic cathedral, built between 1137 and 1160, is the symbol of Vienna and one of Europe's most important Gothic structures. The cathedral has witnessed centuries of history, from medieval coronations to modern state ceremonies.",
+      details: [
+        "• Gothic architecture with stunning stained glass windows",
+        "• Climb the 343 steps of the South Tower for panoramic city views (€6)",
+        "• The Pummerin bell weighs 20 tons and tolls on special occasions",
+        "• Imperial crypt contains the remains of 12 emperors and 19 empresses",
+        "• North Tower houses the cathedral treasury with precious artifacts",
+        "• Free entry to main nave, charges for towers and catacombs"
+      ],
+      website: "https://www.stephanskirche.at",
+      price: "Free entry to cathedral, €6 for South Tower, €5 for North Tower & Treasury",
+      hours: "Daily 6:00 AM - 10:00 PM (towers until 5:30 PM)",
+      tips: [
+        "Visit early morning to avoid crowds",
+        "South Tower views are spectacular at sunset",
+        "Photography allowed but no flash",
+        "Dress modestly - shoulders and knees covered",
+        "Wheelchair accessible via ramp"
+      ]
+    },
+    belvedere: {
+      title: "Belvedere Palace",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Belvedere_Palace_Vienna.jpg/800px-Belvedere_Palace_Vienna.jpg",
+      description: "A masterpiece of Baroque architecture, the Belvedere was built as a summer residence for Prince Eugene of Savoy. Today it houses the world's largest collection of Gustav Klimt paintings, including his famous 'The Kiss'.",
+      details: [
+        "• Two palaces (Upper and Lower) connected by formal gardens",
+        "• Upper Belvedere: Klimt's 'The Kiss' and other masterpieces",
+        "• Lower Belvedere: Temporary exhibitions and garden café",
+        "• Marble Hall with stunning ceiling frescoes",
+        "• Orangery with seasonal exhibitions",
+        "• Beautiful Baroque gardens with fountains and sculptures"
+      ],
+      website: "https://www.belvedere.at",
+      price: "€16 for Upper Belvedere, €14 for Lower, €22 combined ticket",
+      hours: "Tue-Sun 10:00 AM - 6:00 PM, Thu until 9:00 PM",
+      tips: [
+        "Buy tickets online to skip queues",
+        "Allow 2-3 hours for both palaces",
+        "Gardens are free and beautiful for picnics",
+        "Thursday evening visits are quieter",
+        "Photography allowed without flash"
+      ]
+    },
+    hofburg: {
+      title: "Hofburg Palace",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Hofburg_Palace%2C_Innsbruck.jpg/800px-Hofburg_Palace%2C_Innsbruck.jpg",
+      description: "The Hofburg was the residence of the Habsburg emperors for over 600 years. This vast complex includes the Imperial Apartments, the Imperial Treasury with the crown jewels, and the Spanish Riding School famous for its Lipizzaner horses.",
+      details: [
+        "• Imperial Apartments: 19 rooms of imperial luxury",
+        "• Imperial Treasury: Crown jewels, coronation robes, and holy relics",
+        "• Spanish Riding School: World-famous Lipizzaner stallions (€25-€125)",
+        "• Imperial Chapel with Silberkammer (silver collection)",
+        "• National Library with priceless manuscripts",
+        "• Michaelerplatz entrance with Roman ruins underneath"
+      ],
+      website: "https://www.hofburg-wien.at",
+      price: "€20 for Imperial Apartments & Treasury, additional €25-€125 for Riding School",
+      hours: "Imperial Apartments: Sep-Jun 9:00 AM - 5:30 PM, Jul-Aug until 6:00 PM",
+      tips: [
+        "Book tickets online for Imperial Apartments",
+        "Visit Imperial Treasury early to avoid crowds",
+        "Riding School performances require advance booking",
+        "Combined tickets save money",
+        "Guided tours available in multiple languages"
+      ]
+    },
+    schonbrunn: {
+      title: "Schönbrunn Palace & Gardens",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Sch%C3%B6nbrunn_Palace%2C_Vienna.jpg/800px-Sch%C3%B6nbrunn_Palace%2C_Vienna.jpg",
+      description: "Schönbrunn Palace, the former summer residence of the Habsburg emperors, is one of the world's most beautiful Baroque palaces. The palace and its 160-hectare gardens were designed to rival Versailles and remain a UNESCO World Heritage site.",
+      details: [
+        "• 1,441 rooms, 40 of which are open to visitors",
+        "• Grand Gallery with ceiling frescoes by Gregorio Guglielmi",
+        "• Million Room with its intricate oriental wallpaper",
+        "• Gardens with maze, zoo, and palm house (€6)",
+        "• Gloriette: Iconic viewpoint with city panorama",
+        "• Crown Prince Garden with playground and petting zoo"
+      ],
+      website: "https://www.schoenbrunn.at",
+      price: "€22 for palace and gardens, additional €6 for zoo/palm house",
+      hours: "Apr-Oct: 8:00 AM - 6:30 PM, Nov-Mar: 8:00 AM - 5:00 PM",
+      tips: [
+        "Take tram D from city center (20 minutes)",
+        "Visit early morning or late afternoon to avoid crowds",
+        "Gardens are free if you skip the palace",
+        "Picnic areas available in gardens",
+        "Tram tickets included in Vienna Pass"
+      ]
+    },
+    'cafe-central': {
+      title: "Café Central",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Caf%C3%A9_Central_in_Vienna.jpg/800px-Caf%C3%A9_Central_in_Vienna.jpg",
+      description: "Café Central, opened in 1876, is Vienna's most famous coffee house and a UNESCO World Heritage site. This historic venue hosted intellectual giants like Sigmund Freud, Leon Trotsky (who played chess here), and Theodor Herzl. The café maintains its imperial splendor with marble pillars, chandeliers, and newspapers on sticks.",
+      details: [
+        "• Historic venue since 1876, UNESCO World Heritage",
+        "• Famous for its chess games and intellectual gatherings",
+        "• Marble pillars, chandeliers, and Jugendstil interior",
+        "• Newspapers on sticks tradition",
+        "• Trotsky played chess here daily",
+        "• Freud and Herzl met here regularly",
+        "• Famous queue at the entrance (worth the wait!)"
+      ],
+      website: "https://www.cafecentral.wien",
+      price: "Coffee €4-6, pastries €5-8, lunch €15-25",
+      hours: "Daily 7:30 AM - 10:00 PM",
+      tips: [
+        "Expect to queue 15-30 minutes (it's part of the experience!)",
+        "Try the Wiener Melange (Viennese coffee with milk foam)",
+        "Traditional Austrian dishes like Schnitzel available",
+        "Newspapers in multiple languages available",
+        "Perfect for people-watching and intellectual atmosphere",
+        "Dress code: Smart casual, no athletic wear"
+      ]
+    },
+    'cafe-sperl': {
+      title: "Café Sperl",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Caf%C3%A9_Sperl_Interior.jpg/800px-Caf%C3%A9_Sperl_Interior.jpg",
+      description: "Established in 1880, Café Sperl is a Jugendstil masterpiece located in Vienna's theater district. This institution has hosted countless actors, directors, and theater lovers. The café features stunning Art Nouveau interiors with floral motifs, marble tables, and brass fittings.",
+      details: [
+        "• Jugendstil (Art Nouveau) masterpiece since 1880",
+        "• Located in Vienna's theater district (near Burgtheater)",
+        "• Stunning floral motifs and brass fittings",
+        "• Traditional marble tables and bentwood chairs",
+        "• Famous for Sachertorte and apple strudel",
+        "• Theater programs and newspapers available",
+        "• Popular with actors and theater enthusiasts"
+      ],
+      website: "https://www.cafesperl.at",
+      price: "Coffee €3.50-5, cakes €4-6, main dishes €12-18",
+      hours: "Mon-Fri 7:00 AM - 8:00 PM, Sat 8:00 AM - 6:00 PM, Sun closed",
+      tips: [
+        "Visit after a theater performance",
+        "Try the Sachertorte - Sperl's specialty",
+        "Indoor and outdoor seating available",
+        "Theater tickets can be purchased at the counter",
+        "Perfect spot for pre-theater coffee and cake",
+        "Authentic Viennese coffee house experience"
+      ]
+    },
+    'cafe-hawelka': {
+      title: "Café Hawelka",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Caf%C3%A9_Hawelka_Interior.jpg/800px-Caf%C3%A9_Hawelka_Interior.jpg",
+      description: "Café Hawelka, established in 1939 by Leopold Hawelka, has been an artists' haunt for generations. Located in a narrow alleyway near St. Stephen's Cathedral, this bohemian café is famous for its Buchteln (sweet yeast dumplings) and intellectual atmosphere. The walls are adorned with artworks donated by customers over the years.",
+      details: [
+        "• Artists' café since 1939, founded by Leopold Hawelka",
+        "• Located in Dorotheergasse, near St. Stephen's Cathedral",
+        "• Famous for Buchteln (sweet yeast dumplings)",
+        "• Bohemian atmosphere with artwork-covered walls",
+        "• Intellectual and artistic clientele",
+        "• No music, no games - just conversation and coffee",
+        "• Traditional Viennese coffee house culture"
+      ],
+      website: "https://www.hawelka.at",
+      price: "Coffee €3-4, Buchteln €4.50, small dishes €8-12",
+      hours: "Mon-Sat 8:00 AM - 2:00 AM, Sun 10:00 AM - 2:00 AM",
+      tips: [
+        "Go for the Buchteln - they're legendary!",
+        "The queue moves quickly, but come early for seats",
+        "Walls covered with customer-donated artwork",
+        "Late-night spot for artists and intellectuals",
+        "Cash only (no cards accepted)",
+        "Authentic, no-frills Viennese experience"
+      ]
+    },
+    prater: {
+      title: "Prater Park & Riesenrad",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Vienna_Stadtpark_01.jpg/800px-Vienna_Stadtpark_01.jpg",
+      description: "The Prater is Vienna's largest park and home to the iconic Riesenrad (Ferris Wheel), made famous in the film 'The Third Man'. This vast recreational area combines amusement park rides, traditional attractions, and beautiful green spaces for relaxation and family entertainment.",
+      details: [
+        "• Vienna's largest public park (3,000 acres)",
+        "• Riesenrad: 64-meter tall Ferris wheel since 1897",
+        "• Wurstelprater amusement park with traditional rides",
+        "• Liliputbahn miniature railway",
+        "• Planetarium and Madame Tussauds Wax Museum",
+        "• Beautiful lake with rowing boats and pedalos"
+      ],
+      website: "https://www.wiener-prater.at",
+      price: "Riesenrad €12, amusement park rides €2-4 each",
+      hours: "Park: Always open, Rides: 10:00 AM - 6:00 PM (seasonal)",
+      tips: [
+        "Take U1 to Praterstern station",
+        "Riesenrad cabins hold 15 people, take 20 minutes",
+        "Visit early morning for fewer crowds",
+        "Combined tickets available for multiple attractions",
+        "Beautiful in spring with cherry blossoms"
+      ]
+    },
+    naschmarkt: {
+      title: "Naschmarkt",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Naschmarkt_Vienna.jpg/800px-Naschmarkt_Vienna.jpg",
+      description: "Vienna's most famous market, established in 1793, is a vibrant food market that has evolved into a cultural hub. This mile-long market offers everything from fresh produce and international cuisine to vintage clothing and handmade crafts. It's also famous for its bars and restaurants that come alive in the evenings.",
+      details: [
+        "• Vienna's largest and most famous food market since 1793",
+        "• Over 120 market stalls with international cuisine",
+        "• Famous for fresh produce, spices, and street food",
+        "• Vintage shops, flower stalls, and handmade crafts",
+        "• Evening bars and restaurants transform the atmosphere",
+        "• Popular with locals and tourists alike",
+        "• Weekend flea market with antiques and collectibles"
+      ],
+      website: "https://www.naschmarkt-vienna.com",
+      price: "Free entry, food from €5-15 per person",
+      hours: "Mon-Fri 6:00 AM - 8:00 PM, Sat 6:00 AM - 6:00 PM",
+      tips: [
+        "Visit Saturday morning for the flea market",
+        "Try the Naschmarkt's famous chicken soup",
+        "Many stalls have English menus and speak English",
+        "Evening bars popular with young locals",
+        "Take U4 to Kettenbrückengasse or Karlsplatz",
+        "Great for picnic supplies and local specialties"
+      ]
+    }
+  };
 
-    {/* Vienna Coffee Houses */}
-    <Paper sx={{ p: 2, mb: 2 }}>
-      <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#8d6e63' }}>
-        <CafeIcon /> Famous Coffee Houses
-      </Typography>
-      <List dense>
-        <ListItem>
-          <ListItemText primary="🏛️ Demel - Imperial favorite" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="📖 Literaturhaus - Literary hub" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="🎭 Sperl - Theater district" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="🎨 Hawelka - Artists' haunt" />
-        </ListItem>
-      </List>
-    </Paper>
+  const data = attractionData[attraction];
+  if (!data) return null;
 
-    {/* Cultural Venues */}
-    <Paper sx={{ p: 2, mb: 2 }}>
-      <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#7b1fa2' }}>
-        <MusicIcon /> Music & Culture
-      </Typography>
-      <List dense>
-        <ListItem>
-          <ListItemText primary="🎭 Vienna State Opera" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="🎼 Musikverein (Golden Hall)" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="🎨 Albertina Museum" />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="🎪 Volksoper" />
-        </ListItem>
-      </List>
-    </Paper>
-
-    {/* Vienna Zoo */}
-    <Paper sx={{ p: 2 }}>
-      <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#ff9800' }}>
-        🦁 Schönbrunn Zoo
-      </Typography>
-      <Typography variant="body2" sx={{ mb: 1 }}>
-        World's oldest zoo, founded in 1752. Features pandas, gorillas, and beautiful gardens.
-      </Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-          Adults: €25 | Children: €12
+  return (
+    <Dialog
+      open={!!attraction}
+      onClose={onClose}
+      maxWidth="md"
+      fullWidth
+      sx={{
+        '& .MuiDialog-paper': {
+          borderRadius: 2,
+          maxHeight: '90vh'
+        }
+      }}
+    >
+      <DialogTitle sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        pb: 1
+      }}>
+        <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold' }}>
+          {data.title}
         </Typography>
-        <Chip size="small" label="UNESCO Site" color="primary" />
-      </Box>
-    </Paper>
-  </Box>
-);
+        <IconButton onClick={onClose} size="large">
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+
+      <DialogContent dividers sx={{ p: 0 }}>
+        <Box sx={{ p: 3 }}>
+          <Box
+            component="img"
+            src={data.image}
+            alt={data.title}
+            sx={{
+              width: '100%',
+              height: 300,
+              objectFit: 'cover',
+              borderRadius: 1,
+              mb: 3
+            }}
+          />
+
+          <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.6 }}>
+            {data.description}
+          </Typography>
+
+          <Typography variant="h6" gutterBottom color="primary">
+            Key Features & Highlights
+          </Typography>
+          <List dense sx={{ mb: 3 }}>
+            {data.details.map((detail, index) => (
+              <ListItem key={index}>
+                <ListItemText primary={detail} />
+              </ListItem>
+            ))}
+          </List>
+
+          {data.price && (
+            <Paper sx={{ p: 2, mb: 2, bgcolor: 'success.light' }}>
+              <Typography variant="h6" color="white" gutterBottom>
+                💰 Admission & Pricing
+              </Typography>
+              <Typography variant="body1" color="white">
+                {data.price}
+              </Typography>
+            </Paper>
+          )}
+
+          {data.hours && (
+            <Paper sx={{ p: 2, mb: 2, bgcolor: 'info.light' }}>
+              <Typography variant="h6" color="white" gutterBottom>
+                🕐 Opening Hours
+              </Typography>
+              <Typography variant="body1" color="white">
+                {data.hours}
+              </Typography>
+            </Paper>
+          )}
+
+          {data.tips && (
+            <>
+              <Typography variant="h6" gutterBottom color="primary">
+                💡 Visitor Tips
+              </Typography>
+              <List dense sx={{ mb: 3 }}>
+                {data.tips.map((tip, index) => (
+                  <ListItem key={index}>
+                    <ListItemText primary={tip} />
+                  </ListItem>
+                ))}
+              </List>
+            </>
+          )}
+        </Box>
+      </DialogContent>
+
+      <DialogActions sx={{ p: 3, pt: 2 }}>
+        <Button
+          variant="contained"
+          component={Link}
+          href={data.website}
+          target="_blank"
+          rel="noopener"
+          sx={{ mr: 2 }}
+        >
+          Visit Official Website
+        </Button>
+        <Button onClick={onClose} variant="outlined">
+          Close
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 export default Vienna;
