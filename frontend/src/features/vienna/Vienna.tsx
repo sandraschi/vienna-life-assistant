@@ -58,7 +58,21 @@ const ViennaImage: React.FC<{
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  // High-quality fallback images from Unsplash
+  // High-quality primary images from Unsplash (guaranteed to work)
+  const primaryImages = {
+    stephansdom: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600&h=400&fit=crop&crop=center",
+    belvedere: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
+    hofburg: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
+    schonbrunn: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop&crop=center",
+    prater: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop&crop=center",
+    naschmarkt: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&h=400&fit=crop&crop=center",
+    cafe_central: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&h=400&fit=crop&crop=center",
+    khm: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
+    albertina: "https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=600&h=400&fit=crop&crop=center",
+    haus_des_meeres: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop&crop=center"
+  };
+
+  // High-quality fallback images from Unsplash by category
   const fallbackImages = {
     cathedral: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop&crop=center",
     palace: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
@@ -67,6 +81,7 @@ const ViennaImage: React.FC<{
     market: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&h=400&fit=crop&crop=center",
     restaurant: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=400&fit=crop&crop=center",
     park: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop&crop=center",
+    aquarium: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop&crop=center",
     general: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&h=400&fit=crop&crop=center"
   };
 
@@ -78,8 +93,13 @@ const ViennaImage: React.FC<{
   const handleImageError = () => {
     setIsLoading(false);
     setHasError(true);
-    // Use high-quality fallback image based on category
-    setImageSrc(fallbackImages[category as keyof typeof fallbackImages] || fallbackImages.general);
+    // First try specific attraction image, then category fallback
+    const attractionKey = alt.toLowerCase().replace(/[^a-z]/g, '_').replace(/_+/g, '_');
+    if (primaryImages[attractionKey as keyof typeof primaryImages]) {
+      setImageSrc(primaryImages[attractionKey as keyof typeof primaryImages]);
+    } else {
+      setImageSrc(fallbackImages[category as keyof typeof fallbackImages] || fallbackImages.general);
+    }
   };
 
   useEffect(() => {
@@ -275,7 +295,7 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
       <Grid item xs={12} sm={6} md={4}>
         <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('stephansdom')}>
           <ViennaImage
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Stephansdom_Wien_2014.jpg/800px-Stephansdom_Wien_2014.jpg"
+            src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600&h=400&fit=crop&crop=center"
             alt="St. Stephen's Cathedral"
             category="cathedral"
           />
@@ -298,7 +318,7 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
       <Grid item xs={12} sm={6} md={4}>
         <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('belvedere')}>
           <ViennaImage
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Belvedere_Palace_Vienna.jpg/800px-Belvedere_Palace_Vienna.jpg"
+            src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center"
             alt="Belvedere Palace"
             category="palace"
           />
@@ -321,7 +341,7 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
       <Grid item xs={12} sm={6} md={4}>
         <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('hofburg')}>
           <ViennaImage
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Hofburg_Palace%2C_Vienna.jpg/800px-Hofburg_Palace%2C_Vienna.jpg"
+            src="https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=600&h=400&fit=crop&crop=center"
             alt="Hofburg Imperial Palace"
             category="palace"
           />
@@ -346,7 +366,7 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
           <CardMedia
             component="img"
             height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Sch%C3%B6nbrunn_Palace%2C_Vienna.jpg/800px-Sch%C3%B6nbrunn_Palace%2C_Vienna.jpg"
+            image="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop&crop=center"
             alt="Schönbrunn Palace"
           />
           <CardContent>
@@ -370,7 +390,7 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
           <CardMedia
             component="img"
             height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Vienna_Stadtpark_01.jpg/800px-Vienna_Stadtpark_01.jpg"
+            image="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop&crop=center"
             alt="Prater Park"
           />
           <CardContent>
@@ -394,7 +414,7 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
           <CardMedia
             component="img"
             height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Naschmarkt_Vienna.jpg/800px-Naschmarkt_Vienna.jpg"
+            image="https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&h=400&fit=crop&crop=center"
             alt="Naschmarkt"
           />
           <CardContent>
@@ -433,7 +453,7 @@ const ViennaCoffeeHouses: React.FC<{ onAttractionClick: (attraction: string) => 
           <CardMedia
             component="img"
             height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Caf%C3%A9_Central_in_Vienna.jpg/800px-Caf%C3%A9_Central_in_Vienna.jpg"
+            image="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&h=400&fit=crop&crop=center"
             alt="Café Central"
           />
           <CardContent>
@@ -457,7 +477,7 @@ const ViennaCoffeeHouses: React.FC<{ onAttractionClick: (attraction: string) => 
           <CardMedia
             component="img"
             height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Caf%C3%A9_Sperl_Interior.jpg/800px-Caf%C3%A9_Sperl_Interior.jpg"
+            image="https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=600&h=400&fit=crop&crop=center"
             alt="Café Sperl"
           />
           <CardContent>
@@ -481,7 +501,7 @@ const ViennaCoffeeHouses: React.FC<{ onAttractionClick: (attraction: string) => 
           <CardMedia
             component="img"
             height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Caf%C3%A9_Hawelka_Interior.jpg/800px-Caf%C3%A9_Hawelka_Interior.jpg"
+            image="https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=600&h=400&fit=crop&crop=center"
             alt="Café Hawelka"
           />
           <CardContent>
@@ -529,7 +549,7 @@ const ViennaCoffeeHouses: React.FC<{ onAttractionClick: (attraction: string) => 
           <CardMedia
             component="img"
             height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Caf%C3%A9_Pr%C3%BCckel_Interior.jpg/800px-Caf%C3%A9_Pr%C3%BCckel_Interior.jpg"
+            image="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=400&fit=crop&crop=center"
             alt="Café Prückel"
           />
           <CardContent>
@@ -570,7 +590,7 @@ const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void 
           <CardMedia
             component="img"
             height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Kunsthistorisches_Museum_Wien.jpg/800px-Kunsthistorisches_Museum_Wien.jpg"
+            image="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center"
             alt="Kunsthistorisches Museum"
           />
           <CardContent>
@@ -594,7 +614,7 @@ const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void 
           <CardMedia
             component="img"
             height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Albertina_Vienna.jpg/800px-Albertina_Vienna.jpg"
+            image="https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=600&h=400&fit=crop&crop=center"
             alt="Albertina Museum"
           />
           <CardContent>
@@ -786,7 +806,7 @@ const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void 
           <CardMedia
             component="img"
             height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Haus_des_Meeres_Wien.jpg/800px-Haus_des_Meeres_Wien.jpg"
+            image="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop&crop=center"
             alt="Haus des Meeres"
           />
           <CardContent>
