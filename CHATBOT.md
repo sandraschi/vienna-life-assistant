@@ -5,7 +5,7 @@
 
 ## 🤖 Overview
 
-An **AI-powered conversational assistant** with 16 integrated tools, 6 personalities, streaming responses, and MCP server integration. Runs 100% locally on your RTX 4090 via Ollama.
+An **AI-powered conversational assistant** with 16 integrated tools, 6 personalities, streaming responses, and MCP server integration. Runs locally on RTX 4070 or better via Ollama, or use cloud providers like OpenAI.
 
 ## ✨ Features
 

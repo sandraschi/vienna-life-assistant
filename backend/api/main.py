@@ -26,9 +26,21 @@ async def lifespan(app: FastAPI):
     print(">>> Initializing SQLite database...")
     try:
         # Import models to register them with SQLAlchemy
-        from models import todo, calendar, shopping, expense, conversation
-        from models.base import init_db
+        from models import todo, calendar, shopping, expense, conversation, settings
+        from models.base import init_db, get_db
+        from services.settings_service import settings_service
         init_db()
+
+        # Initialize default settings
+        db = next(get_db())
+        try:
+            settings_service.initialize_defaults(db)
+            print(">>> Default settings initialized")
+        except Exception as e:
+            print(f"⚠️  Settings initialization failed: {e}")
+        finally:
+            db.close()
+
         print(">>> Database initialized")
     except Exception as e:
         print(f"⚠️  Database initialization failed: {e}")

@@ -22,7 +22,7 @@ Your **personal command center** for Vienna life:
 - ✅ **Smart Todos**: 12 categories, priorities, filters, statistics
 - 💰 **Expense Tracking**: €836+ tracked, 7 categories, top stores
 - 🛒 **Shopping**: Spar/Billa offers, smart lists
-- 🤖 **AI Chatbot**: 16 integrated tools, 6 personalities, streaming responses
+- 🤖 **AI Chatbot**: 16 integrated tools, 6 personalities, streaming responses (Ollama local or cloud APIs)
 - 🏠 **Smart Home**: Lights, cameras, Ring doorbell (via Tapo MCP)
 - 🧠 **Knowledge Base**: Search/read/create notes (Advanced Memory MCP)
 - 📚 **Media Hub**: 50k anime, 15k ebooks (Plex/Calibre MCP)
@@ -96,7 +96,30 @@ cd vienna-life-assistant
 ### Prerequisites
 - Python 3.11+
 - Node.js 20+
-- Ollama (for local LLM)
+- **Choose your LLM option:**
+  - **Local (Recommended)**: Ollama + RTX 4070 or better
+  - **Cloud**: OpenAI or Anthropic API key (no GPU required)
+
+### LLM Setup
+
+#### Option A: Local LLM (Ollama)
+```bash
+# Install Ollama
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Start Ollama service
+ollama serve
+
+# Pull recommended model
+ollama pull llama3.2:3b
+```
+
+#### Option B: Cloud LLM (OpenAI/Anthropic)
+Get API keys from:
+- [OpenAI API](https://platform.openai.com/api-keys)
+- [Anthropic API](https://console.anthropic.com/)
+
+API keys are configured in the application settings after startup.
 
 ### 1. Backend Setup
 
@@ -166,7 +189,7 @@ npm run dev
 - **FastAPI** - Modern Python API framework
 - **SQLite** - Local database (no Docker needed!)
 - **SQLAlchemy** - ORM with Pydantic v2
-- **Ollama** - Local LLM (RTX 4090 powered)
+- **Ollama** - Local LLM (RTX 4070 or better recommended)
 - **FastMCP** - MCP server integration (stdio transport)
 
 ### Frontend
@@ -330,7 +353,7 @@ Pre-loaded with realistic Vienna life data:
 ## 📝 Notes
 
 - **No Docker required!** Uses SQLite for simplicity
-- **Local AI** runs on your RTX 4090 (no cloud costs!)
+- **Local AI** runs on your RTX 4070 or better (no cloud costs!)
 - **German locale** for dates, Euro currency
 - **Mobile responsive** - works on iPhone/iPad
 - **Tailscale ready** - access from anywhere
@@ -401,7 +424,7 @@ nssm set ViennaLifeFrontend AppDirectory "D:\Dev\repos\vienna-life-assistant\fro
 - **Transit integration** - Vienna public transport
 - **Beautiful UI** - Modern Material-UI design
 - **Mobile responsive** - Looks great on iPhone/iPad
-- **No cloud dependencies** - Everything runs locally
+- **Flexible deployment** - Local Ollama or cloud LLM APIs (OpenAI/Anthropic)
 
 ## 📱 Ports
 
@@ -421,7 +444,7 @@ nssm set ViennaLifeFrontend AppDirectory "D:\Dev\repos\vienna-life-assistant\fro
 ## 🔐 Privacy
 
 - **100% local** - No cloud API calls (except optional web search)
-- **Your hardware** - RTX 4090 runs all AI
+- **Your hardware** - RTX 4070 or better runs all AI locally
 - **Your data** - SQLite file on your machine
 - **MCP servers** - All on your Tailscale network (goliath)
 

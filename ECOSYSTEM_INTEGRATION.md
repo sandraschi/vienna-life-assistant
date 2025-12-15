@@ -17,7 +17,7 @@
 - **Location**: `D:\Dev\repos\tapo-camera-mcp`
 
 ### Infrastructure
-- **Goliath**: AMD 24-core server with 30TB HDDs, RTX 4090
+- **Goliath**: AMD 24-core server with 30TB HDDs, RTX 4070 or better
 - **Tailscale**: Network connectivity
 - **MCP Servers**: Running on Goliath under `d:/dev/repos`
 
