@@ -94,11 +94,31 @@ cd vienna-life-assistant
 ```
 
 ### Prerequisites
-- Python 3.11+
-- Node.js 20+
+- **Docker Desktop** (latest version)
+- Python 3.11+ (for development)
+- Node.js 20+ (for development)
 - **Choose your LLM option:**
   - **Local (Recommended)**: Ollama + RTX 4070 or better
   - **Cloud**: OpenAI or Anthropic API key (no GPU required)
+
+### Docker Desktop Setup
+
+```powershell
+# Download and install Docker Desktop for Windows
+# From: https://www.docker.com/products/docker-desktop/
+
+# After installation, enable WSL 2 backend (recommended)
+# Docker Desktop -> Settings -> General -> Use the WSL 2 based engine
+
+# Enable Kubernetes (optional, for advanced deployments)
+# Docker Desktop -> Settings -> Kubernetes -> Enable Kubernetes
+
+# Allocate sufficient resources
+# Docker Desktop -> Settings -> Resources
+# - CPUs: 4+ cores
+# - Memory: 8GB+ RAM
+# - Disk: 20GB+ available space
+```
 
 ### LLM Setup
 
@@ -121,38 +141,27 @@ Get API keys from:
 
 API keys are configured in the application settings after startup.
 
-### 1. Backend Setup
+### 1. Docker Setup & Launch
 
 ```powershell
-cd D:\Dev\repos\vienna-life-assistant\backend
+cd D:\Dev\repos\vienna-life-assistant
 
-# Create virtual environment
-python -m venv venv
-.\venv\Scripts\Activate.ps1
+# Build and start all services
+docker compose up -d
 
-# Install dependencies
-pip install -r requirements.txt
+# View running containers
+docker compose ps
 
-# Start backend
-uvicorn api.main:app --reload --host 0.0.0.0 --port 9001
+# Check logs if needed
+docker compose logs -f backend
+docker compose logs -f frontend
 ```
 
-### 2. Frontend Setup
+### 2. Access
 
-```powershell
-cd D:\Dev\repos\vienna-life-assistant\frontend
-
-# Install dependencies
-npm install
-
-# Start frontend
-npm run dev
-```
-
-### 3. Access
-
-- **Local**: http://localhost:9173
-- **Tailscale**: http://goliath:9173
+- **Local**: http://localhost:3000
+- **Tailscale**: http://goliath:3000
+- **API Docs**: http://localhost:8000/docs
 
 ## 📖 Usage Examples
 
@@ -187,7 +196,7 @@ npm run dev
 
 ### Backend
 - **FastAPI** - Modern Python API framework
-- **SQLite** - Local database (no Docker needed!)
+- **SQLite** - Local database (Docker containerized)
 - **SQLAlchemy** - ORM with Pydantic v2
 - **Ollama** - Local LLM (RTX 4070 or better recommended)
 - **FastMCP** - MCP server integration (stdio transport)
@@ -288,47 +297,205 @@ vienna-life-assistant/
 
 ## 🔌 MCP Server Configuration
 
-### Required MCP Servers (all on goliath):
+The Vienna Life Assistant integrates with **6 specialized MCP servers**. Each MCP server requires its corresponding application/service to be installed and configured first.
 
-1. **Advanced Memory MCP**
-   - Path: `D:/Dev/repos/advanced-memory-mcp/src/advanced_memory/mcp/server.py`
-   - Tools: 18+ (search, read, write, navigation, skills)
+### 1. Advanced Memory MCP (Knowledge Base)
 
-2. **Tapo MCP**
-   - Path: `D:/Dev/repos/tapo-camera-mcp/src/tapo_camera_mcp/server.py`
-   - Tools: Weather, lights, cameras, Ring, Nest
+**Required Application:** None (uses SQLite database)
+```powershell
+# Clone and setup
+cd D:\Dev\repos
+git clone https://github.com/sandraschi/advanced-memory-mcp.git
+cd advanced-memory-mcp
 
-3. **Plex MCP**
-   - Path: `D:/Dev/repos/plex-mcp/src/plex_mcp/server.py`
-   - Library: 50,000+ anime/movies
+# Install dependencies
+pip install -r requirements.txt
 
-4. **Calibre MCP**
-   - Path: `D:/Dev/repos/calibre-mcp/src/calibre_mcp/server.py`
-   - Library: 15,000+ ebooks
+# The MCP server will create its own SQLite database
+```
 
-5. **Immich MCP** (optional)
-   - Path: `D:/Dev/repos/immich-mcp/src/immich_mcp/server.py`
-   - Photos and memories
+**Configuration:**
+- Path: `D:/Dev/repos/advanced-memory-mcp/src/advanced_memory/mcp/server.py`
+- Tools: 18+ (search, read, write, navigation, skills)
+- Database: Auto-created in project directory
 
-### Set Environment Variables (optional):
+### 2. Tapo MCP (Smart Home)
+
+**Required Application:** Tapo Smart Home App + Hardware
+```powershell
+# Install Tapo app and setup devices first:
+# 1. Download Tapo app from app store
+# 2. Create Tapo account
+# 3. Add smart devices (lights, cameras, plugs)
+# 4. Get your account credentials
+
+# Clone and setup MCP server
+cd D:\Dev\repos
+git clone https://github.com/sandraschi/tapo-mcp.git
+cd tapo-mcp
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure credentials (see .env.example)
+cp .env.example .env
+# Edit .env with your Tapo username/password
+```
+
+**Configuration:**
+- Path: `D:/Dev/repos/tapo-mcp/src/tapo_mcp/server.py`
+- Tools: Weather, lights, cameras, Ring doorbell
+- Requires: Tapo account credentials in `.env`
+
+### 3. Plex MCP (Media Library)
+
+**Required Application:** Plex Media Server
+```powershell
+# Install Plex Media Server first:
+# 1. Download from: https://www.plex.tv/media-server-downloads/
+# 2. Install and create Plex account
+# 3. Add media libraries (movies, TV shows, anime)
+# 4. Get your Plex token from settings
+
+# Clone and setup MCP server
+cd D:\Dev\repos
+git clone https://github.com/sandraschi/plex-mcp.git
+cd plex-mcp
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure (see .env.example)
+cp .env.example .env
+# Edit .env with:
+# PLEX_URL=http://localhost:32400
+# PLEX_TOKEN=your_plex_token_here
+```
+
+**Configuration:**
+- Path: `D:/Dev/repos/plex-mcp/src/plex_mcp/server.py`
+- Tools: Search, continue watching, recently added
+- Requires: Plex server running + valid token
+
+### 4. Calibre MCP (Ebook Library)
+
+**Required Application:** Calibre Ebook Manager
+```powershell
+# Install Calibre first:
+# 1. Download from: https://calibre-ebook.com/download
+# 2. Install and add your ebook library
+# 3. Organize books, add metadata
+# 4. Start Calibre Content Server (optional)
+
+# Clone and setup MCP server
+cd D:\Dev\repos
+git clone https://github.com/sandraschi/calibre-mcp.git
+cd calibre-mcp
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure (see .env.example)
+cp .env.example .env
+# Edit .env with:
+# CALIBRE_URL=http://localhost:8080 (if using Content Server)
+# or set CALIBRE_LIBRARY_PATH to your local library folder
+```
+
+**Configuration:**
+- Path: `D:/Dev/repos/calibre-mcp/src/calibre_mcp/server.py`
+- Tools: Search books, reading progress, library stats
+- Requires: Calibre installed + library accessible
+
+### 5. Immich MCP (Photo Management)
+
+**Required Application:** Immich Photo Server
+```powershell
+# Install Immich first (Docker recommended):
+# 1. Follow Immich installation: https://immich.app/docs/install/docker-compose
+# 2. Setup your photo library
+# 3. Get API key from Immich settings
+
+# Clone and setup MCP server
+cd D:\Dev\repos
+git clone https://github.com/sandraschi/immich-mcp.git
+cd immich-mcp
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure (see .env.example)
+cp .env.example .env
+# Edit .env with:
+# IMMICH_URL=http://localhost:2283
+# IMMICH_API_KEY=your_api_key_here
+```
+
+**Configuration:**
+- Path: `D:/Dev/repos/immich-mcp/src/immich_mcp/server.py`
+- Tools: Recent photos, "today in history"
+- Requires: Immich server running + API key
+
+### 6. Ollama MCP (Local AI)
+
+**Required Application:** Ollama
+```powershell
+# Install Ollama first:
+# 1. Download from: https://ollama.ai/download
+# 2. Install and start Ollama service
+# 3. Pull models: ollama pull llama3.2:3b
+
+# Clone and setup MCP server
+cd D:\Dev\repos
+git clone https://github.com/sandraschi/ollama-mcp.git
+cd ollama-mcp
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure (see .env.example)
+cp .env.example .env
+# Edit .env with:
+# OLLAMA_BASE_URL=http://localhost:11434
+# OLLAMA_MODEL=llama3.2:3b
+```
+
+**Configuration:**
+- Path: `D:/Dev/repos/ollama-mcp/src/ollama_mcp/server.py`
+- Tools: Text generation, model management
+- Requires: Ollama running with models loaded
+
+### Environment Variables (Auto-detected)
+
+The application automatically detects MCP servers if they're cloned in `D:\Dev\repos\`. Manual configuration:
 
 ```powershell
+# Set these in your shell or .env file:
 $env:ADVANCED_MEMORY_MCP_PATH="D:/Dev/repos/advanced-memory-mcp/src/advanced_memory/mcp/server.py"
-$env:TAPO_MCP_PATH="D:/Dev/repos/tapo-camera-mcp/src/tapo_camera_mcp/server.py"
+$env:TAPO_MCP_PATH="D:/Dev/repos/tapo-mcp/src/tapo_mcp/server.py"
 $env:PLEX_MCP_PATH="D:/Dev/repos/plex-mcp/src/plex_mcp/server.py"
 $env:CALIBRE_MCP_PATH="D:/Dev/repos/calibre-mcp/src/calibre_mcp/server.py"
+$env:IMMICH_MCP_PATH="D:/Dev/repos/immich-mcp/src/immich_mcp/server.py"
+$env:OLLAMA_MCP_PATH="D:/Dev/repos/ollama-mcp/src/ollama_mcp/server.py"
 ```
+
+### MCP Server Status
+
+Check MCP server integration in the LLM tab of the web interface. Each MCP server shows:
+- ✅ Connected (tools available)
+- ⚠️ Not found (path incorrect)
+- ❌ Error (configuration issue)
 
 ## 🌐 Access
 
 ### Local Access:
-- Frontend: `http://localhost:9173`
-- Backend API: `http://localhost:9001`
-- API Docs: `http://localhost:9001/docs`
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:8000`
+- API Docs: `http://localhost:8000/docs`
 
 ### Tailscale Access (from any device):
-- Frontend: `http://goliath:9173`
-- Backend API: `http://goliath:9001`
+- Frontend: `http://goliath:3000`
+- Backend API: `http://goliath:8000`
 
 **CORS configured** for both localhost and Tailscale access!
 
@@ -352,7 +519,7 @@ Pre-loaded with realistic Vienna life data:
 
 ## 📝 Notes
 
-- **No Docker required!** Uses SQLite for simplicity
+- **Docker containerized** - Easy deployment with docker-compose
 - **Local AI** runs on your RTX 4070 or better (no cloud costs!)
 - **German locale** for dates, Euro currency
 - **Mobile responsive** - works on iPhone/iPad
@@ -361,47 +528,79 @@ Pre-loaded with realistic Vienna life data:
 
 ## 🔧 Troubleshooting
 
-### Backend won't start
+### Docker containers won't start
 ```powershell
-# Check if port 9001 is in use
-Get-NetTCPConnection -LocalPort 9001
-# Kill process if needed
-Stop-Process -Id <PID> -Force
+# Check Docker Desktop is running
+# Docker Desktop -> Settings -> Resources (ensure enough RAM/CPU allocated)
+
+# Stop and rebuild
+cd D:\Dev\repos\vienna-life-assistant
+docker compose down
+docker compose build --no-cache
+docker compose up -d
+
+# Check container logs
+docker compose logs backend
+docker compose logs frontend
 ```
 
-### Frontend won't load
+### Port conflicts
 ```powershell
-# Clear npm cache
-cd frontend
-rm -r node_modules
-npm install
+# Check what's using ports 3000, 8000
+Get-NetTCPConnection -LocalPort 3000,8000
+
+# Stop conflicting services or change ports in docker-compose.yml
 ```
 
 ### CORS errors
-Backend already configured for `localhost:9173` and `goliath:9173`. Hard refresh: `Ctrl+Shift+R`
+Backend configured for `localhost:3000` and `goliath:3000`. Hard refresh: `Ctrl+Shift+R`
 
-### Ollama not found
+### Ollama integration issues
 ```powershell
-# Install Ollama
-winget install Ollama.Ollama
+# Check Ollama is running
+ollama list
 
-# Pull default model
+# Pull required model
 ollama pull llama3.2:3b
+
+# Check MCP server can connect
+curl http://localhost:11434/api/tags
+```
+
+### MCP server connection issues
+```powershell
+# Verify MCP server paths exist
+Get-ChildItem D:\Dev\repos\*\src\*\mcp\server.py
+
+# Test individual MCP servers
+cd D:\Dev\repos\advanced-memory-mcp
+python -m pytest tests/ -v
 ```
 
 ## 🚀 Deployment
 
-### Windows Service (Production)
+### Docker Production Deployment
 ```powershell
-# Install NSSM
+# Production deployment (rebuilds and restarts)
+cd D:\Dev\repos\vienna-life-assistant
+docker compose down
+docker compose up -d --build
+
+# View running services
+docker compose ps
+
+# Monitor logs
+docker compose logs -f
+```
+
+### Windows Service (Alternative)
+```powershell
+# Install NSSM for Windows services
 winget install NSSM
 
-# Create backend service
-nssm install ViennaLifeBackend "D:\Dev\repos\vienna-life-assistant\backend\venv\Scripts\python.exe" "-m uvicorn api.main:app --host 0.0.0.0 --port 9001"
-
-# Create frontend service
-nssm install ViennaLifeFrontend "npm" "run dev"
-nssm set ViennaLifeFrontend AppDirectory "D:\Dev\repos\vienna-life-assistant\frontend"
+# Create Docker service
+nssm install ViennaLifeDocker "C:\Program Files\Docker\Docker\Docker Desktop.exe" "docker compose up"
+nssm set ViennaLifeDocker AppDirectory "D:\Dev\repos\vienna-life-assistant"
 ```
 
 ## 📚 Documentation
@@ -428,9 +627,13 @@ nssm set ViennaLifeFrontend AppDirectory "D:\Dev\repos\vienna-life-assistant\fro
 
 ## 📱 Ports
 
-- **Backend**: 9001
-- **Frontend**: 9173
+- **Backend**: 8000 (Docker)
+- **Frontend**: 3000 (Docker)
 - **MyWienerLinien**: 3079 (if running)
+- **Ollama**: 11434 (if running)
+- **Plex**: 32400 (if running)
+- **Calibre**: 8080 (if running)
+- **Immich**: 2283 (if running)
 
 ## 🇦🇹 Austrian Features
 
