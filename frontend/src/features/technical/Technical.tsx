@@ -697,7 +697,7 @@ const Technical: React.FC = () => {
               <Button
                 variant="outlined"
                 startIcon={<CodeIcon />}
-                href="https://github.com/sandraschi/plex-mcp"
+                href="https://github.com/sandraschi/plexmcp"
                 target="_blank"
                 rel="noopener"
                 fullWidth

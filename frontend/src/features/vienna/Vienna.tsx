@@ -62,14 +62,14 @@ const ViennaImage: React.FC<{
 
   // High-quality primary images from Unsplash (guaranteed to work)
   const primaryImages = {
-    stephansdom: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600&h=400&fit=crop&crop=center",
+    stephansdom: "https://images.unsplash.com/photo-1449824910516-66b8ece27a77?w=600&h=400&fit=crop&crop=center",
     belvedere: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
-    hofburg: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
-    schonbrunn: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop&crop=center",
+    hofburg: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=600&h=400&fit=crop&crop=center",
+    schonbrunn: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=400&fit=crop&crop=center",
     prater: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop&crop=center",
     naschmarkt: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&h=400&fit=crop&crop=center",
     cafe_central: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&h=400&fit=crop&crop=center",
-    khm: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
+    khm: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&h=400&fit=crop&crop=center",
     albertina: "https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=600&h=400&fit=crop&crop=center",
     haus_des_meeres: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop&crop=center"
   };
@@ -1922,10 +1922,9 @@ const AttractionDetailDialog: React.FC<{
     albertina: {
       title: "Albertina Museum",
       image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Albertina_Wien.jpg/800px-Albertina_Wien.jpg",
-      description: "The Albertina houses the world's largest collection of graphic art, with over 65,000 drawings and 1 million prints. It also features contemporary art exhibitions and the famous Bathtub room with its optical illusions.",
+      description: "The Albertina houses the world's largest collection of graphic art, with over 65,000 drawings and 1 million prints. It features contemporary art exhibitions and stunning architectural spaces.",
       details: [
         "• Largest graphic art collection worldwide",
-        "• Bathtub room with distorted perspectives",
         "• Temporary exhibitions of contemporary art",
         "• Monet, Picasso, and Warhol collections",
         "• State Rooms with stunning architecture",
@@ -1935,7 +1934,6 @@ const AttractionDetailDialog: React.FC<{
       price: "€19 regular, €16.50 reduced, €17.50 for contemporary exhibitions",
       hours: "Daily 10:00 AM - 6:00 PM, Wed until 9:00 PM",
       tips: [
-        "Don't miss the Bathtub room optical illusions",
         "Rooftop terrace has great views and a café",
         "Wednesday evening is less crowded",
         "Graphic art collection requires separate ticket",

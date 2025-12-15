@@ -108,7 +108,7 @@ This application integrates with **6 specialized MCP servers** that provide comp
 - **🤖 Ollama MCP**: Local LLM inference (llama3.2:3b)
 - **🧠 Advanced Memory MCP**: Zettelkasten knowledge base ([sandraschi/advanced-memory-mcp](https://github.com/sandraschi/advanced-memory-mcp))
 - **🏠 Tapo MCP**: Smart home control ([sandraschi/tapo-mcp](https://github.com/sandraschi/tapo-mcp))
-- **🎬 Plex MCP**: Media library access ([sandraschi/plex-mcp](https://github.com/sandraschi/plex-mcp))
+- **🎬 Plex MCP**: Media library access ([sandraschi/plexmcp](https://github.com/sandraschi/plexmcp))
 - **📚 Calibre MCP**: Ebook management ([sandraschi/calibre-mcp](https://github.com/sandraschi/calibre-mcp))
 - **📸 Immich MCP**: Photo management ([sandraschi/immich-mcp](https://github.com/sandraschi/immich-mcp))
 
