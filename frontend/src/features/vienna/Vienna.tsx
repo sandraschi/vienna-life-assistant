@@ -62,7 +62,7 @@ const ViennaImage: React.FC<{
 
   // High-quality primary images from Unsplash (guaranteed to work)
   const primaryImages = {
-    stephansdom: "https://images.unsplash.com/photo-1449824910516-66b8ece27a77?w=600&h=400&fit=crop&crop=center",
+    stephansdom: "https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?w=600&h=400&fit=crop&crop=center",
     belvedere: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
     hofburg: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=600&h=400&fit=crop&crop=center",
     schonbrunn: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=400&fit=crop&crop=center",
