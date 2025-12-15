@@ -13,7 +13,7 @@
 **Status**: Beta Version 🚧  
 **Version**: 3.0-beta - AI-Powered Life Management
 
-A beautiful, modern personal life management app with **AI chatbot**, calendar, todos, expenses, and shopping - integrated with your entire digital ecosystem via MCP servers.
+A beautiful, modern personal life management app with **AI chatbot**, calendar, todos, expenses, shopping, and comprehensive technical documentation - integrated with your entire digital ecosystem via MCP servers and powered by Celery background task processing.
 
 ## 🎯 What It Does
 
@@ -27,6 +27,79 @@ Your **personal command center** for Vienna life:
 - 🧠 **Knowledge Base**: Search/read/create notes (Advanced Memory MCP)
 - 📚 **Media Hub**: 50k anime, 15k ebooks (Plex/Calibre MCP)
 - 🚊 **Transit**: Wiener Linien integration (U-Bahn, Tram, Bus)
+- ⚙️ **Technical Documentation**: Complete hierarchical tech stack guide (Flow Engineering, MCP Architecture, Future Roadmap)
+- 🔄 **Background Processing**: Celery-powered async tasks (email notifications, AI analysis, data sync, maintenance)
+
+## ⚙️ Technical Documentation Tab
+
+The app includes a comprehensive **Technical Documentation** tab that provides hierarchical, beautiful documentation about the entire tech stack:
+
+### **Flow Engineering Philosophy**
+- **Developer Experience First**: Cursor IDE with AI assistance, automated tooling
+- **AI-First Design**: Built around AI capabilities from day one
+- **Fast Iteration**: Docker containers for instant development environments
+
+### **Complete Tech Stack Breakdown**
+- **Frontend**: React 18 + TypeScript + Material-UI + Vite
+- **Backend**: FastAPI + Python 3.11 + SQLAlchemy + Pydantic
+- **Database**: PostgreSQL + Redis (caching & Celery broker)
+- **Infrastructure**: Docker Desktop + Port Island (7333-7336)
+- **Monitoring**: Grafana + Prometheus + Loki stack
+- **Version Control**: Git + GitHub Actions
+
+### **MCP Server Architecture**
+- **Client-Server Model**: MCP clients connect to specialized servers via STDIO
+- **6 Integrated Servers**: Ollama, Advanced Memory, Tapo, Plex, Calibre, Immich
+- **Tool Discovery**: AI automatically detects and uses available MCP tools
+
+### **Future Development Roadmap**
+- **Phase 4**: Advanced AI Integration (Multi-modal, Voice Commands)
+- **Phase 5**: Ecosystem Expansion (Mobile Apps, Multi-user Support)
+
+## 🔄 Background Task Processing (Celery)
+
+Vienna Life Assistant includes a **distributed task queue system** powered by Celery for handling background processing:
+
+### **16 Background Task Categories:**
+
+#### **📧 Email Tasks**
+- `send_welcome_email` - Welcome emails for new users
+- `send_daily_summary` - Daily activity summaries
+- `send_weekly_report` - Comprehensive weekly reports
+
+#### **🤖 AI Tasks**
+- `process_long_ai_analysis` - Long-running AI analysis
+- `generate_weekly_report` - AI-powered report generation
+- `personalize_recommendations` - Personalized user recommendations
+
+#### **🔧 Maintenance Tasks**
+- `cleanup_old_conversations` - Database cleanup (90+ days)
+- `optimize_database` - Database optimization
+- `sync_external_data` - External service synchronization
+
+#### **👤 User Experience Tasks**
+- `send_notification` - In-app notifications
+- `generate_personalized_content` - Dynamic content generation
+
+### **Celery Architecture:**
+```
+User Request → FastAPI → Celery Task → Redis Queue → Worker → Result → User
+```
+
+### **Scheduled Tasks:**
+- **Daily**: User activity summaries at 8:00 AM
+- **Weekly**: Comprehensive reports every Sunday
+- **Monthly**: Database cleanup and optimization
+
+### **Usage Example:**
+```python
+# Submit background task (returns immediately)
+from workers.tasks import send_welcome_email
+result = send_welcome_email.delay("user@example.com", "John Doe")
+
+# Task runs asynchronously in background
+# Check status later: result.ready(), result.get()
+```
 
 ## 🏗️ Multi-MCP Server Architecture
 
