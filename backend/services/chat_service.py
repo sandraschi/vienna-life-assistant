@@ -4,7 +4,7 @@ Chat service with streaming, tool use, web search, and prompt enhancement
 import json
 import re
 from datetime import datetime
-from typing import AsyncGenerator, Dict, List, Optional
+from typing import Any, AsyncGenerator, Dict, List, Optional
 import httpx
 from services.ollama_service import ollama_service
 from services.mcp_clients import mcp_clients
