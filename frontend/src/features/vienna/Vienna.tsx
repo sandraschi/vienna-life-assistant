@@ -1483,7 +1483,7 @@ const AttractionDetailDialog: React.FC<{
         "Visit Saturday morning when it's most lively",
         "Try the Bitzinger Würstelstand for authentic sausages",
         "Many vendors accept only cash",
-        "Market extends under the tracks of Wien Mitte station",
+        "Located between Karlsplatz and Kettenbrückengasse in the 4th district",
         "Great place to experience Vienna's diversity"
       ]
     },
