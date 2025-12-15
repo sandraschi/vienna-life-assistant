@@ -6,6 +6,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import PsychologyIcon from '@mui/icons-material/Psychology'
 import SmartToyIcon from '@mui/icons-material/SmartToy'
 import HomeIcon from '@mui/icons-material/Home'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
 import { useState } from 'react'
 import TodoList from './features/todos/TodoList'
 import ShoppingOffers from './features/shopping/ShoppingOffers'
@@ -14,6 +15,7 @@ import MediaDashboard from './features/media/MediaDashboard'
 import CalendarView from './features/calendar/CalendarView'
 import ExpenseTracker from './features/expenses/ExpenseTracker'
 import { ChatBot } from './features/chat/ChatBot'
+import Vienna from './features/vienna/Vienna'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -171,10 +173,16 @@ function App() {
               label="AI Chat" 
               sx={{ textTransform: 'none' }}
             />
-            <Tab 
-              icon={<HomeIcon />} 
+            <Tab
+              icon={<HomeIcon />}
               iconPosition="start"
-              label="Media & Home" 
+              label="Media & Home"
+              sx={{ textTransform: 'none' }}
+            />
+            <Tab
+              icon={<LocationOnIcon />}
+              iconPosition="start"
+              label="Vienna"
               sx={{ textTransform: 'none' }}
             />
           </Tabs>
@@ -208,6 +216,10 @@ function App() {
             <TabPanel value={activeTab} index={6}>
               <MediaDashboard />
             </TabPanel>
+
+            <TabPanel value={activeTab} index={7}>
+              <Vienna />
+            </TabPanel>
           </Box>
         </Paper>
 
@@ -229,7 +241,7 @@ function App() {
               opacity: 0.7
             }}
           >
-            🚀 Phase 3 (Beta) | ✅ Todos • 🛒 Shopping • 🤖 AI Chat • 🧠 LLM • 🏠 Media Hub |
+            🚀 Phase 3 (Beta) | ✅ Todos • 🛒 Shopping • 🤖 AI Chat • 🧠 LLM • 🏠 Media Hub • 🇦🇹 Vienna |
             Status: <strong>Beta AI Assistant</strong>
           </Typography>
         </Paper>
