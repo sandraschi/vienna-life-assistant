@@ -409,12 +409,14 @@ Only output the enhanced prompt, nothing else."""
         # Calculator patterns
         calc_pattern = r"calculate|compute|what is|how much is|\d+\s*[\+\-\*/]\s*\d+"
         if re.search(calc_pattern, user_message.lower()):
-            # Extract math expression
+            # Extract math expression - look for the longest sequence of math chars
             math_expr = re.findall(r"[\d\+\-\*/\(\)\s\.]+", user_message)
             if math_expr:
+                # Find the longest math expression (most complete one)
+                longest_expr = max(math_expr, key=len).strip()
                 tool_calls.append({
                     "name": "calculator",
-                    "parameters": {"expression": math_expr[0].strip()}
+                    "parameters": {"expression": longest_expr}
                 })
         
         # Date/time patterns
