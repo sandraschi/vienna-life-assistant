@@ -28,6 +28,19 @@ Your **personal command center** for Vienna life:
 - 📚 **Media Hub**: 50k anime, 15k ebooks (Plex/Calibre MCP)
 - 🚊 **Transit**: Wiener Linien integration (U-Bahn, Tram, Bus)
 
+## 🏗️ Multi-MCP Server Architecture
+
+This application integrates with **6 specialized MCP servers** that provide comprehensive digital ecosystem connectivity:
+
+- **🤖 Ollama MCP**: Local LLM inference (llama3.2:3b)
+- **🧠 Advanced Memory MCP**: Zettelkasten knowledge base ([sandraschi/advanced-memory-mcp](https://github.com/sandraschi/advanced-memory-mcp))
+- **🏠 Tapo MCP**: Smart home control ([sandraschi/tapo-mcp](https://github.com/sandraschi/tapo-mcp))
+- **🎬 Plex MCP**: Media library access ([sandraschi/plex-mcp](https://github.com/sandraschi/plex-mcp))
+- **📚 Calibre MCP**: Ebook management ([sandraschi/calibre-mcp](https://github.com/sandraschi/calibre-mcp))
+- **📸 Immich MCP**: Photo management ([sandraschi/immich-mcp](https://github.com/sandraschi/immich-mcp))
+
+See [`INTEGRATED_MCP_SERVERS.md`](INTEGRATED_MCP_SERVERS.md) for detailed MCP server documentation.
+
 ## 🤖 AI Chatbot Features (Beta)
 
 ### **6 AI Personalities:**
@@ -72,6 +85,13 @@ Your **personal command center** for Vienna life:
 - 🎨 **Beautiful UI** - Avatars, timestamps, tool chips
 
 ## 🚀 Quick Start
+
+### 0. Clone Repository
+
+```bash
+git clone https://github.com/sandraschi/vienna-life-assistant.git
+cd vienna-life-assistant
+```
 
 ### Prerequisites
 - Python 3.11+
@@ -363,6 +383,7 @@ nssm set ViennaLifeFrontend AppDirectory "D:\Dev\repos\vienna-life-assistant\fro
 
 ## 📚 Documentation
 
+- `INTEGRATED_MCP_SERVERS.md` - Complete MCP ecosystem guide
 - `FEATURES_ADDED.md` - Phase 2 features (Ollama, scrapers, UI)
 - `TESTING.md` - Pytest guide, fixtures, test coverage
 - `SQLITE_MIGRATION.md` - PostgreSQL → SQLite migration
