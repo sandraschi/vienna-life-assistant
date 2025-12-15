@@ -55,6 +55,42 @@ services:
     extra_hosts:
       - "goliath:host-gateway"
 
+  celery-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: vla-celery-worker
+    environment:
+      DATABASE_URL: postgresql://vla_user:vla_dev_password_change_in_production@postgres:5432/vienna_life
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: dev-secret-key-change-in-production
+      ENVIRONMENT: development
+    volumes:
+      - ./backend:/app
+      - /app/__pycache__
+    depends_on:
+      - postgres
+      - redis
+    command: celery -A workers.celery_app worker --loglevel=info --concurrency=2
+
+  celery-beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: vla-celery-beat
+    environment:
+      DATABASE_URL: postgresql://vla_user:vla_dev_password_change_in_production@postgres:5432/vienna_life
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: dev-secret-key-change-in-production
+      ENVIRONMENT: development
+    volumes:
+      - ./backend:/app
+      - /app/__pycache__
+    depends_on:
+      - postgres
+      - redis
+    command: celery -A workers.celery_app beat --loglevel=info
+
   frontend:
     build:
       context: ./frontend

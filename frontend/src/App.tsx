@@ -16,6 +16,8 @@ import CalendarView from './features/calendar/CalendarView'
 import ExpenseTracker from './features/expenses/ExpenseTracker'
 import { ChatBot } from './features/chat/ChatBot'
 import Vienna from './features/vienna/Vienna'
+import Technical from './features/technical/Technical'
+import CodeIcon from '@mui/icons-material/Code'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -185,6 +187,12 @@ function App() {
               label="Vienna"
               sx={{ textTransform: 'none' }}
             />
+            <Tab
+              icon={<CodeIcon />}
+              iconPosition="start"
+              label="Technical"
+              sx={{ textTransform: 'none' }}
+            />
           </Tabs>
 
           {/* Tab Content */}
@@ -220,6 +228,10 @@ function App() {
             <TabPanel value={activeTab} index={7}>
               <Vienna />
             </TabPanel>
+
+            <TabPanel value={activeTab} index={8}>
+              <Technical />
+            </TabPanel>
           </Box>
         </Paper>
 
@@ -241,7 +253,7 @@ function App() {
               opacity: 0.7
             }}
           >
-            🚀 Phase 3 (Beta) | ✅ Todos • 🛒 Shopping • 🤖 AI Chat • 🧠 LLM • 🏠 Media Hub • 🇦🇹 Vienna |
+            🚀 Phase 3 (Beta) | ✅ Todos • 🛒 Shopping • 🤖 AI Chat • 🧠 LLM • 🏠 Media Hub • 🇦🇹 Vienna • 🛠️ Technical |
             Status: <strong>Beta AI Assistant</strong>
           </Typography>
         </Paper>
