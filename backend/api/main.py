@@ -20,40 +20,40 @@ from api.chat.routes import router as chat_router
 async def lifespan(app: FastAPI):
     """Application lifespan events"""
     # Startup
-    print("🚀 Vienna Life Assistant starting...")
+    print(">>> Vienna Life Assistant starting...")
     
     # Initialize SQLite database
-    print("💾 Initializing SQLite database...")
+    print(">>> Initializing SQLite database...")
     try:
         # Import models to register them with SQLAlchemy
         from models import todo, calendar, shopping, expense, conversation
         from models.base import init_db
         init_db()
-        print("✅ Database initialized")
+        print(">>> Database initialized")
     except Exception as e:
         print(f"⚠️  Database initialization failed: {e}")
     
     # Initialize Ollama default model
-    print("🤖 Checking Ollama LLM...")
+    print(">>> Checking Ollama LLM...")
     try:
         from services.ollama_service import ollama_service
         is_connected = await ollama_service.check_connection()
         if is_connected:
-            print("✅ Ollama is running")
+            print(">>> Ollama is running")
             models = await ollama_service.list_models()
             if models:
-                print(f"📦 Found {len(models)} Ollama models")
+                print(f">>> Found {len(models)} Ollama models")
             else:
-                print("⚠️  No Ollama models found. Pull one with: ollama pull llama3.2:3b")
+                print(">>> No Ollama models found. Pull one with: ollama pull llama3.2:3b")
         else:
-            print("⚠️  Ollama not running (optional). Start with: ollama serve")
+            print(">>> Ollama not running (optional). Start with: ollama serve")
     except Exception as e:
-        print(f"⚠️  Ollama check failed (optional): {e}")
-    
-    print("✨ Vienna Life Assistant ready!")
+        print(f">>> Ollama check failed (optional): {e}")
+
+    print(">>> Vienna Life Assistant ready!")
     yield
     # Shutdown
-    print("👋 Vienna Life Assistant shutting down...")
+    print(">>> Vienna Life Assistant shutting down...")
 
 app = FastAPI(
     title="Vienna Life Assistant API",
