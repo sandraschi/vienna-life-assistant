@@ -159,10 +159,10 @@ docker compose logs -f frontend
 
 ### 2. Access
 
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000
-- **API Docs**: http://localhost:8000/docs
-- **Tailscale**: http://goliath:3000 (API: goliath:8000)
+- **Frontend**: http://localhost:7333
+- **Backend API**: http://localhost:7334
+- **API Docs**: http://localhost:7334/docs
+- **Tailscale**: http://goliath:7333 (API: goliath:7334)
 
 ## 📖 Usage Examples
 
@@ -553,14 +553,14 @@ docker compose logs frontend
 
 ### Port conflicts
 ```powershell
-# Check what's using ports 3000, 8000
-Get-NetTCPConnection -LocalPort 3000,8000
+# Check what's using ports 7333-7336
+Get-NetTCPConnection -LocalPort 7333,7334,7335,7336
 
 # Stop conflicting services or change ports in docker-compose.yml
 ```
 
 ### CORS errors
-Backend configured for `localhost:3000` and `goliath:3000`. Hard refresh: `Ctrl+Shift+R`
+Backend configured for `localhost:7333` and `goliath:7333`. Hard refresh: `Ctrl+Shift+R`
 
 ### Ollama integration issues
 ```powershell
@@ -634,10 +634,10 @@ nssm set ViennaLifeDocker AppDirectory "D:\Dev\repos\vienna-life-assistant"
 
 ## 📱 Ports
 
-- **Frontend**: 3000 (Docker)
-- **Backend API**: 8000 (Docker)
-- **PostgreSQL**: 5432 (Docker)
-- **Redis**: 6380 (Docker, mapped from 6379)
+- **Frontend**: 7333 (Docker)
+- **Backend API**: 7334 (Docker)
+- **PostgreSQL**: 7335 (Docker, mapped from 5432)
+- **Redis**: 7336 (Docker, mapped from 6379)
 - **MyWienerLinien**: 3079 (if running)
 - **Ollama**: 11434 (if running)
 - **Plex**: 32400 (if running)

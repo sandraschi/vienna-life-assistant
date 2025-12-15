@@ -95,9 +95,9 @@ pnpm dev
 
 ### 3. Access Application
 - **Frontend**: http://localhost:5173 (Beautiful landing page!)
-- **Backend API**: http://localhost:8000
-- **API Docs**: http://localhost:8000/docs
-- **Health Check**: http://localhost:8000/health
+- **Backend API**: http://localhost:7334
+- **API Docs**: http://localhost:7334/docs
+- **Health Check**: http://localhost:7334/health
 
 ## 📋 Next Steps (Phase 1 MVP)
 
@@ -214,7 +214,7 @@ alembic upgrade head
 ```
 
 ### Debugging
-- **Backend**: Check http://localhost:8000/docs for interactive API docs
+- **Backend**: Check http://localhost:7334/docs for interactive API docs
 - **Frontend**: Use React DevTools browser extension
 - **Database**: `docker compose logs postgres`
 - **Redis**: `docker compose logs redis`

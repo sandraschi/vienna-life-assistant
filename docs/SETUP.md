@@ -93,7 +93,7 @@ cd D:\Dev\repos\vienna-life-assistant
 docker compose up -d postgres redis
 cd backend
 .\venv\Scripts\Activate.ps1
-uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn api.main:app --reload --host 0.0.0.0 --port 7334
 ```
 
 **Terminal 2 - Frontend:**
@@ -111,9 +111,9 @@ celery -A workers.celery_app worker --loglevel=info
 
 ### Access Points
 - **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:8000
-- **API Docs**: http://localhost:8000/docs
-- **Redoc**: http://localhost:8000/redoc
+- **Backend API**: http://localhost:7334
+- **API Docs**: http://localhost:7334/docs
+- **Redoc**: http://localhost:7334/redoc
 
 ### Using Docker Compose (Full Stack)
 
@@ -198,8 +198,8 @@ pnpm test:coverage
 
 ### Port Already in Use
 ```powershell
-# Find process using port 8000
-netstat -ano | findstr :8000
+# Find process using port 7334
+netstat -ano | findstr :7334
 
 # Kill process
 Stop-Process -Id <PID> -Force
@@ -242,7 +242,7 @@ pip install -r requirements.txt
 1. **Backend API changes:**
    - Edit files in `backend/`
    - FastAPI auto-reloads
-   - Check http://localhost:8000/docs
+   - Check http://localhost:7334/docs
 
 2. **Frontend changes:**
    - Edit files in `frontend/src/`

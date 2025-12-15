@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: vla_user
       POSTGRES_PASSWORD: vla_dev_password_change_in_production
     ports:
-      - "5432:5432"
+      - "7335:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -23,7 +23,7 @@ services:
     image: redis:7-alpine
     container_name: vla-redis
     ports:
-      - "6380:6379"
+      - "7336:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -56,9 +56,9 @@ services:
       TAPO_MCP_PATH: ${TAPO_MCP_PATH:-/repos/tapo-camera-mcp/src/tapo_camera_mcp/server.py}
       OLLAMA_MCP_PATH: ${OLLAMA_MCP_PATH:-/repos/local-llm-mcp/src/local_llm_mcp/server.py}
       OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2:3b}
-      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:9173}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:7333,http://goliath:7333}
     ports:
-      - "9001:9001"
+      - "7334:7334"
     volumes:
       - ./backend:/app
       - /app/__pycache__
@@ -69,7 +69,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    command: uvicorn api.main:app --host 0.0.0.0 --port 9001 --reload
+    command: uvicorn api.main:app --host 0.0.0.0 --port 7334 --reload
     extra_hosts:
       - "goliath:host-gateway"
 
@@ -109,12 +109,12 @@ services:
       dockerfile: Dockerfile
     container_name: vla-frontend
     ports:
-      - "3000:3000"
+      - "7333:3000"
     volumes:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      - VITE_API_URL=http://localhost:8000
+      - VITE_API_URL=http://localhost:7334
     depends_on:
       - backend
     command: npm run dev -- --host 0.0.0.0 --port 3000
