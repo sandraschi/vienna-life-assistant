@@ -12,7 +12,7 @@ using Celery. Tasks are organized by category and demonstrate various use cases:
 
 from workers.celery_app import celery_app
 from sqlalchemy.orm import Session
-from models.base import get_db_session
+from models.base import get_db, SessionLocal
 from services.email_service import EmailService
 from services.llm_service import LLMService
 from services.advanced_memory import AdvancedMemoryService
@@ -76,7 +76,8 @@ def send_daily_summary(self, user_email: str):
     send a personalized summary email.
     """
     try:
-        with get_db_session() as db:
+        db = SessionLocal()
+        try:
             # Query user's activities from last 24 hours
             # This is a placeholder - implement based on your models
             activities = []  # TODO: Implement activity fetching
@@ -101,6 +102,8 @@ def send_daily_summary(self, user_email: str):
             else:
                 logger.info(f"No activities found for {user_email}")
                 return {"success": True, "message": "No activities to summarize"}
+        finally:
+            db.close()
 
     except Exception as exc:
         logger.error(f"Failed to send daily summary to {user_email}: {exc}")
@@ -157,7 +160,8 @@ def generate_weekly_report(self, user_id: str, report_type: str = "comprehensive
     to create personalized weekly insights.
     """
     try:
-        with get_db_session() as db:
+        db = SessionLocal()
+        try:
             # Collect data from past week
             week_ago = datetime.now() - timedelta(days=7)
 
@@ -193,6 +197,8 @@ def generate_weekly_report(self, user_id: str, report_type: str = "comprehensive
                 "generated_at": datetime.now().isoformat(),
                 "content": report_content
             }
+        finally:
+            db.close()
 
     except Exception as exc:
         logger.error(f"Failed to generate weekly report for user {user_id}: {exc}")
@@ -213,7 +219,8 @@ def cleanup_old_conversations(self, days_old: int = 90):
     try:
         cutoff_date = datetime.now() - timedelta(days=days_old)
 
-        with get_db_session() as db:
+        db = SessionLocal()
+        try:
             # TODO: Implement conversation cleanup
             # deleted_count = db.query(Conversation).filter(
             #     Conversation.created_at < cutoff_date
@@ -226,6 +233,8 @@ def cleanup_old_conversations(self, days_old: int = 90):
                 "days_old": days_old,
                 "deleted_count": 0  # TODO: Return actual count
             }
+        finally:
+            db.close()
 
     except Exception as exc:
         logger.error(f"Failed to cleanup old conversations: {exc}")
@@ -243,7 +252,8 @@ def optimize_database(self):
     - Cleaning up orphaned records
     """
     try:
-        with get_db_session() as db:
+        db = SessionLocal()
+        try:
             # TODO: Implement database optimization
             # This would typically run SQL commands like:
             # db.execute("VACUUM ANALYZE;")
@@ -255,6 +265,8 @@ def optimize_database(self):
                 "optimized_at": datetime.now().isoformat(),
                 "operations": ["vacuum", "reindex", "analyze"]
             }
+        finally:
+            db.close()
 
     except Exception as exc:
         logger.error(f"Database optimization failed: {exc}")

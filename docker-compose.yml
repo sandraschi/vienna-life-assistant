@@ -17,6 +17,19 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: vla-redis
+    ports:
+      - "7336:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
   backend:
     build:
       context: ./backend
@@ -24,6 +37,7 @@ services:
     container_name: vla-backend
     environment:
       DATABASE_URL: postgresql://vla_user:vla_dev_password_change_in_production@postgres:5432/vienna_life
+      REDIS_URL: redis://redis:6379/0
       SECRET_KEY: dev-secret-key-change-in-production
       ENVIRONMENT: development
       MICROSOFT_CLIENT_ID: ${MICROSOFT_CLIENT_ID}
@@ -50,6 +64,8 @@ services:
       - D:/Dev/repos:/repos:ro
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     command: uvicorn api.main:app --host 0.0.0.0 --port 7334 --reload
     extra_hosts:
@@ -113,4 +129,5 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:
 
