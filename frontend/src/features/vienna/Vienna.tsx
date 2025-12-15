@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -21,7 +21,8 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
+  Skeleton
 } from '@mui/material';
 import {
   LocationOn as LocationIcon,
@@ -35,6 +36,7 @@ import {
   AccessTime as TimeIcon,
   Info as InfoIcon,
   Photo as PhotoIcon,
+  Image as ImageIcon,
   Launch as LaunchIcon
 } from '@mui/icons-material';
 
@@ -43,6 +45,104 @@ interface TabPanelProps {
   index: number;
   value: number;
 }
+
+// Enhanced Image Component with Error Handling and Fallbacks
+const ViennaImage: React.FC<{
+  src: string;
+  alt: string;
+  height?: number;
+  category?: string;
+  style?: React.CSSProperties;
+}> = ({ src, alt, height = 200, category = 'general', style }) => {
+  const [imageSrc, setImageSrc] = useState<string>(src);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
+  // High-quality fallback images from Unsplash
+  const fallbackImages = {
+    cathedral: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop&crop=center",
+    palace: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
+    museum: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
+    coffee: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&h=400&fit=crop&crop=center",
+    market: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&h=400&fit=crop&crop=center",
+    restaurant: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=400&fit=crop&crop=center",
+    park: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop&crop=center",
+    general: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&h=400&fit=crop&crop=center"
+  };
+
+  const handleImageLoad = () => {
+    setIsLoading(false);
+    setHasError(false);
+  };
+
+  const handleImageError = () => {
+    setIsLoading(false);
+    setHasError(true);
+    // Use high-quality fallback image based on category
+    setImageSrc(fallbackImages[category as keyof typeof fallbackImages] || fallbackImages.general);
+  };
+
+  useEffect(() => {
+    setImageSrc(src);
+    setIsLoading(true);
+    setHasError(false);
+  }, [src]);
+
+  return (
+    <Box sx={{ position: 'relative', height, overflow: 'hidden', borderRadius: 1 }}>
+      {isLoading && (
+        <Skeleton
+          variant="rectangular"
+          height={height}
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            zIndex: 1,
+            borderRadius: 1
+          }}
+        />
+      )}
+      <img
+        src={imageSrc}
+        alt={alt}
+        onLoad={handleImageLoad}
+        onError={handleImageError}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          display: isLoading ? 'none' : 'block',
+          borderRadius: '4px',
+          ...style
+        }}
+      />
+      {hasError && !isLoading && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            bgcolor: 'rgba(0,0,0,0.7)',
+            color: 'white',
+            px: 1,
+            py: 0.5,
+            borderRadius: 1,
+            fontSize: '0.75rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 0.5,
+            zIndex: 2
+          }}
+        >
+          <ImageIcon sx={{ fontSize: 14 }} />
+          Photo
+        </Box>
+      )}
+    </Box>
+  );
+};
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -174,11 +274,10 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
     <Grid container spacing={3}>
       <Grid item xs={12} sm={6} md={4}>
         <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('stephansdom')}>
-          <CardMedia
-            component="img"
-            height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Stephansdom_Wien_2014.jpg/800px-Stephansdom_Wien_2014.jpg"
+          <ViennaImage
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Stephansdom_Wien_2014.jpg/800px-Stephansdom_Wien_2014.jpg"
             alt="St. Stephen's Cathedral"
+            category="cathedral"
           />
           <CardContent>
             <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>St. Stephen's Cathedral</Typography>
@@ -198,11 +297,10 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
 
       <Grid item xs={12} sm={6} md={4}>
         <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('belvedere')}>
-          <CardMedia
-            component="img"
-            height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Belvedere_Palace_Vienna.jpg/800px-Belvedere_Palace_Vienna.jpg"
+          <ViennaImage
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Belvedere_Palace_Vienna.jpg/800px-Belvedere_Palace_Vienna.jpg"
             alt="Belvedere Palace"
+            category="palace"
           />
           <CardContent>
             <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Belvedere Palace</Typography>
@@ -222,11 +320,10 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
 
       <Grid item xs={12} sm={6} md={4}>
         <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('hofburg')}>
-          <CardMedia
-            component="img"
-            height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Hofburg_Palace%2C_Innsbruck.jpg/800px-Hofburg_Palace%2C_Innsbruck.jpg"
-            alt="Hofburg Palace"
+          <ViennaImage
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Hofburg_Palace%2C_Vienna.jpg/800px-Hofburg_Palace%2C_Vienna.jpg"
+            alt="Hofburg Imperial Palace"
+            category="palace"
           />
           <CardContent>
             <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Hofburg Palace</Typography>
