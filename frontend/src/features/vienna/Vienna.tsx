@@ -42,6 +42,9 @@ import {
   Launch as LaunchIcon
 } from '@mui/icons-material';
 
+// Import the photo loader utility
+import { getAttractionPhoto, getFallbackPhoto } from '../../utils/photoLoader';
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -60,31 +63,31 @@ const ViennaImage: React.FC<{
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  // High-quality primary images from Unsplash (guaranteed to work)
+  // Primary images now loaded from photoLoader utility
   const primaryImages = {
-    stephansdom: "https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?w=600&h=400&fit=crop&crop=center",
-    belvedere: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
-    hofburg: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&h=400&fit=crop&crop=center",
-    schonbrunn: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=400&fit=crop&crop=center",
-    prater: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop&crop=center",
-    naschmarkt: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&h=400&fit=crop&crop=center",
-    cafe_central: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&h=400&fit=crop&crop=center",
-    khm: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&h=400&fit=crop&crop=center",
-    albertina: "https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=600&h=400&fit=crop&crop=center",
-    haus_des_meeres: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop&crop=center"
+    stephansdom: getAttractionPhoto('stephansdom'),
+    belvedere: getAttractionPhoto('belvedere'),
+    hofburg: getAttractionPhoto('hofburg'),
+    schonbrunn: getAttractionPhoto('schonbrunn'),
+    prater: getAttractionPhoto('prater'),
+    naschmarkt: getAttractionPhoto('naschmarkt'),
+    cafe_central: getAttractionPhoto('cafe_central'),
+    khm: getAttractionPhoto('khm'),
+    albertina: getAttractionPhoto('albertina'),
+    haus_des_meeres: getAttractionPhoto('haus_des_meeres')
   };
 
-  // High-quality fallback images from Unsplash by category
+  // Fallback images now loaded from photoLoader utility
   const fallbackImages = {
-    cathedral: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600&h=400&fit=crop&crop=center",
-    palace: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
-    museum: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
-    coffee: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&h=400&fit=crop&crop=center",
-    market: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&h=400&fit=crop&crop=center",
-    restaurant: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=400&fit=crop&crop=center",
-    park: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop&crop=center",
-    aquarium: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop&crop=center",
-    general: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&h=400&fit=crop&crop=center"
+    cathedral: getFallbackPhoto('cathedral'),
+    palace: getFallbackPhoto('palace'),
+    museum: getFallbackPhoto('museum'),
+    coffee: getFallbackPhoto('coffee'),
+    market: getFallbackPhoto('market'),
+    restaurant: getFallbackPhoto('restaurant'),
+    park: getFallbackPhoto('park'),
+    aquarium: getFallbackPhoto('aquarium'),
+    general: getFallbackPhoto('general')
   };
 
   const handleImageLoad = () => {
