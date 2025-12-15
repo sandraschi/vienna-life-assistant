@@ -411,30 +411,6 @@ const ViennaCoffeeHouses: React.FC<{ onAttractionClick: (attraction: string) => 
       </Grid>
 
       <Grid item xs={12} sm={6} md={4}>
-        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('cafe-griensteidl')}>
-          <CardMedia
-            component="img"
-            height="200"
-            image="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Caf%C3%A9_Griensteidl_Interior.jpg/800px-Caf%C3%A9_Griensteidl_Interior.jpg"
-            alt="Café Griensteidl"
-          />
-          <CardContent>
-            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Café Griensteidl</Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Literary coffee house since 1847. Meeting place for writers, artists, and intellectuals.
-            </Typography>
-            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-              <Chip size="small" label="Literary" color="primary" />
-              <Chip size="small" label="Historic" color="warning" />
-            </Stack>
-            <Button variant="outlined" size="small" fullWidth>
-              View Details
-            </Button>
-          </CardContent>
-        </Card>
-      </Grid>
-
-      <Grid item xs={12} sm={6} md={4}>
         <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('cafe-demel')}>
           <CardMedia
             component="img"
