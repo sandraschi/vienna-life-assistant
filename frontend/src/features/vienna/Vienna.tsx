@@ -32,6 +32,8 @@ import {
   DirectionsBus as TransportIcon,
   Celebration as CelebrationIcon,
   Train as TrainIcon,
+  Tram as TramIcon,
+  DirectionsRailway as DirectionsRailwayIcon,
   Flight as FlightIcon,
   AccessTime as TimeIcon,
   Info as InfoIcon,
@@ -1434,10 +1436,300 @@ const ViennaDayTrips: React.FC = () => (
 // Stub components for Vienna tabs
 const ViennaTransport: React.FC = () => (
   <Box>
-    <Typography variant="h6" gutterBottom>🚇 Vienna Public Transport</Typography>
-    <Typography variant="body2">
-      Vienna's public transport system is world-class with U-Bahn, S-Bahn, trams, and buses.
+    <Typography variant="h6" gutterBottom sx={{ color: 'primary.main', mb: 3 }}>
+      🚇 Vienna Public Transport - World-Class System
     </Typography>
+
+    <Typography variant="body1" sx={{ mb: 4, fontSize: '1.1rem' }}>
+      Vienna boasts one of Europe's most efficient and extensive public transport networks, serving over 2.6 million passengers daily.
+      The integrated system covers the entire city and surrounding areas with excellent frequency, reliability, and coverage.
+    </Typography>
+
+    <Grid container spacing={3}>
+      {/* U-Bahn Metro */}
+      <Grid item xs={12} md={6}>
+        <Card sx={{ height: '100%', border: '2px solid #1976d2' }}>
+          <CardContent>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <TrainIcon sx={{ mr: 1, color: '#1976d2' }} />
+              <Typography variant="h6">U-Bahn (Metro)</Typography>
+            </Box>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              5 lines (U1-U4, U6) covering 83.3 km with 109 stations. Known for its distinctive red, white, and blue color scheme.
+            </Typography>
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>Lines & Coverage:</Typography>
+              <Typography variant="body2" component="div">
+                • <strong>U1:</strong> Red line - North-South through city center<br/>
+                • <strong>U2:</strong> Purple line - East-West, Karlsplatz to Stadlau<br/>
+                • <strong>U3:</strong> Orange line - North-South, Ottakring to Simmering<br/>
+                • <strong>U4:</strong> Green line - Short line through city center<br/>
+                • <strong>U6:</strong> Brown line - Northwest to Southeast
+              </Typography>
+            </Box>
+            <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+              Frequency: Every 2-5 minutes during peak hours, 5-8 minutes off-peak
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* S-Bahn Suburban Rail */}
+      <Grid item xs={12} md={6}>
+        <Card sx={{ height: '100%', border: '2px solid #388e3c' }}>
+          <CardContent>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <DirectionsRailwayIcon sx={{ mr: 1, color: '#388e3c' }} />
+              <Typography variant="h6">S-Bahn (Suburban Rail)</Typography>
+            </Box>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              12 lines connecting Vienna to surrounding areas, airports, and regional destinations. Essential for airport access.
+            </Typography>
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>Key Lines:</Typography>
+              <Typography variant="body2" component="div">
+                • <strong>S1-S8:</strong> Regional lines to Lower Austria<br/>
+                • <strong>S7:</strong> Vienna Airport to city center (16 min)<br/>
+                • <strong>S45:</strong> Vienna Airport to Wien Mitte (16 min)<br/>
+                • <strong>S50:</strong> North-South through city<br/>
+                • <strong>S60:</strong> To Bratislava (2.5 hours)
+              </Typography>
+            </Box>
+            <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+              Vienna Airport: CAT (City Airport Train) from city center in 16 minutes
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Trams */}
+      <Grid item xs={12} md={6}>
+        <Card sx={{ height: '100%', border: '2px solid #f57c00' }}>
+          <CardContent>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <TramIcon sx={{ mr: 1, color: '#f57c00' }} />
+              <Typography variant="h6">Trams</Typography>
+            </Box>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              29 lines covering 176.9 km, making Vienna one of Europe's most tram-dependent cities. Iconic yellow trams.
+            </Typography>
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>Popular Lines:</Typography>
+              <Typography variant="body2" component="div">
+                • <strong>1:</strong> Ring tram around city center<br/>
+                • <strong>2:</strong> Along Danube Canal<br/>
+                • <strong>D:</strong> Through city center<br/>
+                • <strong>O:</strong> Karlsplatz to Raxstraße<br/>
+                • <strong>71:</strong> To Kahlenberg viewpoint
+              </Typography>
+            </Box>
+            <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+              Frequency: Every 4-8 minutes, historic trams still in service on line 1
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Buses */}
+      <Grid item xs={12} md={6}>
+        <Card sx={{ height: '100%', border: '2px solid #7b1fa2' }}>
+          <CardContent>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <TransportIcon sx={{ mr: 1, color: '#7b1fa2' }} />
+              <Typography variant="h6">Buses</Typography>
+            </Box>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              127 lines complementing metro and tram networks, especially in outer districts and for airport connections.
+            </Typography>
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>Key Services:</Typography>
+              <Typography variant="body2" component="div">
+                • <strong>Express lines:</strong> VAL 1-3 for airport<br/>
+                • <strong>Night buses:</strong> N25, N38, N60, N66<br/>
+                • <strong>Airport buses:</strong> Direct from city center<br/>
+                • <strong>VIP buses:</strong> Premium airport service
+              </Typography>
+            </Box>
+            <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+              Airport: VAL lines connect Vienna Airport to city center in 45-75 minutes
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+
+    {/* Ticketing System */}
+    <Paper sx={{ p: 3, mt: 4, bgcolor: 'grey.50' }}>
+      <Typography variant="h6" gutterBottom sx={{ color: 'primary.main' }}>
+        🎫 Ticketing System
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Typography variant="subtitle1" sx={{ mb: 2, color: 'secondary.main' }}>
+            Single Tickets & Passes
+          </Typography>
+          <Typography variant="body2" component="div" sx={{ mb: 2 }}>
+            • <strong>Single ticket:</strong> €2.40 (valid 1 hour)<br/>
+            • <strong>24-hour ticket:</strong> €8.00<br/>
+            • <strong>48-hour ticket:</strong> €14.10<br/>
+            • <strong>72-hour ticket:</strong> €17.10<br/>
+            • <strong>Weekly ticket:</strong> €17.10<br/>
+            • <strong>Monthly pass:</strong> €51.00<br/>
+            • <strong>Annual pass:</strong> €365.00
+          </Typography>
+          <Typography variant="body2" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
+            All tickets valid on entire network (U-Bahn, S-Bahn, trams, buses, regional trains)
+          </Typography>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Typography variant="subtitle1" sx={{ mb: 2, color: 'secondary.main' }}>
+            Vienna Pass Integration
+          </Typography>
+          <Typography variant="body2" component="div">
+            • <strong>72-hour Vienna Pass:</strong> €99 (includes unlimited transport)<br/>
+            • <strong>Card holders:</strong> 50% discount on single tickets<br/>
+            • <strong>Seniors (65+):</strong> Reduced fares available<br/>
+            • <strong>Youth (6-15):</strong> 50% discount<br/>
+            • <strong>Children under 6:</strong> Free travel
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 2, fontStyle: 'italic', color: 'text.secondary' }}>
+            Buy tickets at machines, apps, or Wiener Linien shops. Validate before boarding!
+          </Typography>
+        </Grid>
+      </Grid>
+    </Paper>
+
+    {/* Night Services */}
+    <Paper sx={{ p: 3, mt: 3 }}>
+      <Typography variant="h6" gutterBottom sx={{ color: 'primary.main' }}>
+        🌙 Night Services (Nightline)
+      </Typography>
+      <Typography variant="body2" sx={{ mb: 2 }}>
+        Vienna operates an excellent night transport system from 12:30 AM to 5:00 AM:
+      </Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4}>
+          <Typography variant="subtitle2">Night Buses:</Typography>
+          <Typography variant="body2">
+            N25, N38, N60, N66 - Every 30 minutes, covering main routes
+          </Typography>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Typography variant="subtitle2">Night Trams:</Typography>
+          <Typography variant="body2">
+            Lines: 1, 5, 6, 9, 18, 31, 33, 37, 38, 41, 42, 43, 44, 49, 52
+          </Typography>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Typography variant="subtitle2">Night Trains:</Typography>
+          <Typography variant="body2">
+            S-Bahn lines continue until 12:30 AM, then limited night service
+          </Typography>
+        </Grid>
+      </Grid>
+      <Typography variant="body2" sx={{ mt: 2, fontStyle: 'italic', color: 'text.secondary' }}>
+        Night services use regular tickets. Special night buses operate between major nightlife areas.
+      </Typography>
+    </Paper>
+
+    {/* Practical Information */}
+    <Paper sx={{ p: 3, mt: 3, bgcolor: 'primary.light', color: 'white' }}>
+      <Typography variant="h6" gutterBottom>
+        💡 Practical Tips for Tourists
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Typography variant="subtitle2" sx={{ mb: 1, color: 'white' }}>Navigation:</Typography>
+          <Typography variant="body2" component="div" sx={{ color: 'white' }}>
+            • <strong>Wiener Linien app:</strong> Real-time schedules and journey planning<br/>
+            • <strong>Google Maps:</strong> Integrated with public transport<br/>
+            • <strong>Wiener Linien website:</strong> Route planning and maps<br/>
+            • <strong>Physical maps:</strong> Available at tourist offices and hotels
+          </Typography>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Typography variant="subtitle2" sx={{ mb: 1, color: 'white' }}>Important Rules:</Typography>
+          <Typography variant="body2" component="div" sx={{ color: 'white' }}>
+            • <strong>Validate tickets</strong> before boarding (stamp machines)<br/>
+            • <strong>Exit through turnstiles</strong> at destination<br/>
+            • <strong>No eating/drinking</strong> on U-Bahn and most trams<br/>
+            • <strong>Give up seats</strong> for elderly, disabled, pregnant passengers<br/>
+            • <strong>Quiet zones</strong> marked in carriages
+          </Typography>
+        </Grid>
+      </Grid>
+    </Paper>
+
+    {/* Accessibility */}
+    <Paper sx={{ p: 3, mt: 3 }}>
+      <Typography variant="h6" gutterBottom sx={{ color: 'primary.main' }}>
+        ♿ Accessibility & Special Services
+      </Typography>
+      <Typography variant="body2" sx={{ mb: 2 }}>
+        Vienna's public transport is highly accessible with modern facilities:
+      </Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4}>
+          <Typography variant="subtitle2">Wheelchair Access:</Typography>
+          <Typography variant="body2">
+            All U-Bahn stations and most trams equipped with lifts and ramps
+          </Typography>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Typography variant="subtitle2">Visual Aids:</Typography>
+          <Typography variant="body2">
+            Audio announcements, tactile paving, Braille signage
+          </Typography>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Typography variant="subtitle2">Assistance:</Typography>
+          <Typography variant="body2">
+            Call 05-1717 for help with navigation and boarding
+          </Typography>
+        </Grid>
+      </Grid>
+    </Paper>
+
+    {/* Tourist Information */}
+    <Paper sx={{ p: 3, mt: 3, bgcolor: 'secondary.light' }}>
+      <Typography variant="h6" gutterBottom>
+        🗺️ Tourist Information Centers
+      </Typography>
+      <Typography variant="body2" component="div">
+        • <strong>Main Tourist Office:</strong> Albertinaplatz 1 (near Opera House)<br/>
+        • <strong>Airport Tourist Info:</strong> Vienna International Airport<br/>
+        • <strong>Railway Station Info:</strong> Wien Hauptbahnhof and Wien Westbahnhof<br/>
+        • <strong>Online:</strong> Visit www.wien.info for transport information
+      </Typography>
+      <Typography variant="body2" sx={{ mt: 2, fontStyle: 'italic' }}>
+        Free city maps, Vienna Pass sales, and personalized route planning available at all tourist offices.
+      </Typography>
+    </Paper>
+
+    {/* System Statistics */}
+    <Box sx={{ mt: 4, p: 3, bgcolor: 'grey.100', borderRadius: 2 }}>
+      <Typography variant="h6" gutterBottom sx={{ color: 'primary.main', textAlign: 'center' }}>
+        📊 Vienna Transport by Numbers
+      </Typography>
+      <Grid container spacing={2} sx={{ textAlign: 'center' }}>
+        <Grid item xs={6} sm={3}>
+          <Typography variant="h4" sx={{ color: 'secondary.main' }}>2.6M</Typography>
+          <Typography variant="body2">Daily Passengers</Typography>
+        </Grid>
+        <Grid item xs={6} sm={3}>
+          <Typography variant="h4" sx={{ color: 'secondary.main' }}>1,200+</Typography>
+          <Typography variant="body2">Stations & Stops</Typography>
+        </Grid>
+        <Grid item xs={6} sm={3}>
+          <Typography variant="h4" sx={{ color: 'secondary.main' }}>1,900km</Typography>
+          <Typography variant="body2">Total Network Length</Typography>
+        </Grid>
+        <Grid item xs={6} sm={3}>
+          <Typography variant="h4" sx={{ color: 'secondary.main' }}>99.5%</Typography>
+          <Typography variant="body2">Punctuality Rate</Typography>
+        </Grid>
+      </Grid>
+    </Box>
   </Box>
 );
 
