@@ -95,11 +95,11 @@ cd vienna-life-assistant
 
 ### Prerequisites
 - **Docker Desktop** (latest version)
-- Python 3.11+ (for development)
-- Node.js 20+ (for development)
 - **Choose your LLM option:**
   - **Local (Recommended)**: Ollama + RTX 4070 or better
   - **Cloud**: OpenAI or Anthropic API key (no GPU required)
+
+**Note:** The application runs entirely in Docker containers for consistency and stability across development and production environments.
 
 ### Docker Desktop Setup
 
@@ -146,7 +146,7 @@ API keys are configured in the application settings after startup.
 ```powershell
 cd D:\Dev\repos\vienna-life-assistant
 
-# Build and start all services
+# Start all services (PostgreSQL, Redis, Backend, Frontend)
 docker compose up -d
 
 # View running containers
@@ -159,9 +159,10 @@ docker compose logs -f frontend
 
 ### 2. Access
 
-- **Local**: http://localhost:3000
-- **Tailscale**: http://goliath:3000
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8000
 - **API Docs**: http://localhost:8000/docs
+- **Tailscale**: http://goliath:3000 (API: goliath:8000)
 
 ## 📖 Usage Examples
 
@@ -196,8 +197,10 @@ docker compose logs -f frontend
 
 ### Backend
 - **FastAPI** - Modern Python API framework
-- **SQLite** - Local database (Docker containerized)
+- **PostgreSQL** - Containerized database
+- **Redis** - Caching and background tasks
 - **SQLAlchemy** - ORM with Pydantic v2
+- **Celery** - Background task processing
 - **Ollama** - Local LLM (RTX 4070 or better recommended)
 - **FastMCP** - MCP server integration (stdio transport)
 
@@ -218,13 +221,16 @@ docker compose logs -f frontend
 
 ## 📊 Database
 
-**SQLite** with 6 models:
+**PostgreSQL** container with 7 models:
 - `todos` - Task management (12+ items)
 - `calendar_events` - Schedule (10+ events)
 - `shopping_items` - Grocery lists
 - `expenses` - Expense tracking (€836+ tracked)
 - `conversations` - Chat history
 - `messages` - Chat messages
+- `settings` - Application settings (LLM preferences)
+
+**Redis** for caching and background task queues.
 
 ## 🧪 Testing
 
@@ -519,7 +525,8 @@ Pre-loaded with realistic Vienna life data:
 
 ## 📝 Notes
 
-- **Docker containerized** - Easy deployment with docker-compose
+- **Fully Docker containerized** - PostgreSQL, Redis, FastAPI, and React all in containers
+- **Stable development environment** - No more local server crashes or dependency conflicts
 - **Local AI** runs on your RTX 4070 or better (no cloud costs!)
 - **German locale** for dates, Euro currency
 - **Mobile responsive** - works on iPhone/iPad
@@ -557,14 +564,14 @@ Backend configured for `localhost:3000` and `goliath:3000`. Hard refresh: `Ctrl+
 
 ### Ollama integration issues
 ```powershell
-# Check Ollama is running
+# Check Ollama is running (outside Docker)
 ollama list
 
 # Pull required model
 ollama pull llama3.2:3b
 
-# Check MCP server can connect
-curl http://localhost:11434/api/tags
+# Check MCP server can connect from Docker container
+docker compose exec backend curl http://host.docker.internal:11434/api/tags
 ```
 
 ### MCP server connection issues
@@ -627,8 +634,10 @@ nssm set ViennaLifeDocker AppDirectory "D:\Dev\repos\vienna-life-assistant"
 
 ## 📱 Ports
 
-- **Backend**: 8000 (Docker)
 - **Frontend**: 3000 (Docker)
+- **Backend API**: 8000 (Docker)
+- **PostgreSQL**: 5432 (Docker)
+- **Redis**: 6380 (Docker, mapped from 6379)
 - **MyWienerLinien**: 3079 (if running)
 - **Ollama**: 11434 (if running)
 - **Plex**: 32400 (if running)
