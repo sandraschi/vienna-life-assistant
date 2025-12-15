@@ -50,7 +50,7 @@ class TestPromptEnhancement:
                 "response": "Explain ML algorithms clearly"
             }
 
-            result = await chat_service.enhance_prompt("explain ML", "llama3.2:3b")
+            result = await chat_service.enhance_prompt("explain ML", "llama3.2:3b", "ollama")
 
             assert result == "Explain ML algorithms clearly"
             mock_generate.assert_called_once()
@@ -59,7 +59,7 @@ class TestPromptEnhancement:
     async def test_enhance_prompt_error_fallback(self):
         """Test fallback to original prompt on error"""
         with patch('services.ollama_service.ollama_service.generate', side_effect=Exception("API Error")):
-            result = await chat_service.enhance_prompt("original prompt")
+            result = await chat_service.enhance_prompt("original prompt", "llama3.2:3b", "ollama")
 
             assert result == "original prompt"
 
@@ -71,7 +71,7 @@ class TestPromptEnhancement:
             long_response = "Enhanced: " + "very detailed enhancement " * 100
             mock_generate.return_value = {"response": long_response}
 
-            result = await chat_service.enhance_prompt("short")
+            result = await chat_service.enhance_prompt("short", "llama3.2:3b", "ollama")
 
             # Should fallback to original
             assert result == "short"

@@ -157,11 +157,33 @@ class ChatService:
         self.personalities = PERSONALITIES
         self.tools = TOOLS
     
-    async def enhance_prompt(self, user_prompt: str, model: str = "llama3.2:3b") -> str:
+    async def enhance_prompt(self, user_prompt: str, model: str = "llama3.2:3b", llm_provider: str = "ollama") -> str:
         """
-        Use AI to enhance/refine user's prompt for better results
+        Enhanced prompt optimization inspired by Promptomatix framework.
+        Uses intent analysis, strategy selection, and cost-aware optimization.
+
+        Promptomatix features implemented:
+        - Intent analysis for user queries
+        - Strategy selection (instructional, few-shot, chain-of-thought)
+        - Cost-aware optimization for cloud LLMs (OpenAI, Anthropic)
+        - Modular design with extensible strategies
         """
-        enhancement_prompt = f"""You are a prompt enhancement expert. The user wrote: "{user_prompt}"
+        # Step 1: Analyze user intent (inspired by Promptomatix)
+        intent_analysis = await self._analyze_intent(user_prompt, model)
+
+        # Step 2: Select optimal prompting strategy (cost-aware)
+        strategy = self._select_prompting_strategy(intent_analysis, user_prompt, llm_provider)
+
+        # Step 3: Generate enhanced prompt using selected strategy
+        if strategy == "instructional":
+            enhancement_prompt = self._create_instructional_enhancement(user_prompt, intent_analysis)
+        elif strategy == "few_shot":
+            enhancement_prompt = self._create_few_shot_enhancement(user_prompt, intent_analysis)
+        elif strategy == "chain_of_thought":
+            enhancement_prompt = self._create_cot_enhancement(user_prompt, intent_analysis)
+        else:
+            # Fallback to original method
+            enhancement_prompt = f"""You are a prompt enhancement expert. The user wrote: "{user_prompt}"
 
 Enhance this prompt to be clearer, more specific, and more likely to get a high-quality response. Keep it concise.
 Only output the enhanced prompt, nothing else."""
@@ -179,6 +201,144 @@ Only output the enhanced prompt, nothing else."""
             return enhanced
         except Exception:
             return user_prompt
+
+    async def _analyze_intent(self, user_prompt: str, model: str) -> Dict[str, Any]:
+        """
+        Analyze user intent using Promptomatix-inspired approach.
+        Returns intent classification and context.
+        """
+        intent_prompt = f"""Analyze this user query and classify its intent:
+
+Query: "{user_prompt}"
+
+Classify into one of these categories:
+- QUESTION: Asking for information or explanation
+- INSTRUCTION: Requesting the AI to perform a task
+- CREATIVE: Requesting creative content (stories, poems, designs)
+- ANALYSIS: Requesting analysis or evaluation
+- CONVERSATION: Casual chat or opinion
+- TECHNICAL: Programming, technical, or specialized knowledge
+
+Also identify:
+- Topic domain (e.g., technology, history, science, daily life)
+- Complexity level (simple, moderate, complex)
+- Required expertise level (basic, intermediate, expert)
+
+Output in JSON format:
+{{"intent": "CATEGORY", "domain": "TOPIC", "complexity": "LEVEL", "expertise": "LEVEL"}}"""
+
+        try:
+            response = await ollama_service.generate(
+                model=model,
+                prompt=intent_prompt,
+                stream=False
+            )
+            response_text = response.get("response", "").strip()
+
+            # Try to parse JSON
+            try:
+                import json
+                intent_data = json.loads(response_text)
+                return intent_data
+            except:
+                # Fallback to basic analysis
+                return {
+                    "intent": "QUESTION" if "?" in user_prompt else "INSTRUCTION",
+                    "domain": "general",
+                    "complexity": "moderate",
+                    "expertise": "basic"
+                }
+        except:
+            return {
+                "intent": "QUESTION" if "?" in user_prompt else "INSTRUCTION",
+                "domain": "general",
+                "complexity": "moderate",
+                "expertise": "basic"
+            }
+
+    def _select_prompting_strategy(self, intent_analysis: Dict[str, Any], user_prompt: str, llm_provider: str = "ollama") -> str:
+        """
+        Select optimal prompting strategy based on intent analysis and cost considerations.
+        Inspired by Promptomatix cost-aware optimization.
+        """
+        intent = intent_analysis.get("intent", "INSTRUCTION")
+        complexity = intent_analysis.get("complexity", "moderate")
+        domain = intent_analysis.get("domain", "general")
+
+        # Cost-aware strategy selection (Promptomatix-inspired)
+        # Cloud LLMs (OpenAI, Anthropic) are more expensive, so prefer efficient strategies
+        is_cloud_llm = llm_provider in ["openai", "anthropic"]
+
+        if is_cloud_llm:
+            # For expensive cloud LLMs, prefer shorter, more direct strategies
+            if intent in ["QUESTION", "TECHNICAL"] and complexity == "complex":
+                return "instructional"  # Skip expensive CoT for cloud LLMs
+            elif intent == "CREATIVE":
+                return "instructional"  # Direct creative prompts are more cost-effective
+            else:
+                return "instructional"  # Default to most efficient strategy
+        else:
+            # For local LLMs (Ollama), we can afford more sophisticated strategies
+            if intent in ["QUESTION", "TECHNICAL"] and complexity == "complex":
+                return "chain_of_thought"
+            elif intent == "CREATIVE" or domain in ["writing", "art"]:
+                return "few_shot"
+            elif intent == "INSTRUCTION" and len(user_prompt.split()) < 20:
+                return "instructional"
+            else:
+                return "instructional"  # Default strategy
+
+    def _create_instructional_enhancement(self, user_prompt: str, intent_analysis: Dict[str, Any]) -> str:
+        """Create instructional enhancement prompt."""
+        domain = intent_analysis.get("domain", "general")
+        expertise = intent_analysis.get("expertise", "basic")
+
+        return f"""You are an expert prompt engineer specializing in {domain} with {expertise} level knowledge.
+
+User's original prompt: "{user_prompt}"
+
+Create an enhanced version that:
+1. Is clear and specific about the desired outcome
+2. Includes relevant context and constraints
+3. Specifies the desired format or structure
+4. Uses appropriate technical terminology for the domain
+
+Enhanced prompt:"""
+
+    def _create_few_shot_enhancement(self, user_prompt: str, intent_analysis: Dict[str, Any]) -> str:
+        """Create few-shot enhancement prompt."""
+        domain = intent_analysis.get("domain", "general")
+
+        return f"""You are a creative prompt optimization expert for {domain} tasks.
+
+User's original prompt: "{user_prompt}"
+
+Enhance this prompt by adding specific examples, formatting guidance, and creative constraints that would produce better results.
+
+Include in the enhancement:
+- Specific style or tone examples
+- Format specifications
+- Quality criteria
+- Creative constraints or themes
+
+Enhanced prompt:"""
+
+    def _create_cot_enhancement(self, user_prompt: str, intent_analysis: Dict[str, Any]) -> str:
+        """Create chain-of-thought enhancement prompt."""
+        domain = intent_analysis.get("domain", "general")
+
+        return f"""You are a prompt engineering expert for complex {domain} reasoning tasks.
+
+User's original prompt: "{user_prompt}"
+
+For complex analytical or reasoning tasks, enhance the prompt to:
+1. Break down the problem into steps
+2. Request step-by-step reasoning
+3. Specify intermediate outputs or checkpoints
+4. Include verification or validation steps
+5. Request justification for conclusions
+
+Enhanced prompt that encourages systematic reasoning:"""
     
     async def _execute_tool(self, tool_name: str, parameters: Dict) -> str:
         """Execute a tool and return results"""
@@ -560,7 +720,14 @@ Only output the enhanced prompt, nothing else."""
         
         # Enhance prompt if requested
         if enhance_prompts and last_message["role"] == "user":
-            enhanced = await self.enhance_prompt(user_content, model)
+            # Determine LLM provider for cost-aware optimization
+            llm_provider = "ollama"  # Default
+            if model.startswith("gpt-") or model.startswith("chatgpt"):
+                llm_provider = "openai"
+            elif model.startswith("claude"):
+                llm_provider = "anthropic"
+
+            enhanced = await self.enhance_prompt(user_content, model, llm_provider)
             yield json.dumps({"type": "enhancement", "original": user_content, "enhanced": enhanced}) + "\n"
             user_content = enhanced
         

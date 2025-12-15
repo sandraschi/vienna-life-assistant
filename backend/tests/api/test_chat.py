@@ -291,7 +291,7 @@ class TestConversations:
                 "response": "Enhanced: " + "very long response " * 50
             }
 
-            result = await chat_service.enhance_prompt("short")
+            result = await chat_service.enhance_prompt("short", "llama3.2:3b", "ollama")
 
             # Should fallback to original
             assert result == "short"
