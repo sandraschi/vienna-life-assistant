@@ -64,7 +64,7 @@ const ViennaImage: React.FC<{
   const primaryImages = {
     stephansdom: "https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?w=600&h=400&fit=crop&crop=center",
     belvedere: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center",
-    hofburg: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=600&h=400&fit=crop&crop=center",
+    hofburg: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&h=400&fit=crop&crop=center",
     schonbrunn: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=400&fit=crop&crop=center",
     prater: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop&crop=center",
     naschmarkt: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&h=400&fit=crop&crop=center",
