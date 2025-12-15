@@ -1,21 +1,20 @@
 /**
- * Photo Loader Utility - High-Quality Pexels Images
+ * Photo Loader Utility - Local User-Curated Photos
  *
- * WHY PEXELS INSTEAD OF UNSPLASH?
- * ===============================
- * - Pexels has higher resolution images (up to 4K)
- * - Better quality for landmarks and architecture
- * - More reliable API without rate limiting
- * - No bot protection issues like Wikimedia Commons
- * - Free for commercial use with proper attribution
+ * USER CONTROL OVER VIENNA ATTRACTION PHOTOS
+ * ==========================================
+ * - No more wrong photos (Colosseum instead of St. Stephen's)
+ * - No more generic images (random cafés instead of Café Central)
+ * - You control exactly what Vienna landmarks are shown
+ * - High-quality, personally selected images of actual attractions
  *
- * HOW TO USE PEXELS IMAGES:
- * =========================
- * 1. Search on Pexels.com: "St. Stephen's Cathedral Vienna Austria"
- * 2. Find high-quality image showing the specific attraction
- * 3. Copy the image URL from the "Download" button (large size)
- * 4. Use format: https://images.pexels.com/photos/{photo-id}/pexels-photo-{photo-id}.jpeg?auto=compress&cs=tinysrgb&w=1200
- * 5. Test URL and verify it shows the correct Vienna attraction
+ * HOW TO ADD YOUR OWN PHOTOS:
+ * ===========================
+ * 1. Place photos in: frontend/public/assets/photos/
+ * 2. Use exact filenames: stephansdom.jpg, belvedere.jpg, etc.
+ * 3. Photos should be of actual Vienna attractions you want to showcase
+ * 4. Recommended: 1200x800px or higher resolution, JPG or PNG format
+ * 5. If local photos don't exist, falls back to placeholder images
  */
 
 export interface PhotoConfig {
@@ -26,170 +25,177 @@ export interface PhotoConfig {
   verified: boolean; // Whether this image has been manually verified
 }
 
-// HIGH-QUALITY PEXELS IMAGES FOR VIENNA ATTRACTIONS
-// All URLs tested with curl - return HTTP 200, high-resolution images
+// LOCAL USER-PROVIDED PHOTOS FOR VIENNA ATTRACTIONS
+// Photos should be placed in frontend/public/assets/photos/ with these filenames
 export const VIENNA_PHOTOS: Record<string, PhotoConfig> = {
   stephansdom: {
-    id: '2297961/pexels-photo-2297961.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    id: '/assets/photos/stephansdom.jpg',
     alt: "St. Stephen's Cathedral Vienna - Iconic Gothic Cathedral",
     category: 'cathedral',
-    searchTerm: "St. Stephen's Cathedral Vienna Austria Gothic architecture",
-    verified: true // Pexels high-quality cathedral image
+    searchTerm: "Place your photo of St. Stephen's Cathedral in Vienna here",
+    verified: false // User must provide this photo
   },
   belvedere: {
-    id: '1837591/pexels-photo-1837591.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    id: '/assets/photos/belvedere.jpg',
     alt: "Belvedere Palace Vienna - Baroque Masterpiece",
     category: 'palace',
-    searchTerm: "Belvedere Palace Vienna Austria Baroque architecture",
-    verified: true // Pexels high-quality palace image
+    searchTerm: "Place your photo of Belvedere Palace in Vienna here",
+    verified: false // User must provide this photo
   },
   hofburg: {
-    id: '1837590/pexels-photo-1837590.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    id: '/assets/photos/hofburg.jpg',
     alt: "Hofburg Imperial Palace Vienna - Habsburg Residence",
     category: 'palace',
-    searchTerm: "Hofburg Palace Vienna Austria Imperial residence",
-    verified: true // Pexels high-quality imperial palace image
+    searchTerm: "Place your photo of Hofburg Palace in Vienna here",
+    verified: false // User must provide this photo
   },
   schonbrunn: {
-    id: '1837589/pexels-photo-1837589.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    id: '/assets/photos/schonbrunn.jpg',
     alt: "Schönbrunn Palace Vienna - Summer Residence",
     category: 'palace',
-    searchTerm: "Schönbrunn Palace Vienna Austria gardens architecture",
-    verified: true // Pexels high-quality palace gardens image
+    searchTerm: "Place your photo of Schönbrunn Palace in Vienna here",
+    verified: false // User must provide this photo
   },
   prater: {
-    id: '1837592/pexels-photo-1837592.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    id: '/assets/photos/prater.jpg',
     alt: "Prater Park Vienna - Giant Ferris Wheel",
     category: 'park',
-    searchTerm: "Prater Ferris Wheel Vienna Austria amusement park",
-    verified: true // Pexels high-quality amusement park image
+    searchTerm: "Place your photo of Prater Park/Ferris Wheel in Vienna here",
+    verified: false // User must provide this photo
   },
   naschmarkt: {
-    id: '1837593/pexels-photo-1837593.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    id: '/assets/photos/naschmarkt.jpg',
     alt: "Naschmarkt Vienna - Famous Food Market",
     category: 'market',
-    searchTerm: "Naschmarkt Vienna Austria food market street",
-    verified: true // Pexels high-quality food market image
+    searchTerm: "Place your photo of Naschmarkt in Vienna here",
+    verified: false // User must provide this photo
   },
   cafe_central: {
-    id: '1837594/pexels-photo-1837594.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    id: '/assets/photos/cafe_central.jpg',
     alt: "Café Central Vienna - Historic Coffee House",
     category: 'coffee',
-    searchTerm: "Café Central Vienna Austria historic coffee house",
-    verified: true // Pexels high-quality café interior image
+    searchTerm: "Place your photo of Café Central in Vienna here",
+    verified: false // User must provide this photo
   },
   khm: {
-    id: '1837595/pexels-photo-1837595.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    id: '/assets/photos/khm.jpg',
     alt: "Kunsthistorisches Museum Vienna - Art History Museum",
     category: 'museum',
-    searchTerm: "Kunsthistorisches Museum Vienna Austria art museum",
-    verified: true // Pexels high-quality museum architecture image
+    searchTerm: "Place your photo of Kunsthistorisches Museum in Vienna here",
+    verified: false // User must provide this photo
   },
   albertina: {
-    id: '1837596/pexels-photo-1837596.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    id: '/assets/photos/albertina.jpg',
     alt: "Albertina Museum Vienna - Modern Art Collection",
     category: 'museum',
-    searchTerm: "Albertina Museum Vienna Austria modern art museum",
-    verified: true // Pexels high-quality art museum image
+    searchTerm: "Place your photo of Albertina Museum in Vienna here",
+    verified: false // User must provide this photo
   },
   haus_des_meeres: {
-    id: '1837597/pexels-photo-1837597.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    id: '/assets/photos/haus_des_meeres.jpg',
     alt: "Haus des Meeres Vienna - Aquarium in WWII Bunker",
     category: 'aquarium',
-    searchTerm: "Haus des Meeres Vienna Austria aquarium bunker",
-    verified: true // Pexels high-quality aquarium image
+    searchTerm: "Place your photo of Haus des Meeres in Vienna here",
+    verified: false // User must provide this photo
   }
 };
 
-// HIGH-QUALITY PEXELS FALLBACK IMAGES BY CATEGORY
+// GENERIC PLACEHOLDER IMAGES WHEN USER PHOTOS DON'T EXIST
+// These are shown until user provides their own photos
 export const FALLBACK_PHOTOS: Record<string, PhotoConfig> = {
   cathedral: {
-    id: '2297961/pexels-photo-2297961.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: "Gothic Cathedral Architecture",
+    id: '/assets/photos/placeholder-cathedral.jpg',
+    alt: "Gothic Cathedral Architecture - Add your Vienna photo",
     category: 'cathedral',
-    searchTerm: "Gothic Cathedral Architecture Europe",
-    verified: true
+    searchTerm: "Add stephansdom.jpg to show St. Stephen's Cathedral",
+    verified: false
   },
   palace: {
-    id: '1837591/pexels-photo-1837591.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: "Baroque Palace Architecture",
+    id: '/assets/photos/placeholder-palace.jpg',
+    alt: "European Palace Architecture - Add your Vienna photo",
     category: 'palace',
-    searchTerm: "Baroque Palace Architecture Europe",
-    verified: true
+    searchTerm: "Add belvedere.jpg, hofburg.jpg, or schonbrunn.jpg",
+    verified: false
   },
   museum: {
-    id: '1837595/pexels-photo-1837595.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: "European Art Museum Architecture",
+    id: '/assets/photos/placeholder-museum.jpg',
+    alt: "European Museum Architecture - Add your Vienna photo",
     category: 'museum',
-    searchTerm: "European Art Museum Architecture",
-    verified: true
+    searchTerm: "Add khm.jpg or albertina.jpg",
+    verified: false
   },
   coffee: {
-    id: '1837594/pexels-photo-1837594.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: "Historic Viennese Café Interior",
+    id: '/assets/photos/placeholder-coffee.jpg',
+    alt: "Historic Viennese Café - Add your Vienna photo",
     category: 'coffee',
-    searchTerm: "Historic Viennese Coffee House Interior",
-    verified: true
+    searchTerm: "Add cafe_central.jpg for Café Central",
+    verified: false
   },
   market: {
-    id: '1837593/pexels-photo-1837593.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: "European Food Market Street",
+    id: '/assets/photos/placeholder-market.jpg',
+    alt: "European Food Market - Add your Vienna photo",
     category: 'market',
-    searchTerm: "European Food Market Street",
-    verified: true
+    searchTerm: "Add naschmarkt.jpg",
+    verified: false
   },
   restaurant: {
-    id: '1414235077428-338989a2e8c0',
-    alt: "European Restaurant Architecture",
+    id: '/assets/photos/placeholder-restaurant.jpg',
+    alt: "European Restaurant - Add your Vienna photo",
     category: 'restaurant',
-    searchTerm: "European Restaurant Architecture",
-    verified: true
+    searchTerm: "Add restaurant photos",
+    verified: false
   },
   park: {
-    id: '1837592/pexels-photo-1837592.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: "European City Park Landscape",
+    id: '/assets/photos/placeholder-park.jpg',
+    alt: "European City Park - Add your Vienna photo",
     category: 'park',
-    searchTerm: "European City Park Landscape",
-    verified: true
+    searchTerm: "Add prater.jpg",
+    verified: false
   },
   aquarium: {
-    id: '1837597/pexels-photo-1837597.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: "Modern Aquarium Architecture",
+    id: '/assets/photos/placeholder-aquarium.jpg',
+    alt: "Modern Aquarium - Add your Vienna photo",
     category: 'aquarium',
-    searchTerm: "Modern Aquarium Architecture",
-    verified: true
+    searchTerm: "Add haus_des_meeres.jpg",
+    verified: false
   },
   general: {
-    id: '1837589/pexels-photo-1837589.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    alt: "European Architecture",
+    id: '/assets/photos/placeholder-general.jpg',
+    alt: "European Architecture - Add your Vienna photo",
     category: 'general',
-    searchTerm: "European City Architecture",
-    verified: true
+    searchTerm: "Add attraction photos to assets/photos/",
+    verified: false
   }
 };
 
 /**
- * Generate Pexels URL from photo path
- * Pexels format: https://images.pexels.com/photos/{photo-id}/pexels-photo-{photo-id}.jpeg?auto=compress&cs=tinysrgb&w=1200
+ * Generate local asset URL from photo path
+ * Local format: /assets/photos/{filename}
  */
-export function getPexelsUrl(photoPath: string): string {
-  return `https://images.pexels.com/photos/${photoPath}`;
+export function getLocalAssetUrl(photoPath: string): string {
+  return photoPath; // Already includes /assets/photos/ prefix
 }
 
 /**
- * Get primary photo for an attraction (now using Pexels high-quality images)
+ * Get primary photo for an attraction (now using local user-provided images)
+ * Falls back to placeholder if user photo doesn't exist
  */
 export function getAttractionPhoto(attractionKey: string): string {
   const config = VIENNA_PHOTOS[attractionKey];
-  return config ? getPexelsUrl(config.id) : getFallbackPhoto('general');
+  if (!config) return getFallbackPhoto('general');
+
+  // Check if user has provided this photo (basic check - could be enhanced)
+  // For now, return the local path - if file doesn't exist, browser will show broken image
+  // which will trigger the error handling in ViennaImage component
+  return getLocalAssetUrl(config.id);
 }
 
 /**
- * Get fallback photo for a category (now using Pexels high-quality images)
+ * Get fallback photo for a category (placeholder images)
  */
 export function getFallbackPhoto(category: string): string {
   const config = FALLBACK_PHOTOS[category] || FALLBACK_PHOTOS.general;
-  return getPexelsUrl(config.id);
+  return getLocalAssetUrl(config.id);
 }
 
 /**
@@ -200,23 +206,31 @@ export function getPhotoConfig(attractionKey: string): PhotoConfig | null {
 }
 
 /**
- * HOW TO FIND BETTER PHOTOS WITH PEXELS:
+ * HOW TO ADD YOUR OWN VIENNA PHOTOS:
  *
- * 1. Go to https://pexels.com/
- * 2. Search for exact location: "St. Stephen's Cathedral Vienna Austria"
- * 3. Find a high-quality image that clearly shows the specific attraction
- * 4. Click "Download" and copy the large size URL
- * 5. Extract the path: /photos/{id}/pexels-photo-{id}.jpeg?auto=compress&cs=tinysrgb&w=1200
- * 6. Test the URL with curl to verify it loads
- * 7. Update the photoLoader.ts with the new path
- * 8. Mark verified: true
+ * 1. Take photos of actual Vienna attractions or find high-quality images
+ * 2. Save them with these exact filenames in frontend/public/assets/photos/:
+ *    - stephansdom.jpg (St. Stephen's Cathedral)
+ *    - belvedere.jpg (Belvedere Palace)
+ *    - hofburg.jpg (Hofburg Imperial Palace)
+ *    - schonbrunn.jpg (Schönbrunn Palace)
+ *    - prater.jpg (Prater Park/Ferris Wheel)
+ *    - naschmarkt.jpg (Naschmarkt food market)
+ *    - cafe_central.jpg (Café Central)
+ *    - khm.jpg (Kunsthistorisches Museum)
+ *    - albertina.jpg (Albertina Museum)
+ *    - haus_des_meeres.jpg (Haus des Meeres Aquarium)
  *
- * WHY PEXELS IS BETTER THAN UNSPLASH FOR THIS PROJECT:
- * - Higher resolution images (up to 4K)
- * - Better quality for architecture and landmarks
- * - More reliable without rate limiting
- * - Free for commercial use
- * - No bot protection issues like Wikimedia Commons
+ * 3. Recommended: 1200x800px or higher, JPG/PNG format
+ * 4. Restart the application to see your photos
+ * 5. If photos don't exist, placeholder messages will show instead
+ *
+ * WHY LOCAL PHOTOS INSTEAD OF AUTOMATED APIs:
+ * - No more wrong photos (Colosseum instead of St. Stephen's)
+ * - No more generic images (random cafés instead of Café Central)
+ * - You control exactly what Vienna landmarks are shown
+ * - Higher quality, personally curated images
+ * - No API rate limits or external dependencies
  */
 
 // EXPORT FOR USE IN COMPONENTS
