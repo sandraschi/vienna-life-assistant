@@ -1330,47 +1330,216 @@ const ViennaTravelGuide: React.FC = () => (
   <Box>
     {/* History & Geography */}
     <Paper sx={{ p: 3, mb: 3 }}>
-      <Typography variant="h5" gutterBottom color="primary">
-        📜 History & Geography
+      <Typography variant="h5" gutterBottom color="primary" sx={{ mb: 3 }}>
+        📜 Vienna's History: From Vindobona to Modern Metropolis
       </Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardMedia
-              component="img"
-              height="200"
-              image="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Vienna_Stadtpark_01.jpg/800px-Vienna_Stadtpark_01.jpg"
-              alt="Vienna Stadtpark"
-            />
-            <CardContent>
-              <Typography variant="h6">Geography</Typography>
-              <Typography variant="body2" color="text.secondary">
-                Vienna lies on the Danube River in northeastern Austria. The city is divided into 23 districts,
-                with the historic center (Innere Stadt) being District 1. The Danube Canal and numerous parks
-                provide green spaces throughout the urban landscape.
-              </Typography>
-            </CardContent>
-          </Card>
+
+      <Typography variant="body1" sx={{ mb: 4, fontStyle: 'italic', textAlign: 'center' }}>
+        "Vienna is the heart of Europe, where East meets West, and history whispers from every cobblestone."
+        - A city that has shaped empires and witnessed the march of time.
+      </Typography>
+
+      {/* Roman Era */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', borderBottom: '2px solid', borderColor: 'primary.main', pb: 1 }}>
+          🏛️ Ancient & Medieval Vienna (15 BCE - 1278)
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={8}>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              Vienna's story begins in Roman times as <strong>Vindobona</strong>, a military camp established around 15 BCE
+              during Emperor Augustus' expansion. The Romans built fortifications, baths, and a civilian settlement
+              that served as a strategic outpost protecting the empire's northeastern frontier.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              The name "Vienna" derives from the Celtic word <em>wedunia</em> (wooded stream), reflecting the
+              forested landscape along the Danube. After the Romans withdrew in the 5th century, Vienna became
+              a Slavic settlement before being conquered by Charlemagne's Frankish Empire in 791 CE.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              During the Middle Ages, Vienna grew as a trading hub on the Danube. It became the residence of
+              the Babenberg dynasty in 1156, and Duke Henry II Jasomirgott granted it city rights in 1221.
+              The city's strategic location made it a vital link between Western and Eastern Europe.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Box sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 2 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>Key Dates:</Typography>
+              <Typography variant="body2">• 15 BCE: Vindobona founded</Typography>
+              <Typography variant="body2">• 791 CE: Frankish conquest</Typography>
+              <Typography variant="body2">• 1156: Babenberg residence</Typography>
+              <Typography variant="body2">• 1221: City rights granted</Typography>
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardMedia
-              component="img"
-              height="200"
-              image="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Sch%C3%B6nbrunn_Palace%2C_Vienna.jpg/800px-Sch%C3%B6nbrunn_Palace%2C_Vienna.jpg"
-              alt="Schönbrunn Palace"
-            />
-            <CardContent>
-              <Typography variant="h6">Imperial History</Typography>
-              <Typography variant="body2" color="text.secondary">
-                For over 600 years, Vienna was the seat of the Holy Roman Empire, then the Austrian Empire,
-                and finally the Austro-Hungarian Empire. The city's imperial palaces, including Schönbrunn
-                and Hofburg, reflect this rich monarchic heritage.
-              </Typography>
-            </CardContent>
-          </Card>
+      </Box>
+
+      {/* Habsburg Era */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', borderBottom: '2px solid', borderColor: 'primary.main', pb: 1 }}>
+          👑 Habsburg Empire & Imperial Vienna (1278 - 1918)
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={8}>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              In 1278, Vienna became the capital of the Habsburg dynasty after Rudolf I defeated King Ottokar II
+              of Bohemia at the Battle of Marchfeld. This marked the beginning of Vienna's transformation into
+              one of Europe's greatest imperial cities.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              The <strong>Great Turkish Siege of 1529</strong> and <strong>Second Siege of 1683</strong> shaped Vienna's
+              defensive architecture and cultural identity. The city became a bastion of Christian Europe against
+              Ottoman expansion, with the victory in 1683 celebrated as a turning point in European history.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              Vienna served as the capital of the <strong>Holy Roman Empire</strong> (1556-1806), the
+              <strong>Austrian Empire</strong> (1804-1867), and the <strong>Austro-Hungarian Empire</strong> (1867-1918).
+              During this period, Vienna became Europe's cultural and political center, home to composers like
+              Mozart, Beethoven, and Strauss, and the birthplace of psychoanalysis with Sigmund Freud.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              The <strong>Ringstraße</strong> project (1858-1865) under Emperor Franz Joseph transformed Vienna's
+              medieval core into a modern imperial metropolis, creating grand boulevards lined with neo-classical
+              palaces, museums, and public buildings.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Box sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 2 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>Key Events:</Typography>
+              <Typography variant="body2">• 1278: Habsburg capital</Typography>
+              <Typography variant="body2">• 1529: First Turkish siege</Typography>
+              <Typography variant="body2">• 1683: Second Turkish siege</Typography>
+              <Typography variant="body2">• 1858-1865: Ringstraße built</Typography>
+              <Typography variant="body2">• 1914: WWI begins in Vienna</Typography>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
+
+      {/* 20th Century */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', borderBottom: '2px solid', borderColor: 'primary.main', pb: 1 }}>
+          ⚡ 20th Century: War, Division & Red Vienna (1918 - 2000)
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={8}>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              The collapse of the Austro-Hungarian Empire in 1918 left Vienna as the capital of the small Republic
+              of Austria. The interwar period saw the rise of <strong>"Red Vienna"</strong> under socialist mayor
+              Karl Seitz (1919-1934), implementing progressive social housing, healthcare, and education reforms.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              The <strong>Anschluss</strong> of 1938 incorporated Austria into Nazi Germany, bringing persecution
+              of Vienna's Jewish community (which had numbered 200,000 before the war). Vienna became a key
+              Nazi administrative center, and the war left much of the city in ruins by 1945.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              Post-WWII Vienna was divided into four occupation zones (American, British, French, Soviet) from
+              1945-1955. The <strong>State Treaty of 1955</strong> restored Austrian sovereignty and neutrality,
+              establishing the "Second Republic" with a constitution prohibiting unification with Germany.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              The Cold War era saw Vienna host crucial diplomatic conferences and become a hub for international
+              organizations. The city's strategic location made it a bridge between East and West during the
+              Iron Curtain period.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Box sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 2 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>Key Events:</Typography>
+              <Typography variant="body2">• 1918: Austrian Republic</Typography>
+              <Typography variant="body2">• 1919-1934: Red Vienna</Typography>
+              <Typography variant="body2">• 1938: Anschluss with Germany</Typography>
+              <Typography variant="body2">• 1945-1955: Four-power occupation</Typography>
+              <Typography variant="body2">• 1955: Austrian State Treaty</Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
+
+      {/* Modern Era */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', borderBottom: '2px solid', borderColor: 'primary.main', pb: 1 }}>
+          🌍 Modern Vienna: EU Membership, COVID & Immigration (2000 - Present)
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={8}>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              Austria joined the European Union in 1995, and Vienna has flourished as a modern European capital.
+              The city has become a major center for international organizations, hosting UN agencies, OPEC,
+              and numerous diplomatic missions. Vienna consistently ranks among the world's most livable cities.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              The <strong>COVID-19 pandemic</strong> (2020-2022) severely impacted Vienna's cultural and tourism
+              sectors. Stringent lockdowns closed theaters, opera houses, and museums for extended periods,
+              though the crisis also accelerated digital transformation and remote work adoption.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              Vienna faces significant <strong>immigration challenges</strong> in recent decades. Large-scale
+              migration from the Middle East, Africa, and Eastern Europe has transformed the city's demographics.
+              While bringing cultural diversity, this has created integration challenges and social tensions.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              The <strong>"Islamization" concerns</strong> stem from rapid mosque construction, halal food proliferation,
+              and cultural practices sometimes seen as incompatible with Austrian traditions. The 2015 migrant crisis
+              exacerbated these issues, with Vienna receiving significant refugee populations. Recent years have
+              seen debates over integration policies, security concerns, and the preservation of Austrian cultural identity.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              Despite challenges, Vienna maintains its reputation as a cultural powerhouse, hosting world-class
+              opera, classical music, and contemporary art scenes. The city continues to balance its imperial
+              heritage with modern European integration.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Box sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 2 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>Modern Timeline:</Typography>
+              <Typography variant="body2">• 1995: EU membership</Typography>
+              <Typography variant="body2">• 2000s: Economic growth</Typography>
+              <Typography variant="body2">• 2015: Migrant crisis peak</Typography>
+              <Typography variant="body2">• 2020-2022: COVID pandemic</Typography>
+              <Typography variant="body2">• 2023+: Immigration debates</Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
+
+      {/* Geography */}
+      <Box sx={{ mb: 2 }}>
+        <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', borderBottom: '2px solid', borderColor: 'primary.main', pb: 1 }}>
+          🗺️ Geography & Urban Development
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={8}>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              Vienna lies on the Danube River in northeastern Austria, where the river makes a dramatic northward
+              turn. The city's location at the crossroads of ancient trade routes made it a natural hub for
+              commerce and culture between Western and Eastern Europe.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              The city is divided into 23 districts (Bezirke), with the historic center (Innere Stadt) being
+              District 1. The famous <strong>Ringstraße</strong> boulevard encircles the old city center,
+              lined with grand neo-classical buildings from the 19th century.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              Vienna's green spaces include extensive parks, vineyards on the outskirts, and the Danube Island
+              recreational area. The Wienerwald (Vienna Woods) provide respite just outside the city limits.
+              Despite its urban density, Vienna maintains a high quality of life with excellent public transport
+              and walkable neighborhoods.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Box sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 2 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>City Facts:</Typography>
+              <Typography variant="body2">• Population: ~1.9 million</Typography>
+              <Typography variant="body2">• Area: 414.65 km²</Typography>
+              <Typography variant="body2">• Districts: 23</Typography>
+              <Typography variant="body2">• UNESCO Sites: 2</Typography>
+              <Typography variant="body2">• Climate: Continental</Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
     </Paper>
 
     {/* 3-Day Travel Plan */}
