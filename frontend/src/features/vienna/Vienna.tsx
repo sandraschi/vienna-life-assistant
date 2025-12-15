@@ -17,7 +17,11 @@ import {
   Tabs,
   Tab,
   Button,
-  Link
+  Link,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
 import {
   LocationOn as LocationIcon,
@@ -30,7 +34,8 @@ import {
   Flight as FlightIcon,
   AccessTime as TimeIcon,
   Info as InfoIcon,
-  Photo as PhotoIcon
+  Photo as PhotoIcon,
+  Launch as LaunchIcon
 } from '@mui/icons-material';
 
 interface TabPanelProps {
@@ -1328,8 +1333,596 @@ const ViennaFestivals: React.FC = () => (
   </Box>
 );
 
-const AttractionDetailDialog: React.FC<{ attraction: string | null; onClose: () => void }> = ({ attraction: _attraction, onClose: _onClose }) => (
-  <div>Attraction details would go here</div>
-);
+const AttractionDetailDialog: React.FC<{
+  attraction: string | null;
+  onClose: () => void;
+}> = ({ attraction, onClose }) => {
+  if (!attraction) return null;
+
+  const attractionData: Record<string, {
+    title: string;
+    image: string;
+    description: string;
+    details: string[];
+    website: string;
+    price?: string;
+    hours?: string;
+    tips?: string[];
+  }> = {
+    stephansdom: {
+      title: "St. Stephen's Cathedral (Stephansdom)",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Stephansdom_Wien_2014.jpg/800px-Stephansdom_Wien_2014.jpg",
+      description: "Vienna's iconic Gothic cathedral, built between 1137 and 1160, is the symbol of Vienna and one of Europe's most important Gothic structures. The cathedral has witnessed centuries of history, from medieval coronations to modern state ceremonies.",
+      details: [
+        "• Gothic architecture with stunning stained glass windows",
+        "• Climb the 343 steps of the South Tower for panoramic city views (€6)",
+        "• The Pummerin bell weighs 20 tons and tolls on special occasions",
+        "• Imperial crypt contains the remains of 12 emperors and 19 empresses",
+        "• North Tower houses the cathedral treasury with precious artifacts",
+        "• Free entry to main nave, charges for towers and catacombs"
+      ],
+      website: "https://www.stephanskirche.at",
+      price: "Free entry to cathedral, €6 for South Tower, €5 for North Tower & Treasury",
+      hours: "Daily 6:00 AM - 10:00 PM (towers until 5:30 PM)",
+      tips: [
+        "Visit early morning to avoid crowds",
+        "South Tower views are spectacular at sunset",
+        "Photography allowed but no flash",
+        "Dress modestly - shoulders and knees covered",
+        "Wheelchair accessible via ramp"
+      ]
+    },
+    belvedere: {
+      title: "Belvedere Palace",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Belvedere_Palace_Vienna.jpg/800px-Belvedere_Palace_Vienna.jpg",
+      description: "A masterpiece of Baroque architecture, the Belvedere was built as a summer residence for Prince Eugene of Savoy. Today it houses the world's largest collection of Gustav Klimt paintings, including his famous 'The Kiss'.",
+      details: [
+        "• Two palaces (Upper and Lower) connected by formal gardens",
+        "• Upper Belvedere: Klimt's 'The Kiss' and other masterpieces",
+        "• Lower Belvedere: Temporary exhibitions and garden café",
+        "• Marble Hall with stunning ceiling frescoes",
+        "• Orangery with seasonal exhibitions",
+        "• Beautiful Baroque gardens with fountains and sculptures"
+      ],
+      website: "https://www.belvedere.at",
+      price: "€16 for Upper Belvedere, €14 for Lower, €22 combined ticket",
+      hours: "Daily 10:00 AM - 6:00 PM",
+      tips: [
+        "Picnic in Belvedere Park is not allowed on the lawn - stepping on the lawn is forbidden",
+        "Visit early to see Klimt's works before crowds arrive",
+        "The botanical garden next to Belvedere is beautiful",
+        "Alpengarten (Alpine Garden) nearby showcases Austrian flora",
+        "Combined ticket saves €8 and is valid for 2 days"
+      ]
+    },
+    hofburg: {
+      title: "Hofburg Imperial Palace",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Hofburg_Palace%2C_Vienna.jpg/800px-Hofburg_Palace%2C_Vienna.jpg",
+      description: "The Hofburg was the residence of the Habsburg dynasty for over 600 years. This vast complex includes imperial apartments, the Spanish Riding School, and the Imperial Silver Collection. It represents the power and opulence of the Austro-Hungarian Empire.",
+      details: [
+        "• Imperial Apartments: opulent rooms used by emperors and their families",
+        "• Spanish Riding School: world-famous Lipizzaner stallions",
+        "• Imperial Silver Collection: priceless tableware and artifacts",
+        "• Sisi Museum: dedicated to Empress Elisabeth",
+        "• Chapel Court: where Mozart performed as a child",
+        "• Papal apartments used during visits to Vienna"
+      ],
+      website: "https://www.hofburg-wien.at",
+      price: "€20 for Imperial Apartments tour, €16 for Silver Collection",
+      hours: "Daily 9:00 AM - 5:00 PM (except Tuesdays)",
+      tips: [
+        "Imperial Apartments require guided tour (audio guide available)",
+        "Spanish Riding School performances require separate tickets",
+        "Visit early morning to avoid tour groups",
+        "The complex is huge - plan for at least 2-3 hours",
+        "Café Hofburg in the complex serves traditional Austrian cuisine"
+      ]
+    },
+    schonbrunn: {
+      title: "Schönbrunn Palace & Gardens",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Sch%C3%B6nbrunn_Palace%2C_Vienna.jpg/800px-Sch%C3%B6nbrunn_Palace%2C_Vienna.jpg",
+      description: "Schönbrunn Palace is Vienna's answer to Versailles. Built as a summer residence for the Habsburgs, it features 1,441 rooms, beautiful gardens, and the world's oldest zoo. The palace and gardens cover 160 hectares.",
+      details: [
+        "• 1,441 rooms, but only 40 are open to public",
+        "• Grand Gallery: site of Mozart's first public performance",
+        "• Schönbrunn Zoo: world's oldest zoo (1752)",
+        "• Gloriette: triumphal arch with panoramic views",
+        "• Maze and Labyrinth for children",
+        "• Orangery with seasonal flower displays"
+      ],
+      website: "https://www.schoenbrunn.at",
+      price: "€22 for palace tour, €12 for gardens only",
+      hours: "Daily 8:00 AM - 6:00 PM (gardens), palace until 5:00 PM",
+      tips: [
+        "Tram D goes directly from city center to Schönbrunn",
+        "Visit gardens early morning for peaceful walks",
+        "Zoo is separate entrance and has additional €22 entry",
+        "Picnic areas available in the gardens",
+        "Audio guides available in multiple languages"
+      ]
+    },
+    prater: {
+      title: "Prater Park & Giant Ferris Wheel",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Prater_Wheel_Vienna.jpg/800px-Prater_Wheel_Vienna.jpg",
+      description: "The Prater is Vienna's premier recreational area, combining amusement park rides with beautiful green spaces. The iconic Riesenrad (Giant Ferris Wheel) has been a Vienna landmark since 1897 and offers stunning city views.",
+      details: [
+        "• Riesenrad: 64 meter tall Ferris wheel with cabin views",
+        "• Planetarium and Madame Tussauds wax museum",
+        "• Liliput miniature village with tiny houses",
+        "• Traditional carousel and historic rides",
+        "• Beautiful green spaces for picnics and walks",
+        "• Beer gardens and restaurants"
+      ],
+      website: "https://www.wienerriesenrad.com",
+      price: "€16 for Riesenrad ride, free entry to Prater park",
+      hours: "Park: Daily 24/7, Rides: 10:00 AM - 6:00 PM (seasonal)",
+      tips: [
+        "Riesenrad cabins accommodate up to 8 people",
+        "Best views from Riesenrad are at sunset",
+        "U1 metro line goes directly to Praterstern station",
+        "Many rides close in winter - check seasonal schedule",
+        "Traditional Austrian food available at on-site restaurants"
+      ]
+    },
+    naschmarkt: {
+      title: "Naschmarkt",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Naschmarkt_Wien.jpg/800px-Naschmarkt_Wien.jpg",
+      description: "Vienna's most famous market, the Naschmarkt has been a food market since 1793. This vibrant market offers everything from fresh produce and international cuisine to antiques and street food. It's a microcosm of Vienna's multicultural character.",
+      details: [
+        "• Over 120 market stalls with international cuisine",
+        "• Fresh produce, spices, and delicatessen items",
+        "• Antique shops and flea market sections",
+        "• Famous for its sarma (cabbage rolls) and falafel",
+        "• Wine bars and casual restaurants",
+        "• Live music and cultural events"
+      ],
+      website: "https://www.wien.gv.at",
+      price: "Free entry, food prices vary (€5-15 per meal)",
+      hours: "Mon-Fri 6:00 AM - 6:00 PM, Sat 6:00 AM - 5:00 PM",
+      tips: [
+        "Visit Saturday morning when it's most lively",
+        "Try the Bitzinger Würstelstand for authentic sausages",
+        "Many vendors accept only cash",
+        "Market extends under the tracks of Wien Mitte station",
+        "Great place to experience Vienna's diversity"
+      ]
+    },
+    khm: {
+      title: "Kunsthistorisches Museum (KHM)",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Kunsthistorisches_Museum_Wien.jpg/800px-Kunsthistorisches_Museum_Wien.jpg",
+      description: "Housed in a magnificent neo-Renaissance building, the Kunsthistorisches Museum contains one of the world's most important art collections. The Habsburgs' treasures include works by Bruegel, Rubens, and Vermeer.",
+      details: [
+        "• World's largest Bruegel collection (12 paintings)",
+        "• Imperial Picture Gallery with masterpieces from 1500-1800",
+        "• Kunstkammer: collection of curiosities and artifacts",
+        "• Egyptian and Near Eastern antiquities",
+        "• Greek and Roman antiquities",
+        "• Numismatic collection (coins and medals)"
+      ],
+      website: "https://www.khm.at",
+      price: "€20 regular, €17 reduced, €25 family ticket",
+      hours: "Daily 10:00 AM - 6:00 PM, Thu until 9:00 PM",
+      tips: [
+        "Allow 2-3 hours for thorough visit",
+        "Audio guide highly recommended (€5)",
+        "Thursday evening visits are quieter",
+        "Café in the museum serves traditional Austrian food",
+        "Wheelchair accessible with elevators"
+      ]
+    },
+    albertina: {
+      title: "Albertina Museum",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Albertina_Wien.jpg/800px-Albertina_Wien.jpg",
+      description: "The Albertina houses the world's largest collection of graphic art, with over 65,000 drawings and 1 million prints. It also features contemporary art exhibitions and the famous Bathtub room with its optical illusions.",
+      details: [
+        "• Largest graphic art collection worldwide",
+        "• Bathtub room with distorted perspectives",
+        "• Temporary exhibitions of contemporary art",
+        "• Monet, Picasso, and Warhol collections",
+        "• State Rooms with stunning architecture",
+        "• Rooftop terrace with city views"
+      ],
+      website: "https://www.albertina.at",
+      price: "€19 regular, €16.50 reduced, €17.50 for contemporary exhibitions",
+      hours: "Daily 10:00 AM - 6:00 PM, Wed until 9:00 PM",
+      tips: [
+        "Don't miss the Bathtub room optical illusions",
+        "Rooftop terrace has great views and a café",
+        "Wednesday evening is less crowded",
+        "Graphic art collection requires separate ticket",
+        "Photography allowed in most areas"
+      ]
+    },
+    albertina_modern: {
+      title: "Albertina Modern",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Albertina_Modern_Wien.jpg/800px-Albertina_Modern_Wien.jpg",
+      description: "Located in the former Hotel Schwarzenberg, Albertina Modern focuses exclusively on 20th and 21st-century art. The museum presents works from artists like Picasso, Mondrian, and contemporary Austrian artists.",
+      details: [
+        "• 20th and 21st-century Austrian and international art",
+        "• Works by Picasso, Mondrian, and Warhol",
+        "• Contemporary Austrian artists",
+        "• Temporary exhibitions of modern art",
+        "• Located in historic Hotel Schwarzenberg",
+        "• Focus on post-WWII art movements"
+      ],
+      website: "https://www.albertina.at",
+      price: "€17.50 regular, €15 reduced",
+      hours: "Daily 10:00 AM - 6:00 PM",
+      tips: [
+        "Combined ticket with main Albertina available",
+        "Located in the elegant Schwarzenberg Palace",
+        "Contemporary focus complements main Albertina",
+        "Café serves modern Austrian cuisine",
+        "Smaller venue allows focused visits"
+      ]
+    },
+    belvedere_upper: {
+      title: "Upper Belvedere",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Upper_Belvedere_Vienna.jpg/800px-Upper_Belvedere_Vienna.jpg",
+      description: "The Upper Belvedere houses the permanent collection of Austrian art from the Middle Ages to the present. It's home to Gustav Klimt's masterpiece 'The Kiss' and works by Egon Schiele, Oskar Kokoschka, and other Austrian modernists.",
+      details: [
+        "• Austrian art from Middle Ages to present day",
+        "• Klimt's 'The Kiss' and other masterpieces",
+        "• Egon Schiele and Oskar Kokoschka works",
+        "• Medieval art collection",
+        "• Baroque Austrian painting",
+        "• Modern Austrian art movements"
+      ],
+      website: "https://www.belvedere.at",
+      price: "€16 regular, combined ticket with Lower Belvedere €22",
+      hours: "Daily 10:00 AM - 6:00 PM",
+      tips: [
+        "Klimt Room is usually crowded - visit early",
+        "Audio guide (€5) provides excellent context",
+        "Lower Belvedere can be visited same day with combined ticket",
+        "Gardens are beautiful for strolls between palaces",
+        "Photography allowed without flash"
+      ]
+    },
+    belvedere_lower: {
+      title: "Lower Belvedere",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Belvedere_Palace_Vienna.jpg/800px-Belvedere_Palace_Vienna.jpg",
+      description: "The Lower Belvedere focuses on international Baroque art and features temporary exhibitions. The palace itself is a masterpiece of Baroque architecture with stunning interiors and formal gardens.",
+      details: [
+        "• International Baroque art collection",
+        "• Temporary exhibitions of various art periods",
+        "• Marble Hall with ceiling frescoes",
+        "• State rooms with period furniture",
+        "• Formal French gardens",
+        "• Orangery for seasonal exhibitions"
+      ],
+      website: "https://www.belvedere.at",
+      price: "€14 regular, combined ticket with Upper Belvedere €22",
+      tips: [
+        "Marble Hall is the highlight of the palace",
+        "Gardens are perfect for picnics (designated areas only)",
+        "Combined ticket saves money and time",
+        "Visit gardens in spring for flower displays",
+        "Café in Lower Belvedere serves traditional Austrian food"
+      ]
+    },
+    naturhistorisches: {
+      title: "Naturhistorisches Museum",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Naturhistorisches_Museum_Wien.jpg/800px-Naturhistorisches_Museum_Wien.jpg",
+      description: "One of the world's most important natural history museums, featuring the famous Venus of Willendorf (25,000 years old), dinosaur skeletons, and extensive geology and biology collections. The museum's architecture is equally impressive.",
+      details: [
+        "• Venus of Willendorf (oldest known art in world)",
+        "• Complete dinosaur skeletons including T-Rex",
+        "• Vast geology collection with crystals and minerals",
+        "• Anthropology exhibits from around the world",
+        "• Tropical butterfly house",
+        "• Vast biology collections"
+      ],
+      website: "https://www.nhm-wien.ac.at",
+      price: "€14 regular, €10 reduced, €30 family",
+      hours: "Daily 9:00 AM - 6:30 PM, Wed until 9:00 PM",
+      tips: [
+        "Venus of Willendorf is in a special display case",
+        "Dinosaur hall is impressive for all ages",
+        "Wednesday evening is less crowded",
+        "Interactive exhibits for children",
+        "Café serves traditional Austrian food"
+      ]
+    },
+    technisches: {
+      title: "Technisches Museum",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Technisches_Museum_Wien.jpg/800px-Technisches_Museum_Wien.jpg",
+      description: "The Technical Museum showcases Austria's industrial and technological heritage. It houses the world's largest collection of motorcycles, historic cars, aircraft, and industrial machinery. Interactive exhibits make it engaging for all ages.",
+      details: [
+        "• World's largest motorcycle collection",
+        "• Historic cars and locomotives",
+        "• Aircraft and aviation history",
+        "• Industrial machinery from various eras",
+        "• Interactive science and technology exhibits",
+        "• Children's science center"
+      ],
+      website: "https://www.technischesmuseum.at",
+      price: "€14 regular, €10 reduced, €35 family",
+      hours: "Daily 9:00 AM - 6:00 PM",
+      tips: [
+        "Motorcycle collection is world-renowned",
+        "Interactive exhibits are great for families",
+        "Science center has hands-on experiments",
+        "Visit early to see the full collection",
+        "Café serves modern Austrian cuisine"
+      ]
+    },
+    heeresgeschichtliches: {
+      title: "Heeresgeschichtliches Museum",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Heeresgeschichtliches_Museum_Wien.jpg/800px-Heeresgeschichtliches_Museum_Wien.jpg",
+      description: "Located in the Arsenal complex, this military history museum chronicles Austria's military history from the 16th century to the present. It features extensive collections of weapons, uniforms, and military artifacts.",
+      details: [
+        "• Austrian military history from 16th century",
+        "• Weapons and armor collections",
+        "• Uniforms from various historical periods",
+        "• Military vehicles and artillery",
+        "• WWI and WWII exhibits",
+        "• Modern Austrian military equipment"
+      ],
+      website: "https://www.hgm.at",
+      price: "€8 regular, €4 reduced",
+      hours: "Tue-Sun 9:00 AM - 5:00 PM",
+      tips: [
+        "Extensive collection spans multiple buildings",
+        "Audio guide recommended (€3)",
+        "Located in historic Arsenal complex",
+        "Tuesday is free entry day",
+        "Military history buffs will love the detail"
+      ]
+    },
+    haus_der_musik: {
+      title: "Haus der Musik",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Haus_der_Musik_Wien.jpg/800px-Haus_der_Musik_Wien.jpg",
+      description: "An interactive museum dedicated to music and sound, located in the former palace of the Archduke Charles. Features exhibits on Vienna's musical heritage, interactive sound installations, and a special Mozart room.",
+      details: [
+        "• Interactive exhibits on music and sound",
+        "• Vienna's musical heritage and composers",
+        "• Special Mozart room with interactive exhibits",
+        "• Sound installations and experiments",
+        "• Historical instruments collection",
+        "• Recording studio experience"
+      ],
+      website: "https://www.hausdermusik.com",
+      price: "€14 regular, €11 reduced, €38 family",
+      hours: "Daily 10:00 AM - 10:00 PM",
+      tips: [
+        "Interactive exhibits are engaging for all ages",
+        "Mozart room is a highlight for families",
+        "Evening visits have live music sometimes",
+        "Located in historic palace building",
+        "Audio guide in multiple languages"
+      ]
+    },
+    haus_des_meeres: {
+      title: "Haus des Meeres",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Haus_des_Meeres_Wien.jpg/800px-Haus_des_Meeres_Wien.jpg",
+      description: "Located in a WWII flak tower bunker, Haus des Meeres is Vienna's aquarium featuring over 10,000 marine creatures. The building itself has historical significance as a remnant of Vienna's wartime defenses.",
+      details: [
+        "• Over 10,000 marine creatures",
+        "• Tropical and cold water exhibits",
+        "• Shark tunnel and coral reefs",
+        "• Touch pools and interactive exhibits",
+        "• Located in WWII flak tower bunker",
+        "• Historical exhibits about the building"
+      ],
+      website: "https://www.haus-des-meeres.at",
+      price: "€22 regular, €19 reduced, €59 family",
+      hours: "Daily 10:00 AM - 6:00 PM",
+      tips: [
+        "Shark tunnel is impressive for children",
+        "Building was part of Vienna's WWII defenses",
+        "Interactive exhibits teach about marine life",
+        "Visit during school holidays for special events",
+        "Café serves light meals and snacks"
+      ]
+    },
+    cafe_central: {
+      title: "Café Central",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Cafe_Central_Wien.jpg/800px-Cafe_Central_Wien.jpg",
+      description: "One of Vienna's most famous coffee houses, Café Central opened in 1876 in the former bank building of the Austrian National Bank. It was a meeting place for intellectuals like Freud, Trotsky, and Lenin. The famous queue at the entrance is part of the experience.",
+      details: [
+        "• Historic coffee house since 1876",
+        "• Meeting place for Freud, Trotsky, Lenin",
+        "• Famous queue at entrance (worth the wait)",
+        "• Traditional Viennese coffee specialties",
+        "• Historic interior with marble pillars",
+        "• Live piano music in the evenings"
+      ],
+      website: "https://www.cafecentral.wien",
+      price: "€4-8 for coffee and pastries",
+      hours: "Daily 7:30 AM - 10:00 PM",
+      tips: [
+        "The queue is part of the authentic experience",
+        "Try the Café Central mélange (marvelous coffee)",
+        "Live piano music creates special atmosphere",
+        "Located in historic Palais Ferstel",
+        "Dress code is smart casual"
+      ]
+    },
+    cafe_sperl: {
+      title: "Café Sperl",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Cafe_Sperl_Wien.jpg/800px-Cafe_Sperl_Wien.jpg",
+      description: "Established in 1880, Café Sperl is one of Vienna's most beautiful Jugendstil (Art Nouveau) coffee houses. The stunning interior with its ornate decorations, stucco ceilings, and marble tables has remained largely unchanged since 1900.",
+      details: [
+        "• Jugendstil (Art Nouveau) masterpiece",
+        "• Unchanged interior since 1900",
+        "• Famous for Sachertorte and apple strudel",
+        "• Marble tables and ornate decorations",
+        "• Traditional Viennese coffee culture",
+        "• Literary history and intellectual gatherings"
+      ],
+      website: "https://www.cafesperl.at",
+      price: "€3-7 for coffee and pastries",
+      hours: "Daily 7:00 AM - 8:00 PM",
+      tips: [
+        "Interior is a work of art - take your time",
+        "Try the Sperl Sachertorte (famous variety)",
+        "Visit during breakfast for authentic experience",
+        "Located in trendy 6th district",
+        "No reservations - first come, first served"
+      ]
+    },
+    cafe_hawelka: {
+      title: "Café Hawelka",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Cafe_Hawelka_Wien.jpg/800px-Cafe_Hawelka_Wien.jpg",
+      description: "A bohemian institution since 1939, Café Hawelka is famous for its Buchteln (sweet yeast dumplings) and intellectual atmosphere. The smoky, lived-in interior attracts artists, writers, and free spirits. It's a place where time seems to stand still.",
+      details: [
+        "• Bohemian atmosphere since 1939",
+        "• Famous for Buchteln (sweet dumplings)",
+        "• Intellectual and artistic clientele",
+        "• Lived-in, authentic Viennese character",
+        "• No music, just conversation",
+        "• Traditional coffee house culture"
+      ],
+      website: "https://www.cafe-hawelka.at",
+      price: "€3-6 for coffee and specialties",
+      hours: "Daily 8:00 AM - 2:00 AM",
+      tips: [
+        "Don't miss the Buchteln - they're legendary",
+        "Atmosphere is casual and authentic",
+        "Long opening hours attract night owls",
+        "Located in historic Dorotheergasse",
+        "No reservations - come early or late"
+      ]
+    },
+    cafe_demel: {
+      title: "Café Demel",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Cafe_Demel_Wien.jpg/800px-Cafe_Demel_Wien.jpg",
+      description: "Imperial heritage meets modern luxury at Café Demel, established in 1786 as the court confectioner to the Habsburgs. Located in the Kohlmarkt, it's famous for its luxurious pastries, chocolates, and elegant atmosphere.",
+      details: [
+        "• Imperial court confectioner since 1786",
+        "• Famous for luxury chocolates and pastries",
+        "• Elegant atmosphere in Kohlmarkt",
+        "• Traditional Austrian confectionery",
+        "• Historic connection to Habsburg court",
+        "• Modern luxury with imperial tradition"
+      ],
+      website: "https://www.demel.at",
+      price: "€5-12 for coffee and pastries",
+      hours: "Daily 9:00 AM - 7:00 PM",
+      tips: [
+        "Try the Demel Sachertorte (royal version)",
+        "Window shopping the luxury chocolates is free",
+        "Located in Vienna's most expensive shopping street",
+        "Elegant atmosphere with high-end clientele",
+        "Perfect for special occasions or luxury treats"
+      ]
+    },
+    cafe_pruckel: {
+      title: "Café Prückel",
+      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cafe_Pruckel_Wien.jpg/800px-Cafe_Pruckel_Wien.jpg",
+      description: "A hidden gem in Vienna's 19th district, Café Prückel has been serving traditional Austrian cuisine since 1903. Known for its hearty portions, reasonable prices, and authentic local atmosphere, it's a favorite among locals.",
+      details: [
+        "• Traditional Austrian cuisine since 1903",
+        "• Hearty portions at reasonable prices",
+        "• Authentic local Viennese atmosphere",
+        "• Schnitzel, goulash, and Wiener Meld",
+        "• Traditional coffee house culture",
+        "• Popular with local residents"
+      ],
+      website: "https://www.prueckel.at",
+      price: "€8-15 for main courses",
+      hours: "Daily 9:00 AM - 12:00 AM",
+      tips: [
+        "Try the Wiener Schnitzel - it's excellent",
+        "Reasonable prices compared to city center",
+        "Located in residential 19th district",
+        "Authentic local experience",
+        "Long opening hours for late dining"
+      ]
+    }
+  };
+
+  const data = attractionData[attraction];
+  if (!data) return null;
+
+  return (
+    <Dialog open={!!attraction} onClose={onClose} maxWidth="md" fullWidth>
+      <DialogTitle sx={{ pb: 1 }}>
+        <Typography variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
+          {data.title}
+        </Typography>
+      </DialogTitle>
+      <DialogContent>
+        <Box sx={{ mb: 3 }}>
+          <img
+            src={data.image}
+            alt={data.title}
+            style={{
+              width: '100%',
+              height: '300px',
+              objectFit: 'cover',
+              borderRadius: '8px',
+              marginBottom: '16px'
+            }}
+          />
+          <Typography variant="body1" sx={{ mb: 3, lineHeight: 1.6 }}>
+            {data.description}
+          </Typography>
+        </Box>
+
+        <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+          Key Highlights
+        </Typography>
+        <Box sx={{ mb: 3 }}>
+          {data.details.map((detail, index) => (
+            <Typography key={index} variant="body2" sx={{ mb: 1, pl: 2 }}>
+              {detail}
+            </Typography>
+          ))}
+        </Box>
+
+        {(data.price || data.hours) && (
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+              Practical Information
+            </Typography>
+            {data.price && (
+              <Typography variant="body2" sx={{ mb: 1 }}>
+                <strong>Price:</strong> {data.price}
+              </Typography>
+            )}
+            {data.hours && (
+              <Typography variant="body2" sx={{ mb: 1 }}>
+                <strong>Hours:</strong> {data.hours}
+              </Typography>
+            )}
+          </Box>
+        )}
+
+        {data.tips && (
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+              Visitor Tips
+            </Typography>
+            {data.tips.map((tip, index) => (
+              <Typography key={index} variant="body2" sx={{ mb: 1, pl: 2 }}>
+                • {tip}
+              </Typography>
+            ))}
+          </Box>
+        )}
+
+        <Box sx={{ textAlign: 'center' }}>
+          <Button
+            variant="outlined"
+            startIcon={<LaunchIcon />}
+            href={data.website}
+            target="_blank"
+            rel="noopener"
+            sx={{ mt: 2 }}
+          >
+            Visit Official Website
+          </Button>
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} variant="outlined">
+          Close
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 export default Vienna;
