@@ -177,25 +177,24 @@ export function getLocalAssetUrl(photoPath: string): string {
 }
 
 /**
- * Get primary photo for an attraction (now using local user-provided images)
- * Falls back to placeholder if user photo doesn't exist
+ * Get primary photo for an attraction (ONLY if user provided it)
+ * Returns empty string if no user photo exists - no fallbacks
  */
 export function getAttractionPhoto(attractionKey: string): string {
   const config = VIENNA_PHOTOS[attractionKey];
-  if (!config) return getFallbackPhoto('general');
+  if (!config) return '';
 
-  // Check if user has provided this photo (basic check - could be enhanced)
-  // For now, return the local path - if file doesn't exist, browser will show broken image
-  // which will trigger the error handling in ViennaImage component
+  // Only return photo path if user has actually provided the photo
+  // Let the ViennaImage component handle the blank display
   return getLocalAssetUrl(config.id);
 }
 
 /**
- * Get fallback photo for a category (placeholder images)
+ * Get fallback photo for a category (returns empty string - no generic images)
  */
-export function getFallbackPhoto(category: string): string {
-  const config = FALLBACK_PHOTOS[category] || FALLBACK_PHOTOS.general;
-  return getLocalAssetUrl(config.id);
+export function getFallbackPhoto(): string {
+  // No fallbacks - only show user-uploaded photos
+  return '';
 }
 
 /**

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   Typography,
@@ -38,12 +38,10 @@ import {
   AccessTime as TimeIcon,
   Info as InfoIcon,
   Photo as PhotoIcon,
-  Image as ImageIcon,
   Launch as LaunchIcon
 } from '@mui/icons-material';
 
-// Import the photo loader utility
-import { getAttractionPhoto, getFallbackPhoto } from '../../utils/photoLoader';
+// No photo loader needed - images are handled directly
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -51,44 +49,20 @@ interface TabPanelProps {
   value: number;
 }
 
-// Enhanced Image Component with Error Handling and Fallbacks
+// Simple Image Component - ONLY shows user-uploaded photos, blank otherwise
 const ViennaImage: React.FC<{
   src: string;
   alt: string;
   height?: number;
-  category?: string;
   style?: React.CSSProperties;
-}> = ({ src, alt, height = 200, category = 'general', style }) => {
-  const [imageSrc, setImageSrc] = useState<string>(src);
+}> = ({ src, alt, height = 200, style }) => {
+  // If no source provided, show nothing (blank space)
+  if (!src || src.trim() === '') {
+    return <Box sx={{ height, borderRadius: 1 }} />; // Empty box same height
+  }
+
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-
-  // Primary images now loaded from photoLoader utility
-  const primaryImages = {
-    stephansdom: getAttractionPhoto('stephansdom'),
-    belvedere: getAttractionPhoto('belvedere'),
-    hofburg: getAttractionPhoto('hofburg'),
-    schonbrunn: getAttractionPhoto('schonbrunn'),
-    prater: getAttractionPhoto('prater'),
-    naschmarkt: getAttractionPhoto('naschmarkt'),
-    cafe_central: getAttractionPhoto('cafe_central'),
-    khm: getAttractionPhoto('khm'),
-    albertina: getAttractionPhoto('albertina'),
-    haus_des_meeres: getAttractionPhoto('haus_des_meeres')
-  };
-
-  // Fallback images now loaded from photoLoader utility
-  const fallbackImages = {
-    cathedral: getFallbackPhoto('cathedral'),
-    palace: getFallbackPhoto('palace'),
-    museum: getFallbackPhoto('museum'),
-    coffee: getFallbackPhoto('coffee'),
-    market: getFallbackPhoto('market'),
-    restaurant: getFallbackPhoto('restaurant'),
-    park: getFallbackPhoto('park'),
-    aquarium: getFallbackPhoto('aquarium'),
-    general: getFallbackPhoto('general')
-  };
 
   const handleImageLoad = () => {
     setIsLoading(false);
@@ -98,20 +72,13 @@ const ViennaImage: React.FC<{
   const handleImageError = () => {
     setIsLoading(false);
     setHasError(true);
-    // First try specific attraction image, then category fallback
-    const attractionKey = alt.toLowerCase().replace(/[^a-z]/g, '_').replace(/_+/g, '_');
-    if (primaryImages[attractionKey as keyof typeof primaryImages]) {
-      setImageSrc(primaryImages[attractionKey as keyof typeof primaryImages]);
-    } else {
-      setImageSrc(fallbackImages[category as keyof typeof fallbackImages] || fallbackImages.general);
-    }
+    // If user photo doesn't exist, show nothing - no fallbacks to generic images
   };
 
-  useEffect(() => {
-    setImageSrc(src);
-    setIsLoading(true);
-    setHasError(false);
-  }, [src]);
+  // If error occurred (file doesn't exist), show blank space
+  if (hasError) {
+    return <Box sx={{ height, borderRadius: 1 }} />;
+  }
 
   return (
     <Box sx={{ position: 'relative', height, overflow: 'hidden', borderRadius: 1 }}>
@@ -130,7 +97,7 @@ const ViennaImage: React.FC<{
         />
       )}
       <img
-        src={imageSrc}
+        src={src}
         alt={alt}
         onLoad={handleImageLoad}
         onError={handleImageError}
@@ -143,28 +110,6 @@ const ViennaImage: React.FC<{
           ...style
         }}
       />
-      {hasError && !isLoading && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 8,
-            right: 8,
-            bgcolor: 'rgba(0,0,0,0.7)',
-            color: 'white',
-            px: 1,
-            py: 0.5,
-            borderRadius: 1,
-            fontSize: '0.75rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 0.5,
-            zIndex: 2
-          }}
-        >
-          <ImageIcon sx={{ fontSize: 14 }} />
-          Photo
-        </Box>
-      )}
     </Box>
   );
 };
@@ -300,9 +245,8 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
       <Grid item xs={12} sm={6} md={4}>
         <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('stephansdom')}>
           <ViennaImage
-            src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600&h=400&fit=crop&crop=center"
+            src="/assets/photos/stephansdom.jpg"
             alt="St. Stephen's Cathedral"
-            category="cathedral"
           />
           <CardContent>
             <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>St. Stephen's Cathedral</Typography>
@@ -323,9 +267,8 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
       <Grid item xs={12} sm={6} md={4}>
         <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('belvedere')}>
           <ViennaImage
-            src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center"
+            src="/assets/photos/belvedere.jpg"
             alt="Belvedere Palace"
-            category="palace"
           />
           <CardContent>
             <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Belvedere Palace</Typography>
@@ -346,9 +289,8 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
       <Grid item xs={12} sm={6} md={4}>
         <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('hofburg')}>
           <ViennaImage
-            src="https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=600&h=400&fit=crop&crop=center"
+            src="/assets/photos/hofburg.jpg"
             alt="Hofburg Imperial Palace"
-            category="palace"
           />
           <CardContent>
             <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Hofburg Palace</Typography>
