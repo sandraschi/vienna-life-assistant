@@ -2602,6 +2602,410 @@ const AttractionDetailDialog: React.FC<{
         "Authentic local experience",
         "Long opening hours for late dining"
       ]
+    },
+
+    // Restaurants
+    'restaurant-steirereck': {
+      title: "Steirereck",
+      image: "",
+      description: "Austrian culinary institution with 3 Michelin stars, located in the peaceful Stadtpark gardens. Helmed by chef Heinz Reitbauer, this restaurant represents the pinnacle of Austrian haute cuisine with innovative takes on traditional ingredients.",
+      details: [
+        "• 3 Michelin stars awarded annually since 1999",
+        "• Located in Stadtpark gardens with outdoor terrace",
+        "• Seasonal menu featuring Austrian ingredients",
+        "• Extensive wine cellar with Austrian and international selections",
+        "• Formal dress code required",
+        "• Multi-course tasting menus available",
+        "• Focus on local, sustainable ingredients"
+      ],
+      website: "https://www.steirereck.at",
+      price: "€180-250 per person for tasting menu",
+      hours: "Tuesday-Saturday 11:30 AM - 1:00 PM, 6:30 PM - 10:00 PM",
+      tips: [
+        "Reservations essential, book months in advance",
+        "Tasting menu is the recommended experience",
+        "Dress elegantly - jacket and tie for gentlemen",
+        "Arrive early to enjoy Stadtpark gardens",
+        "Wine pairings highly recommended",
+        "Special dietary requirements accommodated"
+      ]
+    },
+    'restaurant-mraz-bei-vogel': {
+      title: "Mraz & Sohn (Bei den Schwarzen Kameelen)",
+      image: "",
+      description: "2 Michelin-starred restaurant in the historic Palais Ferstl. Chef Fritz Mayer creates contemporary Austrian cuisine with French influences, featuring exceptional service and an outstanding wine collection.",
+      details: [
+        "• 2 Michelin stars",
+        "• Historic Palais Ferstl location (built 1868)",
+        "• Contemporary Austrian-French fusion cuisine",
+        "• One of Vienna's finest wine collections",
+        "• Elegant dining rooms with original frescoes",
+        "• Seasonal tasting menus",
+        "• Focus on regional Austrian ingredients"
+      ],
+      website: "https://www.palaiseferstl.at",
+      price: "€150-220 per person for tasting menu",
+      hours: "Monday-Friday 6:00 PM - 10:00 PM",
+      tips: [
+        "Closed weekends - perfect for business dinners",
+        "Wine cellar tours available by appointment",
+        "Reservations required, book 4-6 weeks ahead",
+        "Valet parking available",
+        "Special occasion venue with private dining rooms",
+        "English menu available"
+      ]
+    },
+    'heuriger-zach': {
+      title: "Heuriger Mayer am Pfarrplatz",
+      image: "",
+      description: "Traditional heuriger in Grinzing, Vienna's most famous wine district. Family-run since 1683, offering house wines, cold platters, and authentic Viennese atmosphere in beautiful garden settings.",
+      details: [
+        "• Family-run since 1683",
+        "• Traditional heuriger with garden seating",
+        "• House wines from own vineyards",
+        "• Cold platters ( Brettljause) with local specialties",
+        "• Live music on weekends",
+        "• Seasonal opening (March-November)",
+        "• Walking distance to other Grinzing heurigen"
+      ],
+      website: "https://www.heuriger-mayer.at",
+      price: "€15-25 for main courses, €4-6 for wine",
+      hours: "Daily 4:00 PM - 11:00 PM (seasonal)",
+      tips: [
+        "Bus 38A from city center (20 minutes)",
+        "Try the Brettljause (cold platter) for sharing",
+        "House wine is cheaper than bottled wine",
+        "Garden seating preferred for summer evenings",
+        "Live music creates festive atmosphere",
+        "Bring cash - many heurigen don't accept cards"
+      ]
+    },
+    'heuriger-zwölf-apostelkeller': {
+      title: "Zwölf Apostelkeller",
+      image: "",
+      description: "Historic heuriger dating back to 1734 in Nussdorf. Known for excellent wines, traditional Austrian food, and stunning views of Vienna's vineyards and the Danube River.",
+      details: [
+        "• Established 1734 - one of Vienna's oldest heurigen",
+        "• Panoramic views of Vienna and vineyards",
+        "• Award-winning wines from own vineyards",
+        "• Traditional Austrian cuisine",
+        "• Multiple dining areas including terrace",
+        "• Seasonal opening (April-October)",
+        "• Famous for Sturm (young wine) in autumn"
+      ],
+      website: "https://www.zwoelf-apostelkeller.at",
+      price: "€12-20 for main courses, €4-7 for wine",
+      hours: "Daily 11:00 AM - 10:00 PM (seasonal)",
+      tips: [
+        "Take tram D to Nussdorf (30 minutes from center)",
+        "Terrace offers spectacular city views",
+        "Try the seasonal Sturm in September/October",
+        "Reservations recommended for weekends",
+        "Vineyard tours available",
+        "Perfect for sunset dining"
+      ]
+    },
+    'restaurant-silvestrino': {
+      title: "Silvestrino",
+      image: "",
+      description: "Italian fine dining in the city center, offering seasonal ingredients, excellent wine pairings, and impeccable service in an elegant setting. Known for authentic Italian cuisine with Austrian influences.",
+      details: [
+        "• Italian-Austrian fusion cuisine",
+        "• Extensive Italian wine selection",
+        "• Seasonal menu with local ingredients",
+        "• Elegant dining room with modern decor",
+        "• Professional sommelier service",
+        "• Degustation menus available",
+        "• Focus on sustainable, seasonal ingredients"
+      ],
+      website: "https://www.silvestrino.at",
+      price: "€80-150 per person",
+      hours: "Monday-Saturday 6:00 PM - 11:00 PM",
+      tips: [
+        "Located in historic city center building",
+        "Wine pairings highly recommended",
+        "Reservations essential for dinner",
+        "English-speaking staff available",
+        "Business lunch menu available weekdays",
+        "Valet parking nearby"
+      ]
+    },
+    'restaurant-skopik-lodek': {
+      title: "Skopik & Lodek",
+      image: "",
+      description: "Modern Austrian cuisine in a contemporary Naschmarkt setting. Creative takes on traditional dishes, excellent cocktails, and a vibrant atmosphere make this a favorite among foodies.",
+      details: [
+        "• Modern Austrian cuisine with international influences",
+        "• Creative cocktail bar",
+        "• Located in historic Naschmarkt building",
+        "• Seasonal, locally sourced ingredients",
+        "• Small plates and sharing menus",
+        "• Vibrant, contemporary atmosphere",
+        "• Popular with younger crowd"
+      ],
+      website: "https://www.skopik.at",
+      price: "€25-45 for main courses",
+      hours: "Daily 12:00 PM - 12:00 AM",
+      tips: [
+        "Perfect location in bustling Naschmarkt",
+        "Try the tasting menu for full experience",
+        "Cocktail menu is exceptional",
+        "Outdoor seating in summer",
+        "Great for groups and celebrations",
+        "Accepts major credit cards"
+      ]
+    },
+    'restaurant-bierbeisl': {
+      title: "Traditional Viennese Bierbeisl",
+      image: "",
+      description: "Authentic Viennese pubs serving traditional Austrian cuisine at reasonable prices. Cozy atmosphere, local beers, and dishes like Wiener Schnitzel, goulash, and sausages.",
+      details: [
+        "• Traditional Austrian pub cuisine",
+        "• Local beers on draft",
+        "• Cozy, unpretentious atmosphere",
+        "• Wiener Schnitzel and other classics",
+        "• Affordable prices compared to restaurants",
+        "• Popular with locals and tourists",
+        "• No reservations usually needed"
+      ],
+      website: "Various locations throughout Vienna",
+      price: "€8-15 for main courses, €3-4 for beer",
+      hours: "Daily 11:00 AM - 11:00 PM",
+      tips: [
+        "Look for 'Beisl' signs on traditional pubs",
+        "Wiener Schnitzel is usually excellent",
+        "Try local beers like Ottakringer or Gösser",
+        "Cash only in many traditional locations",
+        "Great for casual dining and people-watching",
+        "Many have outdoor seating in summer"
+      ]
+    },
+    'restaurant-naschmarkt-stalls': {
+      title: "Naschmarkt Food Stalls",
+      image: "",
+      description: "Vienna's largest market offers incredible international street food from Turkish kebabs to Vietnamese pho. Fresh, affordable, and incredibly diverse dining options.",
+      details: [
+        "• Vienna's largest and most famous market",
+        "• International street food from around the world",
+        "• Fresh, affordable prices",
+        "• Turkish, Vietnamese, Greek, and Austrian specialties",
+        "• Many stalls have seating areas",
+        "• Open daily except Sundays",
+        "• Perfect for food exploration"
+      ],
+      website: "https://www.naschmarkt-vienna.com",
+      price: "€5-12 for main dishes",
+      hours: "Monday-Saturday 6:00 AM - 6:00 PM",
+      tips: [
+        "Try different stalls for variety",
+        "Turkish kebabs are particularly good",
+        "Fresh fruit and vegetable stalls nearby",
+        "Bring cash - some stalls don't take cards",
+        "Great for picnic supplies",
+        "U-Bahn U4 to Kettenbrückengasse"
+      ]
+    },
+
+    // Accommodation
+    'hotel-imperial': {
+      title: "Hotel Imperial",
+      image: "",
+      description: "Historic luxury palace hotel on the Ringstraße, built in 1863. Biedermeier elegance, Michelin-starred restaurant, and imperial service in Vienna's most prestigious location.",
+      details: [
+        "• Historic palace built in 1863",
+        "• Biedermeier elegance throughout",
+        "• Michelin-starred restaurant (Steirereck)",
+        "• Imperial service and attention to detail",
+        "• Fitness center and spa facilities",
+        "• Walking distance to State Opera and museums",
+        "• Famous for its breakfast buffet"
+      ],
+      website: "https://www.imperialvienna.com",
+      price: "€600-1200 per night",
+      hours: "24/7 reception",
+      tips: [
+        "Ringstraße location - perfect for sightseeing",
+        "Breakfast buffet is legendary",
+        "Valet parking available",
+        "Concierge can arrange tours and tickets",
+        "Historic building with modern amenities",
+        "Perfect for special occasions and luxury travel"
+      ]
+    },
+    'hotel-sacher': {
+      title: "Hotel Sacher",
+      image: "",
+      description: "Vienna's most famous hotel, birthplace of the original Sachertorte. Imperial suites, historic charm, and legendary service opposite the State Opera. A true Viennese institution.",
+      details: [
+        "• Vienna's most famous and historic hotel",
+        "• Birthplace of the original Sachertorte (1832)",
+        "• Imperial suites with antique furnishings",
+        "• Sacher Café serves the authentic Sachertorte",
+        "• Opposite the Vienna State Opera",
+        "• Presidential and royal guest history",
+        "• Famous red awnings and doormen"
+      ],
+      website: "https://www.sacher.com",
+      price: "€800-2000+ per night",
+      hours: "24/7 reception",
+      tips: [
+        "Iconic location opposite State Opera",
+        "Must try the Sachertorte in Sacher Café",
+        "Red carpet treatment from famous doormen",
+        "Historic building with modern luxuries",
+        "Perfect for cultural immersion",
+        "Book well in advance for peak seasons"
+      ]
+    },
+    'hotel-de-france': {
+      title: "Hotel de France",
+      image: "",
+      description: "Boutique hotel in a historic 19th-century building. Elegant rooms, excellent breakfast, and perfect Stephansplatz location. Combines historic charm with modern comfort.",
+      details: [
+        "• Historic 19th-century building",
+        "• Boutique hotel with personal service",
+        "• Elegant rooms with modern amenities",
+        "• Excellent breakfast included",
+        "• Walking distance to St. Stephen's Cathedral",
+        "• Small hotel (only 25 rooms) for personalized service",
+        "• Library and reading room"
+      ],
+      website: "https://www.hoteldefrance.at",
+      price: "€180-280 per night",
+      hours: "24/7 reception",
+      tips: [
+        "Perfect Stephansplatz location",
+        "Small hotel means personal attention",
+        "Excellent value for location",
+        "Breakfast is highly rated",
+        "Historic building with modern comfort",
+        "Short walk to U-Bahn Stephansplatz"
+      ]
+    },
+    'hotel-austria': {
+      title: "Hotel Austria",
+      image: "",
+      description: "Modern mid-range hotel near Westbahnhof station. Clean, functional rooms with good transport links and affordable city center access. Reliable Austrian hospitality.",
+      details: [
+        "• Modern, clean, and functional rooms",
+        "• Near Westbahnhof train station",
+        "• Excellent public transport connections",
+        "• Continental breakfast included",
+        "• Business center facilities",
+        "• 24-hour reception",
+        "• Family rooms available"
+      ],
+      website: "https://www.hotelaustria-wien.at",
+      price: "€80-140 per night",
+      hours: "24/7 reception",
+      tips: [
+        "Perfect for train travelers (Westbahnhof)",
+        "U-Bahn U3/U6 direct to city center",
+        "Clean and well-maintained",
+        "Good value for Vienna standards",
+        "English-speaking staff",
+        "Convenient for airport transfers"
+      ]
+    },
+    'wombats-hostel': {
+      title: "Wombats City Hostel Vienna",
+      image: "",
+      description: "Popular budget accommodation in the city center. Clean dorms and private rooms, social atmosphere, and excellent location. Great for backpackers and young travelers.",
+      details: [
+        "• Clean, modern hostel facilities",
+        "• Dorms and private rooms available",
+        "• Social atmosphere with common areas",
+        "• Kitchen facilities for self-catering",
+        "• 24-hour reception",
+        "• Luggage storage and lockers",
+        "• Walking distance to major attractions"
+      ],
+      website: "https://www.wombats-hostels.com",
+      price: "€20-60 per night (dorm beds €15-25)",
+      hours: "24/7 reception",
+      tips: [
+        "Great social atmosphere",
+        "City center location - walk everywhere",
+        "Clean facilities with good security",
+        "International crowd and events",
+        "Breakfast available for additional fee",
+        "Perfect for budget travelers"
+      ]
+    },
+    'ibis-budget': {
+      title: "Ibis Budget Hotels",
+      image: "",
+      description: "Reliable budget hotel chain across Vienna. Clean, functional rooms with self-service check-in. Consistent quality and good value throughout the city.",
+      details: [
+        "• Multiple locations across Vienna",
+        "• Clean, functional rooms",
+        "• Self-service check-in machines",
+        "• Continental breakfast available",
+        "• WiFi included",
+        "• Public transport connections",
+        "• 24-hour reception (staffed)"
+      ],
+      website: "https://www.ibis.com",
+      price: "€50-80 per night",
+      hours: "24/7 reception",
+      tips: [
+        "Choose location based on your needs",
+        "Self-service check-in saves time",
+        "Clean and reliable chain standards",
+        "Good public transport links",
+        "Breakfast available but not included",
+        "Perfect for short business trips"
+      ]
+    },
+    'airbnb-apartments': {
+      title: "Airbnb Apartments",
+      image: "",
+      description: "Local apartments and homes throughout Vienna. More space, kitchen facilities, and authentic neighborhood experiences. Great for longer stays or families.",
+      details: [
+        "• Apartments in residential neighborhoods",
+        "• Kitchen facilities for cooking",
+        "• More space than hotel rooms",
+        "• Local neighborhood experiences",
+        "• Flexible check-in/check-out",
+        "• Washer/dryer in many units",
+        "• Perfect for longer stays"
+      ],
+      website: "https://www.airbnb.com",
+      price: "€60-150 per night (varies by location/size)",
+      hours: "Flexible check-in (usually 3:00 PM - 10:00 PM)",
+      tips: [
+        "Choose locations with good U-Bahn access",
+        "Read reviews carefully for accuracy",
+        "Superhost listings are more reliable",
+        "Check for kitchen and laundry facilities",
+        "Instant booking saves time",
+        "Contact host for local recommendations"
+      ]
+    },
+    'student-dorms': {
+      title: "Student Dormitories",
+      image: "",
+      description: "Budget accommodation in university dormitories during summer months. Modern facilities, good locations, and very affordable rates. Perfect for budget travelers.",
+      details: [
+        "• Modern university facilities",
+        "• Summer season only (July-August)",
+        "• Shared bathrooms and kitchens",
+        "• Very affordable rates",
+        "• University campus locations",
+        "• Breakfast often included",
+        "• Great for solo travelers"
+      ],
+      website: "https://www.oead.at (Austrian student housing)",
+      price: "€25-45 per night",
+      hours: "Summer season only",
+      tips: [
+        "Book early - limited availability",
+        "Modern facilities despite low price",
+        "Good locations near U-Bahn",
+        "Self-service laundry facilities",
+        "Breakfast usually included",
+        "Perfect for extended stays"
+      ]
     }
   };
 
