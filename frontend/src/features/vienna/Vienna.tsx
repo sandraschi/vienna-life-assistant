@@ -29,6 +29,8 @@ import {
   Euro as EuroIcon,
   Museum as MuseumIcon,
   LocalCafe as CafeIcon,
+  Restaurant as RestaurantIcon,
+  Hotel as HotelIcon,
   DirectionsBus as TransportIcon,
   Celebration as CelebrationIcon,
   Train as TrainIcon,
@@ -188,6 +190,8 @@ const Vienna: React.FC = () => {
         >
           <Tab icon={<LocationIcon />} iconPosition="start" label="Attractions" />
           <Tab icon={<CafeIcon />} iconPosition="start" label="Coffee Houses" />
+          <Tab icon={<RestaurantIcon />} iconPosition="start" label="Restaurants" />
+          <Tab icon={<HotelIcon />} iconPosition="start" label="Accommodation" />
           <Tab icon={<MuseumIcon />} iconPosition="start" label="Museums" />
           <Tab icon={<EuroIcon />} iconPosition="start" label="Vienna Pass" />
           <Tab icon={<TrainIcon />} iconPosition="start" label="Day Trips" />
@@ -205,22 +209,30 @@ const Vienna: React.FC = () => {
         </TabPanel>
 
         <TabPanel value={activeTab} index={2}>
-          <ViennaMuseums onAttractionClick={setSelectedAttraction} />
+          <ViennaRestaurants onAttractionClick={setSelectedAttraction} />
         </TabPanel>
 
         <TabPanel value={activeTab} index={3}>
-          <ViennaPass />
+          <ViennaAccommodation onAttractionClick={setSelectedAttraction} />
         </TabPanel>
 
         <TabPanel value={activeTab} index={4}>
-          <ViennaDayTrips />
+          <ViennaMuseums onAttractionClick={setSelectedAttraction} />
         </TabPanel>
 
         <TabPanel value={activeTab} index={5}>
-          <ViennaTransport />
+          <ViennaPass />
         </TabPanel>
 
         <TabPanel value={activeTab} index={6}>
+          <ViennaDayTrips />
+        </TabPanel>
+
+        <TabPanel value={activeTab} index={7}>
+          <ViennaTransport />
+        </TabPanel>
+
+        <TabPanel value={activeTab} index={8}>
           <ViennaFestivals />
         </TabPanel>
       </Paper>
@@ -507,6 +519,414 @@ const ViennaCoffeeHouses: React.FC<{ onAttractionClick: (attraction: string) => 
             <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
               <Chip size="small" label="Jugendstil" color="primary" />
               <Chip size="small" label="Architecture" color="secondary" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  </Box>
+);
+
+// Restaurants Component
+const ViennaRestaurants: React.FC<{ onAttractionClick: (attraction: string) => void }> = ({ onAttractionClick }) => (
+  <Box>
+    <Typography variant="h5" gutterBottom color="primary" sx={{ mb: 3 }}>
+      🍽️ Vienna's Culinary Scene
+    </Typography>
+
+    <Typography variant="body1" sx={{ mb: 3 }}>
+      Vienna offers a diverse culinary landscape from traditional Austrian cuisine to modern international dining.
+      Don't miss the heurigen (wine taverns) in the vineyards surrounding the city for authentic local experiences.
+    </Typography>
+
+    <Grid container spacing={3}>
+      {/* Fine Dining */}
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('restaurant-steirereck')}>
+          <ViennaImage
+            src=""
+            alt="Steirereck"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Steirereck</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              3 Michelin stars. Austrian haute cuisine with modern twists. Set in Stadtpark gardens.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="3 Michelin Stars" color="warning" />
+              <Chip size="small" label="€€€€" color="error" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('restaurant-mraz-bei-vogel')}>
+          <ViennaImage
+            src=""
+            alt="Mraz & Sohn"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Mraz & Sohn</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              2 Michelin stars. Creative Austrian cuisine in historic Palais Ferstl. Exceptional wine cellar.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="2 Michelin Stars" color="warning" />
+              <Chip size="small" label="€€€€" color="error" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Heurigen */}
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('heuriger-zach')}>
+          <ViennaImage
+            src=""
+            alt="Heuriger Mayer am Pfarrplatz"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Heuriger Mayer am Pfarrplatz</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Authentic heuriger in Grinzing. House wine, cold platters, and Viennese charm. Open seasonally.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Traditional" color="success" />
+              <Chip size="small" label="€€" color="warning" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('heuriger-zwölf-apostelkeller')}>
+          <ViennaImage
+            src=""
+            alt="Zwölf Apostelkeller"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Zwölf Apostelkeller</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Historic heuriger since 1734. Excellent wines, traditional food, and stunning vineyard views.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Historic" color="primary" />
+              <Chip size="small" label="€€" color="warning" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* International Cuisine */}
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('restaurant-silvestrino')}>
+          <ViennaImage
+            src=""
+            alt="Silvestrino"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Silvestrino</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Italian fine dining. Seasonal ingredients, wine pairings, and exceptional service in elegant setting.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Italian" color="secondary" />
+              <Chip size="small" label="€€€" color="error" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('restaurant-skopik-lodek')}>
+          <ViennaImage
+            src=""
+            alt="Skopik & Lodek"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Skopik & Lodek</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Modern Austrian cuisine. Creative takes on traditional dishes in contemporary Naschmarkt setting.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Modern Austrian" color="info" />
+              <Chip size="small" label="€€€" color="error" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Casual Dining */}
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('restaurant-bierbeisl')}>
+          <ViennaImage
+            src=""
+            alt="Traditional Bierbeisl"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Traditional Bierbeisl</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Authentic Viennese pubs. Schnitzel, sausages, and local beers. Cozy, unpretentious atmosphere.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Pub" color="warning" />
+              <Chip size="small" label="€€" color="warning" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('restaurant-naschmarkt-stalls')}>
+          <ViennaImage
+            src=""
+            alt="Naschmarkt Food Stalls"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Naschmarkt Food Stalls</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              International street food. From Turkish kebabs to Vietnamese pho, fresh and affordable.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Street Food" color="success" />
+              <Chip size="small" label="€" color="success" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  </Box>
+);
+
+// Accommodation Component
+const ViennaAccommodation: React.FC<{ onAttractionClick: (attraction: string) => void }> = ({ onAttractionClick }) => (
+  <Box>
+    <Typography variant="h5" gutterBottom color="primary" sx={{ mb: 3 }}>
+      🏨 Where to Stay in Vienna
+    </Typography>
+
+    <Typography variant="body1" sx={{ mb: 3 }}>
+      Vienna offers accommodation for every budget and preference, from historic palaces to modern boutique hotels.
+      The city center (Innere Stadt) is walkable, but consider trams for outer districts.
+    </Typography>
+
+    <Grid container spacing={3}>
+      {/* Luxury Hotels */}
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('hotel-imperial')}>
+          <ViennaImage
+            src=""
+            alt="Hotel Imperial"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Hotel Imperial</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Historic luxury palace. Biedermeier elegance, Michelin-starred restaurant, Ringstraße location.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="5-Star Luxury" color="warning" />
+              <Chip size="small" label="€€€€€" color="error" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('hotel-sacher')}>
+          <ViennaImage
+            src=""
+            alt="Hotel Sacher"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Hotel Sacher</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Vienna's most famous hotel. Sachertorte birthplace, imperial suites, opposite Opera House.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Historic Luxury" color="warning" />
+              <Chip size="small" label="€€€€€" color="error" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Mid-Range Hotels */}
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('hotel-de-france')}>
+          <ViennaImage
+            src=""
+            alt="Hotel de France"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Hotel de France</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Boutique hotel in historic building. Elegant rooms, excellent breakfast, Stephansplatz location.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Boutique" color="secondary" />
+              <Chip size="small" label="€€€" color="warning" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('hotel-austria')}>
+          <ViennaImage
+            src=""
+            alt="Hotel Austria"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Hotel Austria</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Modern comfort near Westbahnhof. Clean rooms, good transport links, affordable city center access.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Modern" color="primary" />
+              <Chip size="small" label="€€" color="success" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Budget Options */}
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('wombats-hostel')}>
+          <ViennaImage
+            src=""
+            alt="Wombats Hostel"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Wombats City Hostel</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Popular budget accommodation. Clean dorms and private rooms, social atmosphere, central location.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Hostel" color="info" />
+              <Chip size="small" label="€" color="success" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('ibis-budget')}>
+          <ViennaImage
+            src=""
+            alt="Ibis Budget Hotels"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Ibis Budget Hotels</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Chain budget hotels across Vienna. Clean, functional rooms, good transport links, reliable quality.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Budget Chain" color="primary" />
+              <Chip size="small" label="€" color="success" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      {/* Alternative Options */}
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('airbnb-apartments')}>
+          <ViennaImage
+            src=""
+            alt="Airbnb Apartments"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Airbnb Apartments</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Local apartments and homes. Kitchen facilities, more space, authentic neighborhood experiences.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Apartments" color="secondary" />
+              <Chip size="small" label="€€-€€€" color="warning" />
+            </Stack>
+            <Button variant="outlined" size="small" fullWidth>
+              View Details
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => onAttractionClick('student-dorms')}>
+          <ViennaImage
+            src=""
+            alt="Student Dormitories"
+            height={200}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontSize: '1.1rem', mb: 1 }}>Student Dormitories</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Budget accommodation during summer. Modern facilities, university locations, very affordable.
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip size="small" label="Summer Only" color="info" />
+              <Chip size="small" label="€" color="success" />
             </Stack>
             <Button variant="outlined" size="small" fullWidth>
               View Details
