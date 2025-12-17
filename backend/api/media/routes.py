@@ -47,8 +47,8 @@ async def get_media_status():
         },
         "ollama": {
             "connected": mcp_health.get("ollama", False),
-            "mcp_available": mcp_health.get("ollama", False),
-            "message": "Local AI via MCP"
+            "mcp_available": False,  # Direct HTTP connection, not MCP
+            "message": "Local AI via HTTP API (not MCP)"
         }
     }
 

@@ -2,6 +2,10 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
+// Get configuration from environment variables
+const tailscaleHostname = process.env.VITE_TAILSCALE_HOSTNAME || process.env.TAILSCALE_HOSTNAME || 'goliath';
+const tailscaleBackendPort = process.env.VITE_TAILSCALE_BACKEND_PORT || process.env.TAILSCALE_BACKEND_PORT || '7334';
+
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -9,17 +13,22 @@ export default defineConfig({
     port: 9173,
     strictPort: true,
     hmr: {
-      host: 'localhost',  // HMR uses localhost (not goliath)
+      host: 'localhost',  // HMR uses localhost (not tailscale hostname)
       protocol: 'ws',
     },
-    // Allow Tailscale hostname
-    allowedHosts: ['localhost', '127.0.0.1', 'goliath'],
+    // Allow configurable Tailscale hostname
+    allowedHosts: ['localhost', '127.0.0.1', tailscaleHostname],
     proxy: {
       '/api': {
-        target: 'http://localhost:9001',
+        target: `http://backend:${tailscaleBackendPort}`,
         changeOrigin: true,
       }
     }
+  },
+  // Define environment variables for the frontend
+  define: {
+    'import.meta.env.VITE_TAILSCALE_HOSTNAME': JSON.stringify(tailscaleHostname),
+    'import.meta.env.VITE_TAILSCALE_BACKEND_PORT': JSON.stringify(tailscaleBackendPort),
   },
   resolve: {
     alias: {

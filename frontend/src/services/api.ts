@@ -8,14 +8,18 @@ import axios from 'axios';
 const getApiBaseUrl = () => {
   const hostname = window.location.hostname;
   const protocol = window.location.protocol;
-  
-  // If accessed via goliath (Tailscale), use goliath for backend too
-  if (hostname === 'goliath') {
-    return `${protocol}//goliath:9001`;
+
+  // Get configuration from environment variables (with fallbacks)
+  const tailscaleHostname = import.meta.env.VITE_TAILSCALE_HOSTNAME || 'goliath';
+  const tailscaleBackendPort = import.meta.env.VITE_TAILSCALE_BACKEND_PORT || '7334';
+
+  // If accessed via configured Tailscale hostname, use it for backend
+  if (hostname === tailscaleHostname) {
+    return `${protocol}//${tailscaleHostname}:${tailscaleBackendPort}`;
   }
-  
-  // Default to localhost
-  return import.meta.env.VITE_API_URL || 'http://localhost:9001';
+
+  // Default to localhost with correct port
+  return import.meta.env.VITE_API_URL || 'http://localhost:7334';
 };
 
 const API_BASE_URL = getApiBaseUrl();

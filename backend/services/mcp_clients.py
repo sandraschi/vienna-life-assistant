@@ -240,7 +240,7 @@ class OllamaMCPClient(MCPClientBase):
         # Path to Ollama MCP server (if it exists)
         server_path = os.getenv(
             "OLLAMA_MCP_PATH",
-            "D:/Dev/repos/local-llm-mcp/src/local_llm_mcp/server.py"
+            "D:/Dev/repos/local-llm-mcp/src/llm_mcp/main.py"
         )
         super().__init__(server_path, "Ollama MCP")
     
@@ -343,6 +343,48 @@ class TapoMCPClient(MCPClientBase):
 # ADVANCED MEMORY CLIENT
 # ============================================================================
 
+class GamesMCPClient(MCPClientBase):
+    """
+    Client for Games MCP server via stdio
+
+    Play correspondence games and get AI analysis
+    """
+
+    def __init__(self):
+        # Path to Games MCP server script
+        server_path = os.getenv(
+            "GAMES_MCP_PATH",
+            "D:/Dev/repos/games-app/games-mcp/src/games_mcp/mcp_server.py"
+        )
+        super().__init__(server_path, "Games MCP")
+
+    async def make_chess_move(self, game_id: str, move: str, fen: str = None) -> Dict[str, Any]:
+        """Make a chess move in correspondence game"""
+        return await self.call_tool(
+            "make_move",
+            game_id=game_id,
+            move=move,
+            game_type="chess",
+            fen=fen
+        )
+
+    async def analyze_position(self, game_type: str, position: str, depth: int = 15) -> Dict[str, Any]:
+        """Analyze game position with AI"""
+        return await self.call_tool(
+            "analyze_position",
+            game_type=game_type,
+            position=position,
+            depth=depth
+        )
+
+    async def get_game_state(self, game_id: str) -> Dict[str, Any]:
+        """Get current game state"""
+        return await self.call_tool(
+            "get_game_state",
+            game_id=game_id
+        )
+
+
 class AdvancedMemoryMCPClient(MCPClientBase):
     """
     Client for Advanced Memory MCP server via stdio
@@ -415,19 +457,29 @@ class MCPClientManager:
         self.immich = ImmichMCPClient()
         self.tapo = TapoMCPClient()
         self.advanced_memory = AdvancedMemoryMCPClient()
+        self.games = GamesMCPClient()
     
     async def check_health(self) -> Dict[str, bool]:
         """Check health of all MCP services (via stdio connection test)"""
         import asyncio
         health = {}
         
+        # Ollama uses direct HTTP connection, not MCP stdio
+        # Check direct connection instead
+        try:
+            from services.ollama_service import ollama_service
+            health["ollama"] = await ollama_service.check_connection()
+        except Exception as e:
+            logger.error(f"Ollama direct connection check failed: {e}")
+            health["ollama"] = False
+
         for name, client in [
             ("plex", self.plex),
             ("calibre", self.calibre),
-            ("ollama", self.ollama),
             ("immich", self.immich),
             ("tapo", self.tapo),
-            ("advanced_memory", self.advanced_memory)
+            ("advanced_memory", self.advanced_memory),
+            ("games", self.games)
         ]:
             try:
                 # Try to connect via stdio with 2-second timeout per client
@@ -443,7 +495,7 @@ class MCPClientManager:
     
     async def close_all(self):
         """Close all client connections"""
-        for client in [self.plex, self.calibre, self.ollama, self.immich, self.tapo, self.advanced_memory]:
+        for client in [self.plex, self.calibre, self.ollama, self.immich, self.tapo, self.advanced_memory, self.games]:
             await client.close()
 
 

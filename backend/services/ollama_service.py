@@ -13,7 +13,19 @@ logger = logging.getLogger(__name__)
 class OllamaService:
     """Service for managing Ollama LLM models"""
 
-    def __init__(self, base_url: str = "http://localhost:11434"):
+    def __init__(self, base_url: str = None):
+        # Use host.docker.internal when running in Docker, localhost otherwise
+        if base_url is None:
+            # Check if we're running in Docker by looking for environment variable or host.docker.internal
+            import socket
+            try:
+                # Try to resolve host.docker.internal (works in Docker)
+                host_ip = socket.gethostbyname('host.docker.internal')
+                base_url = f"http://{host_ip}:11434"
+            except socket.gaierror:
+                # Fall back to localhost (when not in Docker)
+                base_url = "http://localhost:11434"
+
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.default_model = "llama3.2:3b"  # Reasonable default - fast and capable

@@ -12,7 +12,8 @@ import {
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:9001';
+// Use relative URLs since Vite proxy handles /api routes
+const API_BASE = '';
 
 interface MediaStatus {
   plex: { connected: boolean; mcp_available: boolean };
@@ -196,6 +197,7 @@ export default function MediaDashboard() {
                 startIcon={<LaunchIcon />}
                 size="small"
                 sx={{ textTransform: 'none' }}
+                onClick={() => window.open('http://goliath:32400', '_blank')}
               >
                 Open Plex
               </Button>
@@ -203,6 +205,7 @@ export default function MediaDashboard() {
                 variant="outlined"
                 size="small"
                 sx={{ ml: 1, textTransform: 'none' }}
+                onClick={() => alert('Plex configuration: Add PLEX_TOKEN to .env file')}
               >
                 Configure
               </Button>
@@ -278,6 +281,7 @@ export default function MediaDashboard() {
                 startIcon={<LaunchIcon />}
                 size="small"
                 sx={{ textTransform: 'none' }}
+                onClick={() => window.open('http://goliath:8083', '_blank')}
               >
                 Open Calibre++
               </Button>
@@ -285,6 +289,7 @@ export default function MediaDashboard() {
                 variant="outlined"
                 size="small"
                 sx={{ ml: 1, textTransform: 'none' }}
+                onClick={() => alert('Calibre configuration: Set CALIBRE_URL in .env file')}
               >
                 Configure
               </Button>
@@ -334,6 +339,7 @@ export default function MediaDashboard() {
                 startIcon={<LaunchIcon />}
                 size="small"
                 sx={{ textTransform: 'none' }}
+                onClick={() => window.open('http://goliath:2283', '_blank')}
               >
                 Open Immich
               </Button>
@@ -341,6 +347,7 @@ export default function MediaDashboard() {
                 variant="outlined"
                 size="small"
                 sx={{ ml: 1, textTransform: 'none' }}
+                onClick={() => alert('Immich configuration: Set IMMICH_API_KEY in .env file')}
               >
                 Configure
               </Button>
@@ -390,6 +397,7 @@ export default function MediaDashboard() {
                 startIcon={<LaunchIcon />}
                 size="small"
                 sx={{ textTransform: 'none' }}
+                onClick={() => alert('Tapo Dashboard: Use Tapo app on mobile device')}
               >
                 Open Tapo Dashboard
               </Button>
@@ -397,6 +405,7 @@ export default function MediaDashboard() {
                 variant="outlined"
                 size="small"
                 sx={{ ml: 1, textTransform: 'none' }}
+                onClick={() => alert('Tapo configuration: Add TAPO_USERNAME and TAPO_PASSWORD to .env file')}
               >
                 Configure
               </Button>

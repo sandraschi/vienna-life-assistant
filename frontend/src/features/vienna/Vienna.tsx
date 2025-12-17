@@ -269,7 +269,12 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="UNESCO" color="primary" />
               <Chip size="small" label="Free Entry" color="success" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://en.wikipedia.org/wiki/St._Stephen%27s_Cathedral,_Vienna', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -291,7 +296,12 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="Klimt" color="secondary" />
               <Chip size="small" label="€16" color="warning" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://en.wikipedia.org/wiki/Belvedere_Palace', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -313,7 +323,12 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="Imperial" color="warning" />
               <Chip size="small" label="€20" color="warning" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://en.wikipedia.org/wiki/Hofburg', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -337,7 +352,12 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="UNESCO" color="primary" />
               <Chip size="small" label="€22" color="warning" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://en.wikipedia.org/wiki/Sch%C3%B6nbrunn_Palace', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -361,7 +381,12 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="Riesenrad" color="success" />
               <Chip size="small" label="€12" color="warning" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -385,7 +410,12 @@ const ViennaAttractions: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="Market" color="success" />
               <Chip size="small" label="Free" color="success" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -424,7 +454,12 @@ const ViennaCoffeeHouses: React.FC<{ onAttractionClick: (attraction: string) => 
               <Chip size="small" label="Historic" color="warning" />
               <Chip size="small" label="Famous Queue" color="error" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -448,7 +483,12 @@ const ViennaCoffeeHouses: React.FC<{ onAttractionClick: (attraction: string) => 
               <Chip size="small" label="Theater" color="secondary" />
               <Chip size="small" label="Jugendstil" color="primary" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -472,7 +512,12 @@ const ViennaCoffeeHouses: React.FC<{ onAttractionClick: (attraction: string) => 
               <Chip size="small" label="Artists" color="secondary" />
               <Chip size="small" label="Buchteln" color="success" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -496,7 +541,12 @@ const ViennaCoffeeHouses: React.FC<{ onAttractionClick: (attraction: string) => 
               <Chip size="small" label="Imperial" color="warning" />
               <Chip size="small" label="Pastries" color="success" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -520,7 +570,12 @@ const ViennaCoffeeHouses: React.FC<{ onAttractionClick: (attraction: string) => 
               <Chip size="small" label="Jugendstil" color="primary" />
               <Chip size="small" label="Architecture" color="secondary" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -560,7 +615,12 @@ const ViennaRestaurants: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="3 Michelin Stars" color="warning" />
               <Chip size="small" label="€€€€" color="error" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -583,7 +643,12 @@ const ViennaRestaurants: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="2 Michelin Stars" color="warning" />
               <Chip size="small" label="€€€€" color="error" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -607,7 +672,12 @@ const ViennaRestaurants: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="Traditional" color="success" />
               <Chip size="small" label="€€" color="warning" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -630,7 +700,12 @@ const ViennaRestaurants: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="Historic" color="primary" />
               <Chip size="small" label="€€" color="warning" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -654,7 +729,12 @@ const ViennaRestaurants: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="Italian" color="secondary" />
               <Chip size="small" label="€€€" color="error" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -677,7 +757,12 @@ const ViennaRestaurants: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="Modern Austrian" color="info" />
               <Chip size="small" label="€€€" color="error" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -701,7 +786,12 @@ const ViennaRestaurants: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="Pub" color="warning" />
               <Chip size="small" label="€€" color="warning" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -724,7 +814,12 @@ const ViennaRestaurants: React.FC<{ onAttractionClick: (attraction: string) => v
               <Chip size="small" label="Street Food" color="success" />
               <Chip size="small" label="€" color="success" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -764,7 +859,12 @@ const ViennaAccommodation: React.FC<{ onAttractionClick: (attraction: string) =>
               <Chip size="small" label="5-Star Luxury" color="warning" />
               <Chip size="small" label="€€€€€" color="error" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -787,7 +887,12 @@ const ViennaAccommodation: React.FC<{ onAttractionClick: (attraction: string) =>
               <Chip size="small" label="Historic Luxury" color="warning" />
               <Chip size="small" label="€€€€€" color="error" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -811,7 +916,12 @@ const ViennaAccommodation: React.FC<{ onAttractionClick: (attraction: string) =>
               <Chip size="small" label="Boutique" color="secondary" />
               <Chip size="small" label="€€€" color="warning" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -834,7 +944,12 @@ const ViennaAccommodation: React.FC<{ onAttractionClick: (attraction: string) =>
               <Chip size="small" label="Modern" color="primary" />
               <Chip size="small" label="€€" color="success" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -858,7 +973,12 @@ const ViennaAccommodation: React.FC<{ onAttractionClick: (attraction: string) =>
               <Chip size="small" label="Hostel" color="info" />
               <Chip size="small" label="€" color="success" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -881,7 +1001,12 @@ const ViennaAccommodation: React.FC<{ onAttractionClick: (attraction: string) =>
               <Chip size="small" label="Budget Chain" color="primary" />
               <Chip size="small" label="€" color="success" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -905,7 +1030,12 @@ const ViennaAccommodation: React.FC<{ onAttractionClick: (attraction: string) =>
               <Chip size="small" label="Apartments" color="secondary" />
               <Chip size="small" label="€€-€€€" color="warning" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -928,7 +1058,12 @@ const ViennaAccommodation: React.FC<{ onAttractionClick: (attraction: string) =>
               <Chip size="small" label="Summer Only" color="info" />
               <Chip size="small" label="€" color="success" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -969,7 +1104,12 @@ const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void 
               <Chip size="small" label="Imperial Palace" color="warning" />
               <Chip size="small" label="€20" color="primary" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -993,7 +1133,12 @@ const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void 
               <Chip size="small" label="Graphic Art" color="success" />
               <Chip size="small" label="€19" color="primary" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -1017,7 +1162,12 @@ const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void 
               <Chip size="small" label="Modern Art" color="secondary" />
               <Chip size="small" label="€14" color="primary" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -1041,7 +1191,12 @@ const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void 
               <Chip size="small" label="Klimt" color="error" />
               <Chip size="small" label="€16" color="primary" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -1065,7 +1220,12 @@ const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void 
               <Chip size="small" label="Contemporary Art" color="info" />
               <Chip size="small" label="€14" color="primary" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -1089,7 +1249,12 @@ const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void 
               <Chip size="small" label="Dinosaurs" color="success" />
               <Chip size="small" label="€14" color="primary" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -1113,7 +1278,12 @@ const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void 
               <Chip size="small" label="Technology" color="warning" />
               <Chip size="small" label="€14" color="primary" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -1137,7 +1307,12 @@ const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void 
               <Chip size="small" label="Military History" color="error" />
               <Chip size="small" label="€8" color="primary" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -1161,7 +1336,12 @@ const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void 
               <Chip size="small" label="Interactive" color="secondary" />
               <Chip size="small" label="€16" color="primary" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>
@@ -1185,7 +1365,12 @@ const ViennaMuseums: React.FC<{ onAttractionClick: (attraction: string) => void 
               <Chip size="small" label="WWII Bunker" color="error" />
               <Chip size="small" label="€22" color="primary" />
             </Stack>
-            <Button variant="outlined" size="small" fullWidth>
+            <Button
+              variant="outlined"
+              size="small"
+              fullWidth
+              onClick={() => window.open('https://www.wien.info/en', '_blank')}
+            >
               View Details
             </Button>
           </CardContent>

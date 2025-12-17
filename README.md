@@ -555,7 +555,7 @@ $env:TAPO_MCP_PATH="D:/Dev/repos/tapo-mcp/src/tapo_mcp/server.py"
 $env:PLEX_MCP_PATH="D:/Dev/repos/plex-mcp/src/plex_mcp/server.py"
 $env:CALIBRE_MCP_PATH="D:/Dev/repos/calibre-mcp/src/calibre_mcp/server.py"
 $env:IMMICH_MCP_PATH="D:/Dev/repos/immich-mcp/src/immich_mcp/server.py"
-$env:OLLAMA_MCP_PATH="D:/Dev/repos/ollama-mcp/src/ollama_mcp/server.py"
+$env:OLLAMA_MCP_PATH="D:/Dev/repos/local-llm-mcp/src/llm_mcp/main.py"
 ```
 
 ### MCP Server Status

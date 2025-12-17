@@ -82,7 +82,7 @@ export default function LLMManager() {
     } catch (err: any) {
       console.error('Failed to load LLM data:', err);
       const errorMsg = err.response?.data?.detail || err.message || 'Failed to load LLM data';
-      setError(`Error: ${errorMsg}. Check that backend is running on port 9001.`);
+      setError(`Error: ${errorMsg}. Check that backend is running on port 7334.`);
     } finally {
       setLoading(false);
     }
@@ -147,12 +147,12 @@ export default function LLMManager() {
   return (
     <Box>
       {/* Status Card */}
-      <Paper 
-        elevation={2} 
-        sx={{ 
-          p: 3, 
-          mb: 3, 
-          bgcolor: status?.connected ? 'success.light' : 'error.light',
+      <Paper
+        elevation={2}
+        sx={{
+          p: 3,
+          mb: 3,
+          bgcolor: status?.providers_status?.ollama?.connected ? 'success.light' : 'error.light',
           color: 'white'
         }}
       >
@@ -160,19 +160,19 @@ export default function LLMManager() {
           🤖 Local LLM (Ollama)
         </Typography>
         <Typography variant="body1">
-          Status: {status?.connected ? '✅ Connected' : '❌ Not Running'}
+          Status: {status?.providers_status?.ollama?.connected ? '✅ Connected' : '❌ Not Running'}
         </Typography>
-        {status?.connected && (
+        {status?.providers_status?.ollama?.connected && (
           <>
             <Typography variant="body2" sx={{ mt: 1 }}>
-              Default Model: <strong>{status.default_model}</strong>
+              Default Model: <strong>{status.providers_status.ollama.default_model}</strong>
             </Typography>
             <Typography variant="body2">
-              Base URL: {status.base_url}
+              Base URL: {status.providers_status.ollama.base_url}
             </Typography>
           </>
         )}
-        {!status?.connected && (
+        {!status?.providers_status?.ollama?.connected && (
           <Typography variant="body2" sx={{ mt: 1 }}>
             Start Ollama with: <code>ollama serve</code>
           </Typography>
@@ -198,14 +198,14 @@ export default function LLMManager() {
           variant="contained"
           startIcon={<DownloadIcon />}
           onClick={() => setPullDialog(true)}
-          disabled={!status?.connected}
+          disabled={!status?.providers_status?.ollama?.connected}
         >
           Pull Model
         </Button>
         <Button
           variant="outlined"
           onClick={handleEnsureDefault}
-          disabled={!status?.connected}
+          disabled={!status?.providers_status?.ollama?.connected}
         >
           Ensure Default Model
         </Button>
@@ -246,7 +246,7 @@ export default function LLMManager() {
                       primary={
                         <Box display="flex" alignItems="center" gap={1}>
                           <Typography fontWeight={500}>{model.name}</Typography>
-                          {model.name === status?.default_model && (
+                          {model.name === status?.providers_status?.ollama?.default_model && (
                             <Chip label="Default" size="small" color="primary" />
                           )}
                         </Box>

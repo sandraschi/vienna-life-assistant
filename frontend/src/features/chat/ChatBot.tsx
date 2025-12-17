@@ -187,10 +187,8 @@ export const ChatBot: React.FC = () => {
       }));
       messageHistory.push({ role: 'user', content: input });
 
-      // Stream response - dynamic URL for Tailscale support
-      const apiBaseUrl = window.location.hostname === 'goliath' 
-        ? `${window.location.protocol}//goliath:9001`
-        : 'http://localhost:9001';
+      // Stream response - use the configured API base URL
+      const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:7334';
       
       const response = await fetch(`${apiBaseUrl}/api/chat/stream`, {
         method: 'POST',

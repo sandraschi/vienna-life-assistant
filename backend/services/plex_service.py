@@ -14,7 +14,8 @@ class PlexService:
     """Service for Plex Media Server integration"""
 
     def __init__(self):
-        self.base_url = os.getenv("PLEX_URL", "http://goliath:32400")
+        tailscale_hostname = os.getenv("TAILSCALE_HOSTNAME", "goliath")
+        self.base_url = os.getenv("PLEX_URL", f"http://{tailscale_hostname}:32400")
         self.token = os.getenv("PLEX_TOKEN", "")
         self.timeout = 10.0
 

@@ -14,7 +14,8 @@ class CalibreService:
     """Service for Calibre library integration"""
 
     def __init__(self):
-        self.base_url = os.getenv("CALIBRE_URL", "http://goliath:8083")
+        tailscale_hostname = os.getenv("TAILSCALE_HOSTNAME", "goliath")
+        self.base_url = os.getenv("CALIBRE_URL", f"http://{tailscale_hostname}:8083")
         self.timeout = 10.0
 
     async def check_connection(self) -> bool:

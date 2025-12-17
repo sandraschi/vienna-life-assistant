@@ -75,8 +75,11 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS middleware - Updated for port 9173 and Tailscale access
-origins = os.getenv("CORS_ORIGINS", "http://localhost:9173,http://localhost:5173,http://goliath:9173").split(",")
+# CORS middleware - Updated for multiple ports and Tailscale access
+tailscale_hostname = os.getenv("TAILSCALE_HOSTNAME", "goliath")
+tailscale_frontend_port = os.getenv("TAILSCALE_FRONTEND_PORT", "7333")
+default_origins = f"http://localhost:7333,http://localhost:5173,http://localhost:3000,http://{tailscale_hostname}:{tailscale_frontend_port},http://{tailscale_hostname}:3000,http://{tailscale_hostname}:5173"
+origins = os.getenv("CORS_ORIGINS", default_origins).split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
