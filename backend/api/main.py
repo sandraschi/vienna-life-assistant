@@ -16,6 +16,7 @@ from api.media.routes import router as media_router
 from api.expenses.routes import router as expenses_router
 from api.chat.routes import router as chat_router
 from api.mcp.integration import router as mcp_router
+from api.journal.routes import router as journal_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -116,4 +117,5 @@ app.include_router(media_router, prefix="/api/media", tags=["media"])
 app.include_router(expenses_router)
 app.include_router(chat_router, prefix="/api", tags=["chat"])
 app.include_router(mcp_router, prefix="/api", tags=["mcp-integration"])
+app.include_router(journal_router, prefix="/api/journal", tags=["journal"])
 

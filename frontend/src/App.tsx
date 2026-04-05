@@ -1,264 +1,186 @@
-import { Container, Typography, Box, Paper, Tab, Tabs } from '@mui/material'
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
-import PsychologyIcon from '@mui/icons-material/Psychology'
-import SmartToyIcon from '@mui/icons-material/SmartToy'
-import HomeIcon from '@mui/icons-material/Home'
-import LocationOnIcon from '@mui/icons-material/LocationOn'
+import {
+  ThemeProvider,
+  CssBaseline,
+  Box,
+  Typography,
+  alpha,
+  Container,
+  IconButton,
+  Drawer
+} from '@mui/material'
+import { Menu as MenuIcon } from '@mui/icons-material'
 import { useState } from 'react'
+import theme from './theme'
+import { Sidebar } from './components/Layout/Sidebar'
+
+// Feature Imports
 import TodoList from './features/todos/TodoList'
 import ShoppingOffers from './features/shopping/ShoppingOffers'
 import LLMManager from './features/llm/LLMManager'
 import MediaDashboard from './features/media/MediaDashboard'
+import MediaLibrary from './features/media/MediaLibrary'
 import CalendarView from './features/calendar/CalendarView'
 import ExpenseTracker from './features/expenses/ExpenseTracker'
 import { ChatBot } from './features/chat/ChatBot'
 import Vienna from './features/vienna/Vienna'
+import KnowledgeBase from './features/knowledge/KnowledgeBase'
+import DataAnalytics from './features/analytics/DataAnalytics'
+import CreativeStudio from './features/creative/CreativeStudio'
+import HomeSecurity from './features/security/HomeSecurity'
+import VirtualWorlds from './features/virtual/VirtualWorlds'
+import RoboticsAutomation from './features/robotics/RoboticsAutomation'
+import AudioProduction from './features/audio/AudioProduction'
 import Technical from './features/technical/Technical'
-import CodeIcon from '@mui/icons-material/Code'
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ py: 3 }}>{children}</Box>}
-    </div>
-  );
-}
+import { JournalDashboard } from './features/journal/JournalDashboard'
 
 function App() {
-  const [activeTab, setActiveTab] = useState(1); // Start on Todos tab
+  const [activeTab, setActiveTab] = useState(0);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setActiveTab(newValue);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const handleTabChange = (index: number) => {
+    setActiveTab(index);
+    setMobileOpen(false);
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 0: return <CalendarView />;
+      case 1: return <TodoList />;
+      case 2: return <ShoppingOffers />;
+      case 3: return <ExpenseTracker />;
+      case 4: return <MediaDashboard />;
+      case 5: return <MediaLibrary />;
+      case 6: return <JournalDashboard />;
+      case 7: return <LLMManager />;
+      case 8: return <ChatBot />;
+      case 9: return <Vienna />;
+      case 10: return <KnowledgeBase />;
+      case 11: return <DataAnalytics />;
+      case 12: return <CreativeStudio />;
+      case 13: return <HomeSecurity />;
+      case 14: return <VirtualWorlds />;
+      case 15: return <RoboticsAutomation />;
+      case 16: return <AudioProduction />;
+      case 17: return <Technical />;
+      default: return <CalendarView />;
+    }
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#f5f7fa' }}>
-      {/* Hero Header - Mobile Optimized */}
-      <Paper 
-        elevation={0}
-        sx={{ 
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
-          borderRadius: 0,
-          py: { xs: 3, sm: 4, md: 6 },
-          px: { xs: 2, sm: 3 }
-        }}
-      >
-        <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center' }}>
-            <CalendarTodayIcon sx={{ 
-              fontSize: { xs: 50, sm: 60, md: 80 }, 
-              mb: { xs: 1, sm: 2 }, 
-              opacity: 0.9 
-            }} />
-            <Typography 
-              variant="h2" 
-              component="h1" 
-              gutterBottom
-              sx={{ 
-                fontWeight: 700,
-                textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
-                fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3rem' }
-              }}
-            >
-              Vienna Life Assistant
-            </Typography>
-            <Typography 
-              variant="h5" 
-              component="h2" 
-              gutterBottom
-              sx={{ 
-                opacity: 0.95,
-                fontWeight: 400,
-                mb: 2
-              }}
-            >
-              Your personal life management companion
-            </Typography>
-            <Typography 
-              variant="body1" 
-              sx={{ 
-                opacity: 0.9,
-                fontSize: '1.1rem'
-              }}
-            >
-              📅 Calendar • ✅ Todos • 🛒 Shopping • 💰 Expenses • 🤖 AI Chat
-            </Typography>
-          </Box>
-        </Container>
-      </Paper>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
+        {/* Desktop Sidebar */}
+        <Sidebar activeTab={activeTab} setActiveTab={handleTabChange} />
 
-      {/* Main Content - Mobile Optimized */}
-      <Container maxWidth="lg" sx={{ mt: { xs: -2, sm: -3, md: -4 }, mb: { xs: 2, sm: 3, md: 4 }, px: { xs: 1, sm: 2, md: 3 } }}>
-        <Paper 
-          elevation={8}
-          sx={{ 
-            borderRadius: { xs: 2, sm: 3 },
-            overflow: 'hidden',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
+        {/* Mobile Drawer */}
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            display: { xs: 'block', md: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 280 },
           }}
         >
-          {/* Tabs - Mobile Optimized */}
-          <Tabs 
-            value={activeTab} 
-            onChange={handleTabChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            allowScrollButtonsMobile
-            sx={{ 
-              borderBottom: 1, 
-              borderColor: 'divider',
-              bgcolor: 'background.paper',
-              '& .MuiTab-root': {
-                fontSize: { xs: '0.875rem', sm: '1rem' },
-                fontWeight: 500,
-                py: { xs: 1.5, sm: 2, md: 2.5 },
-                minHeight: { xs: 48, sm: 56, md: 64 },
-                minWidth: { xs: 80, sm: 120 }
-              },
-              '& .Mui-selected': {
-                color: 'primary.main',
-                fontWeight: 600
+          <Sidebar activeTab={activeTab} setActiveTab={handleTabChange} />
+        </Drawer>
+
+        <Box component="main" sx={{
+          flexGrow: 1,
+          ml: { md: '280px' },
+          width: { md: `calc(100% - 280px)` },
+          minHeight: '100vh',
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
+          {/* Top Status Bar */}
+          <Box sx={{
+            p: { xs: 2, md: 3 },
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            backdropFilter: 'blur(8px)',
+            position: 'sticky',
+            top: 0,
+            zIndex: 1100,
+            bgcolor: alpha('#020617', 0.8)
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ display: { md: 'none' } }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 800, fontSize: { xs: '1rem', md: '1.25rem' } }}>
+                  {activeTab === 0 ? 'Overview' : 'Control Center'}
+                </Typography>
+                <Typography variant="caption" color="text.secondary" sx={{ display: { xs: 'none', sm: 'block' } }}>
+                  Vienna Life Assistant — SOTA Edition
+                </Typography>
+              </Box>
+            </Box>
+
+            <Box sx={{
+              px: 2,
+              py: 0.5,
+              borderRadius: '20px',
+              bgcolor: alpha('#10b981', 0.1),
+              border: '1px solid',
+              borderColor: alpha('#10b981', 0.2),
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1
+            }}>
+              <Box sx={{ w: 8, h: 8, bgcolor: '#10b981', borderRadius: '50%', animation: 'pulse 2s infinite' }} />
+              <Typography variant="caption" sx={{ color: '#10b981', fontWeight: 700, letterSpacing: 1 }}>
+                VIENNA-LIVE-MCP ONLINE
+              </Typography>
+            </Box>
+          </Box>
+
+          <Container maxWidth="xl" sx={{ py: 4 }}>
+            <Box sx={{
+              animation: 'fadeIn 0.5s ease-out',
+              '@keyframes fadeIn': {
+                from: { opacity: 0, transform: 'translateY(10px)' },
+                to: { opacity: 1, transform: 'translateY(0)' }
               }
-            }}
-          >
-            <Tab 
-              icon={<CalendarTodayIcon />} 
-              iconPosition="start"
-              label="Calendar" 
-              sx={{ textTransform: 'none' }}
-            />
-            <Tab 
-              icon={<CheckCircleIcon />} 
-              iconPosition="start"
-              label="Todos" 
-              sx={{ textTransform: 'none' }}
-            />
-            <Tab 
-              icon={<ShoppingCartIcon />} 
-              iconPosition="start"
-              label="Shopping" 
-              sx={{ textTransform: 'none' }}
-            />
-            <Tab 
-              icon={<AttachMoneyIcon />} 
-              iconPosition="start"
-              label="Expenses" 
-              sx={{ textTransform: 'none' }}
-            />
-            <Tab 
-              icon={<PsychologyIcon />} 
-              iconPosition="start"
-              label="LLM" 
-              sx={{ textTransform: 'none' }}
-            />
-            <Tab 
-              icon={<SmartToyIcon />} 
-              iconPosition="start"
-              label="AI Chat" 
-              sx={{ textTransform: 'none' }}
-            />
-            <Tab
-              icon={<HomeIcon />}
-              iconPosition="start"
-              label="Media & Home"
-              sx={{ textTransform: 'none' }}
-            />
-            <Tab
-              icon={<LocationOnIcon />}
-              iconPosition="start"
-              label="Vienna"
-              sx={{ textTransform: 'none' }}
-            />
-            <Tab
-              icon={<CodeIcon />}
-              iconPosition="start"
-              label="Technical"
-              sx={{ textTransform: 'none' }}
-            />
-          </Tabs>
+            }}>
+              {renderContent()}
+            </Box>
+          </Container>
 
-          {/* Tab Content */}
-          <Box sx={{ p: { xs: 2, sm: 3, md: 4 }, minHeight: '60vh' }}>
-            <TabPanel value={activeTab} index={0}>
-              <CalendarView />
-            </TabPanel>
-
-            <TabPanel value={activeTab} index={1}>
-              <TodoList />
-            </TabPanel>
-
-            <TabPanel value={activeTab} index={2}>
-              <ShoppingOffers />
-            </TabPanel>
-
-            <TabPanel value={activeTab} index={3}>
-              <ExpenseTracker />
-            </TabPanel>
-
-            <TabPanel value={activeTab} index={4}>
-              <LLMManager />
-            </TabPanel>
-
-            <TabPanel value={activeTab} index={5}>
-              <ChatBot />
-            </TabPanel>
-
-            <TabPanel value={activeTab} index={6}>
-              <MediaDashboard />
-            </TabPanel>
-
-            <TabPanel value={activeTab} index={7}>
-              <Vienna />
-            </TabPanel>
-
-            <TabPanel value={activeTab} index={8}>
-              <Technical />
-            </TabPanel>
+          {/* Footer Branding */}
+          <Box sx={{ p: 4, mt: 'auto', textAlign: 'center', opacity: 0.5 }}>
+            <Typography variant="caption" sx={{ letterSpacing: 2, fontWeight: 500 }}>
+              © 2026 VIENNA LIFE INFRASTRUCTURE ENGINE
+            </Typography>
           </Box>
-        </Paper>
+        </Box>
+      </Box>
 
-        {/* Footer Status */}
-        <Paper 
-          elevation={0}
-          sx={{ 
-            mt: 3, 
-            p: 2, 
-            bgcolor: 'transparent',
-            textAlign: 'center'
-          }}
-        >
-          <Typography 
-            variant="body2" 
-            color="text.secondary"
-            sx={{ 
-              fontSize: '0.875rem',
-              opacity: 0.7
-            }}
-          >
-            🚀 Phase 3 (Beta) | ✅ Todos • 🛒 Shopping • 🤖 AI Chat • 🧠 LLM • 🏠 Media Hub • 🇦🇹 Vienna • 🛠️ Technical |
-            Status: <strong>Beta AI Assistant</strong>
-          </Typography>
-        </Paper>
-      </Container>
-    </Box>
+      <style>{`
+        @keyframes pulse {
+          0% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(0.9); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
+    </ThemeProvider>
   )
 }
 

@@ -10,8 +10,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0',  // Listen on all interfaces for Tailscale access
-    port: 9173,
-    strictPort: true,
+    port: 5173,  // Vite default port
+    strictPort: false,  // Allow port fallback if 5173 is busy
     hmr: {
       host: 'localhost',  // HMR uses localhost (not tailscale hostname)
       protocol: 'ws',
@@ -20,8 +20,15 @@ export default defineConfig({
     allowedHosts: ['localhost', '127.0.0.1', tailscaleHostname],
     proxy: {
       '/api': {
-        target: `http://backend:${tailscaleBackendPort}`,
+        // Use localhost for local development, backend hostname for Docker
+        target: process.env.VITE_API_URL || 'http://localhost:9001',
         changeOrigin: true,
+        secure: false,
+      },
+      '/health': {
+        target: process.env.VITE_API_URL || 'http://localhost:9001',
+        changeOrigin: true,
+        secure: false,
       }
     }
   },

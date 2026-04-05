@@ -162,7 +162,22 @@ Start-Process "http://localhost:9173"
 - [ ] Can create todos via API (PowerShell test above)
 - [ ] Can create todos via UI
 
+## Docker Desktop Quick Fix
+
+If Docker becomes unresponsive or CLI commands hang:
+
+1. **Force Kill**:
+   ```powershell
+   taskkill /F /IM "Docker Desktop.exe" /T
+   taskkill /F /IM "vpnkit.exe" /T
+   taskkill /F /IM "com.docker.backend.exe" /T
+   ```
+2. **Restart**: Re-open Docker Desktop from the Start Menu.
+
+---
+
 ## Still Not Working?
+
 
 Check:
 1. Windows Firewall isn't blocking ports 9001, 9173

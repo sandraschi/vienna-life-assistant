@@ -5,7 +5,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Build outputs
-dist
+# dist - needed for production build
 build
 
 # Environment variables

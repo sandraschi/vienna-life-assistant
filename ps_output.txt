@@ -1,0 +1,7 @@
+NAME                IMAGE                                 COMMAND                  SERVICE         CREATED         STATUS                   PORTS
+vla-backend         vienna-life-assistant-backend         "uvicorn api.main:ap…"   backend         3 minutes ago   Up 3 minutes             0.0.0.0:7334->7334/tcp, [::]:7334->7334/tcp
+vla-celery-beat     vienna-life-assistant-celery-beat     "celery -A workers.c…"   celery-beat     3 minutes ago   Up 3 minutes             9001/tcp
+vla-celery-worker   vienna-life-assistant-celery-worker   "celery -A workers.c…"   celery-worker   3 minutes ago   Up 3 minutes             9001/tcp
+vla-frontend        vienna-life-assistant-frontend        "/docker-entrypoint.…"   frontend        3 minutes ago   Up 3 minutes             0.0.0.0:7333->3000/tcp, [::]:7333->3000/tcp
+vla-postgres        postgres:16-alpine                    "docker-entrypoint.s…"   postgres        3 minutes ago   Up 3 minutes (healthy)   0.0.0.0:7335->5432/tcp, [::]:7335->5432/tcp
+vla-redis           redis:7-alpine                        "docker-entrypoint.s…"   redis           3 minutes ago   Up 3 minutes (healthy)   0.0.0.0:7336->6379/tcp, [::]:7336->6379/tcp

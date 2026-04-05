@@ -4,25 +4,8 @@
  */
 import axios from 'axios';
 
-// Dynamic API URL based on hostname (supports Tailscale access)
-const getApiBaseUrl = () => {
-  const hostname = window.location.hostname;
-  const protocol = window.location.protocol;
-
-  // Get configuration from environment variables (with fallbacks)
-  const tailscaleHostname = import.meta.env.VITE_TAILSCALE_HOSTNAME || 'goliath';
-  const tailscaleBackendPort = import.meta.env.VITE_TAILSCALE_BACKEND_PORT || '7334';
-
-  // If accessed via configured Tailscale hostname, use it for backend
-  if (hostname === tailscaleHostname) {
-    return `${protocol}//${tailscaleHostname}:${tailscaleBackendPort}`;
-  }
-
-  // Default to localhost with correct port
-  return import.meta.env.VITE_API_URL || 'http://localhost:7334';
-};
-
-const API_BASE_URL = getApiBaseUrl();
+// Use relative URLs so nginx can proxy /api/ requests to backend
+const API_BASE_URL = '';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

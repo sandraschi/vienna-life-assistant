@@ -19,7 +19,7 @@ COPY . .
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
-EXPOSE 9001
+EXPOSE 7334
 
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "9001"]
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "7334"]
 

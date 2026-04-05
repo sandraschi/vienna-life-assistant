@@ -1,0 +1,69 @@
+NAMES                                 STATUS                     PORTS
+vla-frontend                          Up 2 minutes               0.0.0.0:7333->3000/tcp, [::]:7333->3000/tcp
+vla-backend                           Up 2 minutes               0.0.0.0:7334->7334/tcp, [::]:7334->7334/tcp
+vla-celery-beat                       Up 2 minutes               9001/tcp
+vla-celery-worker                     Up 2 minutes               9001/tcp
+vla-redis                             Up 2 minutes (healthy)     0.0.0.0:7336->6379/tcp, [::]:7336->6379/tcp
+vla-postgres                          Up 2 minutes (healthy)     0.0.0.0:7335->5432/tcp, [::]:7335->5432/tcp
+mcp-studio-frontend                   Up 4 hours (unhealthy)     0.0.0.0:8330->8001/tcp, [::]:8330->8001/tcp
+traefik                               Up 4 hours                 0.0.0.0:80->80/tcp, [::]:80->80/tcp, 0.0.0.0:8090->8080/tcp, [::]:8090->8080/tcp
+grafana                               Up 21 hours (healthy)      0.0.0.0:3140->3000/tcp, [::]:3140->3000/tcp
+promtail                              Up 21 hours                
+wienerlinien-frontend                 Up 21 hours (healthy)      0.0.0.0:3079->3080/tcp, [::]:3079->3080/tcp
+loki                                  Up 21 hours (unhealthy)    0.0.0.0:3193->3100/tcp, [::]:3193->3100/tcp
+wienerlinien-db                       Up 21 hours (healthy)      0.0.0.0:5433->5432/tcp, [::]:5433->5432/tcp
+unified-promtail                      Up 21 hours                0.0.0.0:9080->9080/tcp, [::]:9080->9080/tcp
+unified-node-exporter                 Up 21 hours                0.0.0.0:9100->9100/tcp, [::]:9100->9100/tcp
+unified-cadvisor                      Up 21 hours (healthy)      0.0.0.0:8082->8080/tcp, [::]:8082->8080/tcp
+unified-grafana                       Up 21 hours (healthy)      0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+unified-loki                          Up 21 hours (healthy)      0.0.0.0:3100->3100/tcp, [::]:3100->3100/tcp
+unified-prometheus                    Up 21 hours (healthy)      0.0.0.0:9090->9090/tcp, [::]:9090->9090/tcp
+homarr                                Up 20 hours (unhealthy)    0.0.0.0:7575->7575/tcp, [::]:7575->7575/tcp
+management-stack-authentik-server-1   Up 23 hours (healthy)      0.0.0.0:9000->9000/tcp, [::]:9000->9000/tcp, 0.0.0.0:9443->9443/tcp, [::]:9443->9443/tcp
+management-stack-authentik-worker-1   Up 23 hours (healthy)      
+qbittorrent                           Up 23 hours                0.0.0.0:6881->6881/tcp, 0.0.0.0:6881->6881/udp, [::]:6881->6881/tcp, [::]:6881->6881/udp, 0.0.0.0:8181->8080/tcp, [::]:8181->8080/tcp
+lidarr                                Up 23 hours                0.0.0.0:8686->8686/tcp, [::]:8686->8686/tcp
+sonarr                                Up 23 hours                0.0.0.0:8989->8989/tcp, [::]:8989->8989/tcp
+radarr                                Up 23 hours                0.0.0.0:7878->7878/tcp, [::]:7878->7878/tcp
+bazarr                                Up 23 hours                0.0.0.0:6767->6767/tcp, [::]:6767->6767/tcp
+prowlarr                              Up 23 hours                0.0.0.0:9696->9696/tcp, [::]:9696->9696/tcp
+management-stack-redis-1              Up 23 hours (healthy)      6379/tcp
+homeassistant                         Up 23 hours                0.0.0.0:8123->8123/tcp, [::]:8123->8123/tcp
+management-stack-postgresql-1         Up 23 hours (healthy)      5432/tcp
+watchtower                            Exited (1) 29 hours ago    
+hunyuan-worldplay                     Up 39 hours (healthy)      0.0.0.0:5202->5202/tcp, [::]:5202->5202/tcp
+plex-plus-frontend                    Up 39 hours (healthy)      0.0.0.0:6220->80/tcp, [::]:6220->80/tcp
+plex-plus-backend                     Up 39 hours (healthy)      0.0.0.0:6221->3001/tcp, [::]:6221->3001/tcp
+teams-debate                          Up 39 hours (healthy)      0.0.0.0:5210->5211/tcp, [::]:5210->5211/tcp
+code-assistant                        Up 39 hours (healthy)      0.0.0.0:5212->5210/tcp, [::]:5212->5210/tcp
+video-generator                       Up 39 hours (healthy)      0.0.0.0:5216->5216/tcp, [::]:5216->5216/tcp
+talking-avatar                        Up 39 hours (healthy)      0.0.0.0:5198->5198/tcp, [::]:5198->5198/tcp
+bob-and-alice                         Up 39 hours (healthy)      0.0.0.0:5188->5188/tcp, [::]:5188->5188/tcp
+ai-dashboard                          Up 39 hours (healthy)      0.0.0.0:3060->3060/tcp, [::]:3060->3060/tcp
+calibre-plus-db                       Up 39 hours (healthy)      5432/tcp
+future-you-app                        Up 39 hours (healthy)      0.0.0.0:5194->5194/tcp, [::]:5194->5194/tcp
+character-conversation                Up 39 hours (unhealthy)    0.0.0.0:5190-5191->5190-5191/tcp, [::]:5190-5191->5190-5191/tcp
+research-assistant                    Up 39 hours (healthy)      0.0.0.0:5214->5214/tcp, [::]:5214->5214/tcp
+plex-plus-chromadb                    Up 39 hours (healthy)      0.0.0.0:8002->8000/tcp, [::]:8002->8000/tcp
+myai-traefik                          Up 39 hours (unhealthy)    0.0.0.0:443->443/tcp, [::]:443->443/tcp, 0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp, 0.0.0.0:1234->80/tcp, [::]:1234->80/tcp
+vllm-server                           Up 39 hours (unhealthy)    0.0.0.0:8001->8000/tcp, [::]:8001->8000/tcp
+immich_server                         Up 39 hours (healthy)      0.0.0.0:2283->2283/tcp, [::]:2283->2283/tcp
+immich_postgres                       Up 39 hours (healthy)      5432/tcp
+immich_machine_learning               Up 39 hours (healthy)      
+immich_redis                          Up 39 hours (healthy)      6379/tcp
+github-mcp-singleton                  Up 17 hours                
+mcp-fetch-singleton                   Up 17 hours                
+ocr-mcp-backend-1                     Up 39 hours                0.0.0.0:15000->15000/tcp, [::]:15000->15000/tcp
+myhomecontrol-postgres                Exited (255) 10 days ago   5432/tcp
+robotics-webapp-frontend-1            Up 39 hours                0.0.0.0:14000->80/tcp, [::]:14000->80/tcp
+robotics-webapp-backend-1             Up 39 hours                0.0.0.0:14001->8354/tcp, [::]:14001->8354/tcp
+rustdesk-api                          Up 39 hours                0.0.0.0:21114->21114/tcp, [::]:21114->21114/tcp
+hbbs                                  Up 39 hours                0.0.0.0:21115-21116->21115-21116/tcp, [::]:21115-21116->21115-21116/tcp, 0.0.0.0:21118->21118/tcp, [::]:21118->21118/tcp, 0.0.0.0:21116->21116/udp, [::]:21116->21116/udp
+hbbr                                  Up 39 hours                0.0.0.0:21117->21117/tcp, [::]:21117->21117/tcp, 0.0.0.0:21119->21119/tcp, [::]:21119->21119/tcp
+unified-portainer                     Up 39 hours                0.0.0.0:9190->9000/tcp, [::]:9190->9000/tcp
+veogen-nginx-1                        Up 39 hours                0.0.0.0:4760->80/tcp, [::]:4760->80/tcp, 0.0.0.0:4765->443/tcp, [::]:4765->443/tcp
+veogen-frontend-1                     Up 39 hours (healthy)      0.0.0.0:4710->3000/tcp, [::]:4710->3000/tcp
+veogen-backend-1                      Up 39 hours (healthy)      0.0.0.0:4700->8000/tcp, [::]:4700->8000/tcp, 0.0.0.0:4705->8001/tcp, [::]:4705->8001/tcp
+veogen-livekit-1                      Up 39 hours (unhealthy)    0.0.0.0:3478->3478/udp, [::]:3478->3478/udp, 0.0.0.0:7882->7882/udp, [::]:7882->7882/udp, 0.0.0.0:7880-7881->7880-7881/tcp, [::]:7880-7881->7880-7881/tcp
+veogen-postgres-1                     Up 39 hours (healthy)      0.0.0.0:4715->5432/tcp, [::]:4715->5432/tcp
+veogen-redis-1                        Up 39 hours (healthy)      0.0.0.0:4712->6379/tcp, [::]:4712->6379/tcp
