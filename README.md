@@ -1,6 +1,6 @@
 # Vienna Life Assistant
 
-[![Beta](https://img.shields.io/badge/status-beta-orange.svg)](https://github.com/sandraschi/vienna-life-assistant)
+[![Beta](https://img.shields.io/badge/status-beta-orange.svg)](https://github.com/sandraschi/vienna-life-assistant) [![Built with Just](https://img.shields.io/badge/Built_with-Just-000000?style=flat-square&logo=gnu-bash&logoColor=white)](https://github.com/casey/just)
 [![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
 [![React](https://img.shields.io/badge/react-18+-61dafb.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/typescript-5+-3178c6.svg)](https://www.typescriptlang.org/)
@@ -732,6 +732,17 @@ nssm set ViennaLifeDocker AppDirectory "D:\Dev\repos\vienna-life-assistant"
 - **Your hardware** - RTX 4070 or better runs all AI locally
 - **Your data** - SQLite file on your machine
 - **MCP servers** - All on your Tailscale network (goliath)
+
+
+## 🛡️ Industrial Quality Stack
+
+This project adheres to **SOTA 14.1** industrial standards for high-fidelity agentic orchestration:
+
+- **Python (Core)**: [Ruff](https://astral.sh/ruff) for linting and formatting. Zero-tolerance for `print` statements in core handlers (`T201`).
+- **Webapp (UI)**: [Biome](https://biomejs.dev/) for sub-millisecond linting. Strict `noConsoleLog` enforcement.
+- **Protocol Compliance**: Hardened `stdout/stderr` isolation to ensure crash-resistant JSON-RPC communication.
+- **Automation**: [Justfile](./justfile) recipes for all fleet operations (`just lint`, `just fix`, `just dev`).
+- **Security**: Automated audits via `bandit` and `safety`.
 
 ##  License
 
