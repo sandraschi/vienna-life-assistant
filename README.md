@@ -1,19 +1,31 @@
 # Vienna Life Assistant
 
-[![Beta](https://img.shields.io/badge/status-beta-orange.svg)](https://github.com/sandraschi/vienna-life-assistant) [![Built with Just](https://img.shields.io/badge/Built_with-Just-000000?style=flat-square&logo=gnu-bash&logoColor=white)](https://github.com/casey/just)
-[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
-[![React](https://img.shields.io/badge/react-18+-61dafb.svg)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/typescript-5+-3178c6.svg)](https://www.typescriptlang.org/)
-[![FastAPI](https://img.shields.io/badge/fastapi-0.109+-009688.svg)](https://fastapi.tiangolo.com/)
-[![Material--UI](https://img.shields.io/badge/material--ui-5+-007acc.svg)](https://mui.com/)
-[![SQLite](https://img.shields.io/badge/sqlite-3-003b57.svg)](https://sqlite.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<p align="center">
+  <a href="https://github.com/casey/just"><img src="https://img.shields.io/badge/just-ready_to_go-7c5cfc?style=flat-square&logo=just&logoColor=white" alt="Just"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
+</p>
 
 **Timestamp**: 2025-12-15  
 **Status**: Beta Version   
 **Version**: 3.0-beta - AI-Powered Life Management
 
 A beautiful, modern personal life management app with **AI chatbot**, calendar, todos, expenses, shopping, and comprehensive technical documentation - integrated with your entire digital ecosystem via MCP servers and powered by Celery background task processing.
+
+## Quick Start
+
+```powershell
+git clone https://github.com/sandraschi/vienna-life-assistant
+cd vienna-life-assistant
+just
+```
+
+This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
+
+### Manual Setup
+
+If you don't have `just` installed:
 
 ##  What It Does
 
@@ -752,4 +764,4 @@ Private project - All rights reserved to Sandra Schipal
 
 **Built with  in Vienna's 9th District**
 
-*For daily life management, Benny care, and keeping track of when you last washed your hair* 
+*For daily life management, Benny care, and keeping track of when you last washed your hair*
