@@ -20,7 +20,7 @@ export default function ConcertHall() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:10922/api/vienna/music')
+        fetch('/api/vienna/music')
             .then(res => res.json())
             .then(data => {
                 setConcerts(data);

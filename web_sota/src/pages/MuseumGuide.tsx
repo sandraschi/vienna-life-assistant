@@ -22,7 +22,7 @@ export default function MuseumGuide() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:10922/api/vienna/museums')
+        fetch('/api/vienna/museums')
             .then(res => res.json())
             .then(data => {
                 setExhibitions(data);

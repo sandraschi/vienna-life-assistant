@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import {
     LayoutDashboard,
+    Anchor,
     ShoppingCart,
     Calendar,
     Receipt,
@@ -16,8 +17,10 @@ import {
     Coffee,
     Music,
     Palette,
-    Landmark,
-    MapPin
+    Wrench,
+    ScrollText,
+    Grid3X3,
+    BookOpen,
 } from 'lucide-react';
 import { cn } from './lib/utils';
 
@@ -26,7 +29,14 @@ export default function AppLayout() {
     const location = useLocation();
 
     const mainNav = [
-        { title: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
+        { title: 'Home', icon: LayoutDashboard, path: '/' },
+        { title: 'Tools', icon: Wrench, path: '/tools' },
+        { title: 'Logs', icon: ScrollText, path: '/logs' },
+        { title: 'Apps', icon: Grid3X3, path: '/apps' },
+        { title: 'Help', icon: BookOpen, path: '/help' },
+    ];
+
+    const lifeNav = [
         { title: 'Shopping', icon: ShoppingCart, path: '/vienna/shopping' },
         { title: 'Calendar', icon: Calendar, path: '/calendar' },
         { title: 'Expenses', icon: Receipt, path: '/expenses' },
@@ -39,9 +49,13 @@ export default function AppLayout() {
     ];
 
     const systemNav = [
+        { title: 'Fleet Command', icon: Anchor, path: '/fleet' },
         { title: 'Travel', icon: Plane, path: '/travel' },
         { title: 'Settings', icon: Settings, path: '/settings' },
     ];
+
+    const isActive = (path: string) =>
+        path === '/' ? location.pathname === '/' : location.pathname === path || location.pathname.startsWith(`${path}/`);
 
     return (
         <div className="flex min-h-screen bg-[#050505] text-slate-300 font-sans selection:bg-cosmos-500/30">
@@ -52,7 +66,7 @@ export default function AppLayout() {
             )}>
                 <div className="p-8 pb-4 flex items-center gap-4">
                     <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-cosmos-500 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-cosmos-500/20 group cursor-pointer hover:rotate-12 transition-transform duration-500">
-                        <span className="font-black text-white text-sm tracking-tighter italic">VLA</span>
+                        <span className="font-black text-white text-sm tracking-tighter italic" title="Vienna Life Assistant (not vla-mcp robotics)">ViLife</span>
                     </div>
                     {isSidebarOpen && (
                         <div className="flex flex-col">
@@ -65,23 +79,44 @@ export default function AppLayout() {
                 <nav className="flex-1 px-4 py-8 space-y-8 overflow-y-auto no-scrollbar">
                     {/* Main Section */}
                     <div>
-                        {isSidebarOpen && <p className="px-4 mb-4 text-[9px] font-black text-slate-600 uppercase tracking-[0.3em]">Core</p>}
+                        {isSidebarOpen && <p className="px-4 mb-4 text-[9px] font-black text-slate-600 uppercase tracking-[0.3em]">Fleet SOTA</p>}
                         <div className="space-y-1">
                             {mainNav.map((item) => (
                                 <NavLink
                                     key={item.path}
                                     to={item.path}
-                                    className={({ isActive }) => cn(
+                                    end={item.path === '/'}
+                                    className={cn(
                                         "nav-item group",
-                                        isActive && "active",
+                                        isActive(item.path) && "active",
                                         !isSidebarOpen && "justify-center px-0"
                                     )}
                                 >
                                     <item.icon className="w-5 h-5 flex-shrink-0 transition-colors group-hover:text-white" />
                                     {isSidebarOpen && <span className="font-bold text-xs uppercase tracking-widest">{item.title}</span>}
-                                    {isSidebarOpen && location.pathname === item.path && (
+                                    {isSidebarOpen && isActive(item.path) && (
                                         <ChevronRight className="w-3.5 h-3.5 ml-auto opacity-40 group-hover:opacity-100 transition-opacity" />
                                     )}
+                                </NavLink>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div>
+                        {isSidebarOpen && <p className="px-4 mb-4 text-[9px] font-black text-slate-600 uppercase tracking-[0.3em]">Life</p>}
+                        <div className="space-y-1">
+                            {lifeNav.map((item) => (
+                                <NavLink
+                                    key={item.path}
+                                    to={item.path}
+                                    className={cn(
+                                        "nav-item group",
+                                        isActive(item.path) && "active",
+                                        !isSidebarOpen && "justify-center px-0"
+                                    )}
+                                >
+                                    <item.icon className="w-5 h-5 flex-shrink-0 transition-colors group-hover:text-white" />
+                                    {isSidebarOpen && <span className="font-bold text-xs uppercase tracking-widest">{item.title}</span>}
                                 </NavLink>
                             ))}
                         </div>

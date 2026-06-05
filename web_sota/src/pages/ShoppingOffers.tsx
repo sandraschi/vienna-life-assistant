@@ -20,7 +20,7 @@ export default function ShoppingOffers() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:10922/api/vienna/shopping/offers')
+        fetch('/api/vienna/shopping/offers')
             .then(res => res.json())
             .then(data => {
                 setOffers(data);

@@ -5,12 +5,14 @@ Featuring the "Vienna Life" Ecosystem expansion.
 """
 import os
 import sys
-import random
-from datetime import datetime, date, timedelta
+from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any, Union
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
+
+from vienna_life_assistant.fleet_overview import build_fleet_overview
+from vienna_life_assistant.vienna_life_mcp import mcp as vienna_life_mcp
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from fastmcp import FastMCP
@@ -121,6 +123,46 @@ async def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "version": "0.2.0"}
 
+
+@app.get("/api/capabilities")
+async def capabilities():
+    """Fleet SOTA capability introspection (WEBAPP_STANDARDS §1.4)."""
+    return {
+        "status": "ok",
+        "server": {"name": "vienna-life-assistant", "version": "0.2.0", "fastmcp": "3.2+"},
+        "tool_surface": {
+            "total": 2,
+            "portmanteau_count": 1,
+            "atomic_count": 1,
+            "portmanteau_tools": ["vienna_life"],
+            "atomic_tools": ["vla_vienna_tips"],
+        },
+        "features": {
+            "sampling": False,
+            "agentic_workflows": False,
+            "prompts": False,
+            "resources": False,
+            "skills": False,
+        },
+        "inventory": {
+            "workflow_tools": [],
+            "prompt_names": [],
+            "resource_uris": [],
+            "skill_uris": [],
+        },
+        "runtime": {
+            "transport": "http",
+            "surface_mode": "portmanteau",
+        },
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+@app.get("/api/fleet/overview")
+async def fleet_overview(probe: int = Query(0, ge=0, le=1)):
+    """Meta dashboard: fleet-registry + webapp-registry (+ optional health probes)."""
+    return build_fleet_overview(probe=bool(probe))
+
 @app.get("/api/dashboard", response_model=Dict[str, Any])
 async def get_dashboard_data():
     """Get aggregated dashboard statistics and activity"""
@@ -222,7 +264,10 @@ async def get_shopping_offers():
         { "store": "billa", "product": "Almdudler 1.5L", "price": 1.19, "old_price": 1.79, "discount": 33, "category": "Getränke" },
     ]
 
-# --- MCP Tools ---
+# Mount vienna_life MCP at /mcp (P3)
+app.mount("/mcp", vienna_life_mcp.http_app(path="/"))
+
+# --- Legacy MCP Tools (stdio entry still uses `mcp` below) ---
 
 @mcp.tool()
 async def vla_vienna_tips(category: str) -> str:

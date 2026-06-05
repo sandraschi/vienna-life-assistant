@@ -22,7 +22,7 @@ export default function KaffeehausHub() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:10922/api/vienna/coffee')
+        fetch('/api/vienna/coffee')
             .then(res => res.json())
             .then(data => {
                 setCafes(data);

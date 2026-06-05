@@ -14,6 +14,7 @@ import {
     AlertCircle
 } from 'lucide-react';
 import TransitWidget from '../components/TransitWidget';
+import { API, apiGet } from '../lib/api';
 
 export default function Dashboard() {
     const [viennaToday, setViennaToday] = useState<any>(null);
@@ -22,9 +23,9 @@ export default function Dashboard() {
         const fetchViennaToday = async () => {
             try {
                 const [coffee, music, museums] = await Promise.all([
-                    fetch('http://localhost:10922/api/vienna/coffee').then(r => r.json()),
-                    fetch('http://localhost:10922/api/vienna/music').then(r => r.json()),
-                    fetch('http://localhost:10922/api/vienna/museums').then(r => r.json())
+                    apiGet(API.vienna.coffee),
+                    apiGet(API.vienna.music),
+                    apiGet(API.vienna.museums),
                 ]);
                 setViennaToday({ coffee, music, museums });
             } catch (error) {

@@ -29,7 +29,7 @@ export default function TransitWidget() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:10922/api/vienna/transport');
+                const response = await fetch('/api/vienna/transport');
                 const result = await response.json();
                 setData(result);
                 setLoading(false);
