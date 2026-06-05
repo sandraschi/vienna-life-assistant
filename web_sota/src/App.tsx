@@ -8,10 +8,15 @@ import ConcertHall from './pages/ConcertHall';
 import MuseumGuide from './pages/MuseumGuide';
 import ShoppingOffers from './pages/ShoppingOffers';
 import Tools from './pages/Tools';
+import Chat from './pages/Chat';
+import Skills from './pages/Skills';
 import Logs from './pages/Logs';
 import Apps from './pages/Apps';
 import Help from './pages/Help';
 import Settings from './pages/Settings';
+import Calendar from './pages/Calendar';
+import Expenses from './pages/Expenses';
+import Travel from './pages/Travel';
 
 export default function App() {
     return (
@@ -22,6 +27,8 @@ export default function App() {
 
                 {/* Fleet SOTA standard pages */}
                 <Route path="tools" element={<Tools />} />
+                <Route path="chat" element={<Chat />} />
+                <Route path="skills" element={<Skills />} />
                 <Route path="logs" element={<Logs />} />
                 <Route path="apps" element={<Apps />} />
                 <Route path="help" element={<Help />} />
@@ -36,20 +43,12 @@ export default function App() {
                 <Route path="vienna/shopping" element={<ShoppingOffers />} />
 
                 <Route path="shopping" element={<Navigate to="/vienna/shopping" replace />} />
-                <Route path="calendar" element={<Placeholder title="Calendar" />} />
-                <Route path="expenses" element={<Placeholder title="Expenses" />} />
-                <Route path="travel" element={<Placeholder title="Travel" />} />
+                <Route path="calendar" element={<Calendar />} />
+                <Route path="expenses" element={<Expenses />} />
+                <Route path="travel" element={<Travel />} />
 
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
         </Routes>
-    );
-}
-
-function Placeholder({ title }: { title: string }) {
-    return (
-        <div className="page-enter p-8 text-slate-500 font-bold uppercase tracking-widest italic">
-            {title} — wired to main backend in Phase 2
-        </div>
     );
 }

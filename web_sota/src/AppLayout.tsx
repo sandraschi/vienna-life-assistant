@@ -21,6 +21,8 @@ import {
     ScrollText,
     Grid3X3,
     BookOpen,
+    MessageCircle,
+    Sparkles,
 } from 'lucide-react';
 import { cn } from './lib/utils';
 
@@ -30,7 +32,9 @@ export default function AppLayout() {
 
     const mainNav = [
         { title: 'Home', icon: LayoutDashboard, path: '/' },
+        { title: 'Chat', icon: MessageCircle, path: '/chat' },
         { title: 'Tools', icon: Wrench, path: '/tools' },
+        { title: 'Skills', icon: Sparkles, path: '/skills' },
         { title: 'Logs', icon: ScrollText, path: '/logs' },
         { title: 'Apps', icon: Grid3X3, path: '/apps' },
         { title: 'Help', icon: BookOpen, path: '/help' },
@@ -61,7 +65,7 @@ export default function AppLayout() {
         <div className="flex min-h-screen bg-[#050505] text-slate-300 font-sans selection:bg-cosmos-500/30">
             {/* Sidebar */}
             <aside className={cn(
-                "glass-sidebar transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col z-50 sticky top-0 h-screen",
+                "glass-sidebar transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col z-50 h-screen",
                 isSidebarOpen ? "w-64" : "w-20"
             )}>
                 <div className="p-8 pb-4 flex items-center gap-4">
@@ -178,8 +182,8 @@ export default function AppLayout() {
 
             {/* Main Content */}
             <main className={cn(
-                "flex-1 transition-all duration-500 flex flex-col relative",
-                isSidebarOpen ? "ml-0" : "ml-0"
+                "flex-1 transition-all duration-500 flex flex-col relative min-h-screen",
+                isSidebarOpen ? "ml-64" : "ml-20"
             )}>
                 {/* Top Header */}
                 <header className="h-20 border-b border-white/[0.04] bg-black/40 backdrop-blur-3xl sticky top-0 z-40 px-10 flex items-center justify-between">

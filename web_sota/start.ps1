@@ -12,12 +12,14 @@ $ProjectRoot = Split-Path -Parent $PSScriptRoot
 Write-Host "Starting ViLife (vienna-life-assistant)..." -ForegroundColor Cyan
 Write-Host "Frontend $WebPort | Backend $BackendPort | MCP /mcp" -ForegroundColor Gray
 
-$pids = Get-NetTCPConnection -LocalPort $WebPort, $BackendPort -ErrorAction SilentlyContinue |
+# Also clear Vite drift ports (10989/10990) from prior failed starts
+$portsToClear = @($WebPort, $BackendPort, 10989, 10990)
+$pids = Get-NetTCPConnection -LocalPort $portsToClear -ErrorAction SilentlyContinue |
     Where-Object { $_.OwningProcess -gt 4 } |
     Select-Object -ExpandProperty OwningProcess -Unique
-foreach ($p in $pids) {
-    Write-Host "Releasing port squatter PID $p" -ForegroundColor Yellow
-    try { Stop-Process -Id $p -Force -ErrorAction Stop } catch { }
+foreach ($procId in $pids) {
+    Write-Host "Releasing port squatter PID $procId" -ForegroundColor Yellow
+    try { Stop-Process -Id $procId -Force -ErrorAction Stop } catch { }
 }
 
 Set-Location $PSScriptRoot
@@ -63,4 +65,4 @@ for (`$i = 0; `$i -lt 60; `$i++) {
 Start-Process powershell -ArgumentList "-NoProfile", "-WindowStyle", "Hidden", "-Command", $pollAndOpen
 
 Write-Host "Starting Vite on $WebPort ..." -ForegroundColor Green
-npm run dev -- --port $WebPort --host 127.0.0.1
+npm run dev -- --port $WebPort --host 127.0.0.1 --strictPort

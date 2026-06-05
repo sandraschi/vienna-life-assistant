@@ -3,7 +3,6 @@ Vienna Life Assistant - SOTA Backend Server
 Modernized FastAPI + FastMCP server for the web_sota project.
 Featuring the "Vienna Life" Ecosystem expansion.
 """
-import os
 import sys
 from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any, Union
@@ -11,14 +10,16 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Query
 
+import os
+
+from vienna_life_assistant.capabilities import build_capabilities
 from vienna_life_assistant.fleet_overview import build_fleet_overview
+from vienna_life_assistant.life_routes import router as life_router
+from vienna_life_assistant.llm_routes import router as llm_router
+from vienna_life_assistant.skills_routes import router as skills_router
 from vienna_life_assistant.vienna_life_mcp import mcp as vienna_life_mcp
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from fastmcp import FastMCP
-
-# Create FastMCP instance for tool execution
-mcp = FastMCP("Vienna Life Assistant SOTA")
 
 # Create FastAPI instance
 @asynccontextmanager
@@ -116,6 +117,45 @@ class ShoppingOffer(BaseModel):
     discount: int
     category: str
 
+app.include_router(llm_router)
+app.include_router(skills_router)
+app.include_router(life_router)
+
+
+@app.get("/api/settings")
+async def api_get_settings():
+    openai_key = os.environ.get("OPENAI_API_KEY") or os.environ.get("LOCAL_LLM_KEY") or ""
+    return {
+        "provider": os.environ.get("LLM_PROVIDER", "ollama"),
+        "ollama_url": os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434"),
+        "ollama_model": os.environ.get("OLLAMA_MODEL", ""),
+        "lmstudio_url": os.environ.get("LMSTUDIO_URL", "http://127.0.0.1:1234/v1"),
+        "lmstudio_model": os.environ.get("LMSTUDIO_MODEL", ""),
+        "openai_base_url": os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1"),
+        "openai_model": os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
+        "openai_api_key_configured": bool(openai_key),
+    }
+
+
+@app.post("/api/settings/llm")
+async def api_update_llm_settings(body: dict):
+    mapping = [
+        ("provider", "LLM_PROVIDER"),
+        ("ollama_url", "OLLAMA_URL"),
+        ("ollama_model", "OLLAMA_MODEL"),
+        ("lmstudio_url", "LMSTUDIO_URL"),
+        ("lmstudio_model", "LMSTUDIO_MODEL"),
+        ("openai_base_url", "OPENAI_BASE_URL"),
+        ("openai_model", "OPENAI_MODEL"),
+    ]
+    for key, env in mapping:
+        if body.get(key) is not None and body.get(key) != "":
+            os.environ[env] = str(body[key])
+    if body.get("openai_api_key"):
+        os.environ["OPENAI_API_KEY"] = str(body["openai_api_key"])
+    return {"ok": True, "message": "LLM settings saved for this session"}
+
+
 # --- API Endpoints ---
 
 @app.get("/health")
@@ -127,35 +167,7 @@ async def health_check():
 @app.get("/api/capabilities")
 async def capabilities():
     """Fleet SOTA capability introspection (WEBAPP_STANDARDS §1.4)."""
-    return {
-        "status": "ok",
-        "server": {"name": "vienna-life-assistant", "version": "0.2.0", "fastmcp": "3.2+"},
-        "tool_surface": {
-            "total": 2,
-            "portmanteau_count": 1,
-            "atomic_count": 1,
-            "portmanteau_tools": ["vienna_life"],
-            "atomic_tools": ["vla_vienna_tips"],
-        },
-        "features": {
-            "sampling": False,
-            "agentic_workflows": False,
-            "prompts": False,
-            "resources": False,
-            "skills": False,
-        },
-        "inventory": {
-            "workflow_tools": [],
-            "prompt_names": [],
-            "resource_uris": [],
-            "skill_uris": [],
-        },
-        "runtime": {
-            "transport": "http",
-            "surface_mode": "portmanteau",
-        },
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-    }
+    return await build_capabilities(vienna_life_mcp, version="0.2.0")
 
 
 @app.get("/api/fleet/overview")
@@ -266,17 +278,6 @@ async def get_shopping_offers():
 
 # Mount vienna_life MCP at /mcp (P3)
 app.mount("/mcp", vienna_life_mcp.http_app(path="/"))
-
-# --- Legacy MCP Tools (stdio entry still uses `mcp` below) ---
-
-@mcp.tool()
-async def vla_vienna_tips(category: str) -> str:
-    """Get creative Vienna tips for a specific category (music, coffee, museum)."""
-    if category.lower() == "coffee":
-        return "Try the 'Hausbrand' at Café Berg for a perfect start in Alsergrund."
-    elif category.lower() == "music":
-        return "Check the 'Stehplatz' (standing room) tickets at the Staatsoper 80 mins before the show - only €10-15!"
-    return f"Enjoy the Viennese vibe in the {category} scene!"
 
 # Helper to run uvicorn
 if __name__ == "__main__":

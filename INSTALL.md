@@ -41,15 +41,25 @@ If you prefer not to use `just`:
    ```powershell
    uv sync --all-extras
    ```
-4. Start the server:
+4. **ViLife `web_sota` (recommended):**
    ```powershell
-   # stdio mode (for MCP clients like Claude Desktop)
-   uv run python -m vienna_life_assistant.server
-
-   # HTTP mode (for web dashboard)
-   uv run uvicorn vienna_life_assistant.server:app --port 10988
+   Set-Location web_sota
+   .\start.ps1
    ```
-5. Open `http://localhost:10988` or the frontend URL.
+   - Frontend: **http://127.0.0.1:10988**
+   - Backend + MCP: **http://127.0.0.1:10922** (`/mcp`, `/api/*`)
+
+5. **LLM providers (Settings page):**
+
+   | Provider | Default endpoint | Notes |
+   |----------|------------------|-------|
+   | Ollama | `http://127.0.0.1:11434` | `ollama serve` + pulled model |
+   | LM Studio | `http://127.0.0.1:1234/v1` | Enable local server in LM Studio |
+   | OpenAI | `https://api.openai.com/v1` | Paste API key; pick model from dropdown |
+
+   Save settings, then use **Chat**. API keys are kept in the browser for chat requests and in the server session after Save (not returned on GET).
+
+6. Legacy monolith (Docker): see README — ports 7333–7336.
 
 ---
 

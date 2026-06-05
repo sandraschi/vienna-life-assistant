@@ -26,6 +26,30 @@ just
 
 This opens an interactive dashboard showing all available commands. Run `just bootstrap` to install dependencies, then `just serve` or `just dev` to start.
 
+## ViLife `web_sota` (FastMCP 3.2) — recommended
+
+Fleet SOTA surface for agents and daily use:
+
+```powershell
+Set-Location web_sota
+.\start.ps1
+```
+
+| Surface | URL |
+|---------|-----|
+| Frontend | http://127.0.0.1:10988 |
+| Backend + MCP | http://127.0.0.1:10922 (`/mcp`, `/api/*`) |
+
+**Pages:** Dashboard · Chat · Skills · Tools · Settings · Help · Apps · Logs
+
+**LLM (Settings):** Switch **Ollama** (11434), **LM Studio** (1234/v1), or **OpenAI** (API key). Each provider has a **model dropdown** populated from `/api/llm/models`. Chat uses the saved provider + model with Vienna system preprompt.
+
+**MCP:** `vienna_life` portmanteau, 6 Vienna skills, 6 prompts, sampling via `vienna_life_agentic`.
+
+See [`docs/PRD.md`](docs/PRD.md) and [`CHANGELOG.md`](CHANGELOG.md) for 0.2.0 details.
+
+> **Note:** `vienna-live-mcp` is deprecated — use this repo's `web_sota` only.
+
 ### Manual Setup
 
 If you don't have `just` installed:
