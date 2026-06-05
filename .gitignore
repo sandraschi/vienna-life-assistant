@@ -46,6 +46,12 @@ frontend/build/
 desktop/src-tauri/target/
 backend/test_db.py
 
+# web_sota (Vite / TypeScript)
+web_sota/node_modules/
+web_sota/dist/
+*.tsbuildinfo
+web_sota/.vite/
+
 # IDE
 .vscode/
 .idea/

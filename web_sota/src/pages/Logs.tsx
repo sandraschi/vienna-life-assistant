@@ -1,46 +1,115 @@
-import { useEffect, useState } from 'react';
-import { ScrollText, RefreshCw } from 'lucide-react';
-import { API, apiGet } from '../lib/api';
+import { useCallback, useEffect, useState } from 'react';
+import { ScrollText, RefreshCw, Download, Trash2 } from 'lucide-react';
 
-type LogLine = { ts: string; level: string; msg: string };
+type LogEntry = {
+    id: string;
+    timestamp: string;
+    level: string;
+    kind: string;
+    detail: string;
+};
+
+type LogResponse = {
+    entries: LogEntry[];
+    total: number;
+    max_entries: number;
+};
 
 export default function Logs() {
-    const [lines, setLines] = useState<LogLine[]>([]);
+    const [data, setData] = useState<LogResponse | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [level, setLevel] = useState('');
+    const [search, setSearch] = useState('');
 
-    const refresh = async () => {
+    const refresh = useCallback(async () => {
+        setLoading(true);
         try {
-            const h = await apiGet<{ status: string; version: string }>(API.health);
-            setLines([
-                { ts: new Date().toISOString(), level: 'INFO', msg: `Backend ${h.status} v${h.version}` },
-                { ts: new Date().toISOString(), level: 'INFO', msg: 'ViLife web_sota — fleet-standard logs page (ring buffer Phase 2)' },
-            ]);
+            const params = new URLSearchParams({ limit: '100', sort: 'desc' });
+            if (level) params.set('level', level);
+            if (search.trim()) params.set('search', search.trim());
+            const r = await fetch(`/api/logs?${params}`);
+            setData((await r.json()) as LogResponse);
         } catch (e) {
-            setLines([{ ts: new Date().toISOString(), level: 'ERROR', msg: String(e) }]);
+            setData({ entries: [{ id: '0', timestamp: new Date().toISOString(), level: 'ERROR', kind: 'client', detail: String(e) }], total: 1, max_entries: 2000 });
+        } finally {
+            setLoading(false);
         }
+    }, [level, search]);
+
+    useEffect(() => { void refresh(); }, [refresh]);
+
+    const exportLogs = async () => {
+        const r = await fetch('/api/logs/export?format=json');
+        const blob = await r.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'vilife-logs.json';
+        a.click();
+        URL.revokeObjectURL(url);
     };
 
-    useEffect(() => { void refresh(); }, []);
+    const clearLogs = async () => {
+        await fetch('/api/logs', { method: 'DELETE' });
+        await refresh();
+    };
 
     return (
         <div className="space-y-8 page-enter">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-4">
                 <div>
                     <h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">Event Logs</h1>
-                    <p className="text-slate-500 mt-2 text-sm">Live tail wiring planned — health probe for now</p>
+                    <p className="text-slate-500 mt-2 text-sm">Fleet ring buffer at /api/logs</p>
                 </div>
-                <button onClick={() => void refresh()} className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06]">
-                    <RefreshCw className="w-5 h-5" />
-                </button>
+                <div className="flex gap-2">
+                    <button type="button" onClick={() => void refresh()} className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06]" title="Refresh">
+                        <RefreshCw className="w-5 h-5" />
+                    </button>
+                    <button type="button" onClick={() => void exportLogs()} className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06]" title="Export JSON">
+                        <Download className="w-5 h-5" />
+                    </button>
+                    <button type="button" onClick={() => void clearLogs()} className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06]" title="Clear buffer">
+                        <Trash2 className="w-5 h-5" />
+                    </button>
+                </div>
             </div>
+
+            <div className="glass-card p-4 flex flex-wrap gap-4 items-center">
+                <label className="text-sm text-slate-400 flex items-center gap-2">
+                    Level
+                    <select value={level} onChange={(e) => setLevel(e.target.value)} className="bg-black/30 border border-white/10 rounded-lg px-2 py-1 text-sm">
+                        <option value="">All</option>
+                        <option value="INFO">INFO</option>
+                        <option value="WARNING">WARNING</option>
+                        <option value="ERROR">ERROR</option>
+                    </select>
+                </label>
+                <input
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search"
+                    className="flex-1 min-w-[180px] bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-sm"
+                />
+            </div>
+
+            {data && (
+                <p className="text-xs text-slate-500">{data.total} entries (max {data.max_entries})</p>
+            )}
+
             <div className="glass-card p-6 font-mono text-xs space-y-2 max-h-[60vh] overflow-y-auto">
-                {lines.map((l, i) => (
-                    <div key={i} className="flex gap-4 text-slate-400">
-                        <ScrollText className="w-4 h-4 shrink-0 opacity-40" />
-                        <span className="text-slate-600">{l.ts}</span>
-                        <span className={l.level === 'ERROR' ? 'text-red-400' : 'text-emerald-400'}>{l.level}</span>
-                        <span className="text-slate-300">{l.msg}</span>
-                    </div>
-                ))}
+                {loading ? (
+                    <div className="text-slate-500">Loading…</div>
+                ) : (
+                    data?.entries.map((l) => (
+                        <div key={l.id} className="flex gap-4 text-slate-400 flex-wrap">
+                            <ScrollText className="w-4 h-4 shrink-0 opacity-40" />
+                            <span className="text-slate-600">{l.timestamp}</span>
+                            <span className={l.level === 'ERROR' ? 'text-red-400' : 'text-emerald-400'}>{l.level}</span>
+                            <span className="text-slate-500">{l.kind}</span>
+                            <span className="text-slate-300">{l.detail}</span>
+                        </div>
+                    ))
+                )}
             </div>
         </div>
     );

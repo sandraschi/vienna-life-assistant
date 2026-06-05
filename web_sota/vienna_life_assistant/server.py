@@ -12,9 +12,11 @@ from fastapi import FastAPI, HTTPException, Query
 
 import os
 
+from vienna_life_assistant.activity_log import install_log_handler, log_activity
 from vienna_life_assistant.capabilities import build_capabilities
 from vienna_life_assistant.fleet_overview import build_fleet_overview
 from vienna_life_assistant.life_routes import router as life_router
+from vienna_life_assistant.logs_routes import router as logs_router
 from vienna_life_assistant.llm_routes import router as llm_router
 from vienna_life_assistant.skills_routes import router as skills_router
 from vienna_life_assistant.vienna_life_mcp import mcp as vienna_life_mcp
@@ -25,6 +27,8 @@ from pydantic import BaseModel, Field
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifecycle management for the SOTA backend"""
+    install_log_handler()
+    log_activity("system", "ViLife backend starting", level="INFO")
     print(">>> Vienna SOTA Backend starting...")
     
     # Ensure backend folder is in path for imports
@@ -120,6 +124,7 @@ class ShoppingOffer(BaseModel):
 app.include_router(llm_router)
 app.include_router(skills_router)
 app.include_router(life_router)
+app.include_router(logs_router)
 
 
 @app.get("/api/settings")
