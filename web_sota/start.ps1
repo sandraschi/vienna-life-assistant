@@ -5,6 +5,7 @@
     [switch]$NoBrowser
 )
 
+$ProjectRoot = Split-Path -Parent $PSScriptRoot
 $FleetStartPath = Join-Path $ProjectRoot "scripts\FleetStartMode.ps1"
 if (-not (Test-Path -LiteralPath $FleetStartPath)) {
     Write-Host "ERROR: Missing vendored launcher helper: $FleetStartPath" -ForegroundColor Red
@@ -16,7 +17,6 @@ Enter-FleetHeadlessConsole -Headless:$Headless -BackendOnly:$BackendOnly
 
 $WebPort = 10988
 $BackendPort = 10922
-$ProjectRoot = Split-Path -Parent $PSScriptRoot
 
 Write-Host "Starting ViLife (vienna-life-assistant)..." -ForegroundColor Cyan
 Write-Host "Frontend $WebPort | Backend $BackendPort | MCP /mcp" -ForegroundColor Gray
