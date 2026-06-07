@@ -5,7 +5,12 @@
     [switch]$NoBrowser
 )
 
-. "D:/Dev/repos/mcp-central-docs/standards/FleetStartMode.ps1"
+$FleetStartPath = Join-Path $ProjectRoot "scripts\FleetStartMode.ps1"
+if (-not (Test-Path -LiteralPath $FleetStartPath)) {
+    Write-Host "ERROR: Missing vendored launcher helper: $FleetStartPath" -ForegroundColor Red
+    exit 1
+}
+. $FleetStartPath
 $FleetStart = Initialize-FleetStartMode @PSBoundParameters
 Enter-FleetHeadlessConsole -Headless:$Headless -BackendOnly:$BackendOnly
 
@@ -65,3 +70,4 @@ for (`$i = 0; `$i -lt 60; `$i++) {
 
 Write-Host "Starting Vite on $WebPort ..." -ForegroundColor Green
 npm run dev -- --port $WebPort --host 127.0.0.1 --strictPort
+
