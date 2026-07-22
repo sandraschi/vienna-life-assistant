@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-07-22T00:00:00",
+  "repo": "vienna-life-assistant",
+  "overall": 5.63,
+  "rating": "Good",
+  "dimensions": {
+    "originality": 7.5,
+    "difficulty": 6.5,
+    "wrappee_importance": 4.0,
+    "competitive_situation": 7.5,
+    "tool_surface": 4.5,
+    "webapp_quality": 7.0,
+    "fleet_integration": 6.5,
+    "battlegroup_fit": 3.5
+  }
+}

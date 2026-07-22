@@ -69,11 +69,11 @@ export default function ConcertHall() {
                     <p className="text-2xl text-slate-300 max-w-2xl leading-relaxed italic mb-10">Experience the world's finest acoustics in the Golden Hall. Tonight, Vivaldi's masterpiece returns home.</p>
                     
                     <div className="flex flex-wrap gap-4">
-                        <button className="px-8 py-4 rounded-2xl bg-white text-black text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl flex items-center gap-3">
+                        <button className="px-8 py-4 rounded-2xl bg-white text-black text-sm font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl flex items-center gap-3">
                             <Ticket className="w-4 h-4" />
                             Secure Standplatz
                         </button>
-                        <button className="px-8 py-4 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] text-white text-xs font-black uppercase tracking-widest border border-white/[0.1] transition-all flex items-center gap-3">
+                        <button className="px-8 py-4 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] text-white text-sm font-black uppercase tracking-widest border border-white/[0.1] transition-all flex items-center gap-3">
                             <PlayCircle className="w-4 h-4" />
                             Listen Preview
                         </button>
@@ -99,7 +99,7 @@ export default function ConcertHall() {
                         </div>
 
                         <div className="space-y-2">
-                            <h3 className="text-xs font-black text-cosmos-400 uppercase tracking-widest">{concert.venue}</h3>
+                            <h3 className="text-sm font-black text-cosmos-400 uppercase tracking-widest">{concert.venue}</h3>
                             <p className="text-2xl font-black text-white uppercase tracking-tighter leading-snug group-hover:text-cosmos-300 transition-colors">{concert.performance}</p>
                         </div>
 

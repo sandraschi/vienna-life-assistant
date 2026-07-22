@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import logging
 from datetime import datetime, timezone
 from typing import Any
+
+logger = logging.getLogger("vienna-life-assistant.capabilities")
 
 
 async def build_capabilities(mcp: Any, *, version: str = "0.2.0") -> dict[str, Any]:
@@ -12,6 +15,7 @@ async def build_capabilities(mcp: Any, *, version: str = "0.2.0") -> dict[str, A
         tools = await mcp.list_tools(run_middleware=False)
         tool_names = sorted({t.name for t in tools})
     except Exception:
+        logger.exception("Failed to list MCP tools")
         tool_names = ["vienna_life"]
 
     portmanteau_tools = [n for n in tool_names if n == "vienna_life"]
@@ -22,7 +26,7 @@ async def build_capabilities(mcp: Any, *, version: str = "0.2.0") -> dict[str, A
         prompts = await mcp.list_prompts()
         prompt_names = sorted({p.name for p in prompts})
     except Exception:
-        prompt_names = []
+        logger.exception("Failed to list MCP prompts")
 
     resource_uris: list[str] = []
     skill_uris: list[str] = []
@@ -37,8 +41,7 @@ async def build_capabilities(mcp: Any, *, version: str = "0.2.0") -> dict[str, A
             if uri.startswith("skill://"):
                 skill_uris.append(uri)
     except Exception:
-        resource_uris = []
-        skill_uris = []
+        logger.exception("Failed to list MCP resources")
 
     has_agentic = "vienna_life_agentic" in tool_names
 
@@ -50,11 +53,15 @@ async def build_capabilities(mcp: Any, *, version: str = "0.2.0") -> dict[str, A
         lm_ok, _ = _detect_lmstudio()
         local_llm = ollama_ok or lm_ok
     except Exception:
-        local_llm = False
+        logger.exception("Failed to detect local LLM providers")
 
     return {
         "status": "ok",
-        "server": {"name": "vienna-life-assistant", "version": version, "fastmcp": "3.2+"},
+        "server": {
+            "name": "vienna-life-assistant",
+            "version": version,
+            "fastmcp": "3.2+",
+        },
         "tool_surface": {
             "total": len(tool_names),
             "portmanteau_count": len(portmanteau_tools),

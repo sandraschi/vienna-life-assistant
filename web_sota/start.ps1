@@ -1,9 +1,9 @@
-﻿param(
+param(
     [switch]$Headless,
     [switch]$BackendOnly,
     [switch]$FrontendOnly,
-    [switch]$NoBrowser
-)
+    [switch]$NoBrowser,
+    [switch]$ReuseIfRunning)
 
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $FleetStartPath = Join-Path $ProjectRoot "scripts\FleetStartMode.ps1"
@@ -15,13 +15,26 @@ if (-not (Test-Path -LiteralPath $FleetStartPath)) {
 $FleetStart = Initialize-FleetStartMode @PSBoundParameters
 Enter-FleetHeadlessConsole -Headless:$Headless -BackendOnly:$BackendOnly
 
+$portResolve = @{
+    Ports      = @($WebPort, $BackendPort, 10989, 10990)
+    Label      = "vienna-life-assistant"
+    AllowReuse = $ReuseIfRunning
+}
+if ($ReuseIfRunning) {
+    $portResolve.HealthChecks = @{
+        $WebPort = "http://127.0.0.1:$WebPort/"
+        $BackendPort = "http://127.0.0.1:$BackendPort/health"
+    }
+}
+$portState = Resolve-FleetPortConflict @portResolve
+if ($portState.Action -eq 'Blocked') { exit 1 }
+if ($portState.Reuse) { return }
 $WebPort = 10988
 $BackendPort = 10922
 
 Write-Host "Starting ViLife (vienna-life-assistant)..." -ForegroundColor Cyan
 Write-Host "Frontend $WebPort | Backend $BackendPort | MCP /mcp" -ForegroundColor Gray
 
-Stop-FleetPortSquatters -Ports @($WebPort, $BackendPort, 10989, 10990)
 
 Set-Location $PSScriptRoot
 if (-not (Test-Path "node_modules")) { npm install }

@@ -1,0 +1,6 @@
+# Vienna Life Assistant — project reference
+# Actual build config is in web_sota/pyproject.toml
+[project]
+name = "vienna-life-assistant"
+version = "3.0.0-beta"
+description = "Personal life management webapp + MCP server for Vienna"

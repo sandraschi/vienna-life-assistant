@@ -56,7 +56,7 @@ export default function Skills() {
                             key={s.name}
                             type="button"
                             onClick={() => setSelected(s.name)}
-                            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors ${
+                            className={`w-full text-left px-4 py-3 rounded-xl text-sm font-bold uppercase tracking-widest transition-colors ${
                                 selected === s.name
                                     ? 'bg-cosmos-500/20 text-white border border-cosmos-500/30'
                                     : 'text-slate-500 hover:text-white hover:bg-white/[0.04]'
@@ -79,7 +79,7 @@ export default function Skills() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {prompts.map((p) => (
                             <div key={p.name} className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.04]">
-                                <p className="font-black text-white text-xs uppercase tracking-widest">{p.name}</p>
+                                <p className="font-black text-white text-sm uppercase tracking-widest">{p.name}</p>
                                 <p className="text-[11px] text-slate-500 mt-1">{p.description || 'Vienna life template'}</p>
                             </div>
                         ))}

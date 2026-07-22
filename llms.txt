@@ -1,0 +1,26 @@
+# Vienna Life Assistant
+
+> Personal life management webapp + MCP server for Vienna life admin.
+
+## Docs
+- [Full reference](llms-full.txt)
+- [Install guide](INSTALL.md)
+- [CHANGELOG](CHANGELOG.md)
+
+## Quick start
+```powershell
+Set-Location web_sota
+.\start.ps1
+```
+
+| Surface | Port |
+|---------|------|
+| Frontend | 10988 |
+| Backend + MCP | 10922 |
+
+## Key files
+- `web_sota/vienna_life_assistant/server.py` — FastAPI + FastMCP
+- `web_sota/vienna_life_assistant/vienna_life_mcp.py` — portmanteau MCP tools
+- `web_sota/vienna_life_assistant/skills/` — 6 skill bundles
+- `web_sota/src/pages/` — 16 frontend pages
+- `native/` — Tauri 2.0 NSIS wrapper

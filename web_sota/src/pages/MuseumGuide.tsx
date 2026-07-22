@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
     Palette, 
     Calendar as CalendarIcon, 
-    MapPin, 
     Info, 
     ArrowRight, 
     Sparkles,
@@ -87,7 +86,7 @@ export default function MuseumGuide() {
                         </div>
                         <h3 className="text-2xl font-black text-white tracking-tighter uppercase mb-4">Albertina Modern</h3>
                         <p className="text-sm text-slate-400 leading-relaxed italic pr-12 mb-8">Experience the pulse of contemporary Vienna. From post-war masterpieces to SOTA digital art.</p>
-                        <button className="text-xs font-black text-indigo-400 uppercase tracking-widest flex items-center gap-2 group-hover:translate-x-1 transition-all">
+                        <button className="text-sm font-black text-indigo-400 uppercase tracking-widest flex items-center gap-2 group-hover:translate-x-1 transition-all">
                             Current Program <ArrowRight className="w-3.5 h-3.5" />
                         </button>
                     </div>

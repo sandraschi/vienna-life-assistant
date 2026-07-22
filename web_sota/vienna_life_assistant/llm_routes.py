@@ -10,7 +10,10 @@ from urllib.request import Request, urlopen
 
 from fastapi import APIRouter
 
-from vienna_life_assistant.vienna_context import CHAT_PREPROMPTS, VIENNA_SYSTEM_PREPROMPT
+from vienna_life_assistant.vienna_context import (
+    CHAT_PREPROMPTS,
+    VIENNA_SYSTEM_PREPROMPT,
+)
 
 router = APIRouter(prefix="/api/llm", tags=["llm"])
 
@@ -30,7 +33,11 @@ def _openai_key() -> str:
 
 
 def _openai_base() -> str:
-    return (os.environ.get("OPENAI_BASE_URL") or os.environ.get("LOCAL_LLM_URL") or OPENAI_DEFAULT_URL).rstrip("/")
+    return (
+        os.environ.get("OPENAI_BASE_URL")
+        or os.environ.get("LOCAL_LLM_URL")
+        or OPENAI_DEFAULT_URL
+    ).rstrip("/")
 
 
 def _detect_ollama() -> tuple[bool, str | None]:
@@ -55,7 +62,9 @@ def _detect_ollama() -> tuple[bool, str | None]:
 def _detect_lmstudio() -> tuple[bool, str | None]:
     url = os.environ.get("LMSTUDIO_URL", "http://127.0.0.1:1234/v1")
     try:
-        req = Request(f"{url}/models", method="GET", headers={"Content-Type": "application/json"})
+        req = Request(
+            f"{url}/models", method="GET", headers={"Content-Type": "application/json"}
+        )
         with urlopen(req, timeout=3) as resp:
             data = json.loads(resp.read())
         models = [m["id"] for m in data.get("data", [])]
@@ -78,12 +87,74 @@ def _openai_headers(api_key: str | None = None) -> dict[str, str]:
     return headers
 
 
-def _chat_completions(url_base: str, payload: dict, headers: dict[str, str], timeout: int = 120) -> str:
+def _chat_completions(
+    url_base: str, payload: dict, headers: dict[str, str], timeout: int = 120
+) -> str:
     body = json.dumps(payload).encode()
-    req = Request(f"{url_base.rstrip('/')}/chat/completions", data=body, headers=headers)
+    req = Request(
+        f"{url_base.rstrip('/')}/chat/completions", data=body, headers=headers
+    )
     with urlopen(req, timeout=timeout) as resp:
         data = json.loads(resp.read())
     return data.get("choices", [{}])[0].get("message", {}).get("content", "")
+
+
+@router.get("/providers")
+async def llm_providers() -> dict[str, Any]:
+    import httpx
+
+    providers = []
+    try:
+        async with httpx.AsyncClient(timeout=3.0) as client:
+            resp = await client.get("http://127.0.0.1:11434/api/tags")
+            if resp.status_code == 200:
+                data = resp.json()
+                models = [m["name"] for m in data.get("models", [])]
+                providers.append(
+                    {
+                        "id": "ollama",
+                        "label": "Ollama",
+                        "base_url": "http://127.0.0.1:11434/v1",
+                        "models": models,
+                        "needs_key": False,
+                    }
+                )
+    except Exception:
+        providers.append(
+            {
+                "id": "ollama",
+                "label": "Ollama",
+                "base_url": "http://127.0.0.1:11434/v1",
+                "models": [],
+                "needs_key": False,
+            }
+        )
+    try:
+        async with httpx.AsyncClient(timeout=3.0) as client:
+            resp = await client.get("http://127.0.0.1:1234/v1/models")
+            if resp.status_code == 200:
+                data = resp.json()
+                models = [m["id"] for m in data.get("data", [])]
+                providers.append(
+                    {
+                        "id": "lmstudio",
+                        "label": "LM Studio",
+                        "base_url": "http://127.0.0.1:1234/v1",
+                        "models": models,
+                        "needs_key": False,
+                    }
+                )
+    except Exception:
+        providers.append(
+            {
+                "id": "lmstudio",
+                "label": "LM Studio",
+                "base_url": "http://127.0.0.1:1234/v1",
+                "models": [],
+                "needs_key": False,
+            }
+        )
+    return {"providers": providers}
 
 
 @router.get("/status")
@@ -107,25 +178,41 @@ async def llm_status() -> dict[str, Any]:
                 data = json.loads(resp.read())
             models = [m["name"] for m in data.get("models", [])]
             result["ok"] = bool(models)
-            result["model"] = model if model in models else (models[0] if models else None)
+            result["model"] = (
+                model if model in models else (models[0] if models else None)
+            )
             result["available_models"] = models
             result["local_llm"] = result["ok"]
         except Exception as exc:
             result["error"] = str(exc)
             ok, auto_model = _detect_ollama()
             if ok:
-                result.update({"ok": True, "model": auto_model, "local_llm": True, "error": None, "auto_discovered": True})
+                result.update(
+                    {
+                        "ok": True,
+                        "model": auto_model,
+                        "local_llm": True,
+                        "error": None,
+                        "auto_discovered": True,
+                    }
+                )
 
     elif provider == "lmstudio":
         url = os.environ.get("LMSTUDIO_URL", "http://127.0.0.1:1234/v1")
         model = os.environ.get("LMSTUDIO_MODEL", "")
         try:
-            req = Request(f"{url}/models", method="GET", headers={"Content-Type": "application/json"})
+            req = Request(
+                f"{url}/models",
+                method="GET",
+                headers={"Content-Type": "application/json"},
+            )
             with urlopen(req, timeout=5) as resp:
                 data = json.loads(resp.read())
             models = [m["id"] for m in data.get("data", [])]
             result["ok"] = bool(models)
-            result["model"] = model if model in models else (models[0] if models else None)
+            result["model"] = (
+                model if model in models else (models[0] if models else None)
+            )
             result["available_models"] = models
             result["local_llm"] = result["ok"]
         except Exception as exc:
@@ -139,7 +226,11 @@ async def llm_status() -> dict[str, Any]:
             result["error"] = "OPENAI_API_KEY not configured"
         else:
             try:
-                req = Request(f"{_openai_base()}/models", method="GET", headers=_openai_headers(key))
+                req = Request(
+                    f"{_openai_base()}/models",
+                    method="GET",
+                    headers=_openai_headers(key),
+                )
                 with urlopen(req, timeout=10) as resp:
                     json.loads(resp.read())
                 result["ok"] = True
@@ -150,13 +241,23 @@ async def llm_status() -> dict[str, Any]:
     if not result["ok"] and provider != "openai":
         ollama_ok, ollama_model = _detect_ollama()
         if ollama_ok and provider == "ollama":
-            result.update({"ok": True, "model": ollama_model, "local_llm": True, "auto_discovered": True, "error": None})
+            result.update(
+                {
+                    "ok": True,
+                    "model": ollama_model,
+                    "local_llm": True,
+                    "auto_discovered": True,
+                    "error": None,
+                }
+            )
 
     return result
 
 
 @router.get("/models")
-async def llm_models(provider: str = "ollama", base_url: str | None = None, api_key: str | None = None) -> dict[str, Any]:
+async def llm_models(
+    provider: str = "ollama", base_url: str | None = None, api_key: str | None = None
+) -> dict[str, Any]:
     if provider == "ollama":
         url = base_url or os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
         try:
@@ -171,18 +272,32 @@ async def llm_models(provider: str = "ollama", base_url: str | None = None, api_
     if provider == "lmstudio":
         url = base_url or os.environ.get("LMSTUDIO_URL", "http://127.0.0.1:1234/v1")
         try:
-            req = Request(f"{url}/models", method="GET", headers={"Content-Type": "application/json"})
+            req = Request(
+                f"{url}/models",
+                method="GET",
+                headers={"Content-Type": "application/json"},
+            )
             with urlopen(req, timeout=5) as resp:
                 data = json.loads(resp.read())
             models = [m["id"] for m in data.get("data", [])]
             return {"ok": True, "provider": "lmstudio", "models": models}
         except Exception as exc:
-            return {"ok": False, "provider": "lmstudio", "error": str(exc), "models": []}
+            return {
+                "ok": False,
+                "provider": "lmstudio",
+                "error": str(exc),
+                "models": [],
+            }
 
     if provider == "openai":
         key = api_key or _openai_key()
         if not key:
-            return {"ok": False, "provider": "openai", "error": "API key required", "models": OPENAI_FALLBACK_MODELS}
+            return {
+                "ok": False,
+                "provider": "openai",
+                "error": "API key required",
+                "models": OPENAI_FALLBACK_MODELS,
+            }
         url = (base_url or _openai_base()).rstrip("/")
         try:
             req = Request(f"{url}/models", method="GET", headers=_openai_headers(key))
@@ -191,15 +306,27 @@ async def llm_models(provider: str = "ollama", base_url: str | None = None, api_
             models = sorted(
                 m["id"]
                 for m in data.get("data", [])
-                if any(m["id"].startswith(p) for p in ("gpt-", "o1", "o3", "o4", "chatgpt"))
+                if any(
+                    m["id"].startswith(p) for p in ("gpt-", "o1", "o3", "o4", "chatgpt")
+                )
             )
             if not models:
                 models = OPENAI_FALLBACK_MODELS
             return {"ok": True, "provider": "openai", "models": models}
         except Exception as exc:
-            return {"ok": False, "provider": "openai", "error": str(exc), "models": OPENAI_FALLBACK_MODELS}
+            return {
+                "ok": False,
+                "provider": "openai",
+                "error": str(exc),
+                "models": OPENAI_FALLBACK_MODELS,
+            }
 
-    return {"ok": False, "provider": provider, "error": "Unknown provider", "models": []}
+    return {
+        "ok": False,
+        "provider": provider,
+        "error": "Unknown provider",
+        "models": [],
+    }
 
 
 @router.get("/preprompts")
@@ -215,7 +342,9 @@ async def llm_chat(body: dict[str, Any]) -> dict[str, Any]:
         return {"ok": False, "error": "No message provided"}
 
     history = body.get("history") or []
-    messages: list[dict[str, str]] = [{"role": "system", "content": VIENNA_SYSTEM_PREPROMPT}]
+    messages: list[dict[str, str]] = [
+        {"role": "system", "content": VIENNA_SYSTEM_PREPROMPT}
+    ]
     for item in history:
         role = item.get("role")
         content = item.get("content")
@@ -225,10 +354,18 @@ async def llm_chat(body: dict[str, Any]) -> dict[str, Any]:
 
     if provider == "ollama":
         model = body.get("model") or os.environ.get("OLLAMA_MODEL", "qwen3.5:27b")
-        url = body.get("ollama_url") or os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
-        payload = json.dumps({"model": model, "messages": messages, "stream": False}).encode()
+        url = body.get("ollama_url") or os.environ.get(
+            "OLLAMA_URL", "http://127.0.0.1:11434"
+        )
+        payload = json.dumps(
+            {"model": model, "messages": messages, "stream": False}
+        ).encode()
         try:
-            req = Request(f"{url}/api/chat", data=payload, headers={"Content-Type": "application/json"})
+            req = Request(
+                f"{url}/api/chat",
+                data=payload,
+                headers={"Content-Type": "application/json"},
+            )
             with urlopen(req, timeout=120) as resp:
                 data = json.loads(resp.read())
             return {"ok": True, "response": data.get("message", {}).get("content", "")}
@@ -237,7 +374,9 @@ async def llm_chat(body: dict[str, Any]) -> dict[str, Any]:
 
     if provider == "lmstudio":
         model = body.get("model") or os.environ.get("LMSTUDIO_MODEL", "")
-        url = body.get("lmstudio_url") or os.environ.get("LMSTUDIO_URL", "http://127.0.0.1:1234/v1")
+        url = body.get("lmstudio_url") or os.environ.get(
+            "LMSTUDIO_URL", "http://127.0.0.1:1234/v1"
+        )
         try:
             content = _chat_completions(
                 url,

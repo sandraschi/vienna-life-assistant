@@ -5,13 +5,19 @@ description = "Vienna Life Assistant - State of the Art (SOTA) Backend"
 dependencies = [
     "fastapi>=0.109.0",
     "uvicorn>=0.27.0",
-    "fastmcp>=0.4.1",
+    "fastmcp>=3.4.2,<4",
     "sqlalchemy>=2.0.0",
     "pydantic>=2.0.0",
     "pydantic-settings>=2.0.0",
+    "httpx>=0.24.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=5.0.0",
+    "playwright>=1.50.0",
+    "prefab-ui>=0.14.0",
 ]
 
 [tool.uv]
 dev-dependencies = [
     "pytest>=8.0.0",
+    "ruff>=0.9.0",
 ]

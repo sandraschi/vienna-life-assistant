@@ -44,11 +44,11 @@ export default function KaffeehausHub() {
                     <p className="text-slate-500 mt-2 font-medium tracking-tight">The heartbeat of Vienna. From the 1st to the 9th District.</p>
                 </div>
                 <div className="flex items-center gap-4 bg-white/[0.03] p-1.5 rounded-2xl border border-white/[0.06]">
-                    <div className="px-4 py-2 rounded-xl bg-cosmos-600 text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                    <div className="px-4 py-2 rounded-xl bg-cosmos-600 text-white text-sm font-bold uppercase tracking-widest flex items-center gap-2">
                         <Clock className="w-3.5 h-3.5" />
                         Live Status
                     </div>
-                    <div className="px-4 py-2 text-slate-400 text-xs font-bold uppercase tracking-widest border border-transparent hover:text-white transition-colors cursor-pointer">
+                    <div className="px-4 py-2 text-slate-400 text-sm font-bold uppercase tracking-widest border border-transparent hover:text-white transition-colors cursor-pointer">
                         Favorites Only
                     </div>
                 </div>
@@ -99,7 +99,7 @@ export default function KaffeehausHub() {
                     <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-cosmos-400 mb-4">Melange of the Day</h3>
                     <p className="text-3xl font-black text-white uppercase tracking-tighter leading-none mb-4 italic">The Alsergrund Gold</p>
                     <p className="text-sm text-slate-400 leading-relaxed italic mb-8 px-4">"A double-shot espresso with steamed milk and a signature Berg-style foam architecture."</p>
-                    <button className="w-full py-4 rounded-2xl bg-cosmos-600 hover:bg-cosmos-500 text-white text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-cosmos-500/20 mt-4">
+                    <button className="w-full py-4 rounded-2xl bg-cosmos-600 hover:bg-cosmos-500 text-white text-sm font-black uppercase tracking-widest transition-all shadow-lg shadow-cosmos-500/20 mt-4">
                         Remind to try
                     </button>
                 </div>
@@ -142,7 +142,7 @@ export default function KaffeehausHub() {
                             {cafe.name}
                             {cafe.is_favorite && <Heart className="w-4 h-4 fill-emerald-500 text-emerald-500 animate-pulse" />}
                         </h3>
-                        <p className="text-xs text-slate-500 font-medium mb-6 uppercase italic leading-snug">{cafe.highlight}</p>
+                        <p className="text-sm text-slate-500 font-medium mb-6 uppercase italic leading-snug">{cafe.highlight}</p>
                         
                         <div className="flex items-center justify-between pt-4 border-t border-white/[0.04]">
                             <div className="flex items-center gap-1.5">

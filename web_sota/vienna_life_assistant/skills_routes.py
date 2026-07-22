@@ -33,20 +33,18 @@ async def get_skill(name: str) -> dict[str, Any]:
 
     uri = f"skill://{name}/SKILL.md"
     try:
-        parts = await mcp.read_resource(uri)
+        result = await mcp.read_resource(uri)
         text = ""
-        for part in parts:
-            if hasattr(part, "text"):
-                text += getattr(part, "text", "") or ""
-            elif isinstance(part, dict) and "text" in part:
-                text += str(part["text"])
+        for c in result.contents:
+            val = c.content if hasattr(c, "content") else str(c)
+            text += str(val)
         if not text:
             raise HTTPException(status_code=404, detail=f"Skill not found: {name}")
         return {"name": name, "uri": uri, "content": text}
     except HTTPException:
         raise
     except Exception as exc:
-        raise HTTPException(status_code=404, detail=f"Skill not found: {name}") from exc
+        raise HTTPException(status_code=500, detail=f"Skill error: {exc}") from exc
 
 
 @router.get("/api/prompts")
@@ -57,7 +55,12 @@ async def list_prompts() -> dict[str, Any]:
     try:
         items = await mcp.list_prompts()
         for item in items:
-            prompts.append({"name": item.name, "description": getattr(item, "description", "") or ""})
+            prompts.append(
+                {
+                    "name": item.name,
+                    "description": getattr(item, "description", "") or "",
+                }
+            )
     except Exception as exc:
         return {"prompts": [], "error": str(exc)}
     return {"prompts": prompts}

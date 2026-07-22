@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
     Clock, 
-    ArrowRight, 
     Train, 
-    Bus, 
     Zap,
     MapPin,
     AlertCircle
@@ -33,8 +31,7 @@ export default function TransitWidget() {
                 const result = await response.json();
                 setData(result);
                 setLoading(false);
-            } catch (error) {
-                console.error("Failed to fetch transit data", error);
+            } catch {
                 setLoading(false);
             }
         };
@@ -89,7 +86,7 @@ export default function TransitWidget() {
             <div className="divide-y divide-white/[0.04] flex-1">
                 {currentDepartures.map((departure, idx) => (
                     <div key={`${departure.line}-${departure.destination}-${idx}`} className="px-6 py-3.5 hover:bg-white/[0.02] transition-colors flex items-center gap-4 group">
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-white text-xs ${
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-white text-sm ${
                             departure.line === 'U4' ? 'bg-emerald-600' :
                             departure.line === 'D' ? 'bg-red-600' :
                             departure.line === '5' ? 'bg-orange-600' :
@@ -99,7 +96,7 @@ export default function TransitWidget() {
                         </div>
                         
                         <div className="flex-1">
-                            <p className="text-xs font-semibold text-white uppercase truncate">{departure.destination}</p>
+                            <p className="text-sm font-semibold text-white uppercase truncate">{departure.destination}</p>
                             <div className="flex items-center gap-1.5 mt-0.5">
                                 {departure.type === 'u-bahn' ? (
                                     <Train className="w-3 h-3 text-emerald-500" />

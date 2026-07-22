@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import {
     LayoutDashboard,
@@ -13,7 +13,6 @@ import {
     Bell,
     Search,
     Menu,
-    X,
     Coffee,
     Music,
     Palette,
@@ -25,9 +24,37 @@ import {
     Sparkles,
 } from 'lucide-react';
 import { cn } from './lib/utils';
+import useZoom from './lib/use-zoom';
 
 export default function AppLayout() {
+    useZoom();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [backendOk, setBackendOk] = useState<boolean | null>(null);
+
+    // Backend health: Tauri event listener + HTTP polling
+    useEffect(() => {
+        let unlisten: (() => void) | undefined;
+        (async () => {
+            try {
+                const { listen } = await import("@tauri-apps/api/event");
+                unlisten = await listen<string>("backend-status", (event) => {
+                    if (event.payload === "ready") setBackendOk(true);
+                    else if (typeof event.payload === "string" && event.payload.startsWith("error:")) setBackendOk(false);
+                });
+            } catch {
+                // Not inside Tauri — HTTP polling handles it
+            }
+        })();
+        const check = async () => {
+            try {
+                const r = await fetch(`http://127.0.0.1:10922/health`);
+                setBackendOk(r.ok);
+            } catch { setBackendOk(false); }
+        };
+        check();
+        const interval = setInterval(check, 15000);
+        return () => { if (unlisten) unlisten(); clearInterval(interval); };
+    }, []);
     const location = useLocation();
 
     const mainNav = [
@@ -74,13 +101,20 @@ export default function AppLayout() {
                     </div>
                     {isSidebarOpen && (
                         <div className="flex flex-col">
-                            <span className="font-black text-xs text-white uppercase tracking-[0.3em] leading-none mb-1">Vienna Life</span>
+                            <span className="font-black text-sm text-white uppercase tracking-[0.3em] leading-none mb-1">Vienna Life</span>
                             <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none">Assistant SOTA</span>
                         </div>
                     )}
+                    <button
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        className="ml-auto w-8 h-8 rounded-xl flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/[0.05] transition-all flex-shrink-0"
+                        title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+                    >
+                        {isSidebarOpen ? <ChevronRight className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+                    </button>
                 </div>
 
-                <nav className="flex-1 px-4 py-8 space-y-8 overflow-y-auto no-scrollbar">
+                <nav className="flex-1 px-4 py-4 space-y-8 overflow-y-auto no-scrollbar">
                     {/* Main Section */}
                     <div>
                         {isSidebarOpen && <p className="px-4 mb-4 text-[9px] font-black text-slate-600 uppercase tracking-[0.3em]">Fleet SOTA</p>}
@@ -97,7 +131,7 @@ export default function AppLayout() {
                                     )}
                                 >
                                     <item.icon className="w-5 h-5 flex-shrink-0 transition-colors group-hover:text-white" />
-                                    {isSidebarOpen && <span className="font-bold text-xs uppercase tracking-widest">{item.title}</span>}
+                                    {isSidebarOpen && <span className="font-bold text-sm uppercase tracking-widest">{item.title}</span>}
                                     {isSidebarOpen && isActive(item.path) && (
                                         <ChevronRight className="w-3.5 h-3.5 ml-auto opacity-40 group-hover:opacity-100 transition-opacity" />
                                     )}
@@ -120,7 +154,7 @@ export default function AppLayout() {
                                     )}
                                 >
                                     <item.icon className="w-5 h-5 flex-shrink-0 transition-colors group-hover:text-white" />
-                                    {isSidebarOpen && <span className="font-bold text-xs uppercase tracking-widest">{item.title}</span>}
+                                    {isSidebarOpen && <span className="font-bold text-sm uppercase tracking-widest">{item.title}</span>}
                                 </NavLink>
                             ))}
                         </div>
@@ -141,7 +175,7 @@ export default function AppLayout() {
                                     )}
                                 >
                                     <item.icon className="w-5 h-5 flex-shrink-0 transition-colors group-hover:text-emerald-400" />
-                                    {isSidebarOpen && <span className="font-bold text-xs uppercase tracking-widest">{item.title}</span>}
+                                    {isSidebarOpen && <span className="font-bold text-sm uppercase tracking-widest">{item.title}</span>}
                                 </NavLink>
                             ))}
                         </div>
@@ -162,22 +196,12 @@ export default function AppLayout() {
                                     )}
                                 >
                                     <item.icon className="w-5 h-5 flex-shrink-0" />
-                                    {isSidebarOpen && <span className="font-bold text-xs uppercase tracking-widest">{item.title}</span>}
+                                    {isSidebarOpen && <span className="font-bold text-sm uppercase tracking-widest">{item.title}</span>}
                                 </NavLink>
                             ))}
                         </div>
                     </div>
                 </nav>
-
-                <div className="p-6 border-t border-white/[0.04]">
-                    <button
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                        className="w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-slate-500 hover:text-white hover:bg-white/[0.03] transition-all group"
-                    >
-                        {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5 mx-auto" />}
-                        {isSidebarOpen && <span className="text-[10px] font-black uppercase tracking-widest">Collapse</span>}
-                    </button>
-                </div>
             </aside>
 
             {/* Main Content */}
@@ -193,15 +217,15 @@ export default function AppLayout() {
                             <input
                                 type="text"
                                 placeholder="Guten Morgen, Sandra. What's happening in Vienna?"
-                                className="w-full bg-white/[0.03] border border-white/[0.06] rounded-2xl py-3 pl-12 pr-6 text-xs font-medium focus:outline-none focus:border-cosmos-500/40 focus:bg-white/[0.05] transition-all tracking-tight"
+                                className="w-full bg-white/[0.03] border border-white/[0.06] rounded-2xl py-3 pl-12 pr-6 text-sm font-medium focus:outline-none focus:border-cosmos-500/40 focus:bg-white/[0.05] transition-all tracking-tight"
                             />
                         </div>
                     </div>
 
                     <div className="flex items-center gap-6">
                         <div className="flex items-center gap-4 px-4 py-2 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
-                            <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-glow shadow-emerald-500/50 animate-pulse"></div>
-                            <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Alsergrund Grid ACTIVE</span>
+                            <div className={`w-2 h-2 rounded-full shadow-glow animate-pulse ${backendOk === null ? 'bg-slate-500' : backendOk ? 'bg-emerald-500 shadow-emerald-500/50' : 'bg-red-500 shadow-red-500/50'}`} data-testid="backend-dot"></div>
+                            <span className={`text-[9px] font-black uppercase tracking-widest ${backendOk === null ? 'text-slate-500' : backendOk ? 'text-emerald-500' : 'text-red-400'}`}>{backendOk === null ? 'Connecting...' : backendOk ? 'Connected' : 'Offline'}</span>
                         </div>
                         
                         <button className="p-3 rounded-2xl hover:bg-white/[0.05] text-slate-400 hover:text-white transition-all relative group" aria-label="Notifications">

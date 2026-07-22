@@ -1,33 +1,75 @@
-﻿set windows-shell := ["pwsh.exe", "-NoLogo", "-Command"]
+set windows-shell := ["pwsh.exe", "-NoLogo", "-Command"]
+import 'scripts/just/fleet.just'
 
-# ── Dashboard ─────────────────────────────────────────────────────────────────
-
-# Open the interactive recipe dashboard in the browser
+# Open the interactive recipe dashboard
 default:
     @just --list
 
-# ── Quality ───────────────────────────────────────────────────────────────────
+# Serve the backend
+serve:
+    Set-Location '{{justfile_directory()}}\web_sota'
+    uv run python -m vienna_life_assistant.server
 
-# Execute Ruff SOTA v13.1 linting
+# Serve the frontend
+serve-frontend:
+    Set-Location '{{justfile_directory()}}\web_sota'
+    npm run dev
+
+# Start full stack
+up:
+    Set-Location '{{justfile_directory()}}\web_sota'
+    .\start.ps1
+
+# Run linting
 lint:
-    Set-Location '{{justfile_directory()}}'
+    Set-Location '{{justfile_directory()}}\web_sota'
     uv run ruff check .
 
-# Execute Ruff SOTA v13.1 fix and formatting
+# Run fix and formatting
 fix:
-    Set-Location '{{justfile_directory()}}'
+    Set-Location '{{justfile_directory()}}\web_sota'
     uv run ruff check . --fix --unsafe-fixes
     uv run ruff format .
 
-# ── Hardening ─────────────────────────────────────────────────────────────────
+# Run tests
+test:
+    Set-Location '{{justfile_directory()}}\web_sota'
+    uv run pytest . -v
 
-# Execute Bandit security audit
+# TypeScript typecheck
+types:
+    Set-Location '{{justfile_directory()}}\web_sota'
+    npx tsc --noEmit
+
+# Run E2E tests
+e2e:
+    Set-Location '{{justfile_directory()}}\web_sota'
+    npx playwright test
+
+# Run all gates
+gates-green: lint types
+    Set-Location '{{justfile_directory()}}\web_sota'
+    uv run pytest . -q
+
+# Build Tauri/NSIS installer
+build-native:
+    Set-Location '{{justfile_directory()}}\native'
+    .\build.ps1
+
+# Run CUA-NSIS smoke test
+cua-nsis-test:
+    uv run python scripts/cua-smoke.py
+
+# Build MCPB bundle
+mcpb-pack:
+    uv run mcpb pack . dist/vienna-life-assistant-v0.1.0.mcpb
+
+# Security audit
 check-sec:
-    Set-Location '{{justfile_directory()}}'
-    uv run bandit -r src/
+    Set-Location '{{justfile_directory()}}\web_sota'
+    uv run bandit -r vienna_life_assistant/
 
-# Execute safety audit of dependencies
+# Audit dependencies
 audit-deps:
-    Set-Location '{{justfile_directory()}}'
+    Set-Location '{{justfile_directory()}}\web_sota'
     uv run safety check
-

@@ -7,7 +7,13 @@ from typing import Literal
 from fastapi import APIRouter, Query
 from fastapi.responses import Response
 
-from vienna_life_assistant.activity_log import clear_logs, export_logs, log_activity, log_stats, query_logs
+from vienna_life_assistant.activity_log import (
+    clear_logs,
+    export_logs,
+    log_activity,
+    log_stats,
+    query_logs,
+)
 
 SortOrder = Literal["asc", "desc"]
 

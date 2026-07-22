@@ -8,10 +8,34 @@ from typing import Any
 
 def calendar_today() -> list[dict[str, str]]:
     return [
-        {"id": "1", "time": "09:00", "title": "Benny vet check", "location": "Alsergrund", "category": "pet"},
-        {"id": "2", "time": "11:30", "title": "Spar shopping run", "location": "Währinger Straße", "category": "errands"},
-        {"id": "3", "time": "14:30", "title": "Musikverein — Vivaldi", "location": "Musikverein", "category": "culture"},
-        {"id": "4", "time": "18:00", "title": "Coffee with Ingrid", "location": "Café Berg", "category": "social"},
+        {
+            "id": "1",
+            "time": "09:00",
+            "title": "Benny vet check",
+            "location": "Alsergrund",
+            "category": "pet",
+        },
+        {
+            "id": "2",
+            "time": "11:30",
+            "title": "Spar shopping run",
+            "location": "Währinger Straße",
+            "category": "errands",
+        },
+        {
+            "id": "3",
+            "time": "14:30",
+            "title": "Musikverein — Vivaldi",
+            "location": "Musikverein",
+            "category": "culture",
+        },
+        {
+            "id": "4",
+            "time": "18:00",
+            "title": "Coffee with Ingrid",
+            "location": "Café Berg",
+            "category": "social",
+        },
     ]
 
 
@@ -69,14 +93,70 @@ def expense_summary(period: str = "month") -> dict[str, Any]:
 
 def expense_recent(limit: int = 20) -> list[dict[str, Any]]:
     rows = [
-        {"id": "e1", "date": "2026-06-04", "store": "Billa", "amount_eur": 42.5, "category": "Groceries", "note": "Weekly staples"},
-        {"id": "e2", "date": "2026-06-04", "store": "Restaurant Orlik", "amount_eur": 68.5, "category": "Dining", "note": "Alsergrund dinner"},
-        {"id": "e3", "date": "2026-06-03", "store": "Spar", "amount_eur": 31.2, "category": "Groceries", "note": "Jacobs Krönung"},
-        {"id": "e4", "date": "2026-06-03", "store": "Wiener Linien", "amount_eur": 2.4, "category": "Transit", "note": "Single ticket"},
-        {"id": "e5", "date": "2026-06-02", "store": "Musikverein", "amount_eur": 45.0, "category": "Culture", "note": "Vivaldi tickets"},
-        {"id": "e6", "date": "2026-06-01", "store": "Tierarzt Alsergrund", "amount_eur": 89.0, "category": "Pet (Benny)", "note": "Check-up"},
-        {"id": "e7", "date": "2026-05-31", "store": "A1", "amount_eur": 29.9, "category": "Home", "note": "Mobile"},
-        {"id": "e8", "date": "2026-05-30", "store": "Café Berg", "amount_eur": 12.5, "category": "Dining", "note": "Melange + Buchteln"},
+        {
+            "id": "e1",
+            "date": "2026-06-04",
+            "store": "Billa",
+            "amount_eur": 42.5,
+            "category": "Groceries",
+            "note": "Weekly staples",
+        },
+        {
+            "id": "e2",
+            "date": "2026-06-04",
+            "store": "Restaurant Orlik",
+            "amount_eur": 68.5,
+            "category": "Dining",
+            "note": "Alsergrund dinner",
+        },
+        {
+            "id": "e3",
+            "date": "2026-06-03",
+            "store": "Spar",
+            "amount_eur": 31.2,
+            "category": "Groceries",
+            "note": "Jacobs Krönung",
+        },
+        {
+            "id": "e4",
+            "date": "2026-06-03",
+            "store": "Wiener Linien",
+            "amount_eur": 2.4,
+            "category": "Transit",
+            "note": "Single ticket",
+        },
+        {
+            "id": "e5",
+            "date": "2026-06-02",
+            "store": "Musikverein",
+            "amount_eur": 45.0,
+            "category": "Culture",
+            "note": "Vivaldi tickets",
+        },
+        {
+            "id": "e6",
+            "date": "2026-06-01",
+            "store": "Tierarzt Alsergrund",
+            "amount_eur": 89.0,
+            "category": "Pet (Benny)",
+            "note": "Check-up",
+        },
+        {
+            "id": "e7",
+            "date": "2026-05-31",
+            "store": "A1",
+            "amount_eur": 29.9,
+            "category": "Home",
+            "note": "Mobile",
+        },
+        {
+            "id": "e8",
+            "date": "2026-05-30",
+            "store": "Café Berg",
+            "amount_eur": 12.5,
+            "category": "Dining",
+            "note": "Melange + Buchteln",
+        },
     ]
     return rows[:limit]
 

@@ -78,7 +78,7 @@ export default function Travel() {
                                         {trip.status}
                                     </span>
                                 </div>
-                                <p className="text-xs text-slate-400 mt-4 flex items-center gap-2">
+                                <p className="text-sm text-slate-400 mt-4 flex items-center gap-2">
                                     <MapPin className="w-3.5 h-3.5" />
                                     {trip.carrier}: {trip.from} → {trip.to}
                                 </p>

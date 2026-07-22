@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { API_BASE } from '../lib/api';
 import { ScrollText, RefreshCw, Download, Trash2 } from 'lucide-react';
 
 type LogEntry = {
@@ -27,7 +28,7 @@ export default function Logs() {
             const params = new URLSearchParams({ limit: '100', sort: 'desc' });
             if (level) params.set('level', level);
             if (search.trim()) params.set('search', search.trim());
-            const r = await fetch(`/api/logs?${params}`);
+            const r = await fetch(API_BASE + `/api/logs?${params}`);
             setData((await r.json()) as LogResponse);
         } catch (e) {
             setData({ entries: [{ id: '0', timestamp: new Date().toISOString(), level: 'ERROR', kind: 'client', detail: String(e) }], total: 1, max_entries: 2000 });
@@ -39,7 +40,7 @@ export default function Logs() {
     useEffect(() => { void refresh(); }, [refresh]);
 
     const exportLogs = async () => {
-        const r = await fetch('/api/logs/export?format=json');
+        const r = await fetch(API_BASE + '/api/logs/export?format=json');
         const blob = await r.blob();
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -50,7 +51,7 @@ export default function Logs() {
     };
 
     const clearLogs = async () => {
-        await fetch('/api/logs', { method: 'DELETE' });
+        await fetch(API_BASE + '/api/logs', { method: 'DELETE' });
         await refresh();
     };
 
@@ -93,10 +94,10 @@ export default function Logs() {
             </div>
 
             {data && (
-                <p className="text-xs text-slate-500">{data.total} entries (max {data.max_entries})</p>
+                <p className="text-sm text-slate-500">{data.total} entries (max {data.max_entries})</p>
             )}
 
-            <div className="glass-card p-6 font-mono text-xs space-y-2 max-h-[60vh] overflow-y-auto">
+            <div className="glass-card p-6 font-mono text-sm space-y-2 max-h-[60vh] overflow-y-auto">
                 {loading ? (
                     <div className="text-slate-500">Loading…</div>
                 ) : (

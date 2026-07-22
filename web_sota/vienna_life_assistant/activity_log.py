@@ -18,7 +18,9 @@ SortOrder = Literal["asc", "desc"]
 _LEVEL_RANK = {"DEBUG": 10, "INFO": 20, "WARNING": 30, "ERROR": 40, "CRITICAL": 50}
 
 _DEFAULT_MAX = 2000
-_max_entries = max(100, min(int(os.environ.get("VILIFE_LOG_MAX_ENTRIES", str(_DEFAULT_MAX))), 50_000))
+_max_entries = max(
+    100, min(int(os.environ.get("VILIFE_LOG_MAX_ENTRIES", str(_DEFAULT_MAX))), 50_000)
+)
 _lock = Lock()
 _entries: deque[dict[str, Any]] = deque(maxlen=_max_entries)
 
@@ -120,12 +122,16 @@ def export_logs(
     search: str | None = None,
     sort: SortOrder = "desc",
 ) -> tuple[str, str, str]:
-    payload = query_logs(limit=_max_entries, offset=0, level=level, kind=kind, search=search, sort=sort)
+    payload = query_logs(
+        limit=_max_entries, offset=0, level=level, kind=kind, search=search, sort=sort
+    )
     entries = payload["entries"]
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     if format == "csv":
         buffer = io.StringIO()
-        writer = csv.DictWriter(buffer, fieldnames=["id", "timestamp", "level", "kind", "detail", "meta"])
+        writer = csv.DictWriter(
+            buffer, fieldnames=["id", "timestamp", "level", "kind", "detail", "meta"]
+        )
         writer.writeheader()
         for row in entries:
             writer.writerow(
@@ -139,7 +145,9 @@ def export_logs(
                 }
             )
         return buffer.getvalue(), "text/csv", f"vilife-logs-{stamp}.csv"
-    body = json.dumps({"exported_at": datetime.now(UTC).isoformat(), "entries": entries}, indent=2)
+    body = json.dumps(
+        {"exported_at": datetime.now(UTC).isoformat(), "entries": entries}, indent=2
+    )
     return body, "application/json", f"vilife-logs-{stamp}.json"
 
 

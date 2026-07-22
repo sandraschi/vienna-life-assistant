@@ -1,3 +1,4 @@
+export const API_BASE = "http://127.0.0.1:10922";
 /** Relative API base — Vite proxies /api → backend (10922). */
 export async function apiGet<T = unknown>(path: string): Promise<T> {
     const res = await fetch(path.startsWith('/') ? path : `/${path}`);
@@ -13,6 +14,7 @@ export const API = {
     fleetOverview: (probe = 0) => `/api/fleet/overview?probe=${probe}`,
     dashboard: '/api/dashboard',
     llmStatus: '/api/llm/status',
+    llmProviders: '/api/llm/providers',
     llmModels: (opts: {
         provider?: string;
         base_url?: string;

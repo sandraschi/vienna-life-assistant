@@ -5,6 +5,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Security
+- **CORS**: Replaced wildcard `["*"]` with fleet-standard origins (Tauri `tauri://localhost`, Tailscale regex, LAN IPs, localhost).
+- **`.env` leak**: Created `.env.example` as sanitized template. Tauri build.ps1 now bundles `.env.example` instead of `.env` (which contained real `PLEX_TOKEN` and DB credentials).
+- **`.gitignore`**: `.env` in gitignore confirmed — but file was committed before the rule. Run `git rm --cached .env` to untrack.
+
+### Added
+- `llms.txt`, `llms-full.txt`, `glama.json` — fleet-standard LLM discovery and registry files.
+- `useZoom()` hook (`src/lib/use-zoom.ts`) — Ctrl+Scroll zoom with localStorage persistence and CSS fallback for dev browser.
+- `data-testid` attributes on Dashboard container and backend connection dot.
+- `run_server.py` — dual-transport entry point for PyInstaller (detects `MCP_PORT` for HTTP, falls back to stdio).
+- `vienna-life-assistant-backend.spec` — PyInstaller spec with proper `pathex`, dist-info preserve list, SKIP list.
+- `GET /api/v1/diagnostics` — diagnostics endpoint for CUA-NSIS smoke test certification.
+- Backend-status Tauri event listener + HTTP polling fallback in AppLayout.
+- `pyproject.toml` at repo root.
+- `color-scheme: dark` in CSS.
+- **FastMCP 3.4.4**: Bumped from `>=0.4.1` to `>=3.4.2,<4`. Prefab UI (`prefab-ui>=0.14.0`) in core deps. Ruff in dev-deps.
+- **Tool annotations**: `READ_ONLY` annotations on all 3 tools per fleet standard.
+- **Tool docstrings**: Added `## Return Format` and `## Examples` sections to all tools.
+- **Shutdown endpoint**: `POST /api/shutdown` for graceful agent-callable server termination.
+- **justfile**: Added `serve`, `serve-frontend`, `up`, `test`, `types`, `e2e`, `gates-green`, `build-native`, `cua-nsis-test`, `mcpb-pack` recipes.
+- **`reports/`**: Added to `.gitignore` for audit trail storage.
+
+### Changed
+- **Tauri `frontendDist`**: Pointed to `../web_sota/dist` (was `../webapp/dist` — wrong dir).
+- **`backend.rs` port**: Changed from hardcoded `10700` → `10922` to match registry. Upgraded `free_port()` to full 240s multi-layer kill + escalation + TCP health polling.
+- **CUA smoke config**: Fixed backend port from `10700` to `10922`.
+- **logging**: Replaced `print()` calls in `server.py` with `logger.info/warning/error`.
+- **TypeScript**: Removed `console.error` from Dashboard.tsx (silent catch).
+- **Python imports**: Fixed E402 (imports at top of file) and replaced `Dict`/`List` with `dict`/`list`.
+- **Dashboard**: Removed hardcoded KPI stats, fake activity feed, fake ecosystem grid, Benny dog monitor.
+
+### Added
+- **Playwright headless Chromium scrapers**: `vienna_scraper.py` with real data from Burgtheater (httpx), Wiener Staatsoper (Playwright), Belvedere exhibitions (httpx), Gasthaus Orlik lunch menu (httpx). Cache TTL: 30min performances, 2h exhibitions, 1h menus.
+- **Live performances**: `GET /api/vienna/music` returns Burgtheater (37) + Staatsoper (14) real performances.
+- **Live exhibitions**: `GET /api/vienna/museums` returns Belvedere (8) real exhibitions.
+- **Lunch menus**: `GET /api/vienna/restaurants` returns restaurant list + Orlik daily lunch menu.
+- **New restaurants**: Steirereck, Enopizzeria Toledo, Mast Weinbar added to reference list.
+- **Dashboard hero**: Time-aware greeting with real metrics (concerts, coffee houses, museums).
+- **Dashboard Quick Actions**: Working nav buttons to Expenses, Calendar, Shopping, Chat, Fleet.
+- **Playwright dep**: `playwright>=1.50.0`, `beautifulsoup4>=4.12.0`, `lxml>=5.0.0`.
+
+### Fixed
+- **Error handling**: Added `logger.exception()` to all bare `except` blocks in `capabilities.py`.
+- **Sidebar toggle**: Moved collapse button from bottom to top (after logo/header) — fixes fleet-wide UX defect.
+- **TypeScript lint**: Removed 11 unused imports across 6 files. Added `@tauri-apps/api` dependency.
+- **Python lint**: Removed 7 unused imports in `server.py`.
+
 ## [0.2.0] - 2026-06-05
 
 ### Added

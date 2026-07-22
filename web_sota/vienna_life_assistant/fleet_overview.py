@@ -2,6 +2,7 @@
 Fleet meta-dashboard data layer.
 Reads mcp-central-docs registries and optionally probes /health on local ports.
 """
+
 from __future__ import annotations
 
 import json
@@ -14,7 +15,13 @@ from urllib.request import Request, urlopen
 DEFAULT_OPS_ROOT = Path(r"D:\Dev\repos\mcp-central-docs\operations")
 
 CARRIER_IDS = frozenset(
-    {"vienna-life-assistant", "robofang", "meta_mcp", "advanced-memory-mcp", "fleet-agent-mcp"}
+    {
+        "vienna-life-assistant",
+        "robofang",
+        "meta_mcp",
+        "advanced-memory-mcp",
+        "fleet-agent-mcp",
+    }
 )
 
 FRIGATE_IDS = frozenset(
@@ -100,7 +107,10 @@ def build_fleet_overview(*, probe: bool = False) -> dict[str, Any]:
 
     if not fleet_data or "fleet" not in fleet_data:
         return {
-            "summary": {"total": 0, "error": f"fleet-registry.json not found under {ops}"},
+            "summary": {
+                "total": 0,
+                "error": f"fleet-registry.json not found under {ops}",
+            },
             "ships": [],
             "ops_root": str(ops),
         }
@@ -147,7 +157,14 @@ def build_fleet_overview(*, probe: bool = False) -> dict[str, Any]:
         )
 
     def _sort_key(s: dict[str, Any]) -> tuple[int, str]:
-        order = {"carrier": 0, "frigate": 1, "destroyer": 2, "submarine": 3, "minesweeper": 4, "tender": 5}
+        order = {
+            "carrier": 0,
+            "frigate": 1,
+            "destroyer": 2,
+            "submarine": 3,
+            "minesweeper": 4,
+            "tender": 5,
+        }
         return order.get(s["ship_class"], 9), s["name"].lower()
 
     ships.sort(key=_sort_key)

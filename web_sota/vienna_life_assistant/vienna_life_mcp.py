@@ -1,7 +1,7 @@
 """vienna_life portmanteau — P3 life admin MCP surface (FastMCP 3.2+ SOTA)."""
 
 from __future__ import annotations
-
+import logging
 from datetime import date
 from pathlib import Path
 from typing import Any, Literal
@@ -11,6 +11,12 @@ from fastmcp.prompts import Message
 
 from vienna_life_assistant.life_data import calendar_today as _calendar_today_data
 from vienna_life_assistant.life_data import expense_summary as _expense_summary_data
+
+logger = logging.getLogger("vienna-life-assistant.mcp")
+
+_READ_ONLY = {"readonly": True}
+_MUTATING = {}  # Future: create/update tools
+_DESTRUCTIVE = {}  # Future: delete tools
 
 mcp = FastMCP(
     "vienna-life-mcp",
@@ -26,10 +32,26 @@ def _mock_calendar_today() -> list[dict[str, str]]:
     return _calendar_today_data()
 
 
+def _error_response(error: str, error_type: str = "general", **kwargs) -> dict:
+    """Auto-logging error response — traceback logged before returning."""
+    logger.exception("Tool error: %s [%s]", error, error_type)
+    return {"success": False, "error": error, "error_type": error_type, **kwargs}
+
+
 def _mock_todos() -> list[dict[str, str]]:
     return [
-        {"id": "1", "title": "Review fleet-registry merge", "priority": "high", "status": "open"},
-        {"id": "2", "title": "Spar shopping run", "priority": "normal", "status": "open"},
+        {
+            "id": "1",
+            "title": "Review fleet-registry merge",
+            "priority": "high",
+            "status": "open",
+        },
+        {
+            "id": "2",
+            "title": "Spar shopping run",
+            "priority": "normal",
+            "status": "open",
+        },
     ]
 
 
@@ -128,24 +150,37 @@ def kultur_abend() -> list[Message]:
     ]
 
 
-@mcp.tool()
+@mcp.tool(annotations=_READ_ONLY)
 async def vienna_tips(category: str) -> str:
-    """Vienna culture tips for coffee, music, or museums (not vla-robotics)."""
+    """Vienna culture tips for coffee, music, or museums (not vla-robotics).
+
+    ## Return Format
+    A plain-text tip string describing the recommended experience.
+
+    ## Examples
+    await vienna_tips(category="coffee")
+    await vienna_tips(category="music")
+    """
     key = category.lower()
     if key == "coffee":
         return "Try the Hausbrand at Café Berg for a perfect start in Alsergrund."
     if key == "music":
-        return (
-            "Check Stehplatz tickets at the Staatsoper ~80 minutes before show — often €10–15."
-        )
+        return "Check Stehplatz tickets at the Staatsoper ~80 minutes before show — often €10–15."
     if key in ("museum", "museums"):
         return "Leopold Museum MQ: Schiele & Klimt — pair with a Café Berg stop after."
     return f"Enjoy the Viennese vibe in the {category} scene!"
 
 
-@mcp.tool()
+@mcp.tool(annotations=_READ_ONLY)
 async def vienna_life_agentic(goal: str, ctx: Context) -> dict[str, Any]:
-    """Plan a multi-step Vienna life workflow using MCP sampling (SEP-1577)."""
+    """Plan a multi-step Vienna life workflow using MCP sampling (SEP-1577).
+
+    ## Return Format
+    {"success": bool, "plan": str, "goal": str}
+
+    ## Examples
+    await vienna_life_agentic(goal="Plan my Saturday in Alsergrund")
+    """
     result = await ctx.sample(
         messages=(
             "You are ViLife (Vienna Life Assistant). Given the user's goal, output a compact plan:\n"
@@ -161,7 +196,7 @@ async def vienna_life_agentic(goal: str, ctx: Context) -> dict[str, Any]:
     return {"success": True, "plan": text.strip(), "goal": goal}
 
 
-@mcp.tool()
+@mcp.tool(annotations=_READ_ONLY)
 async def vienna_life(
     operation: Literal[
         "calendar_today",
@@ -176,6 +211,14 @@ async def vienna_life(
 ) -> dict[str, Any]:
     """
     Vienna life admin portmanteau (P3).
+
+    ## Return Format
+    {"success": bool, "message": str, **operation_specific_keys}
+
+    ## Examples
+    await vienna_life(operation="health")
+    await vienna_life(operation="calendar_today")
+    await vienna_life(operation="life_brief")
 
     Read-only Phase 1. Wire to main backend SQLAlchemy services in Phase 2.
     """
@@ -204,16 +247,28 @@ async def vienna_life(
         }
 
     if operation == "health":
-        return {"success": True, "message": "vienna-life-mcp healthy", "date": str(date.today())}
+        return {
+            "success": True,
+            "message": "vienna-life-mcp healthy",
+            "date": str(date.today()),
+        }
 
     if operation == "calendar_today":
         events = _mock_calendar_today()
-        return {"success": True, "message": f"{len(events)} events today", "events": events}
+        return {
+            "success": True,
+            "message": f"{len(events)} events today",
+            "events": events,
+        }
 
     if operation == "todo_list":
         todos = _mock_todos()
         open_todos = [t for t in todos if t.get("status") == "open"]
-        return {"success": True, "message": f"{len(open_todos)} open todos", "todos": open_todos}
+        return {
+            "success": True,
+            "message": f"{len(open_todos)} open todos",
+            "todos": open_todos,
+        }
 
     if operation == "expense_summary":
         summary = _expense_summary_data()
@@ -263,14 +318,15 @@ def _add_skills_provider() -> None:
     try:
         from fastmcp.server.providers.skills import SkillsDirectoryProvider
     except ImportError:
+        logger.warning("SkillsDirectoryProvider not available", exc_info=True)
         return
     roots = Path(__file__).resolve().parent / "skills"
     if not roots.is_dir():
         return
     try:
         mcp.add_provider(SkillsDirectoryProvider(roots=roots))
-    except (OSError, UnicodeError, ValueError):
-        pass
+    except (OSError, UnicodeError, ValueError) as e:
+        logger.warning("Failed to add SkillsDirectoryProvider: %s", e, exc_info=True)
 
 
 _add_skills_provider()

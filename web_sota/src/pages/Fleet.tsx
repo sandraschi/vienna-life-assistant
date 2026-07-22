@@ -106,7 +106,7 @@ export default function Fleet() {
                     <button
                         type="button"
                         onClick={() => load(probe)}
-                        className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white/[0.05] border border-white/[0.08] text-xs font-black uppercase tracking-widest hover:bg-white/[0.1] transition-all"
+                        className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white/[0.05] border border-white/[0.08] text-sm font-black uppercase tracking-widest hover:bg-white/[0.1] transition-all"
                     >
                         <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                         Refresh

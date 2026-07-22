@@ -1,0 +1,33 @@
+{
+  "name": "Vienna Life Assistant",
+  "description": "Personal life management with FastMCP — calendar, todos, expenses, shopping, travel, and Vienna cultural guides. Portmanteau tools with 8 operations, 6 prompts, 6 skills, and local LLM auto-discovery.",
+  "repository": "https://github.com/sandraschi/vienna-life-assistant",
+  "server": {
+    "runtime": "python",
+    "transport": "http",
+    "url": "http://127.0.0.1:10922/mcp",
+    "command": "uv run uvicorn vienna_life_assistant.server:app --host 127.0.0.1 --port 10922"
+  },
+  "tools": [
+    {
+      "name": "vienna_life",
+      "description": "Portmanteau: calendar_today, todo_list, expense_summary, shopping_list, life_brief, fleet_overview, health, help"
+    },
+    {
+      "name": "vienna_life_agentic",
+      "description": "Multi-step life planning via MCP sampling"
+    },
+    {
+      "name": "vienna_tips",
+      "description": "Vienna culture tips (coffee, music, museum)"
+    }
+  ],
+  "features": [
+    "sampling",
+    "prompts",
+    "resources",
+    "skills-provider"
+  ],
+  "categories": ["productivity", "personal-assistant", "life-management"],
+  "version": "3.0.0-beta"
+}

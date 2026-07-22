@@ -45,7 +45,7 @@ Vienna Life Assistant was a Docker monolith (7333–7336) that agents could not 
 | MCP-1 | FastMCP mounted at `/mcp` on port 10922 | Done |
 | MCP-2 | Capabilities reflect live tools/prompts/resources/skills | Done |
 | MCP-3 | `vienna_life_agentic` sampling workflow | Done |
-| MCP-4 | Read tools backed by real VLA services | Phase 2 |
+| MCP-4 | Read tools backed by real VLA services | Scrapers live (Burgtheater, Staatsoper, Belvedere, Orlik) |
 
 ### UI
 

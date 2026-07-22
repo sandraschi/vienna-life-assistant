@@ -30,10 +30,19 @@ type LlmSettings = {
 
 type LlmStatus = { ok: boolean; provider: string; model: string | null; local_llm?: boolean; cloud_llm?: boolean };
 
+interface ProviderInfo {
+    id: string;
+    label: string;
+    base_url: string;
+    models: string[];
+    needs_key: boolean;
+}
+
 export default function Settings() {
     const [caps, setCaps] = useState<Capabilities | null>(null);
     const [llm, setLlm] = useState<LlmConfig | null>(null);
     const [status, setStatus] = useState<LlmStatus | null>(null);
+    const [providers, setProviders] = useState<ProviderInfo[]>([]);
     const [models, setModels] = useState<string[]>([]);
     const [saving, setSaving] = useState(false);
     const [loadingModels, setLoadingModels] = useState(false);
@@ -77,12 +86,20 @@ export default function Settings() {
                 openai_api_key: local.openai_api_key || '',
             });
         });
+        apiGet<{ providers: ProviderInfo[] }>(API.llmProviders)
+            .then((d) => setProviders(d.providers))
+            .catch(() => setProviders([]));
         apiGet<LlmStatus>(API.llmStatus).then(setStatus);
     }, []);
 
     useEffect(() => {
         if (!llm) return;
-        refreshModels(llm);
+        const disc = providers.find((p) => p.id === llm.provider);
+        if (disc && disc.models.length > 0 && llm.provider !== 'openai') {
+            setModels(disc.models);
+        } else {
+            refreshModels(llm);
+        }
     }, [llm?.provider, llm?.ollama_url, llm?.lmstudio_url, llm?.openai_base_url, refreshModels]);
 
     const saveLlm = async () => {
@@ -132,7 +149,7 @@ export default function Settings() {
                             <Cpu className="w-6 h-6 text-cosmos-400" />
                             <div>
                                 <p className="font-black text-white uppercase tracking-widest text-sm">LLM provider</p>
-                                <p className="text-xs text-slate-500">{statusHint()}</p>
+                                <p className="text-sm text-slate-500">{statusHint()}</p>
                             </div>
                         </div>
 
@@ -140,10 +157,26 @@ export default function Settings() {
                         <select
                             className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white"
                             value={llm.provider}
-                            onChange={(e) => setLlm({ ...llm, provider: e.target.value as LlmProvider })}
+                            onChange={(e) => {
+                                const p = providers.find((x) => x.id === e.target.value);
+                                if (p) {
+                                    const url = p.base_url;
+                                    setLlm({
+                                        ...llm,
+                                        provider: e.target.value as LlmProvider,
+                                        ollama_url: p.id === 'ollama' ? url.replace('/v1', '') : llm.ollama_url,
+                                        lmstudio_url: p.id === 'lmstudio' ? url : llm.lmstudio_url,
+                                    });
+                                } else {
+                                    setLlm({ ...llm, provider: e.target.value as LlmProvider });
+                                }
+                            }}
                         >
-                            <option value="ollama">Ollama</option>
-                            <option value="lmstudio">LM Studio</option>
+                            {providers.map((p) => (
+                                <option key={p.id} value={p.id}>
+                                    {p.label} {p.models.length === 0 ? '(offline)' : ''}
+                                </option>
+                            ))}
                             <option value="openai">OpenAI</option>
                         </select>
 
@@ -215,7 +248,7 @@ export default function Settings() {
                             type="button"
                             onClick={saveLlm}
                             disabled={saving}
-                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest"
+                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-sm font-black uppercase tracking-widest"
                         >
                             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                             Save · {activeModel(llm) || 'auto'}
@@ -227,10 +260,10 @@ export default function Settings() {
                             <SettingsIcon className="w-6 h-6 text-cosmos-400" />
                             <div>
                                 <p className="font-black text-white uppercase tracking-widest text-sm">{caps.server.name}</p>
-                                <p className="text-xs text-slate-500">v{caps.server.version} · {caps.server.fastmcp ?? 'FastMCP'}</p>
+                                <p className="text-sm text-slate-500">v{caps.server.version} · {caps.server.fastmcp ?? 'FastMCP'}</p>
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4 text-xs">
+                        <div className="grid grid-cols-2 gap-4 text-sm">
                             {Object.entries(caps.features).map(([k, v]) => (
                                 <div key={k} className="flex justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
                                     <span className="text-slate-500 uppercase tracking-widest">{k.replace(/_/g, ' ')}</span>

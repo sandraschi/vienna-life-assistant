@@ -1,0 +1,98 @@
+# Vienna Life Assistant — Full Reference
+
+## Overview
+ViLife is a personal life management webapp and MCP server for Vienna-based life admin. Provides AI chat, calendar, todos, expense tracking, shopping, travel planning, Vienna cultural guides, and live scraped event data.
+
+## Architecture
+- **Backend**: Python 3.13+, FastAPI, FastMCP 3.4.4, uvicorn
+- **Frontend**: React 19, Vite 7, TailwindCSS 3, Radix UI, Lucide icons
+- **Desktop**: Tauri 2.0 + NSIS installer
+- **Scraping**: Playwright headless Chromium (JS SPA), httpx + BeautifulSoup (server-rendered HTML)
+- **Build**: uv, just
+
+## Ports
+| Service | Port |
+|---------|------|
+| Backend + MCP HTTP | 10922 |
+| Frontend (Vite dev) | 10988 |
+
+## MCP Tools
+
+### `vienna_life(operation)`
+Portmanteau with 8 operations:
+- `calendar_today` — today's calendar events
+- `todo_list` — pending tasks
+- `expense_summary` — month expenses
+- `shopping_list` — active shopping list
+- `life_brief` — full daily brief
+- `fleet_overview` — fleet health
+- `health` — server status
+- `help` — operation listing
+
+### `vienna_life_agentic(goal)`
+Multi-step life planning via FastMCP sampling.
+
+### `vienna_tips(category)`
+Vienna culture tips (coffee, music, museum).
+
+## REST API
+### System
+- `GET /health` — server health
+- `GET /api/capabilities` — tools, prompts, resources, skills
+- `GET /api/v1/diagnostics` — tool list, system info (CUA-NSIS)
+- `POST /api/shutdown` — graceful server termination
+
+### Content
+- `GET /api/skills` — list Vienna skills (6)
+- `GET /api/skills/{name}` — skill markdown content
+- `GET /api/fleet/overview` — fleet status from mcp-central-docs registry
+
+### Vienna Cultural Data (live scraped)
+- `GET /api/vienna/music` — Burgtheater (37) + Staatsoper (14) performances, auto-refreshed 30min
+- `GET /api/vienna/museums` — Belvedere current exhibitions (8), auto-refreshed 2h
+- `GET /api/vienna/coffee` — reference coffee house guide (static)
+- `GET /api/vienna/restaurants` — restaurant list + Gasthaus Orlik daily lunch menu (1h refresh)
+- `GET /api/vienna/transport` — reference transit data (mock, see mywienerlinien for live)
+- `GET /api/vienna/shopping/offers` — Spar/Billa offers (mock, see scrapers)
+
+### LLM
+- `GET /api/llm/providers` — detected LLM providers
+- `GET /api/llm/status` — current provider health
+- `POST /api/llm/chat` — LLM chat with Vienna system preprompt
+- `POST /api/settings/llm` — save provider settings for session
+
+### Life Data
+- `GET /api/life/calendar/today` — today's events
+- `GET /api/life/expenses/summary` — expense summary
+- `GET /api/life/brief` — morning life brief
+
+## Scraper Sources
+| Source | Method | Cache | Data |
+|--------|--------|-------|------|
+| burgtheater.at/spielplan | httpx + BeautifulSoup | 30 min | 37 plays with dates |
+| wiener-staatsoper.at/kalender | Playwright Chromium (JS SPA) | 30 min | 14 operas/concerts |
+| belvedere.at/en/exhibitions | httpx + BeautifulSoup | 2 hours | 8 exhibitions |
+| gasthaus-orlik.at/mittagmenues.html | httpx + BeautifulSoup | 1 hour | Daily lunch menu |
+
+## Skills (6)
+- `vienna-life`, `vienna-alsergrund`, `vienna-transit`, `vienna-kaffeehaus`, `vienna-kultur`, `vienna-shopping`
+
+## Prompts (6)
+- `life_brief_request`, `vienna_day_plan`, `alsergrund_morning`, `spar_shopping_run`, `wien_transit_check`, `kultur_abend`
+
+## Resources (2)
+- `resource://vienna-life/capabilities`
+- `resource://vienna-life/quickstart`
+
+## Environment
+Copy `.env.example` to `.env` and configure:
+- `OLLAMA_URL` — local LLM endpoint (default http://127.0.0.1:11434)
+- `OPENAI_API_KEY` — cloud LLM fallback
+
+## LLM Providers
+- **Ollama** (auto-detect port 11434)
+- **LM Studio** (auto-detect port 1234)
+- **OpenAI** (manual API key)
+
+## Skills Directory
+`web_sota/vienna_life_assistant/skills/` contains 6 SKILL.md bundles served as FastMCP resources.

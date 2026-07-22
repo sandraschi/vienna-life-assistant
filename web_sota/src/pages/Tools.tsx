@@ -56,7 +56,7 @@ export default function Tools() {
             {caps && (
                 <>
                     <div className="glass-card p-6">
-                        <p className="text-xs text-slate-500 uppercase tracking-widest font-black mb-3">
+                        <p className="text-sm text-slate-500 uppercase tracking-widest font-black mb-3">
                             {caps.server.name} v{caps.server.version} · {caps.server.fastmcp ?? 'FastMCP'}
                         </p>
                         <div className="flex flex-wrap gap-2">
@@ -86,7 +86,7 @@ export default function Tools() {
                                     <Wrench className="w-5 h-5 text-cosmos-400" />
                                     <h3 className="font-black text-white text-sm uppercase tracking-widest">{name}</h3>
                                 </div>
-                                <p className="text-xs text-slate-500">
+                                <p className="text-sm text-slate-500">
                                     {name === 'vienna_life' && 'Life admin portmanteau (calendar, todos, brief)'}
                                     {name === 'vienna_life_agentic' && 'Agentic workflow via MCP sampling'}
                                     {name === 'vienna_tips' && 'Vienna culture tips (coffee, music, museums)'}

@@ -126,7 +126,7 @@ export default function ShoppingOffers() {
                         </div>
 
                         <div className="space-y-1 mb-8 h-12 flex flex-col justify-center">
-                            <p className="text-xs font-black text-slate-500 uppercase tracking-widest">{offer.category}</p>
+                            <p className="text-sm font-black text-slate-500 uppercase tracking-widest">{offer.category}</p>
                             <h4 className="text-sm font-black text-white uppercase tracking-tight leading-snug truncate group-hover:text-emerald-400 transition-colors">{offer.product}</h4>
                         </div>
 
