@@ -590,7 +590,11 @@ async def run_agent(
             "tool_choice": "auto",
         }
         try:
-            message = _chat_message(llm["url_base"], payload, llm["headers"])
+            import asyncio as _asyncio
+
+            message = await _asyncio.to_thread(
+                _chat_message, llm["url_base"], payload, llm["headers"]
+            )
         except Exception as e:  # noqa: BLE001
             logger.warning("agent LLM call failed: %s", e)
             return {"ok": False, "error": f"LLM call failed: {e}"}

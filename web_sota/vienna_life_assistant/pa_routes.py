@@ -156,6 +156,41 @@ def pa_alerts(db: Session) -> list[dict[str, Any]]:
             }
         )
 
+    # Environment monitoring (devices-mcp — Fritz!Box, energy, connectivity)
+    try:
+        from vienna_life_assistant.environment_routes import environment_overview
+
+        env = environment_overview()
+        fritz = env.get("fritz")
+        if fritz and fritz.get("critical"):
+            alerts.append(
+                {
+                    "level": "warn",
+                    "domain": "environment",
+                    "text": f"Fritz!Box critical incidents: {fritz['critical']}",
+                }
+            )
+        if env.get("offline_devices"):
+            names = ", ".join(str(d) for d in env["offline_devices"][:3])
+            alerts.append(
+                {
+                    "level": "warn",
+                    "domain": "environment",
+                    "text": f"Offline devices: {names}",
+                }
+            )
+        energy = env.get("energy")
+        if energy:
+            alerts.append(
+                {
+                    "level": "info",
+                    "domain": "environment",
+                    "text": f"Energy: {energy['on']}/{energy['total']} devices on",
+                }
+            )
+    except Exception as e:  # noqa: BLE001 — env alerts are best-effort
+        logger.warning("environment alerts failed: %s", e)
+
     return alerts
 
 
@@ -219,6 +254,31 @@ def context_markdown(db: Session) -> str:
     lines.append(f"\nExpenses this month: EUR {ctx['expenses_month_eur']}.")
     if ctx["journal_streak"]:
         lines.append(f"Journal streak: {ctx['journal_streak']} days.")
+
+    # Environment snapshot (devices-mcp)
+    try:
+        from vienna_life_assistant.environment_routes import environment_overview
+
+        env = environment_overview()
+        pieces = []
+        if env.get("weather"):
+            pieces.append(f"{env['weather'].get('temperature_c')}C")
+        if env.get("energy"):
+            pieces.append(f"energy {env['energy']['on']}/{env['energy']['total']} on")
+        if env.get("fritz"):
+            f = env["fritz"]
+            state = "OK" if f.get("ok") else f"{f.get('critical')} critical"
+            pieces.append(f"fritz {state}")
+        if pieces:
+            lines.append("\n## Environment")
+            lines.append(" · ".join(pieces))
+        if env.get("offline_devices"):
+            lines.append(
+                f"Offline devices: {', '.join(str(d) for d in env['offline_devices'][:3])}"
+            )
+    except Exception as e:  # noqa: BLE001
+        logger.warning("environment context failed: %s", e)
+
     return "\n".join(lines)
 
 
@@ -239,10 +299,14 @@ def save_state(state: dict[str, Any]) -> None:
 
 
 async def regenerate_brief(db: Session) -> dict[str, Any]:
-    """Generate the daily brief: rule alerts + LLM prose (fallback = alerts)."""
+    """Generate the daily brief: rule alerts + LLM prose (fallback = alerts).
+
+    The LLM call runs in a thread — a blocking urlopen on the event loop
+    would stall every request for the model-load duration.
+    """
     alerts = pa_alerts(db)
     ctx_md = context_markdown(db)
-    brief = pa_agent.generate_brief(ctx_md)
+    brief = await asyncio.to_thread(pa_agent.generate_brief, ctx_md)
     if not brief:
         brief = (
             "## ViLife brief\n\n"
@@ -337,7 +401,7 @@ async def pa_ask(body: dict[str, Any], db: Session = Depends(get_db)) -> dict[st
             ctx += "\n" + "\n".join(lines)
     except Exception as e:  # noqa: BLE001 — RAG is best-effort
         logger.warning("journal memory injection failed: %s", e)
-    answer = pa_agent.answer_question(question, ctx)
+    answer = await asyncio.to_thread(pa_agent.answer_question, question, ctx)
     if answer is None:
         return {
             "ok": False,

@@ -24,7 +24,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TransitWidget from "../components/TransitWidget";
-import { API, apiGet, apiPost } from "../lib/api";
+import { API, apiGet, apiGetRetry, apiPost } from "../lib/api";
 
 interface ViennaTip {
 	coffee: { name: string; status: string }[];
@@ -98,6 +98,13 @@ export default function Dashboard() {
 		answer: string;
 	} | null>(null);
 	const [paBusy, setPaBusy] = useState(false);
+	const [env, setEnv] = useState<{
+		energy: { on: number; total: number } | null;
+		fritz: { incidents: number; critical: number; ok: boolean } | null;
+		weather: { temperature_c: number } | null;
+		offline_devices: unknown[];
+		sensors: { id: string; name?: string; connected?: boolean }[];
+	} | null>(null);
 
 	const refreshBrief = useCallback(() => {
 		apiPost<{
@@ -146,38 +153,34 @@ export default function Dashboard() {
 	}, [paState]);
 
 	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const [
-					coffee,
-					music,
-					museums,
-					news,
-					pressReleases,
-					dashboard,
-					overview,
-				] = await Promise.all([
-					apiGet<{ name: string; status: string }[]>(API.vienna.coffee),
-					apiGet<{ venue: string; performance: string; tickets: string }[]>(
-						API.vienna.music,
-					),
-					apiGet<{ museum: string; title: string }[]>(API.vienna.museums),
-					apiGet<NewsItem[]>(API.vienna.news),
-					apiGet<NewsItem[]>(API.vienna.press),
-					apiGet<{ stats: DashboardStat[] }>(API.dashboard),
-					apiGet<LifeOverview>(API.life.overview),
-				]);
+		// Fast local endpoints render the KPIs + Life Pulse immediately.
+		Promise.all([
+			apiGetRetry<{ stats: DashboardStat[] }>(API.dashboard),
+			apiGetRetry<LifeOverview>(API.life.overview),
+		])
+			.then(([dashboard, overview]) => {
+				setStats(dashboard.stats || []);
+				setLife(overview);
+			})
+			.catch(() => {});
+
+		// Slow Vienna scrapers load in the background — never block the pulse.
+		Promise.all([
+			apiGet<{ name: string; status: string }[]>(API.vienna.coffee),
+			apiGet<{ venue: string; performance: string; tickets: string }[]>(
+				API.vienna.music,
+			),
+			apiGet<{ museum: string; title: string }[]>(API.vienna.museums),
+			apiGet<NewsItem[]>(API.vienna.news),
+			apiGet<NewsItem[]>(API.vienna.press),
+		])
+			.then(([coffee, music, museums, news, pressReleases]) => {
 				setViennaTips({ coffee, music, museums });
 				setHeadlines(news);
 				setPress(pressReleases);
-				setStats(dashboard.stats || []);
-				setLife(overview);
-			} catch {
-				// Backend starting
-			}
-		};
-		fetchData();
-		apiGet<{
+			})
+			.catch(() => {});
+		apiGetRetry<{
 			date: string;
 			brief: string | null;
 			alerts: { level: string; domain: string; text: string }[];
@@ -185,6 +188,15 @@ export default function Dashboard() {
 			llm?: boolean;
 		}>(API.pa.state)
 			.then((d) => setPaState(d))
+			.catch(() => {});
+		apiGetRetry<{
+			energy: { on: number; total: number } | null;
+			fritz: { incidents: number; critical: number; ok: boolean } | null;
+			weather: { temperature_c: number } | null;
+			offline_devices: unknown[];
+			sensors: { id: string; name?: string; connected?: boolean }[];
+		}>(API.environment.overview)
+			.then((d) => setEnv(d))
 			.catch(() => {});
 	}, []);
 
@@ -397,6 +409,74 @@ export default function Dashboard() {
 								{paAnswer.answer}
 							</p>
 						</div>
+					)}
+				</div>
+			)}
+
+			{/* Environment monitor (devices-mcp) */}
+			{env && (
+				<div className="glass-card p-6" data-testid="environment-widget">
+					<h3 className="font-black text-sm tracking-[0.3em] uppercase text-white italic mb-4 flex items-center gap-3">
+						<Home className="w-4 h-4 text-emerald-400" /> Environment
+					</h3>
+					<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+						{env.weather && (
+							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+								<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+									Indoor
+								</p>
+								<p
+									className="text-sm font-bold text-white"
+									data-testid="env-temp"
+								>
+									{env.weather.temperature_c}°C
+								</p>
+							</div>
+						)}
+						{env.energy && (
+							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+								<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+									Energy
+								</p>
+								<p
+									className="text-sm font-bold text-white"
+									data-testid="env-energy"
+								>
+									{env.energy.on}/{env.energy.total} on
+								</p>
+							</div>
+						)}
+						{env.fritz && (
+							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+								<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+									Fritz!Box
+								</p>
+								<p
+									className={`text-sm font-bold ${env.fritz.ok ? "text-emerald-400" : "text-red-400"}`}
+									data-testid="env-fritz"
+								>
+									{env.fritz.ok ? "OK" : `${env.fritz.critical} critical`}
+								</p>
+							</div>
+						)}
+						{env.sensors.length > 0 && (
+							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+								<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+									Sensors
+								</p>
+								<p
+									className="text-sm font-bold text-white"
+									data-testid="env-sensors"
+								>
+									{env.sensors.map((s) => s.name ?? s.id).join(", ")}
+								</p>
+							</div>
+						)}
+					</div>
+					{env.offline_devices.length > 0 && (
+						<p className="text-xs text-red-400 uppercase tracking-widest mt-3">
+							Offline: {env.offline_devices.join(", ")}
+						</p>
 					)}
 				</div>
 			)}

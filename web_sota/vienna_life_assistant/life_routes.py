@@ -45,8 +45,38 @@ async def api_calendar_week(db: Session = Depends(get_db)) -> dict[str, Any]:
 async def api_expense_summary(
     period: str = Query("month"), db: Session = Depends(get_db)
 ) -> dict[str, Any]:
-    total = life_db.expense_month_total(db, period)
-    return {"ok": True, "period": period, "total_eur": round(total, 2)}
+    from collections import defaultdict
+
+    rows = life_db.list_rows(db, Expense)
+    month_prefix = (
+        date.today().strftime("%Y-%m")
+        if period == "month"
+        else date.today().strftime("%Y")
+    )
+    month_rows = [r for r in rows if r.date.startswith(month_prefix)]
+    total = round(sum(r.amount_eur for r in month_rows), 2)
+
+    by_cat: dict[str, float] = defaultdict(float)
+    for r in month_rows:
+        by_cat[r.category or "Other"] += r.amount_eur
+    categories = [
+        {
+            "name": name,
+            "eur": round(amount, 2),
+            "pct": round(amount / total * 100, 1) if total else 0,
+        }
+        for name, amount in sorted(by_cat.items(), key=lambda kv: kv[1], reverse=True)
+    ]
+    top_store = max(month_rows, key=lambda r: r.amount_eur).store if month_rows else "—"
+    return {
+        "ok": True,
+        "period": period,
+        "total_eur": total,
+        "change_pct": 0,
+        "top_store": top_store,
+        "budget_eur": 0,
+        "categories": categories,
+    }
 
 
 @router.get("/expenses/recent")

@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* EXPERIMENTAL light mode — invert hack. Toggling .dark off inverts the UI.
+   Remove this block to revert to permanently-dark. */
+html:not(.dark) {
+	filter: invert(1) hue-rotate(180deg);
+	background: #f4f4f5;
+}
+html:not(.dark) img,
+html:not(.dark) video,
+html:not(.dark) canvas,
+html:not(.dark) iframe {
+	filter: invert(1) hue-rotate(180deg); /* un-invert media */
+}
+
 @layer base {
 	:root {
 		--background: 0 0% 2%;

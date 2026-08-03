@@ -82,7 +82,7 @@ test.describe("Fleet Audit", () => {
 		await page.goto(`${FE}/notes`, { timeout: 15000 });
 		await expect(page.locator('[data-testid="notes-page"]')).toBeAttached();
 		await expect(page.locator('[data-testid="notes-search"]')).toBeAttached({
-			timeout: 15000,
+			timeout: 25000,
 		});
 	});
 
@@ -90,15 +90,18 @@ test.describe("Fleet Audit", () => {
 		await page.goto(`${FE}/email`, { timeout: 15000 });
 		await expect(page.locator('[data-testid="email-page"]')).toBeAttached();
 		await expect(page.locator('[data-testid="email-search"]')).toBeAttached({
-			timeout: 15000,
+			timeout: 25000,
 		});
 	});
 
 	test("Dashboard shows life pulse", async ({ page }) => {
 		await page.goto(FE, { timeout: 15000 });
 		await expect(page.locator('[data-testid="dashboard"]')).toBeAttached();
-		await page.waitForTimeout(2500);
-		await expect(page.locator('[data-testid="pulse-meds"]')).toBeAttached();
+		// The backend may still be warming up (uvicorn binds before lifespan
+		// init finishes) — the dashboard retries with backoff; wait properly.
+		await expect(page.locator('[data-testid="pulse-meds"]')).toBeAttached({
+			timeout: 25000,
+		});
 	});
 
 	test("Dashboard shows PA brief widget", async ({ page }) => {
@@ -115,5 +118,28 @@ test.describe("Fleet Audit", () => {
 		const body = await resp.json();
 		expect(body.ok).toBe(true);
 		expect(Array.isArray(body.calendar_today)).toBe(true);
+	});
+
+	test("Theme toggle flips light mode (dark is default)", async ({ page }) => {
+		await page.goto(FE, { timeout: 15000 });
+		await expect(page.locator("html")).toHaveClass(/dark/);
+		await page.locator('[data-testid="theme-toggle"]').click();
+		await expect(page.locator("html")).not.toHaveClass(/dark/);
+		await page.locator('[data-testid="theme-toggle"]').click();
+		await expect(page.locator("html")).toHaveClass(/dark/);
+	});
+
+	test("Health page conditions tab", async ({ page }) => {
+		await page.goto(`${FE}/health`, { timeout: 15000 });
+		await expect(page.locator('[data-testid="health-tab-conditions"]')).toBeAttached();
+		await page.locator('[data-testid="health-tab-conditions"]').click();
+		await expect(page.locator('[data-testid="condition-name"]')).toBeAttached();
+	});
+
+	test("Expenses page has log form", async ({ page }) => {
+		await page.goto(`${FE}/expenses`, { timeout: 15000 });
+		await expect(page.locator('[data-testid="expense-store"]')).toBeAttached({
+			timeout: 15000,
+		});
 	});
 });

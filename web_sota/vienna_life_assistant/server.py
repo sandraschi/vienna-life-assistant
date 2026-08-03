@@ -15,6 +15,7 @@ from vienna_life_assistant.activity_log import install_log_handler, log_activity
 from vienna_life_assistant.capabilities import build_capabilities
 from vienna_life_assistant.db import init_db
 from vienna_life_assistant.email_routes import router as email_router
+from vienna_life_assistant.environment_routes import router as environment_router
 from vienna_life_assistant.fleet_overview import build_fleet_overview
 from vienna_life_assistant.life_db_routes import (
     condition_routes,
@@ -197,6 +198,7 @@ app.include_router(news_router)
 app.include_router(notes_router)
 app.include_router(email_router)
 app.include_router(pa_router)
+app.include_router(environment_router)
 
 
 @app.get("/api/settings")
@@ -420,10 +422,16 @@ async def get_vienna_press():
 
 @app.get("/api/vienna/transport")
 async def get_transit_info():
-    """Static reference departures — mock. Live data: mywienerlinien (10896) / gtfs-mcp (10913)."""
+    """Real Wiener Linien departures via mywienerlinien; static reference fallback."""
+    from vienna_life_assistant.environment_routes import live_departures
+
+    live = live_departures(lines=["U4", "5", "12", "D"])
+    if live is not None:
+        return {"ok": True, "source": "mywienerlinien (real)", **live}
     return {
+        "ok": True,
         "mock": True,
-        "source": "static reference — use mywienerlinien/gtfs-mcp for live departures",
+        "source": "static reference — mywienerlinien/gtfs-mcp offline; start them for live departures",
         "Friedensbrücke": [
             {
                 "line": "U4",

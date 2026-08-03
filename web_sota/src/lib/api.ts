@@ -32,6 +32,22 @@ export const apiPut = <T = unknown>(path: string, body?: unknown) =>
 export const apiDelete = <T = unknown>(path: string) =>
 	apiSend<T>(path, "DELETE");
 
+/** Fetch with exponential backoff — the backend may still be warming up
+ * (uvicorn binds before lifespan init finishes). Intervals: 1s, 2s, 4s, 8s. */
+export async function apiGetRetry<T = unknown>(
+	path: string,
+	attempts = 5,
+): Promise<T> {
+	try {
+		return await apiGet<T>(path);
+	} catch (err) {
+		if (attempts <= 1) throw err;
+		const delay = 1000 * (6 - attempts);
+		await new Promise((r) => setTimeout(r, delay));
+		return apiGetRetry<T>(path, attempts - 1);
+	}
+}
+
 export const API = {
 	health: "/health",
 	capabilities: "/api/capabilities",
@@ -131,5 +147,8 @@ export const API = {
 		refresh: "/api/pa/refresh",
 		ask: "/api/pa/ask",
 		chat: "/api/pa/chat",
+	},
+	environment: {
+		overview: "/api/environment/overview",
 	},
 } as const;

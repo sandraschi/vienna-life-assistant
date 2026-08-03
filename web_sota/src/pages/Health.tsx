@@ -56,7 +56,9 @@ type Condition = {
 const today = () => new Date().toISOString().slice(0, 10);
 
 export default function Health() {
-	const [tab, setTab] = useState<"visits" | "meds" | "vitals">("visits");
+	const [tab, setTab] = useState<"visits" | "meds" | "vitals" | "conditions">(
+		"visits",
+	);
 	const [visits, setVisits] = useState<Visit[]>([]);
 	const [meds, setMeds] = useState<Medication[]>([]);
 	const [vitals, setVitals] = useState<Vitals[]>([]);
@@ -152,6 +154,25 @@ export default function Health() {
 		setTimeout(() => setSaved(""), 2500);
 	}, [vitalsForm]);
 
+	const [conditionForm, setConditionForm] = useState({
+		name: "",
+		status: "monitoring",
+		since: "",
+		notes: "",
+	});
+
+	const addCondition = useCallback(async () => {
+		if (!conditionForm.name) return;
+		const r = await apiPost<{ item: Condition }>(
+			API.life.conditions,
+			conditionForm,
+		);
+		setConditions((p) => [...p, r.item]);
+		setConditionForm({ name: "", status: "monitoring", since: "", notes: "" });
+		setSaved("Condition added");
+		setTimeout(() => setSaved(""), 2500);
+	}, [conditionForm]);
+
 	const activeMeds = meds.filter((m) => m.active);
 
 	return (
@@ -172,6 +193,7 @@ export default function Health() {
 							["visits", "Visits", Stethoscope],
 							["meds", "Medications", Pill],
 							["vitals", "Vitals", Activity],
+							["conditions", "Status", HeartPulse],
 						] as const
 					).map(([key, label, Icon]) => (
 						<button
@@ -596,6 +618,121 @@ export default function Health() {
 								{vitals.length === 0 && (
 									<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8">
 										No readings yet
+									</p>
+								)}
+							</div>
+						</>
+					)}
+
+					{tab === "conditions" && (
+						<>
+							<div className="glass-card p-6">
+								<h2 className="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+									<Plus className="w-4 h-4 text-cosmos-400" /> Add condition
+								</h2>
+								<div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+									<input
+										data-testid="condition-name"
+										placeholder="Condition (e.g. Hay fever)"
+										value={conditionForm.name}
+										onChange={(e) =>
+											setConditionForm({
+												...conditionForm,
+												name: e.target.value,
+											})
+										}
+										className="input-dark md:col-span-2"
+									/>
+									<select
+										data-testid="condition-status"
+										value={conditionForm.status}
+										onChange={(e) =>
+											setConditionForm({
+												...conditionForm,
+												status: e.target.value,
+											})
+										}
+										className="input-dark"
+									>
+										<option value="active">Active</option>
+										<option value="monitoring">Monitoring</option>
+										<option value="seasonal">Seasonal</option>
+										<option value="resolved">Resolved</option>
+									</select>
+									<input
+										data-testid="condition-since"
+										type="date"
+										title="Since"
+										value={conditionForm.since}
+										onChange={(e) =>
+											setConditionForm({
+												...conditionForm,
+												since: e.target.value,
+											})
+										}
+										className="input-dark"
+									/>
+									<input
+										data-testid="condition-notes"
+										placeholder="Notes"
+										value={conditionForm.notes}
+										onChange={(e) =>
+											setConditionForm({
+												...conditionForm,
+												notes: e.target.value,
+											})
+										}
+										className="input-dark md:col-span-4"
+									/>
+									<button
+										data-testid="condition-add"
+										onClick={addCondition}
+										className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest justify-self-start"
+									>
+										Add condition
+									</button>
+								</div>
+							</div>
+							<div className="space-y-3">
+								{conditions.map((c) => (
+									<div
+										key={c.id}
+										className="glass-card px-6 py-4 flex items-center gap-4"
+									>
+										<div className="w-10 h-10 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center shrink-0">
+											<HeartPulse className="w-4 h-4 text-cosmos-400" />
+										</div>
+										<div className="flex-1">
+											<p className="text-sm font-black text-white uppercase tracking-tight">
+												{c.name}
+											</p>
+											{c.notes && (
+												<p className="text-xs text-slate-300 mt-1">{c.notes}</p>
+											)}
+										</div>
+										<div className="text-right shrink-0">
+											<span
+												className={`text-xs font-black uppercase tracking-widest ${
+													c.status === "resolved"
+														? "text-emerald-400"
+														: c.status === "seasonal"
+															? "text-amber-400"
+															: "text-cosmos-400"
+												}`}
+											>
+												{c.status}
+											</span>
+											{c.since && (
+												<p className="text-xs text-slate-300 uppercase tracking-widest mt-0.5">
+													since {c.since}
+												</p>
+											)}
+										</div>
+									</div>
+								))}
+								{conditions.length === 0 && (
+									<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8">
+										No conditions tracked
 									</p>
 								)}
 							</div>

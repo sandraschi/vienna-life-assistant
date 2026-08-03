@@ -1434,6 +1434,42 @@ async def vienna_email(
     return {"success": False, "error": f"Unknown operation: {operation}"}
 
 
+# --- Environment (devices-mcp bridge) -----------------------------------------
+
+
+@mcp.tool(annotations=_READ_ONLY)
+async def vienna_environment(operation: Literal["overview"]) -> dict[str, Any]:
+    """Home environment monitoring via devices-mcp (:10717).
+
+    [RATIONALE] devices-mcp (running as a background nssm task) is the fleet's
+    environment hub; one tool surfaces its state for the daily brief and ad-hoc
+    questions.
+
+    ## Return Format
+    {"success": bool, "message": str, **environment_fields}
+
+    ## Examples
+    await vienna_environment(operation="overview")
+
+    ## Notes
+    - Includes energy devices, sensors, Fritz!Box incidents, weather (when
+      Netatmo is configured), and offline devices.
+    - Returns success=False with a recovery hint when devices-mcp is down.
+    """
+    from vienna_life_assistant.environment_routes import environment_overview
+
+    env = environment_overview()
+    if not env.get("devices_mcp_online"):
+        return {
+            "success": False,
+            "error": "devices-mcp unreachable on :10717",
+            "recovery_options": [
+                "Start the devices-mcp nssm task (background service)"
+            ],
+        }
+    return {"success": True, "message": "environment overview", **env}
+
+
 def _add_skills_provider() -> None:
     try:
         from fastmcp.server.providers.skills import SkillsDirectoryProvider

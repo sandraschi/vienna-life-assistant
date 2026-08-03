@@ -12,6 +12,7 @@ import {
 	Mail,
 	Menu,
 	MessageCircle,
+	Moon,
 	Music,
 	Newspaper,
 	NotebookPen,
@@ -24,6 +25,7 @@ import {
 	Settings,
 	ShoppingCart,
 	Sparkles,
+	Sun,
 	User,
 	Users,
 	Wrench,
@@ -37,6 +39,24 @@ export default function AppLayout() {
 	useZoom();
 	const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 	const [backendOk, setBackendOk] = useState<boolean | null>(null);
+	const [isLight, setIsLight] = useState(() => {
+		try {
+			return localStorage.getItem("vilife-light-mode") === "1";
+		} catch {
+			return false;
+		}
+	});
+
+	const toggleTheme = () => {
+		const light = !isLight;
+		setIsLight(light);
+		try {
+			localStorage.setItem("vilife-light-mode", light ? "1" : "0");
+		} catch {
+			/* ignore */
+		}
+		document.documentElement.classList.toggle("dark", !light);
+	};
 
 	// Backend health: Tauri event listener + HTTP polling
 	useEffect(() => {
@@ -317,6 +337,23 @@ export default function AppLayout() {
 										: "Offline"}
 							</span>
 						</div>
+
+						<button
+							type="button"
+							onClick={toggleTheme}
+							className="p-3 rounded-2xl hover:bg-white/[0.05] text-slate-300 hover:text-white transition-all"
+							aria-label={
+								isLight ? "Switch to dark mode" : "Switch to light mode"
+							}
+							title={isLight ? "Dark mode" : "Light mode"}
+							data-testid="theme-toggle"
+						>
+							{isLight ? (
+								<Moon className="w-5 h-5" />
+							) : (
+								<Sun className="w-5 h-5" />
+							)}
+						</button>
 
 						<button
 							className="p-3 rounded-2xl hover:bg-white/[0.05] text-slate-300 hover:text-white transition-all relative group"

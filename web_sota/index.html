@@ -7,6 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vienna Life Assistant | SOTA Dashboard</title>
     <meta name="description" content="Next-generation life management interface for the Vienna ecosystem." />
+    <script>
+        // Fleet light-mode toggle: restore persisted choice before paint (no flash).
+        try {
+            if (localStorage.getItem("vilife-light-mode") === "1") {
+                document.documentElement.classList.remove("dark");
+            }
+        } catch (e) {}
+    </script>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
