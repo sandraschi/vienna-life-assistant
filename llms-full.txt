@@ -27,6 +27,20 @@ seeds realistic demo content; everything afterwards is user data. Schema:
 doctor_visits, medical_conditions, medications, vitals, trips, packing_items,
 travel_documents, contacts, pet_care_events, subscriptions, home_tasks.
 
+### PA engine (the assistant layer)
+- `POST /api/pa/chat` — agent chat: LLM + tool execution over life data
+  (24 curated vienna_* tools; trace returned per message)
+- `POST /api/pa/brief`-style refresh: `POST /api/pa/refresh` — LLM morning brief
+  over real context + rule-based alerts, persisted to data/pa_state.json
+- `GET /api/pa/state` — today's brief + alerts (Dashboard widget)
+- `GET /api/pa/alerts` — rule-based alert list (refills, follow-ups, renewals,
+  document expiry, birthdays, overdue tasks, events today)
+- `GET /api/pa/context` — life snapshot (calendar, todos, meds, visits, trips,
+  birthdays, renewals, expenses, journal streak)
+- `POST /api/pa/ask` — NL question over life context
+- Daily scheduler regenerates the brief at server start + once per day
+  (PA_AUTOBRIEF=0 disables; PA_STATE_FILE overrides the state path)
+
 ## MCP Tools (portmanteaus)
 
 ### `vienna_life(operation)` — daily life ops

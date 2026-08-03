@@ -1,3 +1,14 @@
+### Added — PA engine + agent chat (2026-08-03)
+- **PA engine**: `/api/pa/*` — LLM morning brief over real life data (context
+  grounding), rule-based alerts (refills, follow-ups, renewals, document expiry,
+  birthdays, overdue tasks), NL ask over context, daily scheduler (persists to
+  data/pa_state.json), Dashboard **PA Brief** widget with read-aloud + ask box
+- **Agent chat**: Chat is now a tool-calling agent — the LLM decides vienna_*
+  calls (24 curated tools), the loop executes them and reflects; tool trace
+  chips rendered per assistant message. Works with Ollama /v1, LM Studio, OpenAI
+- Smart Ollama model pick (prefers gemma4/qwen3.6 local models over
+  reasoning/cloud tags that return empty content)
+- 12 new pytest (57 total), 3 new e2e (15 total)
 ### Added — email bridge (2026-08-03)
 - **Email**: inbox (list/unread filter), search, message detail, mark-read, and send — via the email-mcp gateway (:10813, HTTP Basic auth); IMAP/SMTP/Graph credentials stay in email-mcp
 - `vienna_email` portmanteau (status/inbox/get/search/send/mark_read/stats) + `/api/email/*` + Email page (compose form, inbox list, detail pane, unread KPIs)

@@ -52,6 +52,13 @@ and **OneNote integration** via the onenote-mcp gateway (search notebooks, creat
 pages, export journal entries — the Microsoft Graph token stays in onenote-mcp),
 plus **email** (inbox, search, send) via the email-mcp gateway.
 
+**AI PA:** a **tool-calling chat** (the LLM executes your life data — log
+expenses, schedule events, send email — with visible tool traces), a
+**PA Brief** on the Dashboard (LLM-generated morning brief over real context +
+rule-based alerts: refills, follow-ups, renewals, birthdays, document expiry),
+NL questions ("when is my next doctor visit?"), read-aloud, and a daily
+scheduler. Works with Ollama / LM Studio / OpenAI.
+
 **LLM (Settings):** Switch **Ollama** (11434), **LM Studio** (1234/v1), or **OpenAI** (API key). Each provider has a **model dropdown** populated from `/api/llm/models`. Chat uses the saved provider + model with Vienna system preprompt.
 
 **MCP:** 11 portmanteau tools — `vienna_life`, `vienna_health`, `vienna_travel`,

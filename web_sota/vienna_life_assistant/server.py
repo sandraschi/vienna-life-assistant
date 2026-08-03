@@ -4,12 +4,12 @@ Modernized FastAPI + FastMCP server for the web_sota project.
 Featuring the "Vienna Life" Ecosystem expansion.
 """
 
+import asyncio
 import logging
 import os
 import sys
 from contextlib import asynccontextmanager
 from typing import Any, Optional
-
 from fastapi import FastAPI, Query
 from vienna_life_assistant.activity_log import install_log_handler, log_activity
 from vienna_life_assistant.capabilities import build_capabilities
@@ -39,6 +39,7 @@ from vienna_life_assistant.logs_routes import router as logs_router
 from vienna_life_assistant.llm_routes import router as llm_router
 from vienna_life_assistant.news_routes import router as news_router
 from vienna_life_assistant.notes_routes import router as notes_router
+from vienna_life_assistant.pa_routes import router as pa_router, scheduler_loop
 from vienna_life_assistant.skills_routes import router as skills_router
 from vienna_life_assistant.vienna_life_mcp import mcp as vienna_life_mcp
 from fastapi.middleware.cors import CORSMiddleware
@@ -86,9 +87,20 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error("Database initialization failed: %s", e)
 
+    # Start the PA daily-brief scheduler
+    _scheduler_task = asyncio.create_task(scheduler_loop())
+
     yield
     logger.info("Vienna SOTA Backend shutting down...")
 
+    _scheduler_task.cancel()
+    try:
+        await _scheduler_task
+    except (asyncio.CancelledError, Exception):  # noqa: BLE001
+        pass
+
+
+_scheduler_task: asyncio.Task | None = None
 
 app = FastAPI(
     title="Vienna Life Assistant SOTA API",
@@ -184,6 +196,7 @@ app.include_router(log_routes)
 app.include_router(news_router)
 app.include_router(notes_router)
 app.include_router(email_router)
+app.include_router(pa_router)
 
 
 @app.get("/api/settings")

@@ -7,11 +7,11 @@ import {
 	Send,
 	Sparkles,
 	User,
+	Wrench,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { API, apiGet } from "../lib/api";
 import {
-	chatRequestBody,
 	DEFAULT_LLM_CONFIG,
 	type LlmConfig,
 	loadLlmLocal,
@@ -21,7 +21,24 @@ const LS_HISTORY = "vilife-chat-history";
 const LS_PERSONALITY = "vilife-chat-personality";
 const MAX_HISTORY = 100;
 
-type ChatMessage = { role: "user" | "assistant"; content: string };
+type ChatMessage = {
+	role: "user" | "assistant";
+	content: string;
+	trace?: ToolTrace[];
+};
+
+type ToolTrace = {
+	tool: string;
+	args: Record<string, unknown>;
+	result: { success?: boolean; message?: string };
+};
+
+type PaChatResponse = {
+	ok: boolean;
+	response?: string;
+	trace?: ToolTrace[];
+	error?: string;
+};
 
 type LlmStatus = {
 	provider: string;
@@ -173,30 +190,34 @@ export default function Chat() {
 			setMessages((prev) => [...prev, { role: "user", content: trimmed }]);
 			setSending(true);
 
+			const persona = PERSONALITIES.find((p) => p.id === personality);
 			try {
-				const res = await fetch(API.llmChat, {
+				const res = await fetch(API.pa.chat, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify(chatRequestBody(llmCfg, trimmed, history)),
+					body: JSON.stringify({
+						messages: history.map(({ role, content }) => ({ role, content })),
+						personality: persona
+							? { label: persona.label, prompt: persona.prompt }
+							: undefined,
+					}),
 				});
-				const data = await res.json();
+				const data = (await res.json()) as PaChatResponse;
 				if (data.ok) {
-					setMessages((prev) => [
-						...prev,
-						{ role: "assistant", content: data.response },
-					]);
-				} else {
-					const hint =
-						llmCfg.provider === "openai"
-							? "Check Settings \u2014 OpenAI API key and model"
-							: llmCfg.provider === "lmstudio"
-								? "Check Settings \u2014 LM Studio on 1234"
-								: "Check Settings \u2014 Ollama on 11434";
 					setMessages((prev) => [
 						...prev,
 						{
 							role: "assistant",
-							content: `Error: ${data.error || "LLM request failed"}. ${hint}`,
+							content: data.response ?? "",
+							trace: data.trace,
+						},
+					]);
+				} else {
+					setMessages((prev) => [
+						...prev,
+						{
+							role: "assistant",
+							content: `Error: ${data.error || "PA request failed"}. Start Ollama or set a provider in Settings.`,
 						},
 					]);
 				}
@@ -212,7 +233,7 @@ export default function Chat() {
 				setSending(false);
 			}
 		},
-		[sending, messages, llmCfg],
+		[sending, messages, personality],
 	);
 
 	const handleClear = useCallback(() => {
@@ -329,8 +350,28 @@ export default function Chat() {
 									<Bot className="w-4 h-4 text-cosmos-400" />
 								)}
 							</div>
-							<div className="text-sm text-slate-300 whitespace-pre-wrap max-w-[85%] leading-relaxed">
-								{msg.content}
+							<div className="max-w-[85%] space-y-2">
+								<div className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">
+									{msg.content}
+								</div>
+								{msg.trace && msg.trace.length > 0 && (
+									<div
+										className="flex flex-wrap gap-1.5"
+										data-testid="chat-tool-trace"
+									>
+										{msg.trace.map((t, ti) => (
+											<span
+												key={ti}
+												className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
+												title={`${JSON.stringify(t.args)}`}
+											>
+												<Wrench className="w-2.5 h-2.5" />
+												{t.tool.split("__")[1] ?? t.tool}
+												{t.result?.success === false ? " ✗" : " ✓"}
+											</span>
+										))}
+									</div>
+								)}
 							</div>
 						</div>
 					))}

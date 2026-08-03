@@ -124,4 +124,12 @@ export const API = {
 		search: (q: string) => `/api/email/search?q=${encodeURIComponent(q)}`,
 		send: "/api/email/send",
 	},
+	pa: {
+		context: "/api/pa/context",
+		alerts: "/api/pa/alerts",
+		state: "/api/pa/state",
+		refresh: "/api/pa/refresh",
+		ask: "/api/pa/ask",
+		chat: "/api/pa/chat",
+	},
 } as const;

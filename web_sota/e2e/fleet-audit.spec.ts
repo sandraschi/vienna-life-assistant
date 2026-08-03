@@ -100,4 +100,20 @@ test.describe("Fleet Audit", () => {
 		await page.waitForTimeout(2500);
 		await expect(page.locator('[data-testid="pulse-meds"]')).toBeAttached();
 	});
+
+	test("Dashboard shows PA brief widget", async ({ page }) => {
+		await page.goto(FE, { timeout: 15000 });
+		await expect(page.locator('[data-testid="pa-brief"]')).toBeAttached({
+			timeout: 15000,
+		});
+		await expect(page.locator('[data-testid="pa-ask-input"]')).toBeAttached();
+	});
+
+	test("PA context endpoint serves life data", async ({ request }) => {
+		const resp = await request.get(`${BE}/api/pa/context`);
+		expect(resp.status()).toBe(200);
+		const body = await resp.json();
+		expect(body.ok).toBe(true);
+		expect(Array.isArray(body.calendar_today)).toBe(true);
+	});
 });

@@ -13,14 +13,18 @@ import {
 	Palette,
 	Plane,
 	Receipt,
+	RefreshCw,
+	Send,
 	ShoppingBag,
+	Sparkles,
 	Sun,
 	Users,
+	Volume2,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TransitWidget from "../components/TransitWidget";
-import { API, apiGet } from "../lib/api";
+import { API, apiGet, apiPost } from "../lib/api";
 
 interface ViennaTip {
 	coffee: { name: string; status: string }[];
@@ -81,6 +85,65 @@ export default function Dashboard() {
 	const [press, setPress] = useState<NewsItem[]>([]);
 	const [stats, setStats] = useState<DashboardStat[]>([]);
 	const [life, setLife] = useState<LifeOverview | null>(null);
+	const [paState, setPaState] = useState<{
+		date: string;
+		brief: string | null;
+		alerts: { level: string; domain: string; text: string }[];
+		generated_at: string | null;
+		llm?: boolean;
+	} | null>(null);
+	const [paQuestion, setPaQuestion] = useState("");
+	const [paAnswer, setPaAnswer] = useState<{
+		question: string;
+		answer: string;
+	} | null>(null);
+	const [paBusy, setPaBusy] = useState(false);
+
+	const refreshBrief = useCallback(() => {
+		apiPost<{
+			date: string;
+			brief: string | null;
+			alerts: { level: string; domain: string; text: string }[];
+			generated_at: string | null;
+			llm?: boolean;
+		}>(API.pa.refresh)
+			.then((d) => setPaState(d))
+			.catch(() => {});
+	}, []);
+
+	const askPa = useCallback(async () => {
+		const q = paQuestion.trim();
+		if (!q || paBusy) return;
+		setPaBusy(true);
+		try {
+			const d = await apiPost<{ question: string; answer: string }>(
+				API.pa.ask,
+				{ question: q },
+			);
+			setPaAnswer({ question: d.question, answer: d.answer });
+		} catch {
+			setPaAnswer({
+				question: q,
+				answer: "No LLM reachable — start Ollama or check Settings.",
+			});
+		} finally {
+			setPaBusy(false);
+		}
+	}, [paQuestion, paBusy]);
+
+	const speakBrief = useCallback(() => {
+		if (
+			!paState?.brief ||
+			typeof window === "undefined" ||
+			!window.speechSynthesis
+		)
+			return;
+		window.speechSynthesis.cancel();
+		const plain = paState.brief.replace(/[*_#`>]/g, "").replace(/\n+/g, " ");
+		const u = new SpeechSynthesisUtterance(plain);
+		u.rate = 1;
+		window.speechSynthesis.speak(u);
+	}, [paState]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -114,6 +177,15 @@ export default function Dashboard() {
 			}
 		};
 		fetchData();
+		apiGet<{
+			date: string;
+			brief: string | null;
+			alerts: { level: string; domain: string; text: string }[];
+			generated_at: string | null;
+			llm?: boolean;
+		}>(API.pa.state)
+			.then((d) => setPaState(d))
+			.catch(() => {});
 	}, []);
 
 	return (
@@ -234,6 +306,98 @@ export default function Dashboard() {
 							</p>
 						</div>
 					</div>
+				</div>
+			)}
+
+			{/* PA brief */}
+			{paState && (
+				<div className="glass-card p-6" data-testid="pa-brief">
+					<div className="flex items-center justify-between mb-4">
+						<h3 className="font-black text-sm tracking-[0.3em] uppercase text-white italic flex items-center gap-3">
+							<Sparkles className="w-4 h-4 text-amber-400" /> PA Brief ·{" "}
+							{paState.date}
+						</h3>
+						<div className="flex items-center gap-2">
+							{paState.brief && (
+								<button
+									type="button"
+									onClick={speakBrief}
+									className="p-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+									title="Read brief aloud"
+								>
+									<Volume2 className="w-4 h-4" />
+								</button>
+							)}
+							<button
+								type="button"
+								onClick={refreshBrief}
+								className="p-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+								title="Regenerate brief"
+								data-testid="pa-refresh"
+							>
+								<RefreshCw className="w-4 h-4" />
+							</button>
+						</div>
+					</div>
+					{paState.brief && (
+						<p
+							className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed"
+							data-testid="pa-brief-text"
+						>
+							{paState.brief}
+						</p>
+					)}
+					{paState.alerts.length > 0 && (
+						<div className="flex flex-wrap gap-2 mt-4">
+							{paState.alerts.map((a, i) => (
+								<span
+									key={i}
+									className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${
+										a.level === "warn"
+											? "bg-amber-500/10 border-amber-500/30 text-amber-400"
+											: "bg-cosmos-500/10 border-cosmos-500/20 text-cosmos-400"
+									}`}
+								>
+									{a.text}
+								</span>
+							))}
+						</div>
+					)}
+
+					<div className="mt-5 flex gap-3">
+						<input
+							data-testid="pa-ask-input"
+							placeholder="Ask ViLife… e.g. when is my next doctor visit?"
+							value={paQuestion}
+							onChange={(e) => setPaQuestion(e.target.value)}
+							onKeyDown={(e) => {
+								if (e.key === "Enter") askPa();
+							}}
+							className="input-dark flex-1"
+						/>
+						<button
+							type="button"
+							onClick={askPa}
+							disabled={paBusy || !paQuestion.trim()}
+							className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 disabled:opacity-40 text-white text-xs font-black uppercase tracking-widest transition-colors"
+							data-testid="pa-ask-send"
+						>
+							{paBusy ? "Thinking…" : <Send className="w-3.5 h-3.5" />}
+						</button>
+					</div>
+					{paAnswer && (
+						<div
+							className="mt-4 rounded-xl bg-white/[0.02] border border-white/[0.06] p-4"
+							data-testid="pa-answer"
+						>
+							<p className="text-xs font-black text-amber-400 uppercase tracking-widest mb-1">
+								{paAnswer.question}
+							</p>
+							<p className="text-sm text-slate-300 leading-relaxed">
+								{paAnswer.answer}
+							</p>
+						</div>
+					)}
 				</div>
 			)}
 
