@@ -1,8 +1,8 @@
 # ViLife `web_sota` — Product Requirements (0.2.0)
 
-**Status:** In progress (Phase 1 shipped)  
+**Status:** Shipped (v0.2.0, 2026-08-03) - superset of the 0.2.0 plan: AI PA engine added  
 **Owner:** Sandra Schipal  
-**Last updated:** 2026-06-05
+**Last updated:** 2026-08-03
 
 ## Problem
 
@@ -84,3 +84,16 @@ Documented in `mcp-central-docs/operations/WEBAPP_PORTS.md`.
 - Real DB-backed `calendar_today`, `todo_list`, `life_brief`.
 - Write tools with confirm cards.
 - Agent API audit log page.
+
+
+---
+
+## Shipped since the original 0.2.0 plan (2026-08-03)
+
+- **Life domains (SQLite)**: health (doctor visits, medications, vitals, conditions), travel (trips, packing, documents), contacts (birthdays), household (subscriptions, home tasks, pet care), journal (mood, streak, on-this-day)
+- **PA engine**: /api/pa/* - LLM morning brief over real context, rule-based alerts, NL ask, daily scheduler, brief-by-email
+- **Agent chat**: tool-calling loop over 24 curated vienna_* tools + fleet orchestration (fleet_tools/fleet_call/fritz_status)
+- **Journal RAG**: semantic search via Ollama embeddings, memory injection into answers
+- **Voice**: Web Speech mic input + read-aloud
+- **Bridges**: aiwatcher (news), onenote-mcp (OneNote + journal export), email-mcp (inbox/search/send)
+- **Gates**: 68 pytest + 15 Playwright e2e, ruff/pyright/tsc/biome clean

@@ -195,9 +195,18 @@ travel_documents, contacts, pet_care_events, subscriptions, home_tasks.
 
 ## Environment
 Copy `.env.example` to `.env` and configure:
-- `OLLAMA_URL` — local LLM endpoint (default http://127.0.0.1:11434)
-- `OPENAI_API_KEY` — cloud LLM fallback
+- `OLLAMA_URL` — local LLM endpoint (default http://127.0.0.1:11434); `OLLAMA_MODEL`
+- `LMSTUDIO_URL` / `LMSTUDIO_MODEL` — LM Studio OpenAI-compatible endpoint
+- `OPENAI_API_KEY` / `OPENAI_BASE_URL` / `OPENAI_MODEL` — cloud fallback
 - `VILIFE_DB_PATH` — optional SQLite path override
+- `AIWATCHER_URL` / `AIWATCHER_TIMEOUT` — news bridge (default :10946)
+- `ONENOTE_MCP_URL` / `ONENOTE_MCP_TIMEOUT` — OneNote gateway (default :10907)
+- `EMAIL_MCP_URL` / `EMAIL_MCP_USER` / `EMAIL_MCP_PASSWORD` / `EMAIL_MCP_TIMEOUT` — mail gateway (:10813)
+- `FLEET_MCP_ALLOWLIST` — fleet orchestration servers (default all: plex, calibre, gtfs, aiwatcher)
+- `DEVICES_MCP_URL` — Fritz!Box probe endpoint (default :10717)
+- `PA_BRIEF_EMAIL` / `PA_BRIEF_RECIPIENT` — proactive brief-by-email
+- `PA_AUTOBRIEF` — daily scheduler flag (0 disables); `PA_STATE_FILE` — brief state path
+- `RAG_EMBED_MODEL` — journal embedding model (default nomic-embed-text)
 
 ## LLM Providers
 - **Ollama** (auto-detect port 11434)

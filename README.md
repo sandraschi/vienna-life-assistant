@@ -10,11 +10,11 @@
 
 > 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
 
-**Timestamp**: 2025-12-15  
-**Status**: Beta Version   
+**Timestamp**: 2026-08-03  
+**Status**: Active (web_sota v0.2.0)   
 **Version**: 3.0-beta - AI-Powered Life Management
 
-A beautiful, modern personal life management app with **AI chatbot**, calendar, todos, expenses, shopping, and comprehensive technical documentation - integrated with your entire digital ecosystem via MCP servers and powered by Celery background task processing.
+A personal **AI life assistant** for Vienna (Alsergrund): owned life data (calendar, health, travel, contacts, household, journal), an agent that executes tools, journal memory (RAG), a proactive daily brief, voice, and fleet orchestration (Plex, Calibre, Wiener Linien, aiwatcher, Fritz!Box).
 
 ## Quick Start
 
@@ -74,7 +74,7 @@ See [`docs/PRD.md`](docs/PRD.md) and [`CHANGELOG.md`](CHANGELOG.md) for 0.2.0 de
 
 If you don't have `just` installed:
 
-##  What It Does
+##  What It Does (legacy overview - the modern surface is web_sota, see below)
 
 Your **personal command center** for Vienna life:
 -  **Calendar**: Day/Week/Month views, Benny appointments, events
