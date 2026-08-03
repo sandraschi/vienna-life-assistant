@@ -86,6 +86,14 @@ test.describe("Fleet Audit", () => {
 		});
 	});
 
+	test("Email page renders (email-mcp bridge, offline-safe)", async ({ page }) => {
+		await page.goto(`${FE}/email`, { timeout: 15000 });
+		await expect(page.locator('[data-testid="email-page"]')).toBeAttached();
+		await expect(page.locator('[data-testid="email-search"]')).toBeAttached({
+			timeout: 15000,
+		});
+	});
+
 	test("Dashboard shows life pulse", async ({ page }) => {
 		await page.goto(FE, { timeout: 15000 });
 		await expect(page.locator('[data-testid="dashboard"]')).toBeAttached();

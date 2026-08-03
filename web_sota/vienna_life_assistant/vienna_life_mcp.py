@@ -1271,6 +1271,139 @@ async def vienna_notes(
     return {"success": False, "error": f"Unknown operation: {operation}"}
 
 
+# --- Email (email-mcp bridge) -------------------------------------------------
+
+
+@mcp.tool(annotations=_READ_ONLY)
+async def vienna_email(
+    operation: Literal[
+        "status", "inbox", "get", "search", "send", "mark_read", "stats"
+    ],
+    message_id: str | None = None,
+    query: str | None = None,
+    limit: int = 10,
+    unread_only: bool = False,
+    data: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Email — ViLife bridges email-mcp (:10813), the mail gateway.
+
+    [RATIONALE] IMAP/SMTP/Graph credentials live in email-mcp; ViLife calls it
+    server-to-server so inbox, search, and send work without duplicating secrets.
+
+    ## Return Format
+    {"success": bool, "message": str, "emails"|"email"|"payload": ...}
+
+    ## Examples
+    await vienna_email(operation="status")
+    await vienna_email(operation="inbox", limit=10)
+    await vienna_email(operation="inbox", unread_only=True)
+    await vienna_email(operation="search", query="Orlik")
+    await vienna_email(operation="send", data={"to": "a@b.at", "subject": "…", "body": "…"})
+
+    ## Notes
+    - send requires data with to, subject, body. mark_read requires message_id.
+    - Requires email-mcp running with a configured + authenticated service.
+    """
+    from vienna_life_assistant.email_routes import _em
+
+    if operation == "status":
+        payload = _em("/api/status")
+        return {
+            "success": True,
+            "message": "email-mcp reachable"
+            if payload.get("ok")
+            else "email-mcp unreachable",
+            "reachable": payload.get("ok", False),
+            "payload": payload.get("payload"),
+            "error": payload.get("error"),
+        }
+
+    if operation == "inbox":
+        payload = _em("/api/inbox", {"limit": limit, "unread_only": unread_only})
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "email-mcp unreachable"),
+            }
+        emails = payload.get("emails", [])
+        return {"success": True, "message": f"{len(emails)} emails", "emails": emails}
+
+    if operation == "get":
+        if not message_id:
+            return _error_response("get requires message_id", "validation")
+        payload = _em(f"/api/inbox/{message_id}")
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "email-mcp unreachable"),
+            }
+        return {"success": True, "message": "email detail", "email": payload}
+
+    if operation == "search":
+        if not query:
+            return _error_response("search requires query", "validation")
+        payload = _em("/api/search", {"q": query})
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "email-mcp unreachable"),
+            }
+        results = payload.get("results", payload.get("emails", []))
+        return {
+            "success": True,
+            "message": f"{len(results)} results for '{query}'",
+            "emails": results,
+        }
+
+    if operation == "mark_read":
+        if not message_id:
+            return _error_response("mark_read requires message_id", "validation")
+        payload = _em(f"/api/inbox/{message_id}/mark-read", json_body={}, method="POST")
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "email-mcp unreachable"),
+            }
+        return {
+            "success": True,
+            "message": f"Email {message_id} marked read",
+            "payload": payload,
+        }
+
+    if operation == "send":
+        if (
+            not data
+            or not data.get("to")
+            or not data.get("subject")
+            or not data.get("body")
+        ):
+            return _error_response(
+                "send requires data with to, subject, body", "validation"
+            )
+        payload = _em("/api/send", json_body=data, method="POST")
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "email-mcp unreachable"),
+            }
+        return {
+            "success": True,
+            "message": f"Email sent to {data['to']}",
+            "payload": payload,
+        }
+
+    if operation == "stats":
+        payload = _em("/api/stats")
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "email-mcp unreachable"),
+            }
+        return {"success": True, "message": "email stats", "stats": payload}
+
+    return {"success": False, "error": f"Unknown operation: {operation}"}
+
+
 def _add_skills_provider() -> None:
     try:
         from fastmcp.server.providers.skills import SkillsDirectoryProvider

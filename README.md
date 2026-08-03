@@ -40,7 +40,7 @@ Set-Location web_sota
 | Frontend | http://127.0.0.1:10988 |
 | Backend + MCP | http://127.0.0.1:10922 (`/mcp`, `/api/*`) |
 
-**Pages:** Dashboard · Health · Calendar · Travel · Journal · News · Notes · Contacts · Household · Expenses · Shopping · Chat · Skills · Tools · Settings · Help · Apps · Logs
+**Pages:** Dashboard · Health · Calendar · Travel · Journal · News · Notes · Email · Contacts · Household · Expenses · Shopping · Chat · Skills · Tools · Settings · Help · Apps · Logs
 
 **Life domains (SQLite, since v0.2.0):** calendar with CRUD, doctor visit log,
 medications (dose/schedule/refill), vitals, trips with countdown + packing lists,
@@ -49,13 +49,14 @@ subscriptions with monthly total + renewal dates, home maintenance tasks, pet ca
 a **personal journal** (mood, streak, on-this-day recall), a **personal news
 site** fed by the fleet aiwatcher engine (urgency-scored stories, trends, search),
 and **OneNote integration** via the onenote-mcp gateway (search notebooks, create
-pages, export journal entries — the Microsoft Graph token stays in onenote-mcp).
+pages, export journal entries — the Microsoft Graph token stays in onenote-mcp),
+plus **email** (inbox, search, send) via the email-mcp gateway.
 
 **LLM (Settings):** Switch **Ollama** (11434), **LM Studio** (1234/v1), or **OpenAI** (API key). Each provider has a **model dropdown** populated from `/api/llm/models`. Chat uses the saved provider + model with Vienna system preprompt.
 
-**MCP:** 10 portmanteau tools — `vienna_life`, `vienna_health`, `vienna_travel`,
+**MCP:** 11 portmanteau tools — `vienna_life`, `vienna_health`, `vienna_travel`,
 `vienna_contacts`, `vienna_household`, `vienna_log`, `vienna_news`, `vienna_notes`,
-`vienna_life_agentic`, `vienna_tips` — plus 6 Vienna skills, 6 prompts, SQLite
+`vienna_email`, `vienna_life_agentic`, `vienna_tips` — plus 6 Vienna skills, 6 prompts, SQLite
 persistence, sampling via `vienna_life_agentic`.
 
 See [`docs/PRD.md`](docs/PRD.md) and [`CHANGELOG.md`](CHANGELOG.md) for 0.2.0 details.

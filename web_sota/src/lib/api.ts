@@ -109,4 +109,19 @@ export const API = {
 		create: "/api/notes/pages",
 		exportJournal: "/api/notes/export-journal",
 	},
+	email: {
+		status: "/api/email/status",
+		stats: "/api/email/stats",
+		inbox: (opts?: { limit?: number; unreadOnly?: boolean }) => {
+			const q = new URLSearchParams();
+			if (opts?.limit) q.set("limit", String(opts.limit));
+			if (opts?.unreadOnly) q.set("unread_only", "true");
+			return `/api/email/inbox?${q.toString()}`;
+		},
+		message: (id: string) => `/api/email/message/${id}`,
+		markRead: (id: string) => `/api/email/message/${id}/mark-read`,
+		markUnread: (id: string) => `/api/email/message/${id}/unread`,
+		search: (q: string) => `/api/email/search?q=${encodeURIComponent(q)}`,
+		send: "/api/email/send",
+	},
 } as const;

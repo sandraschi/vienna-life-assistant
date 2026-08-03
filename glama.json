@@ -1,6 +1,6 @@
 {
   "name": "Vienna Life Assistant",
-  "description": "Personal life management with FastMCP — calendar, todos, expenses, health, travel, contacts, household, personal journal (mood, streak, on-this-day), news fed by the fleet aiwatcher engine, and OneNote integration via the onenote-mcp gateway (journal export). Portmanteau tools, 6 prompts, 6 skills, local LLM auto-discovery, SQLite persistence.",
+  "description": "Personal life management with FastMCP — calendar, todos, expenses, health, travel, contacts, household, personal journal (mood, streak, on-this-day), news fed by the fleet aiwatcher engine, OneNote integration (journal export), and email (inbox/search/send) via fleet gateway servers. Portmanteau tools, 6 prompts, 6 skills, local LLM auto-discovery, SQLite persistence.",
   "repository": "https://github.com/sandraschi/vienna-life-assistant",
   "server": {
     "runtime": "python",
@@ -40,6 +40,10 @@
     {
       "name": "vienna_notes",
       "description": "OneNote via onenote-mcp gateway: notebooks, search, create pages, journal export"
+    },
+    {
+      "name": "vienna_email",
+      "description": "Email via email-mcp gateway: inbox, search, read, mark-read, send"
     },
     {
       "name": "vienna_life_agentic",

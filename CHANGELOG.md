@@ -1,3 +1,7 @@
+### Added — email bridge (2026-08-03)
+- **Email**: inbox (list/unread filter), search, message detail, mark-read, and send — via the email-mcp gateway (:10813, HTTP Basic auth); IMAP/SMTP/Graph credentials stay in email-mcp
+- `vienna_email` portmanteau (status/inbox/get/search/send/mark_read/stats) + `/api/email/*` + Email page (compose form, inbox list, detail pane, unread KPIs)
+- 4 new tests (45 total), 1 new e2e (13 total); EMAIL_MCP_URL/USER/PASSWORD env
 ### Added — OneNote bridge (2026-08-03)
 - **Notes**: OneNote via the onenote-mcp gateway (:10907) — the Microsoft Graph token stays in onenote-mcp (device-code flow); ViLife proxies notebooks/search/pages/create
 - **Journal → OneNote export**: per-entry export button + `vienna_notes(operation="export_journal", entry_id=)`; offline-safe when onenote-mcp is down

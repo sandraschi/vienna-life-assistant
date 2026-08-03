@@ -80,6 +80,17 @@ travel_documents, contacts, pet_care_events, subscriptions, home_tasks.
 - `export_journal(entry_id)` — push a ViLife journal entry as a OneNote page
   (Graph token stays inside onenote-mcp)
 
+### `vienna_email(operation)` — email (email-mcp gateway, :10813)
+- `status` — reachability + payload
+- `inbox(limit, unread_only)` — recent mail
+- `get(message_id)` — email detail
+- `search(query)` — search mail
+- `mark_read(message_id)` — flip read state
+- `send(data={to, subject, body, cc?})` — send via email-mcp
+- `stats` — unread/total counters
+  (IMAP/SMTP/Graph credentials stay inside email-mcp; Basic auth via
+  EMAIL_MCP_USER/PASSWORD)
+
 ### Other
 - `vienna_life_agentic(goal, ctx)` — multi-step planning via MCP sampling
 - `vienna_tips(category)` — Vienna culture tips (coffee, music, museum)
@@ -115,6 +126,13 @@ travel_documents, contacts, pet_care_events, subscriptions, home_tasks.
 - `POST /api/notes/pages` — create page {notebook_id, title, content}
 - `POST /api/notes/export-journal` — {entry_id} journal entry → OneNote page
 - `ONENOTE_MCP_URL` — onenote-mcp base URL (default http://127.0.0.1:10907)
+
+### Email (email-mcp bridge)
+- `GET /api/email/status` — reachability
+- `GET /api/email/inbox?limit=&unread_only=` / `message/{id}` / `search?q=` / `stats`
+- `POST /api/email/message/{id}/mark-read` / `unread`
+- `POST /api/email/send` — {to, subject, body, cc?} via email-mcp
+- `EMAIL_MCP_URL` / `EMAIL_MCP_USER` / `EMAIL_MCP_PASSWORD` — gateway creds
 
 ### LLM
 - `GET /api/llm/providers`, `GET /api/llm/status`, `GET /api/llm/models`, `POST /api/llm/chat`

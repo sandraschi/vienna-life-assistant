@@ -14,6 +14,7 @@ from fastapi import FastAPI, Query
 from vienna_life_assistant.activity_log import install_log_handler, log_activity
 from vienna_life_assistant.capabilities import build_capabilities
 from vienna_life_assistant.db import init_db
+from vienna_life_assistant.email_routes import router as email_router
 from vienna_life_assistant.fleet_overview import build_fleet_overview
 from vienna_life_assistant.life_db_routes import (
     condition_routes,
@@ -182,6 +183,7 @@ app.include_router(home_task_routes)
 app.include_router(log_routes)
 app.include_router(news_router)
 app.include_router(notes_router)
+app.include_router(email_router)
 
 
 @app.get("/api/settings")
@@ -500,7 +502,7 @@ async def get_diagnostics():
         "server": "vienna-life-assistant",
         "version": "0.2.0",
         "uptime_seconds": 0,
-        "tool_count": 10,
+        "tool_count": 11,
         "tools": [
             {"name": "vienna_life", "operations": 16},
             {"name": "vienna_health", "operations": 12},
@@ -510,6 +512,7 @@ async def get_diagnostics():
             {"name": "vienna_log", "operations": 8},
             {"name": "vienna_news", "operations": 6},
             {"name": "vienna_notes", "operations": 6},
+            {"name": "vienna_email", "operations": 7},
             {"name": "vienna_life_agentic"},
             {"name": "vienna_tips"},
         ],

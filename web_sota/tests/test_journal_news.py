@@ -177,3 +177,59 @@ def test_notes_export_journal_success(client, monkeypatch):
     assert "ViLife Journal" in body["message"]
     assert body["page"] is not None
     assert body["page"]["id"] == "pg1"
+
+
+# --- Email: email-mcp bridge -------------------------------------------------
+
+
+def test_email_status_reports_unreachable(monkeypatch):
+    from vienna_life_assistant import email_routes
+
+    monkeypatch.setattr(email_routes, "EMAIL_MCP_URL", "http://127.0.0.1:1")
+    payload = email_routes._em("/api/status")
+    assert payload.get("ok") is False
+    assert "error" in payload
+
+
+def test_email_send_validates_required_fields(client):
+    r = client.post("/api/email/send", json={"subject": "no recipient"})
+    assert r.status_code == 200
+    assert r.json()["ok"] is False
+    assert "required" in r.json()["error"]
+
+
+def test_email_inbox_unreachable_is_graceful(client, monkeypatch):
+    from vienna_life_assistant import email_routes
+
+    monkeypatch.setattr(email_routes, "EMAIL_MCP_URL", "http://127.0.0.1:1")
+    r = client.get("/api/email/inbox?limit=5")
+    assert r.status_code == 200
+    assert r.json()["ok"] is False
+    assert "email-mcp" in r.json()["error"].lower()
+
+
+def test_email_send_passthrough(client, monkeypatch):
+    from vienna_life_assistant import email_routes
+
+    def fake_em(url, params=None, json_body=None, method="GET"):
+        assert url == "/api/send"
+        assert json_body is not None
+        return {
+            "ok": True,
+            "success": True,
+            "message": f"Sent to {json_body.get('to')}",
+        }
+
+    monkeypatch.setattr(email_routes, "_em", fake_em)
+    r = client.post(
+        "/api/email/send",
+        json={
+            "to": "ingrid@example.at",
+            "subject": "Kaffeehaus tour",
+            "body": "Samstag?",
+        },
+    )
+    assert r.status_code == 200
+    body = r.json()
+    assert body["ok"] is True
+    assert "Sent to ingrid@example.at" in body["message"]

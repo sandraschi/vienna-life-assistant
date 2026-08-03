@@ -6,6 +6,7 @@ import Chat from "./pages/Chat";
 import ConcertHall from "./pages/ConcertHall";
 import Contacts from "./pages/Contacts";
 import Dashboard from "./pages/Dashboard";
+import Email from "./pages/Email";
 import Expenses from "./pages/Expenses";
 import Fleet from "./pages/Fleet";
 import Health from "./pages/Health";
@@ -60,6 +61,7 @@ export default function App() {
 				<Route path="journal" element={<Journal />} />
 				<Route path="news" element={<News />} />
 				<Route path="notes" element={<Notes />} />
+				<Route path="email" element={<Email />} />
 
 				<Route path="*" element={<Navigate to="/" replace />} />
 			</Route>
