@@ -161,7 +161,7 @@ export default function Health() {
 					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 						Health
 					</h1>
-					<p className="text-slate-400 mt-2 text-sm">
+					<p className="text-slate-300 mt-2 text-sm">
 						Doctor visits, medications, vitals — your medical status, one
 						surface
 					</p>
@@ -182,7 +182,7 @@ export default function Health() {
 							className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors flex items-center gap-2 ${
 								tab === key
 									? "bg-cosmos-500 text-white"
-									: "text-slate-400 hover:text-white"
+									: "text-slate-300 hover:text-white"
 							}`}
 						>
 							<Icon className="w-4 h-4" /> {label}
@@ -202,7 +202,7 @@ export default function Health() {
 					>
 						{activeMeds.length}
 					</p>
-					<p className="text-xs text-slate-400 mt-1">
+					<p className="text-xs text-slate-300 mt-1">
 						{activeMeds.map((m) => m.name).join(", ") || "None"}
 					</p>
 				</div>
@@ -220,7 +220,7 @@ export default function Health() {
 								a.follow_up_date.localeCompare(b.follow_up_date),
 							)[0]?.follow_up_date ?? "—"}
 					</p>
-					<p className="text-xs text-slate-400 mt-1">
+					<p className="text-xs text-slate-300 mt-1">
 						Conditions:{" "}
 						{conditions.map((c) => c.name).join(" · ") || "None tracked"}
 					</p>
@@ -235,7 +235,7 @@ export default function Health() {
 					>
 						{vitals[0] ? `${vitals[0].systolic}/${vitals[0].diastolic}` : "—"}
 					</p>
-					<p className="text-xs text-slate-400 mt-1">
+					<p className="text-xs text-slate-300 mt-1">
 						{vitals[0]
 							? `pulse ${vitals[0].pulse} · ${vitals[0].weight_kg ? `${vitals[0].weight_kg} kg` : "no weight"} · ${vitals[0].date}`
 							: "No readings yet"}
@@ -336,11 +336,11 @@ export default function Health() {
 												<p className="text-sm font-black text-white uppercase tracking-tight">
 													{v.doctor}
 												</p>
-												<span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+												<span className="text-xs font-bold text-slate-300 uppercase tracking-widest">
 													{v.date}
 												</span>
 											</div>
-											<p className="text-xs text-slate-400 mt-1 uppercase tracking-widest">
+											<p className="text-xs text-slate-300 mt-1 uppercase tracking-widest">
 												{v.specialty}
 												{v.reason ? ` · ${v.reason}` : ""}
 											</p>
@@ -358,7 +358,7 @@ export default function Health() {
 									</div>
 								))}
 								{visits.length === 0 && (
-									<p className="text-sm text-slate-500 uppercase tracking-widest text-center py-8">
+									<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8">
 										No visits logged
 									</p>
 								)}
@@ -445,7 +445,7 @@ export default function Health() {
 									>
 										<div className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center shrink-0">
 											<Pill
-												className={`w-5 h-5 ${m.active ? "text-emerald-400" : "text-slate-500"}`}
+												className={`w-5 h-5 ${m.active ? "text-emerald-400" : "text-slate-300"}`}
 											/>
 										</div>
 										<div className="flex-1">
@@ -458,7 +458,7 @@ export default function Health() {
 													</span>
 												)}
 											</p>
-											<p className="text-xs text-slate-400 mt-1 uppercase tracking-widest">
+											<p className="text-xs text-slate-300 mt-1 uppercase tracking-widest">
 												{m.frequency || "as needed"}
 												{m.times ? ` · ${m.times}` : ""}
 												{m.with_food ? " · with food" : ""}
@@ -470,14 +470,14 @@ export default function Health() {
 											)}
 										</div>
 										<span
-											className={`text-xs font-black uppercase tracking-widest ${m.active ? "text-emerald-400" : "text-slate-500"}`}
+											className={`text-xs font-black uppercase tracking-widest ${m.active ? "text-emerald-400" : "text-slate-300"}`}
 										>
 											{m.active ? "Active" : "Stopped"}
 										</span>
 									</div>
 								))}
 								{meds.length === 0 && (
-									<p className="text-sm text-slate-500 uppercase tracking-widest text-center py-8">
+									<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8">
 										No medications tracked
 									</p>
 								)}
@@ -493,7 +493,7 @@ export default function Health() {
 								</h2>
 								<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
 									<label className="flex flex-col gap-1">
-										<span className="text-xs text-slate-400 uppercase tracking-widest">
+										<span className="text-xs text-slate-300 uppercase tracking-widest">
 											Systolic
 										</span>
 										<input
@@ -510,7 +510,7 @@ export default function Health() {
 										/>
 									</label>
 									<label className="flex flex-col gap-1">
-										<span className="text-xs text-slate-400 uppercase tracking-widest">
+										<span className="text-xs text-slate-300 uppercase tracking-widest">
 											Diastolic
 										</span>
 										<input
@@ -527,7 +527,7 @@ export default function Health() {
 										/>
 									</label>
 									<label className="flex flex-col gap-1">
-										<span className="text-xs text-slate-400 uppercase tracking-widest">
+										<span className="text-xs text-slate-300 uppercase tracking-widest">
 											Pulse
 										</span>
 										<input
@@ -541,7 +541,7 @@ export default function Health() {
 										/>
 									</label>
 									<label className="flex flex-col gap-1">
-										<span className="text-xs text-slate-400 uppercase tracking-widest">
+										<span className="text-xs text-slate-300 uppercase tracking-widest">
 											Weight (kg)
 										</span>
 										<input
@@ -576,7 +576,7 @@ export default function Health() {
 										<Activity className="w-5 h-5 text-amber-400" />
 										<p className="text-sm font-black text-white tabular-nums">
 											{v.systolic}/{v.diastolic}
-											<span className="text-slate-400 font-normal ml-2">
+											<span className="text-slate-300 font-normal ml-2">
 												mmHg
 											</span>
 										</p>
@@ -588,13 +588,13 @@ export default function Health() {
 												{v.weight_kg} kg
 											</p>
 										)}
-										<span className="ml-auto text-xs text-slate-400 uppercase tracking-widest">
+										<span className="ml-auto text-xs text-slate-300 uppercase tracking-widest">
 											{v.date} {v.time}
 										</span>
 									</div>
 								))}
 								{vitals.length === 0 && (
-									<p className="text-sm text-slate-500 uppercase tracking-widest text-center py-8">
+									<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8">
 										No readings yet
 									</p>
 								)}
@@ -605,13 +605,13 @@ export default function Health() {
 			)}
 
 			<div className="flex items-center justify-between">
-				<p className="text-xs text-slate-500 uppercase tracking-widest flex items-center gap-2">
+				<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
 					<HeartPulse className="w-3.5 h-3.5" /> MCP:
 					vienna_health(operation=visits|meds|vitals) · REST /api/life/health/*
 				</p>
 				<button
 					onClick={load}
-					className="p-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+					className="p-2 rounded-xl text-slate-300 hover:text-white transition-colors"
 					title="Refresh"
 					data-testid="health-refresh"
 				>

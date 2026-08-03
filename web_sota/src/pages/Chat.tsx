@@ -270,12 +270,12 @@ export default function Chat() {
 					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 						Chat
 					</h1>
-					<p className="text-slate-500 mt-2 text-sm">
+					<p className="text-slate-300 mt-2 text-sm">
 						Vienna-aware LLM \u00B7 Ollama \u00B7 LM Studio \u00B7 OpenAI
 					</p>
 				</div>
 				<div className="flex items-center gap-2">
-					<span className="text-[10px] uppercase tracking-wider text-slate-500 font-mono bg-slate-800 px-2 py-0.5 rounded">
+					<span className="text-xs uppercase tracking-wider text-slate-300 font-mono bg-slate-800 px-2 py-0.5 rounded">
 						skill:vienna-guide
 					</span>
 					<select
@@ -315,7 +315,7 @@ export default function Chat() {
 							type="button"
 							onClick={() => sendMessage(p.message)}
 							disabled={sending}
-							className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-cosmos-500/30 text-cosmos-400 bg-cosmos-500/10 hover:bg-cosmos-500/20 transition-colors"
+							className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border border-cosmos-500/30 text-cosmos-400 bg-cosmos-500/10 hover:bg-cosmos-500/20 transition-colors"
 						>
 							<Sparkles className="w-3 h-3" />
 							{p.label}
@@ -325,7 +325,7 @@ export default function Chat() {
 					<button
 						key={p}
 						onClick={() => setInput(p)}
-						className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] border border-cosmos-500/20 text-slate-400 hover:text-cosmos-400 hover:border-cosmos-500/40 transition-colors bg-slate-900/50"
+						className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs border border-cosmos-500/20 text-slate-300 hover:text-cosmos-400 hover:border-cosmos-500/40 transition-colors bg-slate-900/50"
 					>
 						<Sparkles className="w-2.5 h-2.5" />
 						{p}
@@ -347,7 +347,7 @@ export default function Chat() {
 								className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${msg.role === "user" ? "bg-white/[0.05] border-white/10" : "bg-cosmos-500/10 border-cosmos-500/30"}`}
 							>
 								{msg.role === "user" ? (
-									<User className="w-4 h-4 text-slate-400" />
+									<User className="w-4 h-4 text-slate-300" />
 								) : (
 									<Bot className="w-4 h-4 text-cosmos-400" />
 								)}
@@ -369,7 +369,7 @@ export default function Chat() {
 										{msg.trace.map((t, ti) => (
 											<span
 												key={ti}
-												className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
+												className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
 												title={`${JSON.stringify(t.args)}`}
 											>
 												<Wrench className="w-2.5 h-2.5" />
@@ -383,7 +383,7 @@ export default function Chat() {
 						</div>
 					))}
 					{sending && (
-						<div className="flex gap-3 text-slate-500 text-sm">
+						<div className="flex gap-3 text-slate-300 text-sm">
 							<Loader2 className="w-4 h-4 animate-spin text-cosmos-400" />{" "}
 							Thinking\u2026
 						</div>
@@ -395,7 +395,7 @@ export default function Chat() {
 							data-testid="chat-export"
 							onClick={handleExport}
 							disabled={messages.length === 0}
-							className="p-1.5 rounded text-slate-500 hover:text-slate-300 disabled:opacity-30"
+							className="p-1.5 rounded text-slate-300 hover:text-slate-300 disabled:opacity-30"
 							title="Export"
 						>
 							<Download className="w-3.5 h-3.5" />
@@ -404,7 +404,7 @@ export default function Chat() {
 							data-testid="chat-clear"
 							onClick={handleClear}
 							disabled={messages.length === 0}
-							className="p-1.5 rounded text-slate-500 hover:text-slate-300 disabled:opacity-30"
+							className="p-1.5 rounded text-slate-300 hover:text-slate-300 disabled:opacity-30"
 							title="Clear"
 						>
 							<Eraser className="w-3.5 h-3.5" />

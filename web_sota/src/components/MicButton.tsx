@@ -44,7 +44,7 @@ export function MicButton({
 			className={`p-3 rounded-2xl transition-colors shrink-0 ${
 				listening
 					? "bg-red-500/20 text-red-400 border border-red-500/40"
-					: "bg-white/[0.03] border border-white/[0.08] text-slate-400 hover:text-white"
+					: "bg-white/[0.03] border border-white/[0.08] text-slate-300 hover:text-white"
 			}`}
 			title={listening ? "Stop listening" : "Voice input"}
 			data-testid="chat-mic"

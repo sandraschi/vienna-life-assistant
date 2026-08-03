@@ -42,7 +42,7 @@ export default function ConcertHall() {
 					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 						Concert Hall
 					</h1>
-					<p className="text-slate-500 font-medium tracking-tight uppercase flex items-center gap-2">
+					<p className="text-slate-300 font-medium tracking-tight uppercase flex items-center gap-2">
 						<CircleDot className="w-3 h-3 text-emerald-500 fill-emerald-500 animate-pulse" />
 						Tonight in the World's Music Capital
 					</p>
@@ -58,7 +58,7 @@ export default function ConcertHall() {
 							</div>
 						))}
 					</div>
-					<span className="text-[10px] font-black uppercase tracking-widest pl-4 pr-6 text-slate-400 group-hover:text-white transition-colors">
+					<span className="text-xs font-black uppercase tracking-widest pl-4 pr-6 text-slate-300 group-hover:text-white transition-colors">
 						3 Exclusive Highlights
 					</span>
 				</div>
@@ -71,7 +71,7 @@ export default function ConcertHall() {
 
 				<div className="relative p-12 lg:p-16 h-full flex flex-col justify-end min-h-[500px]">
 					<div className="flex items-center gap-2 mb-6">
-						<span className="px-4 py-1 rounded-full bg-cosmos-500/20 text-cosmos-400 text-[10px] font-black uppercase tracking-[0.3em] border border-cosmos-500/30">
+						<span className="px-4 py-1 rounded-full bg-cosmos-500/20 text-cosmos-400 text-xs font-black uppercase tracking-[0.3em] border border-cosmos-500/30">
 							Masterpiece Tonight
 						</span>
 					</div>
@@ -108,7 +108,7 @@ export default function ConcertHall() {
 								<Music className="w-6 h-6" />
 							</div>
 							<span
-								className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border ${
+								className={`text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full border ${
 									concert.tickets === "Sold Out"
 										? "bg-red-500/10 text-red-500 border-red-500/20"
 										: concert.tickets === "Last Few"
@@ -131,14 +131,14 @@ export default function ConcertHall() {
 
 						<div className="mt-10 pt-8 border-t border-white/[0.06] flex items-center justify-between">
 							<div className="flex items-center gap-3">
-								<Clock className="w-4 h-4 text-slate-500" />
+								<Clock className="w-4 h-4 text-slate-300" />
 								<span className="text-sm font-bold text-white italic">
 									{concert.time}
 								</span>
 							</div>
 							<button
 								title="View details"
-								className="p-3 rounded-xl bg-white/[0.03] hover:bg-cosmos-500/10 text-slate-500 hover:text-cosmos-400 transition-all border border-transparent hover:border-cosmos-500/20"
+								className="p-3 rounded-xl bg-white/[0.03] hover:bg-cosmos-500/10 text-slate-300 hover:text-cosmos-400 transition-all border border-transparent hover:border-cosmos-500/20"
 							>
 								<ArrowRight className="w-5 h-5" />
 							</button>

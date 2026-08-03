@@ -44,7 +44,7 @@ export default function KaffeehausHub() {
 					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 						Kaffeehaus Hub
 					</h1>
-					<p className="text-slate-500 mt-2 font-medium tracking-tight">
+					<p className="text-slate-300 mt-2 font-medium tracking-tight">
 						The heartbeat of Vienna. From the 1st to the 9th District.
 					</p>
 				</div>
@@ -53,7 +53,7 @@ export default function KaffeehausHub() {
 						<Clock className="w-3.5 h-3.5" />
 						Live Status
 					</div>
-					<div className="px-4 py-2 text-slate-400 text-sm font-bold uppercase tracking-widest border border-transparent hover:text-white transition-colors cursor-pointer">
+					<div className="px-4 py-2 text-slate-300 text-sm font-bold uppercase tracking-widest border border-transparent hover:text-white transition-colors cursor-pointer">
 						Favorites Only
 					</div>
 				</div>
@@ -67,7 +67,7 @@ export default function KaffeehausHub() {
 
 					<div className="relative p-10 h-full flex flex-col justify-end min-h-[400px]">
 						<div className="flex items-center gap-2 mb-4">
-							<span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] border border-emerald-500/30">
+							<span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-black uppercase tracking-[0.2em] border border-emerald-500/30">
 								Sandra's High-Level Choice
 							</span>
 						</div>
@@ -85,7 +85,7 @@ export default function KaffeehausHub() {
 									<Coffee className="w-5 h-5" />
 								</div>
 								<div>
-									<p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+									<p className="text-xs text-slate-300 font-bold uppercase tracking-widest">
 										Recommended
 									</p>
 									<p className="text-sm font-bold text-white uppercase italic">
@@ -98,7 +98,7 @@ export default function KaffeehausHub() {
 									<CheckCircle2 className="w-5 h-5" />
 								</div>
 								<div>
-									<p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+									<p className="text-xs text-slate-300 font-bold uppercase tracking-widest">
 										Atmosphere
 									</p>
 									<p className="text-sm font-bold text-white uppercase italic">
@@ -122,7 +122,7 @@ export default function KaffeehausHub() {
 					<p className="text-3xl font-black text-white uppercase tracking-tighter leading-none mb-4 italic">
 						The Alsergrund Gold
 					</p>
-					<p className="text-sm text-slate-400 leading-relaxed italic mb-8 px-4">
+					<p className="text-sm text-slate-300 leading-relaxed italic mb-8 px-4">
 						"A double-shot espresso with steamed milk and a signature Berg-style
 						foam architecture."
 					</p>
@@ -152,14 +152,14 @@ export default function KaffeehausHub() {
 										? "bg-[#E89AB0]/10 text-[#E89AB0]"
 										: cafe.is_favorite
 											? "bg-emerald-500/10 text-emerald-500"
-											: "bg-white/[0.03] text-slate-400"
+											: "bg-white/[0.03] text-slate-300"
 								}`}
 							>
 								<Coffee className="w-5 h-5" />
 							</div>
 							<div className="flex flex-col items-end gap-2">
 								<span
-									className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full ${
+									className={`text-xs font-black uppercase tracking-widest px-2 py-1 rounded-full ${
 										cafe.status === "Crowded"
 											? "bg-red-500/10 text-red-500"
 											: cafe.status === "Busy"
@@ -170,7 +170,7 @@ export default function KaffeehausHub() {
 									{cafe.status}
 								</span>
 								{cafe.is_aida && (
-									<span className="text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full bg-[#E89AB0]/20 text-[#E89AB0] border border-[#E89AB0]/30 animate-pulse">
+									<span className="text-xs font-black uppercase tracking-widest px-2 py-1 rounded-full bg-[#E89AB0]/20 text-[#E89AB0] border border-[#E89AB0]/30 animate-pulse">
 										AIDA Special
 									</span>
 								)}
@@ -183,20 +183,20 @@ export default function KaffeehausHub() {
 								<Heart className="w-4 h-4 fill-emerald-500 text-emerald-500 animate-pulse" />
 							)}
 						</h3>
-						<p className="text-sm text-slate-500 font-medium mb-6 uppercase italic leading-snug">
+						<p className="text-sm text-slate-300 font-medium mb-6 uppercase italic leading-snug">
 							{cafe.highlight}
 						</p>
 
 						<div className="flex items-center justify-between pt-4 border-t border-white/[0.04]">
 							<div className="flex items-center gap-1.5">
-								<MapPin className="w-3 h-3 text-slate-600" />
-								<span className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">
+								<MapPin className="w-3 h-3 text-slate-300" />
+								<span className="text-xs font-bold text-slate-300 uppercase tracking-widest">
 									{cafe.is_favorite ? "ALSERGRUND" : "INNER CITY"}
 								</span>
 							</div>
 							<button
 								title="Café details"
-								className="p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-500 hover:text-white transition-all"
+								className="p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all"
 							>
 								<Info className="w-4 h-4" />
 							</button>

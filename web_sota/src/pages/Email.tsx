@@ -130,7 +130,7 @@ export default function Email() {
 					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 						Email
 					</h1>
-					<p className="text-slate-400 mt-2 text-sm">
+					<p className="text-slate-300 mt-2 text-sm">
 						Inbox, search, and send — via the fleet email-mcp gateway
 					</p>
 				</div>
@@ -159,7 +159,7 @@ export default function Email() {
 					<button
 						type="button"
 						onClick={() => load()}
-						className="p-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+						className="p-2 rounded-xl text-slate-300 hover:text-white transition-colors"
 						title="Refresh"
 					>
 						<RefreshCw className="w-4 h-4" />
@@ -169,7 +169,7 @@ export default function Email() {
 
 			{status?.error && (
 				<p
-					className="text-sm text-slate-500 uppercase tracking-widest"
+					className="text-sm text-slate-300 uppercase tracking-widest"
 					data-testid="email-error"
 				>
 					{status.error}
@@ -189,7 +189,7 @@ export default function Email() {
 							className="glass-card px-5 py-3"
 							data-testid="kpi-email-unread"
 						>
-							<p className="text-xs font-black text-slate-500 uppercase tracking-widest">
+							<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
 								Unread
 							</p>
 							<p className="text-2xl font-black text-cosmos-400">
@@ -199,7 +199,7 @@ export default function Email() {
 					)}
 					{stats.total !== undefined && (
 						<div className="glass-card px-5 py-3" data-testid="kpi-email-total">
-							<p className="text-xs font-black text-slate-500 uppercase tracking-widest">
+							<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
 								Total
 							</p>
 							<p className="text-2xl font-black text-emerald-400">
@@ -269,7 +269,7 @@ export default function Email() {
 
 						<div className="lg:col-span-2 space-y-4">
 							<div className="relative">
-								<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+								<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
 								<input
 									data-testid="email-search"
 									placeholder="Search mail…"
@@ -286,7 +286,7 @@ export default function Email() {
 											<p className="text-sm font-black text-white uppercase tracking-tight">
 												{String(selected.subject ?? "Untitled")}
 											</p>
-											<p className="text-xs text-slate-400 mt-1">
+											<p className="text-xs text-slate-300 mt-1">
 												{String(selected.from ?? "")} ·{" "}
 												{fmtDate(String(selected.date ?? ""))}
 											</p>
@@ -315,26 +315,26 @@ export default function Email() {
 										>
 											<div className="flex items-center justify-between gap-4">
 												<p
-													className={`text-sm truncate ${e.read ? "text-slate-400" : "font-black text-white"}`}
+													className={`text-sm truncate ${e.read ? "text-slate-300" : "font-black text-white"}`}
 												>
 													{e.read ? (
-														<MailOpen className="w-3.5 h-3.5 inline mr-2 text-slate-600" />
+														<MailOpen className="w-3.5 h-3.5 inline mr-2 text-slate-300" />
 													) : (
 														<Mail className="w-3.5 h-3.5 inline mr-2 text-cosmos-400" />
 													)}
 													{e.subject || "(no subject)"}
 												</p>
-												<span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest shrink-0">
+												<span className="text-xs text-slate-300 font-bold uppercase tracking-widest shrink-0">
 													{fmtDate(e.date)}
 												</span>
 											</div>
-											<p className="text-xs text-slate-500 mt-1 truncate">
+											<p className="text-xs text-slate-300 mt-1 truncate">
 												{e.from}
 											</p>
 										</button>
 									))}
 									{emails.length === 0 && (
-										<p className="text-sm text-slate-500 uppercase tracking-widest text-center py-8">
+										<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8">
 											{searching ? "No mail found" : "Inbox empty"}
 										</p>
 									)}
@@ -345,7 +345,7 @@ export default function Email() {
 				</>
 			)}
 
-			<p className="text-xs text-slate-500 uppercase tracking-widest flex items-center gap-2">
+			<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
 				<MailQuestion className="w-3.5 h-3.5" />
 				Gateway: email-mcp :10813 (credentials + Graph token stay there) · MCP:
 				vienna_email(operation=status|inbox|search|send|mark_read)

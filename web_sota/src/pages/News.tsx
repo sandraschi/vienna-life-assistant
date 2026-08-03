@@ -63,7 +63,7 @@ const tagList = (tags: string) =>
 		.slice(0, 4);
 
 const urgencyColor = (s: number) =>
-	s >= 8 ? "text-red-400" : s >= 5 ? "text-amber-400" : "text-slate-500";
+	s >= 8 ? "text-red-400" : s >= 5 ? "text-amber-400" : "text-slate-300";
 
 export default function News() {
 	const [data, setData] = useState<Overview | null>(null);
@@ -113,7 +113,7 @@ export default function News() {
 					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 						News
 					</h1>
-					<p className="text-slate-400 mt-2 text-sm">
+					<p className="text-slate-300 mt-2 text-sm">
 						Your personal news site — scored and distilled by the fleet
 						aiwatcher engine
 					</p>
@@ -121,7 +121,7 @@ export default function News() {
 				<button
 					type="button"
 					onClick={load}
-					className="p-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+					className="p-2 rounded-xl text-slate-300 hover:text-white transition-colors"
 					title="Refresh"
 				>
 					<RefreshCw className="w-4 h-4" />
@@ -141,7 +141,7 @@ export default function News() {
 			{!error && data?.stats_payload && (
 				<div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
 					<div className="glass-card p-5">
-						<p className="text-xs font-black text-slate-500 uppercase tracking-widest mb-1">
+						<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
 							Last 24h
 						</p>
 						<p
@@ -150,10 +150,10 @@ export default function News() {
 						>
 							{data.stats_payload.items_last_24h ?? 0}
 						</p>
-						<p className="text-xs text-slate-400 mt-1">stories ingested</p>
+						<p className="text-xs text-slate-300 mt-1">stories ingested</p>
 					</div>
 					<div className="glass-card p-5">
-						<p className="text-xs font-black text-slate-500 uppercase tracking-widest mb-1">
+						<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
 							Feeds
 						</p>
 						<p
@@ -162,14 +162,14 @@ export default function News() {
 						>
 							{data.stats_payload.active_feeds ?? 0}
 						</p>
-						<p className="text-xs text-slate-400 mt-1">
+						<p className="text-xs text-slate-300 mt-1">
 							{data.stats_payload.degraded_feeds
 								? `${data.stats_payload.degraded_feeds} degraded`
 								: "all healthy"}
 						</p>
 					</div>
 					<div className="glass-card p-5">
-						<p className="text-xs font-black text-slate-500 uppercase tracking-widest mb-1">
+						<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
 							Critical
 						</p>
 						<p
@@ -178,10 +178,10 @@ export default function News() {
 						>
 							{data.stats_payload.critical_items ?? 0}
 						</p>
-						<p className="text-xs text-slate-400 mt-1">high-urgency items</p>
+						<p className="text-xs text-slate-300 mt-1">high-urgency items</p>
 					</div>
 					<div className="glass-card p-5">
-						<p className="text-xs font-black text-slate-500 uppercase tracking-widest mb-1">
+						<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
 							Archive
 						</p>
 						<p
@@ -190,7 +190,7 @@ export default function News() {
 						>
 							{data.stats_payload.total_items ?? 0}
 						</p>
-						<p className="text-xs text-slate-400 mt-1">items indexed</p>
+						<p className="text-xs text-slate-300 mt-1">items indexed</p>
 					</div>
 				</div>
 			)}
@@ -210,7 +210,7 @@ export default function News() {
 								className="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-white/[0.03] border border-white/[0.08] text-slate-300 hover:text-cosmos-400 hover:border-cosmos-500/40 transition-colors"
 								data-testid={`trend-${t.tag}`}
 							>
-								{t.tag} <span className="text-slate-600 ml-1">{t.count}</span>
+								{t.tag} <span className="text-slate-300 ml-1">{t.count}</span>
 							</button>
 						))}
 					</div>
@@ -218,7 +218,7 @@ export default function News() {
 			)}
 
 			<div className="relative">
-				<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+				<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
 				<input
 					data-testid="news-search"
 					placeholder="Search all 12,000+ indexed stories…"
@@ -250,12 +250,12 @@ export default function News() {
 										{item.title}
 									</p>
 									<span
-										className={`text-[10px] font-black uppercase tracking-widest shrink-0 ${urgencyColor(item.urgency_score ?? 0)}`}
+										className={`text-xs font-black uppercase tracking-widest shrink-0 ${urgencyColor(item.urgency_score ?? 0)}`}
 									>
 										{(item.urgency_score ?? 0).toFixed(1)}
 									</span>
 								</div>
-								<p className="text-xs text-slate-400 mt-2 line-clamp-2">
+								<p className="text-xs text-slate-300 mt-2 line-clamp-2">
 									{item.distilled_summary || item.summary}
 								</p>
 								<div className="flex items-center justify-between mt-3">
@@ -263,25 +263,25 @@ export default function News() {
 										{tagList(item.tags).map((t) => (
 											<span
 												key={t}
-												className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
+												className="px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
 											>
 												{t}
 											</span>
 										))}
 									</div>
-									<span className="text-[10px] text-slate-600 font-bold uppercase tracking-widest shrink-0 ml-2">
+									<span className="text-xs text-slate-300 font-bold uppercase tracking-widest shrink-0 ml-2">
 										{fmtTime(item.published_at)}
 									</span>
 								</div>
 								{item.url && (
-									<span className="flex items-center gap-1 text-[10px] text-cosmos-400 uppercase tracking-widest mt-2">
+									<span className="flex items-center gap-1 text-xs text-cosmos-400 uppercase tracking-widest mt-2">
 										Open <ArrowUpRight className="w-3 h-3" />
 									</span>
 								)}
 							</a>
 						))}
 						{stories.length === 0 && (
-							<p className="text-sm text-slate-500 uppercase tracking-widest text-center py-8">
+							<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8">
 								No stories found
 							</p>
 						)}
@@ -298,7 +298,7 @@ export default function News() {
 										{item.title}
 									</p>
 									{item.distilled_summary && (
-										<p className="text-xs text-slate-400 mt-1 line-clamp-2">
+										<p className="text-xs text-slate-300 mt-1 line-clamp-2">
 											{item.distilled_summary}
 										</p>
 									)}
@@ -309,7 +309,7 @@ export default function News() {
 				</div>
 			)}
 
-			<p className="text-xs text-slate-500 uppercase tracking-widest flex items-center gap-2">
+			<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
 				<Newspaper className="w-3.5 h-3.5" />
 				Upstream: aiwatcher-mcp :10946 · MCP:
 				vienna_news(operation=top|trends|search|morning) · REST /api/news/*

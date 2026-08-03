@@ -76,7 +76,7 @@ export default function Logs() {
 					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 						Event Logs
 					</h1>
-					<p className="text-slate-500 mt-2 text-sm">
+					<p className="text-slate-300 mt-2 text-sm">
 						Fleet ring buffer at /api/logs
 					</p>
 				</div>
@@ -109,7 +109,7 @@ export default function Logs() {
 			</div>
 
 			<div className="glass-card p-4 flex flex-wrap gap-4 items-center">
-				<label className="text-sm text-slate-400 flex items-center gap-2">
+				<label className="text-sm text-slate-300 flex items-center gap-2">
 					Level
 					<select
 						value={level}
@@ -131,19 +131,19 @@ export default function Logs() {
 			</div>
 
 			{data && (
-				<p className="text-sm text-slate-500">
+				<p className="text-sm text-slate-300">
 					{data.total} entries (max {data.max_entries})
 				</p>
 			)}
 
 			<div className="glass-card p-6 font-mono text-sm space-y-2 max-h-[60vh] overflow-y-auto">
 				{loading ? (
-					<div className="text-slate-500">Loading…</div>
+					<div className="text-slate-300">Loading…</div>
 				) : (
 					data?.entries.map((l) => (
-						<div key={l.id} className="flex gap-4 text-slate-400 flex-wrap">
+						<div key={l.id} className="flex gap-4 text-slate-300 flex-wrap">
 							<ScrollText className="w-4 h-4 shrink-0 opacity-40" />
-							<span className="text-slate-600">{l.timestamp}</span>
+							<span className="text-slate-300">{l.timestamp}</span>
 							<span
 								className={
 									l.level === "ERROR" ? "text-red-400" : "text-emerald-400"
@@ -151,7 +151,7 @@ export default function Logs() {
 							>
 								{l.level}
 							</span>
-							<span className="text-slate-500">{l.kind}</span>
+							<span className="text-slate-300">{l.kind}</span>
 							<span className="text-slate-300">{l.detail}</span>
 						</div>
 					))

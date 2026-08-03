@@ -136,14 +136,14 @@ export default function AppLayout() {
 							<span className="font-black text-sm text-white uppercase tracking-[0.3em] leading-none mb-1">
 								Vienna Life
 							</span>
-							<span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none">
+							<span className="text-xs text-slate-300 font-bold uppercase tracking-widest leading-none">
 								Assistant SOTA
 							</span>
 						</div>
 					)}
 					<button
 						onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-						className="ml-auto w-8 h-8 rounded-xl flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/[0.05] transition-all flex-shrink-0"
+						className="ml-auto w-8 h-8 rounded-xl flex items-center justify-center text-slate-300 hover:text-white hover:bg-white/[0.05] transition-all flex-shrink-0"
 						title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
 					>
 						{isSidebarOpen ? (
@@ -158,7 +158,7 @@ export default function AppLayout() {
 					{/* Main Section */}
 					<div>
 						{isSidebarOpen && (
-							<p className="px-4 mb-4 text-[9px] font-black text-slate-600 uppercase tracking-[0.3em]">
+							<p className="px-4 mb-4 text-xs font-black text-slate-300 uppercase tracking-[0.3em]">
 								Fleet SOTA
 							</p>
 						)}
@@ -190,7 +190,7 @@ export default function AppLayout() {
 
 					<div>
 						{isSidebarOpen && (
-							<p className="px-4 mb-4 text-[9px] font-black text-slate-600 uppercase tracking-[0.3em]">
+							<p className="px-4 mb-4 text-xs font-black text-slate-300 uppercase tracking-[0.3em]">
 								Life
 							</p>
 						)}
@@ -219,7 +219,7 @@ export default function AppLayout() {
 					{/* Vienna Life Section */}
 					<div>
 						{isSidebarOpen && (
-							<p className="px-4 mb-4 text-[9px] font-black text-emerald-500/60 uppercase tracking-[0.3em]">
+							<p className="px-4 mb-4 text-xs font-black text-emerald-500/60 uppercase tracking-[0.3em]">
 								Vienna Today
 							</p>
 						)}
@@ -251,7 +251,7 @@ export default function AppLayout() {
 					{/* System Section */}
 					<div>
 						{isSidebarOpen && (
-							<p className="px-4 mb-4 text-[9px] font-black text-slate-600 uppercase tracking-[0.3em]">
+							<p className="px-4 mb-4 text-xs font-black text-slate-300 uppercase tracking-[0.3em]">
 								System
 							</p>
 						)}
@@ -292,7 +292,7 @@ export default function AppLayout() {
 				<header className="h-20 border-b border-white/[0.04] bg-black/40 backdrop-blur-3xl sticky top-0 z-40 px-10 flex items-center justify-between">
 					<div className="flex items-center gap-6 flex-1">
 						<div className="relative group max-w-lg w-full">
-							<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-cosmos-400 transition-colors" />
+							<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within:text-cosmos-400 transition-colors" />
 							<input
 								type="text"
 								placeholder="Guten Morgen, Sandra. What's happening in Vienna?"
@@ -308,7 +308,7 @@ export default function AppLayout() {
 								data-testid="backend-dot"
 							></div>
 							<span
-								className={`text-[9px] font-black uppercase tracking-widest ${backendOk === null ? "text-slate-500" : backendOk ? "text-emerald-500" : "text-red-400"}`}
+								className={`text-xs font-black uppercase tracking-widest ${backendOk === null ? "text-slate-300" : backendOk ? "text-emerald-500" : "text-red-400"}`}
 							>
 								{backendOk === null
 									? "Connecting..."
@@ -319,7 +319,7 @@ export default function AppLayout() {
 						</div>
 
 						<button
-							className="p-3 rounded-2xl hover:bg-white/[0.05] text-slate-400 hover:text-white transition-all relative group"
+							className="p-3 rounded-2xl hover:bg-white/[0.05] text-slate-300 hover:text-white transition-all relative group"
 							aria-label="Notifications"
 						>
 							<Bell className="w-5 h-5" />
@@ -328,15 +328,15 @@ export default function AppLayout() {
 
 						<div className="flex items-center gap-4 pl-6 border-l border-white/[0.04] group cursor-pointer">
 							<div className="text-right hidden sm:block">
-								<p className="text-[10px] font-black text-white uppercase tracking-widest leading-none mb-1">
+								<p className="text-xs font-black text-white uppercase tracking-widest leading-none mb-1">
 									Sandra Schipal
 								</p>
-								<p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest leading-none">
+								<p className="text-xs text-slate-300 font-bold uppercase tracking-widest leading-none">
 									Architect
 								</p>
 							</div>
 							<div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-white/[0.1] flex items-center justify-center shadow-lg group-hover:border-cosmos-500/50 transition-all">
-								<User className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" />
+								<User className="w-5 h-5 text-slate-300 group-hover:text-white transition-colors" />
 							</div>
 						</div>
 					</div>

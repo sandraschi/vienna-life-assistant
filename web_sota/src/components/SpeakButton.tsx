@@ -17,7 +17,7 @@ export function SpeakButton({ text }: { text: string }) {
 				setSpeaking(true);
 				speak(text, () => setSpeaking(false));
 			}}
-			className={`p-1.5 rounded transition-colors ${speaking ? "text-cosmos-400" : "text-slate-500 hover:text-white"}`}
+			className={`p-1.5 rounded transition-colors ${speaking ? "text-cosmos-400" : "text-slate-300 hover:text-white"}`}
 			title={speaking ? "Stop" : "Speak"}
 		>
 			<Volume2 className="h-3.5 w-3.5" />

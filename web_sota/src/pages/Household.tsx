@@ -163,7 +163,7 @@ export default function Household() {
 					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 						Household
 					</h1>
-					<p className="text-slate-400 mt-2 text-sm">
+					<p className="text-slate-300 mt-2 text-sm">
 						Subscriptions, home maintenance, and pet care — the silent costs of
 						life
 					</p>
@@ -183,7 +183,7 @@ export default function Household() {
 							className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors flex items-center gap-2 ${
 								tab === key
 									? "bg-cosmos-500 text-white"
-									: "text-slate-400 hover:text-white"
+									: "text-slate-300 hover:text-white"
 							}`}
 						>
 							<Icon className="w-4 h-4" /> {label}
@@ -309,7 +309,7 @@ export default function Household() {
 											<p className="text-sm font-black text-white uppercase tracking-tight">
 												{s.name}
 											</p>
-											<p className="text-xs text-slate-400 uppercase tracking-widest">
+											<p className="text-xs text-slate-300 uppercase tracking-widest">
 												{s.category}
 												{s.auto_renew ? " · auto-renew" : " · manual"}
 											</p>
@@ -324,7 +324,7 @@ export default function Household() {
 										</span>
 										<button
 											onClick={() => deleteSub(s)}
-											className="text-xs text-slate-500 hover:text-red-400 transition-colors uppercase tracking-widest"
+											className="text-xs text-slate-300 hover:text-red-400 transition-colors uppercase tracking-widest"
 											title="Delete"
 										>
 											×
@@ -332,7 +332,7 @@ export default function Household() {
 									</div>
 								))}
 								{subs.length === 0 && (
-									<p className="text-sm text-slate-500 uppercase tracking-widest text-center py-8">
+									<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8">
 										No subscriptions tracked
 									</p>
 								)}
@@ -408,13 +408,13 @@ export default function Household() {
 											onClick={() => toggleTask(t)}
 											className="shrink-0"
 										>
-											<Circle className="w-5 h-5 text-slate-600 hover:text-emerald-400 transition-colors" />
+											<Circle className="w-5 h-5 text-slate-300 hover:text-emerald-400 transition-colors" />
 										</button>
 										<div className="flex-1">
 											<p className="text-sm font-black text-white uppercase tracking-tight">
 												{t.name}
 											</p>
-											<p className="text-xs text-slate-400 uppercase tracking-widest">
+											<p className="text-xs text-slate-300 uppercase tracking-widest">
 												{t.category}
 												{t.frequency_days > 0
 													? ` · every ${t.frequency_days}d`
@@ -429,7 +429,7 @@ export default function Household() {
 									</div>
 								))}
 								{dueTasks.length === 0 && (
-									<p className="text-sm text-slate-500 uppercase tracking-widest text-center py-8">
+									<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8">
 										All caught up
 									</p>
 								)}
@@ -497,7 +497,7 @@ export default function Household() {
 												{p.pet_name} — {p.event_type}
 											</p>
 											{p.notes && (
-												<p className="text-xs text-slate-400 mt-1">{p.notes}</p>
+												<p className="text-xs text-slate-300 mt-1">{p.notes}</p>
 											)}
 										</div>
 										<span className="text-xs font-bold text-amber-400 uppercase tracking-widest">
@@ -506,7 +506,7 @@ export default function Household() {
 									</div>
 								))}
 								{petUpcoming.length === 0 && (
-									<p className="text-sm text-slate-500 uppercase tracking-widest text-center py-8">
+									<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8">
 										No upcoming care events
 									</p>
 								)}
@@ -516,7 +516,7 @@ export default function Household() {
 				</div>
 			)}
 
-			<p className="text-xs text-slate-500 uppercase tracking-widest flex items-center gap-2">
+			<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
 				<HomeIcon className="w-3.5 h-3.5" /> MCP:
 				vienna_household(operation=subscriptions|tasks|pet) · REST /api/life/*
 			</p>

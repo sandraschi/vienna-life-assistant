@@ -44,7 +44,7 @@ export default function Tools() {
 				<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 					MCP Tools
 				</h1>
-				<p className="text-slate-500 mt-2 text-sm">
+				<p className="text-slate-300 mt-2 text-sm">
 					ViLife agent surface — mounted at{" "}
 					<code className="text-cosmos-400">/mcp</code>
 				</p>
@@ -64,7 +64,7 @@ export default function Tools() {
 			{caps && (
 				<>
 					<div className="glass-card p-6">
-						<p className="text-sm text-slate-500 uppercase tracking-widest font-black mb-3">
+						<p className="text-sm text-slate-300 uppercase tracking-widest font-black mb-3">
 							{caps.server.name} v{caps.server.version} ·{" "}
 							{caps.server.fastmcp ?? "FastMCP"}
 						</p>
@@ -72,10 +72,10 @@ export default function Tools() {
 							{Object.entries(caps.features).map(([key, on]) => (
 								<span
 									key={key}
-									className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
+									className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest border ${
 										on
 											? "border-emerald-500/40 text-emerald-400 bg-emerald-500/10"
-											: "border-slate-700 text-slate-600"
+											: "border-slate-700 text-slate-300"
 									}`}
 								>
 									{key.replace(/_/g, " ")} {on ? "on" : "off"}
@@ -83,7 +83,7 @@ export default function Tools() {
 							))}
 						</div>
 						{caps.runtime && (
-							<p className="text-[10px] text-slate-600 mt-4 uppercase tracking-widest">
+							<p className="text-xs text-slate-300 mt-4 uppercase tracking-widest">
 								Transport: {caps.runtime.transport} · Surface:{" "}
 								{caps.runtime.surface_mode}
 							</p>
@@ -98,7 +98,7 @@ export default function Tools() {
 										{name}
 									</h3>
 								</div>
-								<p className="text-sm text-slate-500">
+								<p className="text-sm text-slate-300">
 									{name === "vienna_life" &&
 										"Life admin portmanteau (calendar, todos, brief)"}
 									{name === "vienna_life_agentic" &&

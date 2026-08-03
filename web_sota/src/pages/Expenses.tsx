@@ -54,7 +54,7 @@ export default function Expenses() {
 				<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 					Expenses
 				</h1>
-				<p className="text-slate-500 mt-2 text-sm">
+				<p className="text-slate-300 mt-2 text-sm">
 					Month tracking — Euro, Billa & Spar heavy
 				</p>
 			</div>
@@ -62,7 +62,7 @@ export default function Expenses() {
 			{summary && (
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 					<div className="glass-card p-8">
-						<p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">
+						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
 							This month
 						</p>
 						<p className="text-4xl font-black text-white mt-2 tabular-nums">
@@ -74,24 +74,24 @@ export default function Expenses() {
 						</p>
 					</div>
 					<div className="glass-card p-8">
-						<p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">
+						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
 							Budget used
 						</p>
 						<p className="text-4xl font-black text-white mt-2 tabular-nums">
 							{pctOfBudget}%
 						</p>
-						<p className="text-sm text-slate-500 mt-2">
+						<p className="text-sm text-slate-300 mt-2">
 							of €{summary.budget_eur.toFixed(0)}
 						</p>
 					</div>
 					<div className="glass-card p-8">
-						<p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">
+						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
 							Top store
 						</p>
 						<p className="text-4xl font-black text-white mt-2 uppercase italic">
 							{summary.top_store}
 						</p>
-						<p className="text-sm text-slate-500 mt-2 flex items-center gap-1">
+						<p className="text-sm text-slate-300 mt-2 flex items-center gap-1">
 							<Store className="w-3.5 h-3.5" />
 							Alsergrund runs
 						</p>
@@ -101,13 +101,13 @@ export default function Expenses() {
 
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 				<div className="glass-card p-8 space-y-4">
-					<h2 className="text-[10px] font-black text-white uppercase tracking-widest">
+					<h2 className="text-xs font-black text-white uppercase tracking-widest">
 						By category
 					</h2>
 					{summary?.categories.map((c) => (
 						<div key={c.name} className="space-y-1">
 							<div className="flex justify-between text-sm">
-								<span className="text-slate-400 uppercase font-bold">
+								<span className="text-slate-300 uppercase font-bold">
 									{c.name}
 								</span>
 								<span className="text-white font-black tabular-nums">
@@ -127,7 +127,7 @@ export default function Expenses() {
 				<div className="glass-card overflow-hidden">
 					<div className="px-8 py-5 border-b border-white/[0.06] flex items-center gap-3">
 						<CreditCard className="w-5 h-5 text-cosmos-400" />
-						<span className="text-[10px] font-black uppercase tracking-widest text-white">
+						<span className="text-xs font-black uppercase tracking-widest text-white">
 							Recent
 						</span>
 					</div>
@@ -141,7 +141,7 @@ export default function Expenses() {
 									<p className="text-sm font-black text-white uppercase">
 										{e.store}
 									</p>
-									<p className="text-[10px] text-slate-500 mt-1">
+									<p className="text-xs text-slate-300 mt-1">
 										{e.note} · {e.date}
 									</p>
 								</div>
@@ -149,7 +149,7 @@ export default function Expenses() {
 									<p className="text-sm font-black text-white tabular-nums">
 										€{e.amount_eur.toFixed(2)}
 									</p>
-									<p className="text-[9px] text-slate-600 uppercase">
+									<p className="text-xs text-slate-300 uppercase">
 										{e.category}
 									</p>
 								</div>

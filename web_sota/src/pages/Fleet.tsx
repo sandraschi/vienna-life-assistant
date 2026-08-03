@@ -93,12 +93,12 @@ export default function Fleet() {
 							Fleet Command
 						</h1>
 					</div>
-					<p className="text-slate-500 text-sm font-medium uppercase tracking-widest">
+					<p className="text-slate-300 text-sm font-medium uppercase tracking-widest">
 						Meta dashboard — jump to any MCP webapp (L3 above L2 destroyers)
 					</p>
 				</div>
 				<div className="flex items-center gap-3">
-					<label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 cursor-pointer">
+					<label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-300 cursor-pointer">
 						<input
 							type="checkbox"
 							checked={probe}
@@ -121,7 +121,7 @@ export default function Fleet() {
 			{data?.summary && (
 				<div className="grid grid-cols-2 md:grid-cols-4 gap-6">
 					<div className="glass-card p-6">
-						<p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
 							Registered
 						</p>
 						<p className="text-3xl font-black text-white mt-2">
@@ -129,7 +129,7 @@ export default function Fleet() {
 						</p>
 					</div>
 					<div className="glass-card p-6">
-						<p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
 							Online
 						</p>
 						<p className="text-3xl font-black text-emerald-400 mt-2">
@@ -137,7 +137,7 @@ export default function Fleet() {
 						</p>
 					</div>
 					<div className="glass-card p-6">
-						<p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
 							Quarantined
 						</p>
 						<p className="text-3xl font-black text-amber-400 mt-2">
@@ -145,7 +145,7 @@ export default function Fleet() {
 						</p>
 					</div>
 					<div className="glass-card p-6">
-						<p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
 							Categories
 						</p>
 						<p className="text-3xl font-black text-cosmos-400 mt-2">
@@ -156,7 +156,7 @@ export default function Fleet() {
 			)}
 
 			<div className="flex flex-wrap gap-2 items-center">
-				<Filter className="w-4 h-4 text-slate-600" />
+				<Filter className="w-4 h-4 text-slate-300" />
 				{[
 					"all",
 					"carrier",
@@ -171,10 +171,10 @@ export default function Fleet() {
 						key={f}
 						type="button"
 						onClick={() => setFilter(f)}
-						className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${
+						className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border transition-all ${
 							filter === f
 								? "bg-cosmos-500/20 border-cosmos-500/40 text-white"
-								: "bg-white/[0.02] border-white/[0.06] text-slate-500 hover:text-white"
+								: "bg-white/[0.02] border-white/[0.06] text-slate-300 hover:text-white"
 						}`}
 					>
 						{f}
@@ -183,7 +183,7 @@ export default function Fleet() {
 			</div>
 
 			{loading && !data && (
-				<p className="text-slate-500 text-sm uppercase tracking-widest font-bold">
+				<p className="text-slate-300 text-sm uppercase tracking-widest font-bold">
 					Loading fleet registry…
 				</p>
 			)}
@@ -210,7 +210,7 @@ export default function Fleet() {
 										<h3 className="text-sm font-black text-white uppercase tracking-tight">
 											{ship.name}
 										</h3>
-										<p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">
+										<p className="text-xs font-bold text-slate-300 uppercase tracking-widest">
 											{CLASS_LABELS[ship.ship_class] ?? ship.ship_class} ·{" "}
 											{ship.category}
 										</p>
@@ -225,12 +225,12 @@ export default function Fleet() {
 								)}
 							</div>
 
-							<p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">
+							<p className="text-[11px] text-slate-300 line-clamp-2 leading-relaxed">
 								{ship.description}
 							</p>
 
 							<div className="flex items-center justify-between mt-auto pt-2 border-t border-white/[0.04]">
-								<span className="text-[9px] font-mono text-slate-600">
+								<span className="text-xs font-mono text-slate-300">
 									{ship.frontend_port > 0
 										? `:${ship.frontend_port}`
 										: ship.backend_port > 0
@@ -238,7 +238,7 @@ export default function Fleet() {
 											: "no port"}
 								</span>
 								{quarantined ? (
-									<span className="flex items-center gap-1 text-[9px] font-black text-amber-500 uppercase">
+									<span className="flex items-center gap-1 text-xs font-black text-amber-500 uppercase">
 										<AlertTriangle className="w-3 h-3" />
 										{ship.status}
 									</span>
@@ -247,12 +247,12 @@ export default function Fleet() {
 										href={ship.url}
 										target="_blank"
 										rel="noopener noreferrer"
-										className="flex items-center gap-1 text-[10px] font-black text-cosmos-400 uppercase tracking-widest hover:text-white transition-colors"
+										className="flex items-center gap-1 text-xs font-black text-cosmos-400 uppercase tracking-widest hover:text-white transition-colors"
 									>
 										Open <ExternalLink className="w-3 h-3" />
 									</a>
 								) : (
-									<span className="text-[9px] text-slate-600 uppercase">
+									<span className="text-xs text-slate-300 uppercase">
 										stdio only
 									</span>
 								)}
@@ -263,7 +263,7 @@ export default function Fleet() {
 			</div>
 
 			{data?.ops_root && (
-				<p className="text-[9px] text-slate-700 font-mono">
+				<p className="text-xs text-slate-700 font-mono">
 					Registry: {data.ops_root}
 				</p>
 			)}

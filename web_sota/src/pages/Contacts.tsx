@@ -79,13 +79,13 @@ export default function Contacts() {
 					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 						Contacts
 					</h1>
-					<p className="text-slate-400 mt-2 text-sm">
+					<p className="text-slate-300 mt-2 text-sm">
 						People, birthdays, and relationships — never miss a birthday again
 					</p>
 				</div>
 				<button
 					onClick={load}
-					className="p-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+					className="p-2 rounded-xl text-slate-300 hover:text-white transition-colors"
 					title="Refresh"
 				>
 					<RefreshCw className="w-4 h-4" />
@@ -186,7 +186,7 @@ export default function Contacts() {
 									<p className="text-sm font-black text-white uppercase tracking-tight truncate">
 										{c.name}
 									</p>
-									<p className="text-xs text-slate-400 uppercase tracking-widest">
+									<p className="text-xs text-slate-300 uppercase tracking-widest">
 										{c.relationship || "—"}
 										{c.favorite && (
 											<Heart className="w-3 h-3 inline ml-1 text-pink-400 fill-pink-400" />
@@ -197,19 +197,19 @@ export default function Contacts() {
 							<div className="mt-4 space-y-2 text-sm">
 								{c.phone && (
 									<p className="flex items-center gap-2 text-slate-300">
-										<Phone className="w-3.5 h-3.5 text-slate-500" />
+										<Phone className="w-3.5 h-3.5 text-slate-300" />
 										{c.phone}
 									</p>
 								)}
 								{c.email && (
 									<p className="flex items-center gap-2 text-slate-300 truncate">
-										<Mail className="w-3.5 h-3.5 text-slate-500" />
+										<Mail className="w-3.5 h-3.5 text-slate-300" />
 										{c.email}
 									</p>
 								)}
 								{c.birthday && (
 									<p className="flex items-center gap-2 text-slate-300">
-										<Cake className="w-3.5 h-3.5 text-slate-500" />
+										<Cake className="w-3.5 h-3.5 text-slate-300" />
 										{c.birthday}
 									</p>
 								)}
@@ -217,7 +217,7 @@ export default function Contacts() {
 						</div>
 					))}
 					{contacts.length === 0 && (
-						<p className="text-sm text-slate-500 uppercase tracking-widest text-center py-8 col-span-full">
+						<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8 col-span-full">
 							No contacts yet
 						</p>
 					)}

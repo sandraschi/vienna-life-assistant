@@ -29,7 +29,7 @@ export default function Apps() {
 				<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 					Apps Hub
 				</h1>
-				<p className="text-slate-500 mt-2 text-sm">
+				<p className="text-slate-300 mt-2 text-sm">
 					Fleet webapps from registry — one click to L2 destroyers
 				</p>
 			</div>
@@ -52,7 +52,7 @@ export default function Apps() {
 							<h3 className="font-black text-white mt-4 text-sm uppercase tracking-widest">
 								{s.name}
 							</h3>
-							<p className="text-[10px] text-slate-500 mt-2">
+							<p className="text-xs text-slate-300 mt-2">
 								:{s.frontend_port} · {s.status}
 							</p>
 						</a>

@@ -202,7 +202,7 @@ export default function Dashboard() {
 					<h1 className="text-4xl md:text-5xl font-black gradient-text tracking-tighter uppercase italic leading-tight mb-3">
 						Vienna Life
 					</h1>
-					<p className="text-slate-400 text-sm max-w-xl leading-relaxed">
+					<p className="text-slate-300 text-sm max-w-xl leading-relaxed">
 						Your local layer for the 9th district — transit, culture, coffee,
 						and daily logistics. All data served from your own fleet, zero cloud
 						dependence.
@@ -219,13 +219,13 @@ export default function Dashboard() {
 							className="glass-card p-5"
 							data-testid={`kpi-${s.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
 						>
-							<p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">
+							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
 								{s.title}
 							</p>
 							<p className="text-2xl font-black text-white truncate">
 								{s.value}
 							</p>
-							<p className="text-xs text-slate-400 mt-1 truncate">{s.change}</p>
+							<p className="text-xs text-slate-300 mt-1 truncate">{s.change}</p>
 						</div>
 					))}
 				</div>
@@ -239,7 +239,7 @@ export default function Dashboard() {
 					</h3>
 					<div className="grid grid-cols-2 md:grid-cols-5 gap-4">
 						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">
+							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
 								Medications
 							</p>
 							<p
@@ -252,7 +252,7 @@ export default function Dashboard() {
 							</p>
 						</div>
 						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">
+							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
 								Next doctor
 							</p>
 							<p
@@ -265,7 +265,7 @@ export default function Dashboard() {
 							</p>
 						</div>
 						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">
+							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
 								Next trip
 							</p>
 							<p
@@ -278,7 +278,7 @@ export default function Dashboard() {
 							</p>
 						</div>
 						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">
+							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
 								Birthdays soon
 							</p>
 							<p
@@ -293,7 +293,7 @@ export default function Dashboard() {
 							</p>
 						</div>
 						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">
+							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
 								Renewals soon
 							</p>
 							<p
@@ -322,7 +322,7 @@ export default function Dashboard() {
 								<button
 									type="button"
 									onClick={speakBrief}
-									className="p-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+									className="p-2 rounded-xl text-slate-300 hover:text-white transition-colors"
 									title="Read brief aloud"
 								>
 									<Volume2 className="w-4 h-4" />
@@ -331,7 +331,7 @@ export default function Dashboard() {
 							<button
 								type="button"
 								onClick={refreshBrief}
-								className="p-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+								className="p-2 rounded-xl text-slate-300 hover:text-white transition-colors"
 								title="Regenerate brief"
 								data-testid="pa-refresh"
 							>
@@ -352,7 +352,7 @@ export default function Dashboard() {
 							{paState.alerts.map((a, i) => (
 								<span
 									key={i}
-									className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${
+									className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border ${
 										a.level === "warn"
 											? "bg-amber-500/10 border-amber-500/30 text-amber-400"
 											: "bg-cosmos-500/10 border-cosmos-500/20 text-cosmos-400"
@@ -409,7 +409,7 @@ export default function Dashboard() {
 						<button
 							key={link.label}
 							onClick={() => navigate(link.path)}
-							className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] hover:border-white/20 text-slate-400 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap"
+							className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] hover:border-white/20 text-slate-300 hover:text-white text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap"
 						>
 							<Icon className="w-3.5 h-3.5" />
 							{link.label}
@@ -428,7 +428,7 @@ export default function Dashboard() {
 							<h3 className="font-black text-sm tracking-[0.3em] uppercase text-white italic">
 								Vienna Today
 							</h3>
-							<ArrowRight className="w-4 h-4 text-slate-600" />
+							<ArrowRight className="w-4 h-4 text-slate-300" />
 						</div>
 
 						<div className="space-y-4">
@@ -442,7 +442,7 @@ export default function Dashboard() {
 										<Music className="w-5 h-5" />
 									</div>
 									<div className="flex-1 min-w-0">
-										<p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">
+										<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
 											{item.venue}
 										</p>
 										<p className="text-sm font-bold text-white truncate">
@@ -450,7 +450,7 @@ export default function Dashboard() {
 										</p>
 									</div>
 									<span
-										className={`text-[10px] font-black uppercase tracking-widest shrink-0 ${item.tickets === "Available" ? "text-emerald-500" : item.tickets === "Last Few" ? "text-amber-500" : "text-red-500"}`}
+										className={`text-xs font-black uppercase tracking-widest shrink-0 ${item.tickets === "Available" ? "text-emerald-500" : item.tickets === "Last Few" ? "text-amber-500" : "text-red-500"}`}
 									>
 										{item.tickets}
 									</span>
@@ -466,7 +466,7 @@ export default function Dashboard() {
 										<Coffee className="w-5 h-5" />
 									</div>
 									<div className="flex-1 min-w-0">
-										<p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">
+										<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
 											{item.name}
 										</p>
 										<p className="text-sm font-bold text-white">
@@ -485,7 +485,7 @@ export default function Dashboard() {
 										<Palette className="w-5 h-5" />
 									</div>
 									<div className="flex-1 min-w-0">
-										<p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">
+										<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
 											{item.museum}
 										</p>
 										<p className="text-sm font-bold text-white truncate">
@@ -498,7 +498,7 @@ export default function Dashboard() {
 
 						<button
 							onClick={() => navigate("/vienna/coffee")}
-							className="w-full py-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-400 hover:text-white text-[10px] font-black uppercase tracking-[0.2em] transition-all border border-white/[0.06] mt-2"
+							className="w-full py-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white text-xs font-black uppercase tracking-[0.2em] transition-all border border-white/[0.06] mt-2"
 						>
 							Vienna Guide
 						</button>

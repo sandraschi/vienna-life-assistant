@@ -147,7 +147,7 @@ export default function Journal() {
 					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 						Journal
 					</h1>
-					<p className="text-slate-400 mt-2 text-sm">
+					<p className="text-slate-300 mt-2 text-sm">
 						Your personal log — mood, tags, streak, and what happened on this
 						day
 					</p>
@@ -167,7 +167,7 @@ export default function Journal() {
 					<button
 						type="button"
 						onClick={load}
-						className="p-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+						className="p-2 rounded-xl text-slate-300 hover:text-white transition-colors"
 						title="Refresh"
 					>
 						<RefreshCw className="w-4 h-4" />
@@ -228,7 +228,7 @@ export default function Journal() {
 								className="input-dark"
 							/>
 							<div className="flex items-center gap-3">
-								<span className="text-xs font-black text-slate-400 uppercase tracking-widest">
+								<span className="text-xs font-black text-slate-300 uppercase tracking-widest">
 									Mood
 								</span>
 								<input
@@ -266,14 +266,14 @@ export default function Journal() {
 							<div className="space-y-4">
 								{onThisDay.map((e) => (
 									<div key={e.id}>
-										<p className="text-xs text-slate-500 font-bold uppercase tracking-widest">
+										<p className="text-xs text-slate-300 font-bold uppercase tracking-widest">
 											{e.date}
 										</p>
 										<p className="text-sm text-slate-300 mt-1 font-bold">
 											{e.title || "Untitled"}
 										</p>
 										{e.body && (
-											<p className="text-xs text-slate-400 mt-1 line-clamp-3">
+											<p className="text-xs text-slate-300 mt-1 line-clamp-3">
 												{e.body}
 											</p>
 										)}
@@ -288,7 +288,7 @@ export default function Journal() {
 				<div className="lg:col-span-2 space-y-4">
 					<div className="flex gap-3">
 						<div className="relative flex-1">
-							<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+							<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
 							<input
 								data-testid="journal-search"
 								placeholder="Search your log…"
@@ -301,7 +301,7 @@ export default function Journal() {
 							<button
 								type="button"
 								onClick={clearSearch}
-								className="px-4 py-2 rounded-xl bg-white/[0.03] border border-white/[0.08] text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors"
+								className="px-4 py-2 rounded-xl bg-white/[0.03] border border-white/[0.08] text-xs font-black uppercase tracking-widest text-slate-300 hover:text-white transition-colors"
 							>
 								Clear
 							</button>
@@ -319,7 +319,7 @@ export default function Journal() {
 											<p className="text-sm font-black text-white uppercase tracking-tight truncate">
 												{e.title || "Untitled entry"}
 											</p>
-											<p className="text-xs text-slate-500 font-bold uppercase tracking-widest mt-1">
+											<p className="text-xs text-slate-300 font-bold uppercase tracking-widest mt-1">
 												{e.date} · {e.time}
 											</p>
 										</div>
@@ -332,7 +332,7 @@ export default function Journal() {
 											<button
 												type="button"
 												onClick={() => exportToOneNote(e.id)}
-												className="text-slate-500 hover:text-cosmos-400 transition-colors"
+												className="text-slate-300 hover:text-cosmos-400 transition-colors"
 												title="Export to OneNote"
 												data-testid={`journal-export-${e.id}`}
 											>
@@ -341,7 +341,7 @@ export default function Journal() {
 											<button
 												type="button"
 												onClick={() => deleteEntry(e.id)}
-												className="text-slate-600 hover:text-red-400 transition-colors"
+												className="text-slate-300 hover:text-red-400 transition-colors"
 												title="Delete entry"
 												data-testid={`journal-delete-${e.id}`}
 											>
@@ -363,7 +363,7 @@ export default function Journal() {
 												.map((t) => (
 													<span
 														key={t}
-														className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
+														className="px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
 													>
 														{t}
 													</span>
@@ -373,7 +373,7 @@ export default function Journal() {
 								</div>
 							))}
 							{entries.length === 0 && (
-								<p className="text-sm text-slate-500 uppercase tracking-widest text-center py-8">
+								<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8">
 									{searching
 										? "No matching entries"
 										: "Nothing logged yet — start today"}
@@ -384,7 +384,7 @@ export default function Journal() {
 				</div>
 			</div>
 
-			<p className="text-xs text-slate-500 uppercase tracking-widest flex items-center gap-2">
+			<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
 				<NotebookPen className="w-3.5 h-3.5" />
 				MCP: vienna_log(operation=entries|add|streak|on_this_day|search) · REST
 				/api/life/logs

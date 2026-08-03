@@ -164,7 +164,7 @@ export default function Settings() {
 				<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 					Settings
 				</h1>
-				<p className="text-slate-500 mt-2 text-sm">
+				<p className="text-slate-300 mt-2 text-sm">
 					Switchable LLM · Ollama · LM Studio · OpenAI
 				</p>
 			</div>
@@ -180,13 +180,13 @@ export default function Settings() {
 								<p className="font-black text-white uppercase tracking-widest text-sm">
 									LLM provider
 								</p>
-								<p className="text-sm text-slate-500">{statusHint()}</p>
+								<p className="text-sm text-slate-300">{statusHint()}</p>
 							</div>
 						</div>
 
 						<label
 							htmlFor="llm-provider-select"
-							className="block text-[10px] font-black text-slate-600 uppercase tracking-widest"
+							className="block text-xs font-black text-slate-300 uppercase tracking-widest"
 						>
 							Provider
 						</label>
@@ -315,7 +315,7 @@ export default function Settings() {
 								<p className="font-black text-white uppercase tracking-widest text-sm">
 									{caps.server.name}
 								</p>
-								<p className="text-sm text-slate-500">
+								<p className="text-sm text-slate-300">
 									v{caps.server.version} · {caps.server.fastmcp ?? "FastMCP"}
 								</p>
 							</div>
@@ -326,10 +326,10 @@ export default function Settings() {
 									key={k}
 									className="flex justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]"
 								>
-									<span className="text-slate-500 uppercase tracking-widest">
+									<span className="text-slate-300 uppercase tracking-widest">
 										{k.replace(/_/g, " ")}
 									</span>
-									<span className={v ? "text-emerald-400" : "text-slate-600"}>
+									<span className={v ? "text-emerald-400" : "text-slate-300"}>
 										{v ? "on" : "off"}
 									</span>
 								</div>
@@ -362,14 +362,14 @@ function ModelSelect({
 			<div className="flex items-center justify-between">
 				<label
 					htmlFor="llm-model-select"
-					className="text-[10px] font-black text-slate-600 uppercase tracking-widest"
+					className="text-xs font-black text-slate-300 uppercase tracking-widest"
 				>
 					{label}
 				</label>
 				<button
 					type="button"
 					onClick={onRefresh}
-					className="flex items-center gap-1 text-[10px] text-cosmos-400 uppercase tracking-widest"
+					className="flex items-center gap-1 text-xs text-cosmos-400 uppercase tracking-widest"
 				>
 					{loading ? (
 						<Loader2 className="w-3 h-3 animate-spin" />

@@ -103,7 +103,7 @@ export default function Notes() {
 					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 						Notes
 					</h1>
-					<p className="text-slate-400 mt-2 text-sm">
+					<p className="text-slate-300 mt-2 text-sm">
 						OneNote via onenote-mcp — search, create, and journal export
 					</p>
 				</div>
@@ -140,7 +140,7 @@ export default function Notes() {
 					<button
 						type="button"
 						onClick={load}
-						className="p-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+						className="p-2 rounded-xl text-slate-300 hover:text-white transition-colors"
 						title="Refresh"
 					>
 						<RefreshCw className="w-4 h-4" />
@@ -150,7 +150,7 @@ export default function Notes() {
 
 			{status?.error && (
 				<p
-					className="text-sm text-slate-500 uppercase tracking-widest"
+					className="text-sm text-slate-300 uppercase tracking-widest"
 					data-testid="notes-error"
 				>
 					{status.error}
@@ -228,7 +228,7 @@ export default function Notes() {
 					</div>
 
 					<div className="relative">
-						<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+						<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
 						<input
 							data-testid="notes-search"
 							placeholder="Search OneNote…"
@@ -254,20 +254,20 @@ export default function Notes() {
 													"_blank",
 												)
 											}
-											className="flex items-center gap-1 text-[10px] text-cosmos-400 uppercase tracking-widest shrink-0"
+											className="flex items-center gap-1 text-xs text-cosmos-400 uppercase tracking-widest shrink-0"
 										>
 											Open <ArrowUpRight className="w-3 h-3" />
 										</button>
 									</div>
 									{p.content && (
-										<p className="text-xs text-slate-400 mt-2 line-clamp-3">
+										<p className="text-xs text-slate-300 mt-2 line-clamp-3">
 											{p.content}
 										</p>
 									)}
 								</div>
 							))}
 							{results.length === 0 && (
-								<p className="text-sm text-slate-500 uppercase tracking-widest text-center py-8">
+								<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8">
 									No pages match "{query}"
 								</p>
 							)}
@@ -276,7 +276,7 @@ export default function Notes() {
 				</>
 			)}
 
-			<p className="text-xs text-slate-500 uppercase tracking-widest flex items-center gap-2">
+			<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
 				<NotebookText className="w-3.5 h-3.5" />
 				Gateway: onenote-mcp :10907 (token stays there) · MCP:
 				vienna_notes(operation=notebooks|search|create|export_journal)

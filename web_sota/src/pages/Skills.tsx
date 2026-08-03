@@ -47,14 +47,14 @@ export default function Skills() {
 				<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 					Skills
 				</h1>
-				<p className="text-slate-500 mt-2 text-sm">
+				<p className="text-slate-300 mt-2 text-sm">
 					Vienna skill pack · MCP prompts
 				</p>
 			</div>
 
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				<div className="glass-card p-4 space-y-2">
-					<p className="text-[10px] font-black text-slate-600 uppercase tracking-widest px-2 mb-2">
+					<p className="text-xs font-black text-slate-300 uppercase tracking-widest px-2 mb-2">
 						Vienna skills
 					</p>
 					{skills.map((s) => (
@@ -65,7 +65,7 @@ export default function Skills() {
 							className={`w-full text-left px-4 py-3 rounded-xl text-sm font-bold uppercase tracking-widest transition-colors ${
 								selected === s.name
 									? "bg-cosmos-500/20 text-white border border-cosmos-500/30"
-									: "text-slate-500 hover:text-white hover:bg-white/[0.04]"
+									: "text-slate-300 hover:text-white hover:bg-white/[0.04]"
 							}`}
 						>
 							<BookMarked className="w-4 h-4 inline mr-2 opacity-60" />
@@ -75,7 +75,7 @@ export default function Skills() {
 				</div>
 
 				<div className="lg:col-span-2 glass-card p-6 overflow-auto max-h-[32rem]">
-					<pre className="text-xs text-slate-400 whitespace-pre-wrap font-mono leading-relaxed">
+					<pre className="text-xs text-slate-300 whitespace-pre-wrap font-mono leading-relaxed">
 						{content}
 					</pre>
 				</div>
@@ -83,7 +83,7 @@ export default function Skills() {
 
 			{prompts.length > 0 && (
 				<div className="glass-card p-6">
-					<p className="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-4">
+					<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-4">
 						MCP preprompts
 					</p>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -95,7 +95,7 @@ export default function Skills() {
 								<p className="font-black text-white text-sm uppercase tracking-widest">
 									{p.name}
 								</p>
-								<p className="text-[11px] text-slate-500 mt-1">
+								<p className="text-[11px] text-slate-300 mt-1">
 									{p.description || "Vienna life template"}
 								</p>
 							</div>

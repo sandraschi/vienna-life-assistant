@@ -81,7 +81,7 @@ export default function Calendar() {
 					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 						Calendar
 					</h1>
-					<p className="text-slate-500 mt-2 text-sm">
+					<p className="text-slate-300 mt-2 text-sm">
 						Today and week ahead — Alsergrund grid
 					</p>
 				</div>
@@ -91,10 +91,10 @@ export default function Calendar() {
 							key={k}
 							type="button"
 							onClick={() => setTab(k)}
-							className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors ${
+							className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors ${
 								tab === k
 									? "bg-cosmos-500 text-white"
-									: "text-slate-500 hover:text-white"
+									: "text-slate-300 hover:text-white"
 							}`}
 						>
 							{k}
@@ -162,7 +162,7 @@ export default function Calendar() {
 			<div className="glass-card overflow-hidden">
 				<div className="px-8 py-5 border-b border-white/[0.06] flex items-center gap-3">
 					<CalendarIcon className="w-5 h-5 text-cosmos-400" />
-					<span className="text-[10px] font-black uppercase tracking-widest text-white">
+					<span className="text-xs font-black uppercase tracking-widest text-white">
 						{events.length} events
 					</span>
 				</div>
@@ -177,7 +177,7 @@ export default function Calendar() {
 									{ev.time}
 								</p>
 								{ev.date && (
-									<p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest mt-1">
+									<p className="text-xs font-bold text-slate-300 uppercase tracking-widest mt-1">
 										{ev.date}
 									</p>
 								)}
@@ -186,25 +186,25 @@ export default function Calendar() {
 								<p className="text-sm font-black text-white uppercase tracking-tight">
 									{ev.title}
 								</p>
-								<p className="text-[10px] text-slate-500 mt-2 flex items-center gap-2 uppercase font-bold">
+								<p className="text-xs text-slate-300 mt-2 flex items-center gap-2 uppercase font-bold">
 									<MapPin className="w-3 h-3" />
 									{ev.location}
 								</p>
 							</div>
-							<span className="text-[9px] font-black text-cosmos-400 uppercase tracking-widest self-center">
+							<span className="text-xs font-black text-cosmos-400 uppercase tracking-widest self-center">
 								{ev.category}
 							</span>
 						</div>
 					))}
 					{events.length === 0 && (
-						<p className="px-8 py-12 text-slate-600 text-sm uppercase tracking-widest">
+						<p className="px-8 py-12 text-slate-300 text-sm uppercase tracking-widest">
 							No events
 						</p>
 					)}
 				</div>
 			</div>
 
-			<p className="text-[10px] text-slate-600 uppercase tracking-widest flex items-center gap-2">
+			<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
 				<Clock className="w-3 h-3" />
 				Source: GET /api/life/calendar — MCP
 				vienna_life(operation=calendar_today)

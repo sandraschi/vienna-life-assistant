@@ -33,7 +33,7 @@ export default function Help() {
 				<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 					Help
 				</h1>
-				<p className="text-slate-500 mt-2 text-sm">
+				<p className="text-slate-300 mt-2 text-sm">
 					ViLife — Vienna Life Assistant (human carrier)
 				</p>
 			</div>
@@ -46,7 +46,7 @@ export default function Help() {
 							Quick start
 						</h2>
 					</div>
-					<ol className="text-sm text-slate-400 space-y-2 list-decimal pl-5">
+					<ol className="text-sm text-slate-300 space-y-2 list-decimal pl-5">
 						<li>
 							<code className="text-cosmos-400">Set-Location web_sota</code>{" "}
 							then <code className="text-cosmos-400">.\start.ps1</code>
@@ -73,7 +73,7 @@ export default function Help() {
 							Ports & naming
 						</h2>
 					</div>
-					<ul className="text-sm text-slate-400 space-y-2">
+					<ul className="text-sm text-slate-300 space-y-2">
 						<li>
 							Frontend (Vite): <code className="text-cosmos-400">10988</code>
 						</li>
@@ -103,7 +103,7 @@ export default function Help() {
 							Pages
 						</h2>
 					</div>
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-[10px] font-bold uppercase tracking-widest">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs font-bold uppercase tracking-widest">
 						{[
 							{ path: "/", label: "Dashboard" },
 							{ path: "/chat", label: "Chat", icon: MessageCircle },
@@ -120,7 +120,7 @@ export default function Help() {
 							<a
 								key={p.path}
 								href={p.path}
-								className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] text-slate-500 hover:text-white hover:border-cosmos-500/30 transition-colors"
+								className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] text-slate-300 hover:text-white hover:border-cosmos-500/30 transition-colors"
 							>
 								{p.label}
 							</a>
@@ -135,7 +135,7 @@ export default function Help() {
 							REST API
 						</h2>
 					</div>
-					<div className="bg-black/40 rounded-xl p-4 font-mono text-[10px] text-slate-400 space-y-2 border border-white/[0.06] overflow-x-auto">
+					<div className="bg-black/40 rounded-xl p-4 font-mono text-xs text-slate-300 space-y-2 border border-white/[0.06] overflow-x-auto">
 						<p>
 							<span className="text-emerald-400">GET</span>{" "}
 							/api/life/calendar/today
@@ -174,7 +174,7 @@ export default function Help() {
 							MCP (agents)
 						</h2>
 					</div>
-					<div className="text-sm text-slate-400 space-y-2">
+					<div className="text-sm text-slate-300 space-y-2">
 						<p>
 							Tool{" "}
 							<code className="text-cosmos-400">
@@ -182,7 +182,7 @@ export default function Help() {
 							</code>
 							:
 						</p>
-						<p className="text-[10px] font-mono text-slate-500">
+						<p className="text-xs font-mono text-slate-300">
 							calendar_today · todo_list · expense_summary · shopping_list ·
 							life_brief · fleet_overview · health · help
 						</p>
@@ -209,17 +209,17 @@ export default function Help() {
 						<Loader2 className="w-5 h-5 animate-spin text-cosmos-400" />
 					) : (
 						<div className="flex flex-wrap gap-3">
-							<span className="text-sm text-slate-500">
+							<span className="text-sm text-slate-300">
 								{caps.server.name} v{caps.server.version} ·{" "}
 								{caps.server.fastmcp ?? "FastMCP"}
 							</span>
 							{Object.entries(caps.features).map(([k, v]) => (
 								<span
 									key={k}
-									className={`px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${
+									className={`px-2 py-1 rounded-lg text-xs font-black uppercase tracking-widest border ${
 										v
 											? "border-emerald-500/30 text-emerald-400 bg-emerald-500/10"
-											: "border-white/10 text-slate-600"
+											: "border-white/10 text-slate-300"
 									}`}
 								>
 									{k.replace(/_/g, " ")}
@@ -233,7 +233,7 @@ export default function Help() {
 					<h2 className="text-white font-black uppercase tracking-widest text-sm">
 						Troubleshooting
 					</h2>
-					<ul className="text-sm text-slate-400 space-y-2 list-disc pl-5">
+					<ul className="text-sm text-slate-300 space-y-2 list-disc pl-5">
 						<li>Blank UI — hard refresh; confirm Vite on 10988 (not 10990)</li>
 						<li>
 							LLM offline — Ollama 11434, LM Studio 1234, or OpenAI key in

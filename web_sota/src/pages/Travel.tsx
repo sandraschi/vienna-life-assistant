@@ -41,7 +41,7 @@ const daysUntil = (d: string) =>
 const statusColor: Record<string, string> = {
 	booked: "text-emerald-400",
 	planned: "text-amber-400",
-	watchlist: "text-slate-400",
+	watchlist: "text-slate-300",
 };
 
 export default function Travel() {
@@ -131,13 +131,13 @@ export default function Travel() {
 					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 						Travel
 					</h1>
-					<p className="text-slate-400 mt-2 text-sm">
+					<p className="text-slate-300 mt-2 text-sm">
 						ÖBB, flights, packing, documents — from Vienna Hbf
 					</p>
 				</div>
 				<button
 					onClick={load}
-					className="p-2 rounded-xl text-slate-400 hover:text-white transition-colors"
+					className="p-2 rounded-xl text-slate-300 hover:text-white transition-colors"
 					title="Refresh"
 				>
 					<RefreshCw className="w-4 h-4" />
@@ -233,24 +233,24 @@ export default function Travel() {
 											<p className="text-lg font-black text-white uppercase tracking-tight">
 												{trip.title}
 											</p>
-											<p className="text-xs text-slate-400 mt-2 uppercase font-bold">
+											<p className="text-xs text-slate-300 mt-2 uppercase font-bold">
 												{trip.start_date} → {trip.end_date || "TBA"}
 											</p>
 										</div>
 										<div className="text-right">
 											<span
-												className={`text-xs font-black uppercase tracking-widest ${statusColor[trip.status] || "text-slate-400"}`}
+												className={`text-xs font-black uppercase tracking-widest ${statusColor[trip.status] || "text-slate-300"}`}
 											>
 												{trip.status}
 											</span>
 											<p
-												className={`text-[10px] font-black uppercase tracking-widest mt-1 ${days < 0 ? "text-slate-600" : days <= 3 ? "text-red-400" : "text-amber-400"}`}
+												className={`text-xs font-black uppercase tracking-widest mt-1 ${days < 0 ? "text-slate-300" : days <= 3 ? "text-red-400" : "text-amber-400"}`}
 											>
 												{days < 0 ? "started" : `T-${days}`}
 											</p>
 										</div>
 									</div>
-									<p className="text-sm text-slate-400 mt-4 flex items-center gap-2">
+									<p className="text-sm text-slate-300 mt-4 flex items-center gap-2">
 										<MapPin className="w-3.5 h-3.5" />
 										{trip.carrier || trip.mode}: {trip.origin || "Wien Hbf"} →{" "}
 										{trip.destination || trip.title}
@@ -269,7 +269,7 @@ export default function Travel() {
 													onClick={() => togglePack(item)}
 													className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border transition-colors ${
 														item.done
-															? "text-slate-500 border-slate-700 bg-slate-900/40 line-through"
+															? "text-slate-300 border-slate-700 bg-slate-900/40 line-through"
 															: "text-slate-300 border-white/[0.08] hover:border-emerald-500/40 hover:text-emerald-400"
 													}`}
 												>
@@ -283,7 +283,7 @@ export default function Travel() {
 											))}
 										<button
 											onClick={() => addPackItem(trip.id)}
-											className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border border-dashed border-white/[0.15] text-slate-500 hover:text-white transition-colors"
+											className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border border-dashed border-white/[0.15] text-slate-300 hover:text-white transition-colors"
 										>
 											<Plus className="w-3 h-3" /> item
 										</button>
@@ -293,7 +293,7 @@ export default function Travel() {
 						);
 					})}
 					{trips.length === 0 && (
-						<p className="text-sm text-slate-500 uppercase tracking-widest text-center py-8">
+						<p className="text-sm text-slate-300 uppercase tracking-widest text-center py-8">
 							No upcoming trips
 						</p>
 					)}
@@ -314,20 +314,20 @@ export default function Travel() {
 										{d.name}
 									</p>
 									{d.number && (
-										<p className="text-[10px] text-slate-500 font-mono">
+										<p className="text-xs text-slate-300 font-mono">
 											{d.number}
 										</p>
 									)}
 								</div>
 								<span
-									className={`text-[10px] font-black uppercase tracking-widest ${docWarn(d.expiry_date)}`}
+									className={`text-xs font-black uppercase tracking-widest ${docWarn(d.expiry_date)}`}
 								>
 									{daysUntil(d.expiry_date)}d
 								</span>
 							</div>
 						))}
 						{docs.length === 0 && (
-							<p className="text-xs text-slate-500 uppercase tracking-widest">
+							<p className="text-xs text-slate-300 uppercase tracking-widest">
 								No documents tracked
 							</p>
 						)}
