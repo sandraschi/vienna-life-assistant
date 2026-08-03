@@ -400,6 +400,39 @@ _TOOL_SPECS: list[dict[str, Any]] = [
             "required": ["entry_id"],
         },
     },
+    {
+        "name": "fleet_tools",
+        "run": "fleet",
+        "description": "List the MCP tools exposed by a fleet server (plex-mcp, calibre-mcp, gtfs-mcp, aiwatcher-mcp, devices-mcp). Call this first to discover what a server can do.",
+        "parameters": {
+            "type": "object",
+            "properties": {"server": {"type": "string"}},
+            "required": ["server"],
+        },
+    },
+    {
+        "name": "fleet_call",
+        "run": "fleet",
+        "description": "Call a tool on another fleet MCP server. Use fleet_tools first to discover the tool name and arguments. Examples: plex-mcp media search/play, calibre-mcp book lookup, gtfs-mcp live departures, aiwatcher-mcp top news, devices-mcp Fritz!Box internet status.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "server": {"type": "string"},
+                "tool": {"type": "string"},
+                "arguments": {
+                    "type": "object",
+                    "description": "Tool arguments as a JSON object",
+                },
+            },
+            "required": ["server", "tool"],
+        },
+    },
+    {
+        "name": "fritz_status",
+        "run": "fleet",
+        "description": "Fritz!Box home network status via devices-mcp: internet/WAN health, uptime, cameras. Ask when the user mentions internet problems, router, or home network.",
+        "parameters": {"type": "object", "properties": {}},
+    },
 ]
 
 # Keys that move into the tool's data= dict instead of top-level args.
@@ -472,6 +505,33 @@ async def execute_tool(name: str, args: dict[str, Any]) -> dict[str, Any]:
     spec = next((s for s in _TOOL_SPECS if s["name"] == name), None)
     if spec is None:
         return {"success": False, "error": f"unknown tool {name}"}
+
+    if spec["run"] == "fleet":
+        from vienna_life_assistant import fleet_mcp
+
+        if name == "fleet_tools":
+            tools = fleet_mcp.list_tools(args.get("server", ""))
+            if not tools:
+                return {
+                    "success": False,
+                    "error": f"server '{args.get('server', '')}' offline or not allowlisted",
+                }
+            return {
+                "success": True,
+                "server": args.get("server"),
+                "tools": [
+                    {
+                        "name": t.get("name"),
+                        "description": (t.get("description") or "")[:200],
+                    }
+                    for t in tools[:40]
+                ],
+            }
+        if name == "fritz_status":
+            return fleet_mcp.fritz_status()
+        return fleet_mcp.call_tool(
+            args.get("server", ""), args.get("tool", ""), args.get("arguments") or {}
+        )
 
     fn = _FUNCS[spec["run"]]
     kwargs: dict[str, Any] = {"operation": spec["op"]}

@@ -335,3 +335,105 @@ def test_brief_email_skipped_when_disabled(client, monkeypatch):
     monkeypatch.setattr(email_routes, "_em", fake_em)
     client.post("/api/pa/refresh")
     assert called["n"] == 0
+
+
+# --- Fleet orchestration (ednaficator-style) ----------------------------------
+
+
+def test_run_agent_executes_fleet_call(monkeypatch):
+    """LLM issues fleet_call -> the loop calls the remote MCP server."""
+    import asyncio
+
+    from vienna_life_assistant import fleet_mcp
+
+    calls = {"n": 0}
+    captured = {}
+
+    def fake_resolve():
+        return {
+            "url_base": "http://mock",
+            "model": "m",
+            "headers": {},
+            "provider": "ollama",
+        }
+
+    def fake_chat_message(url_base, payload, headers, timeout=90):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return {
+                "role": "assistant",
+                "content": "",
+                "tool_calls": [
+                    {
+                        "id": "call_f",
+                        "function": {
+                            "name": "fleet_call",
+                            "arguments": '{"server": "aiwatcher-mcp", "tool": "get_top_items", "arguments": {"limit": 2}}',
+                        },
+                    }
+                ],
+            }
+        return {"role": "assistant", "content": "Fetched."}
+
+    def fake_call_tool(server, tool, arguments):
+        captured.update(server=server, tool=tool, arguments=arguments)
+        return {"success": True, "text": "items"}
+
+    monkeypatch.setattr(pa_agent, "resolve_llm", fake_resolve)
+    monkeypatch.setattr(pa_agent, "_chat_message", fake_chat_message)
+    monkeypatch.setattr(fleet_mcp, "call_tool", fake_call_tool)
+
+    result = asyncio.run(
+        pa_agent.run_agent([{"role": "user", "content": "news?"}], max_iterations=2)
+    )
+    assert result["ok"] is True
+    assert captured == {
+        "server": "aiwatcher-mcp",
+        "tool": "get_top_items",
+        "arguments": {"limit": 2},
+    }
+    assert result["trace"][0]["tool"] == "fleet_call"
+
+
+def test_fleet_allowlist_enforced():
+    import asyncio
+
+    result = asyncio.run(
+        pa_agent.execute_tool(
+            "fleet_call",
+            {"server": "not-a-server", "tool": "x", "arguments": {}},
+        )
+    )
+    assert result["success"] is False
+    assert "ALLOWLIST" in result["error"]
+
+
+def test_fleet_rpc_graceful_offline(monkeypatch):
+    from vienna_life_assistant import fleet_mcp
+
+    monkeypatch.setitem(
+        fleet_mcp.FLEET_SERVERS, "gtfs-mcp", {"port": 1, "path": "/mcp", "purpose": "x"}
+    )
+    assert fleet_mcp.list_tools("gtfs-mcp") == []
+
+
+def test_fleet_tools_offline_error(monkeypatch):
+    import asyncio
+
+    from vienna_life_assistant import fleet_mcp
+
+    monkeypatch.setitem(
+        fleet_mcp.FLEET_SERVERS, "plex-mcp", {"port": 1, "path": "/mcp", "purpose": "x"}
+    )
+    result = asyncio.run(pa_agent.execute_tool("fleet_tools", {"server": "plex-mcp"}))
+    assert result["success"] is False
+    assert "offline" in result["error"]
+
+
+def test_fritz_status_graceful_offline(monkeypatch):
+    from vienna_life_assistant import fleet_mcp
+
+    monkeypatch.setenv("DEVICES_MCP_URL", "http://127.0.0.1:1")
+    r = fleet_mcp.fritz_status()
+    assert r["success"] is False
+    assert "Fritz" in r["error"]

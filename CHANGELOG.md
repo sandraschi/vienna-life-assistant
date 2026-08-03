@@ -1,3 +1,11 @@
+### Added — fleet orchestration (2026-08-03)
+- **Fleet MCP orchestration**: the agent can call any allowlisted fleet server
+  over MCP streamable HTTP — fleet_tools (discover), fleet_call (invoke),
+  fritz_status (devices-mcp Fritz!Box probe). Registry: plex-mcp, calibre-mcp,
+  gtfs-mcp, aiwatcher-mcp; FLEET_MCP_ALLOWLIST; graceful offline errors.
+  Verified live: agent discovered aiwatcher tools and answered with real
+  get_tag_trends data end-to-end
+- 5 new pytest (68 total)
 ### Added — journal RAG + proactive email + voice (2026-08-03)
 - **Journal RAG**: semantic search over the personal log via Ollama
   embeddings (nomic-embed-text, /v1/embeddings, SQLite-stored vectors) —

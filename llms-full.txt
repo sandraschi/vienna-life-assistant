@@ -29,7 +29,13 @@ travel_documents, contacts, pet_care_events, subscriptions, home_tasks.
 
 ### PA engine (the assistant layer)
 - `POST /api/pa/chat` — agent chat: LLM + tool execution over life data
-  (24 curated vienna_* tools; trace returned per message)
+  (24 curated vienna_* tools + fleet orchestration; trace returned per message)
+- **Fleet orchestration (ednaficator-style)**: the agent can call any allowlisted
+  fleet MCP server over streamable HTTP — `fleet_tools(server)` to discover,
+  `fleet_call(server, tool, arguments)` to invoke, `fritz_status()` for the
+  Fritz!Box probe via devices-mcp. Registry: plex-mcp (10740), calibre-mcp
+  (10720), gtfs-mcp (10913), aiwatcher-mcp (10946). Allowlist via
+  FLEET_MCP_ALLOWLIST (default all); offline servers return graceful errors.
 - `POST /api/pa/brief`-style refresh: `POST /api/pa/refresh` — LLM morning brief
   over real context + rule-based alerts, persisted to data/pa_state.json
 - `GET /api/pa/state` — today's brief + alerts (Dashboard widget)
