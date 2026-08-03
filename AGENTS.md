@@ -54,6 +54,7 @@ Portmanteaus (see `vienna_life_mcp.py`):
 - `vienna_household(operation=...)` — subscriptions, tasks, pet
 - `vienna_log(operation=...)` — journal entries, streak, on_this_day, search
 - `vienna_news(operation=...)` — aiwatcher-fed top/trends/search/morning
+- `vienna_notes(operation=...)` — OneNote via onenote-mcp gateway (:10907), journal export
 - `vienna_life_agentic(goal, ctx)` — sampling-based planning
 - `vienna_tips(category)` — culture tips
 

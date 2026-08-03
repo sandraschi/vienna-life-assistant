@@ -1128,6 +1128,149 @@ async def vienna_news(
     return {"success": False, "error": f"Unknown operation: {operation}"}
 
 
+# --- Notes (OneNote bridge) --------------------------------------------------
+
+
+@mcp.tool(annotations=_READ_ONLY)
+async def vienna_notes(
+    operation: Literal[
+        "status", "notebooks", "search", "page", "create", "export_journal"
+    ],
+    query: str | None = None,
+    page_id: str | None = None,
+    entry_id: int | None = None,
+    data: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """OneNote integration — ViLife bridges onenote-mcp (:10907), the Graph gateway.
+
+    [RATIONALE] The Microsoft Graph token lives in onenote-mcp; ViLife calls it
+    server-to-server so notebooks, search, and journal export work without
+    duplicating credentials.
+
+    ## Return Format
+    {"success": bool, "message": str, "notebooks"|"pages"|"page"|"status": ...}
+
+    ## Examples
+    await vienna_notes(operation="status")
+    await vienna_notes(operation="notebooks")
+    await vienna_notes(operation="search", query="Benny")
+    await vienna_notes(operation="create", data={"notebook_id": "...", "title": "Shopping list", "content": "…"})
+    await vienna_notes(operation="export_journal", entry_id=3)
+
+    ## Notes
+    - export_journal pushes a ViLife journal entry as a page into the first notebook.
+    - Requires onenote-mcp running and authenticated (device-code flow there).
+    """
+    from vienna_life_assistant.notes_routes import _on
+
+    def _f(payload: dict[str, Any], what: str) -> dict[str, Any]:
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "onenote-mcp unreachable"),
+                "recovery_options": [
+                    "Start onenote-mcp (port 10907) and complete the device-code auth there"
+                ],
+            }
+        return {
+            "success": True,
+            "message": f"{what}",
+            **{k: v for k, v in payload.items() if k != "ok"},
+        }
+
+    if operation == "status":
+        payload = _on("/api/auth/status")
+        return {
+            "success": True,
+            "message": "authenticated"
+            if payload.get("authenticated")
+            else "not authenticated",
+            "reachable": payload.get("ok", False),
+            "authenticated": bool(payload.get("authenticated")),
+            "error": payload.get("error"),
+        }
+
+    if operation == "notebooks":
+        return _f(_on("/api/notebooks"), "notebooks")
+
+    if operation == "search":
+        if not query:
+            return _error_response("search requires query", "validation")
+        payload = _on("/api/search", {"q": query})
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "onenote-mcp unreachable"),
+            }
+        pages = payload.get("pages", [])
+        return {
+            "success": True,
+            "message": f"{len(pages)} pages match '{query}'",
+            "pages": pages,
+        }
+
+    if operation == "page":
+        if not page_id:
+            return _error_response("page requires page_id", "validation")
+        return _f(_on(f"/api/pages/{page_id}"), "page")
+
+    if operation == "create":
+        if not data or not data.get("notebook_id") or not data.get("title"):
+            return _error_response(
+                "create requires data with notebook_id + title", "validation"
+            )
+        return _f(_on("/api/pages", json_body=data, method="POST"), "page created")
+
+    if operation == "export_journal":
+        if not entry_id:
+            return _error_response("export_journal requires entry_id", "validation")
+        from vienna_life_assistant.life_db import get_row
+        from vienna_life_assistant.models import JournalEntry
+        from vienna_life_assistant.db import SessionLocal
+
+        with SessionLocal() as db:
+            entry = get_row(db, JournalEntry, entry_id)
+            if entry is None:
+                return _error_response(
+                    f"Journal entry {entry_id} not found", "not_found"
+                )
+            notebook_payload = _on("/api/notebooks")
+            if not notebook_payload.get("ok") or not notebook_payload.get("notebooks"):
+                return {
+                    "success": False,
+                    "error": "onenote-mcp unreachable or no notebooks",
+                    "recovery_options": ["Start onenote-mcp and authenticate"],
+                }
+            notebook = notebook_payload["notebooks"][0]
+            notebook_id = notebook.get("id") or notebook.get("notebook_id")
+            title = f"Journal {entry.date}: {entry.title or 'Untitled'}"
+            content = (
+                f"{entry.date} {entry.time} · Mood {entry.mood}/10 · Tags: {entry.tags or 'untagged'}\n\n"
+                f"{entry.body}"
+            )
+            payload = _on(
+                "/api/pages",
+                json_body={
+                    "notebook_id": notebook_id,
+                    "title": title,
+                    "content": content,
+                },
+                method="POST",
+            )
+            if not payload.get("ok"):
+                return {
+                    "success": False,
+                    "error": payload.get("error", "onenote-mcp failed to create page"),
+                }
+            return {
+                "success": True,
+                "message": f"Journal entry {entry.id} exported to OneNote",
+                "page": payload.get("page"),
+            }
+
+    return {"success": False, "error": f"Unknown operation: {operation}"}
+
+
 def _add_skills_provider() -> None:
     try:
         from fastmcp.server.providers.skills import SkillsDirectoryProvider

@@ -78,6 +78,14 @@ test.describe("Fleet Audit", () => {
 		await expect(page.locator('[data-testid="news-search"]')).toBeAttached();
 	});
 
+	test("Notes page renders (onenote bridge, offline-safe)", async ({ page }) => {
+		await page.goto(`${FE}/notes`, { timeout: 15000 });
+		await expect(page.locator('[data-testid="notes-page"]')).toBeAttached();
+		await expect(page.locator('[data-testid="notes-search"]')).toBeAttached({
+			timeout: 15000,
+		});
+	});
+
 	test("Dashboard shows life pulse", async ({ page }) => {
 		await page.goto(FE, { timeout: 15000 });
 		await expect(page.locator('[data-testid="dashboard"]')).toBeAttached();

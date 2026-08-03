@@ -121,3 +121,59 @@ def test_news_bridge_tolerates_unreachable_upstream(monkeypatch):
     payload = news_routes._aw("/api/stats")
     assert payload.get("ok") is False
     assert "error" in payload
+
+
+# --- Notes: onenote-mcp bridge -----------------------------------------------
+
+
+def test_notes_status_reports_unreachable(monkeypatch):
+    from vienna_life_assistant import notes_routes
+
+    monkeypatch.setattr(notes_routes, "ONENOTE_MCP_URL", "http://127.0.0.1:1")
+    payload = notes_routes._on("/api/auth/status")
+    assert payload.get("ok") is False
+    assert "error" in payload
+
+
+def test_notes_export_journal_missing_entry(client):
+    r = client.post("/api/notes/export-journal", json={"entry_id": 999999})
+    assert r.status_code == 200
+    assert r.json()["ok"] is False
+    assert "not found" in r.json()["error"]
+
+
+def test_notes_export_journal_unreachable_is_graceful(client, monkeypatch):
+    from vienna_life_assistant import notes_routes
+
+    monkeypatch.setattr(notes_routes, "ONENOTE_MCP_URL", "http://127.0.0.1:1")
+    r = client.post("/api/notes/export-journal", json={"entry_id": 1})
+    assert r.status_code == 200
+    assert r.json()["ok"] is False
+    assert "onenote" in r.json()["error"].lower()
+
+
+def test_notes_export_journal_success(client, monkeypatch):
+    from vienna_life_assistant import notes_routes
+
+    def fake_on(url, params=None, json_body=None, method="GET"):
+        if url == "/api/notebooks":
+            return {
+                "ok": True,
+                "notebooks": [{"id": "nb1", "display_name": "ViLife Journal"}],
+            }
+        if url == "/api/pages":
+            assert json_body is not None
+            return {
+                "ok": True,
+                "page": {"id": "pg1", "title": json_body.get("title", "")},
+            }
+        return {"ok": True}
+
+    monkeypatch.setattr(notes_routes, "_on", fake_on)
+    r = client.post("/api/notes/export-journal", json={"entry_id": 1})
+    assert r.status_code == 200
+    body = r.json()
+    assert body["ok"] is True
+    assert "ViLife Journal" in body["message"]
+    assert body["page"] is not None
+    assert body["page"]["id"] == "pg1"

@@ -37,6 +37,7 @@ from vienna_life_assistant.life_routes import router as life_router
 from vienna_life_assistant.logs_routes import router as logs_router
 from vienna_life_assistant.llm_routes import router as llm_router
 from vienna_life_assistant.news_routes import router as news_router
+from vienna_life_assistant.notes_routes import router as notes_router
 from vienna_life_assistant.skills_routes import router as skills_router
 from vienna_life_assistant.vienna_life_mcp import mcp as vienna_life_mcp
 from fastapi.middleware.cors import CORSMiddleware
@@ -180,6 +181,7 @@ app.include_router(subscription_routes)
 app.include_router(home_task_routes)
 app.include_router(log_routes)
 app.include_router(news_router)
+app.include_router(notes_router)
 
 
 @app.get("/api/settings")
@@ -498,7 +500,7 @@ async def get_diagnostics():
         "server": "vienna-life-assistant",
         "version": "0.2.0",
         "uptime_seconds": 0,
-        "tool_count": 9,
+        "tool_count": 10,
         "tools": [
             {"name": "vienna_life", "operations": 16},
             {"name": "vienna_health", "operations": 12},
@@ -507,6 +509,7 @@ async def get_diagnostics():
             {"name": "vienna_household", "operations": 12},
             {"name": "vienna_log", "operations": 8},
             {"name": "vienna_news", "operations": 6},
+            {"name": "vienna_notes", "operations": 6},
             {"name": "vienna_life_agentic"},
             {"name": "vienna_tips"},
         ],

@@ -101,4 +101,12 @@ export const API = {
 		search: (q: string) => `/api/news/search?q=${encodeURIComponent(q)}`,
 		morning: "/api/news/morning",
 	},
+	notes: {
+		status: "/api/notes/status",
+		notebooks: "/api/notes/notebooks",
+		search: (q: string) => `/api/notes/search?q=${encodeURIComponent(q)}`,
+		page: (id: string) => `/api/notes/page/${id}`,
+		create: "/api/notes/pages",
+		exportJournal: "/api/notes/export-journal",
+	},
 } as const;

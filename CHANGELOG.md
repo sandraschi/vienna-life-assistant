@@ -1,3 +1,8 @@
+### Added — OneNote bridge (2026-08-03)
+- **Notes**: OneNote via the onenote-mcp gateway (:10907) — the Microsoft Graph token stays in onenote-mcp (device-code flow); ViLife proxies notebooks/search/pages/create
+- **Journal → OneNote export**: per-entry export button + `vienna_notes(operation="export_journal", entry_id=)`; offline-safe when onenote-mcp is down
+- `vienna_notes` portmanteau (status/notebooks/search/page/create/export_journal) + `/api/notes/*` + Notes page
+- 4 new tests (41 total), 1 new e2e (12 total); ONENOTE_MCP_URL env
 ### Added — journal + news site (2026-08-03, v0.2.0 continuation)
 - **Journal**: personal log with daily entries (title, body, mood 1-10, tags), streak counter, on-this-day recall from previous years, full-text search — `vienna_log` portmanteau + `/api/life/logs*` + Journal page
 - **News site**: personal news fed by the fleet aiwatcher engine (:10946) — top stories by urgency, weekly trends, search across 12k+ items, morning digest; `/api/news/*` server-to-server bridge with graceful offline state; `vienna_news` portmanteau + News page

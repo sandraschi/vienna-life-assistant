@@ -71,6 +71,15 @@ travel_documents, contacts, pet_care_events, subscriptions, home_tasks.
 - `morning` — the aiwatcher morning digest
 - `stats` / `overview` — feed/item health + top + trends
 
+### `vienna_notes(operation)` — OneNote (onenote-mcp gateway, :10907)
+- `status` — reachability + Graph auth state
+- `notebooks` — list notebooks
+- `search(query)` — search OneNote pages
+- `page(page_id)` — fetch a page
+- `create(data={notebook_id, title, content})` — new page
+- `export_journal(entry_id)` — push a ViLife journal entry as a OneNote page
+  (Graph token stays inside onenote-mcp)
+
 ### Other
 - `vienna_life_agentic(goal, ctx)` — multi-step planning via MCP sampling
 - `vienna_tips(category)` — Vienna culture tips (coffee, music, museum)
@@ -99,6 +108,13 @@ travel_documents, contacts, pet_care_events, subscriptions, home_tasks.
 ### News (aiwatcher bridge)
 - `GET /api/news/overview` — stats + top + trends + morning in one call
 - `GET /api/news/top` / `trends` / `search?q=` / `morning` — proxied from aiwatcher :10946
+
+### Notes (onenote-mcp bridge)
+- `GET /api/notes/status` — reachability + Graph auth state
+- `GET /api/notes/notebooks` / `search?q=` / `page/{id}`
+- `POST /api/notes/pages` — create page {notebook_id, title, content}
+- `POST /api/notes/export-journal` — {entry_id} journal entry → OneNote page
+- `ONENOTE_MCP_URL` — onenote-mcp base URL (default http://127.0.0.1:10907)
 
 ### LLM
 - `GET /api/llm/providers`, `GET /api/llm/status`, `GET /api/llm/models`, `POST /api/llm/chat`

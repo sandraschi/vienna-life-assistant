@@ -1,4 +1,5 @@
 import {
+	BookMarked,
 	Flame,
 	History,
 	Loader2,
@@ -102,6 +103,18 @@ export default function Journal() {
 	const deleteEntry = useCallback(async (id: number) => {
 		await apiDelete(`${API.life.logs}/${id}`);
 		setEntries((p) => p.filter((e) => e.id !== id));
+	}, []);
+
+	const exportToOneNote = useCallback(async (id: number) => {
+		try {
+			const r = await apiPost<{ message?: string }>(API.notes.exportJournal, {
+				entry_id: id,
+			});
+			setSaved(r.message ?? "Exported to OneNote");
+		} catch {
+			setSaved("Export failed — is onenote-mcp running and authenticated?");
+		}
+		setTimeout(() => setSaved(""), 3500);
 	}, []);
 
 	const runSearch = useCallback(async (q: string) => {
@@ -316,6 +329,15 @@ export default function Journal() {
 											>
 												{e.mood}
 											</span>
+											<button
+												type="button"
+												onClick={() => exportToOneNote(e.id)}
+												className="text-slate-500 hover:text-cosmos-400 transition-colors"
+												title="Export to OneNote"
+												data-testid={`journal-export-${e.id}`}
+											>
+												<BookMarked className="w-3.5 h-3.5" />
+											</button>
 											<button
 												type="button"
 												onClick={() => deleteEntry(e.id)}

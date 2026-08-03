@@ -16,6 +16,7 @@ import KaffeehausHub from "./pages/KaffeehausHub";
 import Logs from "./pages/Logs";
 import MuseumGuide from "./pages/MuseumGuide";
 import News from "./pages/News";
+import Notes from "./pages/Notes";
 import Settings from "./pages/Settings";
 import ShoppingOffers from "./pages/ShoppingOffers";
 import Skills from "./pages/Skills";
@@ -58,6 +59,7 @@ export default function App() {
 				<Route path="household" element={<Household />} />
 				<Route path="journal" element={<Journal />} />
 				<Route path="news" element={<News />} />
+				<Route path="notes" element={<Notes />} />
 
 				<Route path="*" element={<Navigate to="/" replace />} />
 			</Route>
