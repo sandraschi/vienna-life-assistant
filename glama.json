@@ -1,6 +1,6 @@
 {
   "name": "Vienna Life Assistant",
-  "description": "Personal life management with FastMCP — calendar, todos, expenses, health (doctor visits, medications, vitals), travel (trips, packing, documents), contacts (birthdays), household (subscriptions, home tasks, pet care). Portmanteau tools, 6 prompts, 6 skills, local LLM auto-discovery, SQLite persistence.",
+  "description": "Personal life management with FastMCP — calendar, todos, expenses, health (doctor visits, medications, vitals), travel (trips, packing, documents), contacts (birthdays), household (subscriptions, home tasks, pet care), personal journal (mood, streak, on-this-day), and a news site fed by the fleet aiwatcher engine. Portmanteau tools, 6 prompts, 6 skills, local LLM auto-discovery, SQLite persistence.",
   "repository": "https://github.com/sandraschi/vienna-life-assistant",
   "server": {
     "runtime": "python",
@@ -28,6 +28,14 @@
     {
       "name": "vienna_household",
       "description": "Subscriptions with monthly total, home maintenance tasks, pet care events"
+    },
+    {
+      "name": "vienna_log",
+      "description": "Personal journal: daily entries with mood and tags, streak, on-this-day recall, search"
+    },
+    {
+      "name": "vienna_news",
+      "description": "Personal news site fed by aiwatcher: top stories, trends, search, morning digest"
     },
     {
       "name": "vienna_life_agentic",

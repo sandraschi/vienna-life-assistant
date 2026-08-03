@@ -11,9 +11,11 @@ import Fleet from "./pages/Fleet";
 import Health from "./pages/Health";
 import Help from "./pages/Help";
 import Household from "./pages/Household";
+import Journal from "./pages/Journal";
 import KaffeehausHub from "./pages/KaffeehausHub";
 import Logs from "./pages/Logs";
 import MuseumGuide from "./pages/MuseumGuide";
+import News from "./pages/News";
 import Settings from "./pages/Settings";
 import ShoppingOffers from "./pages/ShoppingOffers";
 import Skills from "./pages/Skills";
@@ -54,6 +56,8 @@ export default function App() {
 				<Route path="health" element={<Health />} />
 				<Route path="contacts" element={<Contacts />} />
 				<Route path="household" element={<Household />} />
+				<Route path="journal" element={<Journal />} />
+				<Route path="news" element={<News />} />
 
 				<Route path="*" element={<Navigate to="/" replace />} />
 			</Route>

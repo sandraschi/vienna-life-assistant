@@ -20,6 +20,7 @@ from vienna_life_assistant.models import (
     DoctorVisit,
     Expense,
     HomeTask,
+    JournalEntry,
     MedicalCondition,
     Medication,
     PackingItem,
@@ -152,6 +153,7 @@ subscription_routes = crud_router(
 home_task_routes = crud_router(
     "/api/life/home-tasks", HomeTask, "home-tasks", HomeTask.due_date
 )
+log_routes = crud_router("/api/life/logs", JournalEntry, "life-logs", JournalEntry.date)
 
 
 @router.get("/calendar/today")
@@ -166,3 +168,40 @@ def calendar_today_route(db: Session = Depends(get_db)) -> dict[str, Any]:
         where=CalendarEvent.date == date.today().isoformat(),
     )
     return {"ok": True, "count": len(rows), "events": [r.to_dict() for r in rows]}
+
+
+# --- Journal aggregations (defined before the CRUD router so /today,
+# /streak, /on-this-day, /search are not shadowed by /{row_id}) -------------
+
+
+@router.get("/logs/today")
+def journal_today(db: Session = Depends(get_db)) -> dict[str, Any]:
+    from datetime import date
+
+    rows = life_db.list_rows(
+        db,
+        JournalEntry,
+        order_by=JournalEntry.time,
+        where=JournalEntry.date == date.today().isoformat(),
+    )
+    return {"ok": True, "count": len(rows), "entries": [r.to_dict() for r in rows]}
+
+
+@router.get("/logs/streak")
+def journal_streak(db: Session = Depends(get_db)) -> dict[str, Any]:
+    return {"ok": True, "streak": life_db.journal_streak(db)}
+
+
+@router.get("/logs/on-this-day")
+def journal_on_this_day(db: Session = Depends(get_db)) -> dict[str, Any]:
+    entries = life_db.journal_on_this_day(db)
+    return {"ok": True, "count": len(entries), "entries": entries}
+
+
+@router.get("/logs/search")
+def journal_search(
+    q: str = Query("", min_length=1),
+    db: Session = Depends(get_db),
+) -> dict[str, Any]:
+    entries = life_db.journal_search(db, q)
+    return {"ok": True, "count": len(entries), "entries": entries}

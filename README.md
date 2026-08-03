@@ -40,18 +40,21 @@ Set-Location web_sota
 | Frontend | http://127.0.0.1:10988 |
 | Backend + MCP | http://127.0.0.1:10922 (`/mcp`, `/api/*`) |
 
-**Pages:** Dashboard · Health · Calendar · Travel · Contacts · Household · Expenses · Shopping · Chat · Skills · Tools · Settings · Help · Apps · Logs
+**Pages:** Dashboard · Health · Calendar · Travel · Journal · News · Contacts · Household · Expenses · Shopping · Chat · Skills · Tools · Settings · Help · Apps · Logs
 
 **Life domains (SQLite, since v0.2.0):** calendar with CRUD, doctor visit log,
 medications (dose/schedule/refill), vitals, trips with countdown + packing lists,
 travel documents with expiry alerts, contacts with birthday reminders,
-subscriptions with monthly total + renewal dates, home maintenance tasks, pet care.
+subscriptions with monthly total + renewal dates, home maintenance tasks, pet care,
+a **personal journal** (mood, streak, on-this-day recall), and a **personal news
+site** fed by the fleet aiwatcher engine (urgency-scored stories, trends, search).
 
 **LLM (Settings):** Switch **Ollama** (11434), **LM Studio** (1234/v1), or **OpenAI** (API key). Each provider has a **model dropdown** populated from `/api/llm/models`. Chat uses the saved provider + model with Vienna system preprompt.
 
-**MCP:** 7 portmanteau tools — `vienna_life`, `vienna_health`, `vienna_travel`,
-`vienna_contacts`, `vienna_household`, `vienna_life_agentic`, `vienna_tips` — plus
-6 Vienna skills, 6 prompts, SQLite persistence, sampling via `vienna_life_agentic`.
+**MCP:** 9 portmanteau tools — `vienna_life`, `vienna_health`, `vienna_travel`,
+`vienna_contacts`, `vienna_household`, `vienna_log`, `vienna_news`,
+`vienna_life_agentic`, `vienna_tips` — plus 6 Vienna skills, 6 prompts, SQLite
+persistence, sampling via `vienna_life_agentic`.
 
 See [`docs/PRD.md`](docs/PRD.md) and [`CHANGELOG.md`](CHANGELOG.md) for 0.2.0 details.
 

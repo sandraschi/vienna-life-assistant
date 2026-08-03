@@ -6,6 +6,8 @@ personal app, timezone-safe at the call site, JSON-native for REST and MCP.
 
 from __future__ import annotations
 
+from datetime import date
+
 from sqlalchemy import Boolean, Float, Integer, String, Text, inspect
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -199,3 +201,21 @@ class HomeTask(Base, BaseMixin):
     frequency_days: Mapped[int] = mapped_column(Integer, default=0)  # 0 = one-off
     done: Mapped[bool] = mapped_column(Boolean, default=False)
     notes: Mapped[str] = mapped_column(Text, default="")
+
+
+class JournalEntry(Base, BaseMixin):
+    """Personal log entry — daily journal with mood + tags."""
+
+    __tablename__ = "journal_entries"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    date: Mapped[str] = mapped_column(
+        String(10), index=True, default=lambda: date.today().isoformat()
+    )
+    time: Mapped[str] = mapped_column(String(5), default="20:00")
+    title: Mapped[str] = mapped_column(String(200), default="")
+    body: Mapped[str] = mapped_column(Text, default="")
+    mood: Mapped[int] = mapped_column(Integer, default=5)  # 1-10
+    tags: Mapped[str] = mapped_column(String(300), default="")  # comma-separated
+    created_at: Mapped[str] = mapped_column(String(19), default="")  # ISO datetime
+    updated_at: Mapped[str] = mapped_column(String(19), default="")

@@ -1,3 +1,7 @@
+### Added — journal + news site (2026-08-03, v0.2.0 continuation)
+- **Journal**: personal log with daily entries (title, body, mood 1-10, tags), streak counter, on-this-day recall from previous years, full-text search — `vienna_log` portmanteau + `/api/life/logs*` + Journal page
+- **News site**: personal news fed by the fleet aiwatcher engine (:10946) — top stories by urgency, weekly trends, search across 12k+ items, morning digest; `/api/news/*` server-to-server bridge with graceful offline state; `vienna_news` portmanteau + News page
+- Journal streak/on-this-day seeded; 10 new tests (37 total); 3 new e2e (11 total)
 ## [0.2.0] - 2026-08-03
 
 ### Added — real life-assistant domains (SQLite-backed)

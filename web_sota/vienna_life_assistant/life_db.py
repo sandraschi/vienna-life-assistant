@@ -20,6 +20,7 @@ from vienna_life_assistant.models import (
     DoctorVisit,
     Expense,
     HomeTask,
+    JournalEntry,
     MedicalCondition,
     Medication,
     PackingItem,
@@ -207,6 +208,58 @@ def expense_month_total(db: Session, period: str = "month") -> float:
     return sum(
         r.amount_eur for r in list_rows(db, Expense) if r.date.startswith(prefix)
     )
+
+
+# --- Journal (personal log) --------------------------------------------------
+
+
+def journal_streak(db: Session) -> int:
+    """Consecutive days with at least one entry, ending today (or yesterday
+    if today has no entry yet — the streak is not lost until a full day passes)."""
+    dates = {r.date for r in list_rows(db, JournalEntry)}
+    if not dates:
+        return 0
+    streak = 0
+    cursor = date.today()
+    if cursor.isoformat() not in dates:
+        cursor -= timedelta(days=1)
+    while cursor.isoformat() in dates:
+        streak += 1
+        cursor -= timedelta(days=1)
+    return streak
+
+
+def journal_on_this_day(db: Session) -> list[dict]:
+    """Entries from previous years on today's month-day — memory recall."""
+    today = date.today()
+    md = (today.month, today.day)
+    hits = []
+    for r in list_rows(db, JournalEntry, order_by=JournalEntry.date):
+        if not r.date:
+            continue
+        try:
+            d = date.fromisoformat(r.date)
+        except ValueError:
+            continue
+        if (d.month, d.day) == md and d.year < today.year:
+            hits.append(r.to_dict())
+    return sorted(hits, key=lambda e: e["date"])
+
+
+def journal_search(db: Session, query: str, limit: int = 20) -> list[dict]:
+    """Case-insensitive substring search over title, body, and tags."""
+    q = query.strip().lower()
+    if not q:
+        return []
+    rows = list_rows(db, JournalEntry, order_by=JournalEntry.date, limit=1000)
+    hits = []
+    for r in rows:
+        haystack = f"{r.title} {r.body} {r.tags}".lower()
+        if q in haystack:
+            hits.append(r.to_dict())
+        if len(hits) >= limit:
+            break
+    return hits
 
 
 # --- Seed --------------------------------------------------------------------
@@ -581,6 +634,49 @@ def seed_if_empty(db: Session) -> None:
                 category="Heating",
                 due_date=(today + timedelta(days=30)).isoformat(),
                 frequency_days=365,
+            ),
+        ]
+    )
+
+    # Journal — personal log with streak + on-this-day recall
+    db.add_all(
+        [
+            JournalEntry(
+                date=today.isoformat(),
+                time="08:30",
+                title="Sunny start in Alsergrund",
+                body="Morning walk with Benny along the Donaukanal. U4 quiet for a "
+                "Monday. Coffee at Café Berg — Hausbrand as always. Planning the "
+                "Salzburg weekend.",
+                mood=8,
+                tags="benny,coffee,planning",
+            ),
+            JournalEntry(
+                date=(today - timedelta(days=1)).isoformat(),
+                time="21:00",
+                title="Tosca at the Staatsoper",
+                body="Stehplatz again — worth every minute. Met Ingrid at the interval, "
+                "agreed on a Kaffeehaus tour next Saturday.",
+                mood=9,
+                tags="culture,ingrid",
+            ),
+            JournalEntry(
+                date=(today - timedelta(days=6)).isoformat(),
+                time="19:30",
+                title="Fleet review day",
+                body="Long session on the fleet registry merge. Vitamin D prescription "
+                "picked up afterwards — remember to take it with breakfast.",
+                mood=6,
+                tags="work,health",
+            ),
+            JournalEntry(
+                date=(today - timedelta(days=400)).isoformat(),
+                time="20:00",
+                title="Benny's first vet visit",
+                body="Puppy check-up, everything fine. He was braver than I was. "
+                "Vaccination schedule starts next month.",
+                mood=7,
+                tags="benny,health",
             ),
         ]
     )

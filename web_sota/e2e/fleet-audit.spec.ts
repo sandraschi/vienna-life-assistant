@@ -56,6 +56,28 @@ test.describe("Fleet Audit", () => {
 		await expect(page.locator('[data-testid="household-page"]')).toBeAttached();
 	});
 
+	test("Journal page renders with streak", async ({ page }) => {
+		await page.goto(`${FE}/journal`, { timeout: 15000 });
+		await expect(page.locator('[data-testid="journal-page"]')).toBeAttached();
+		await expect(page.locator('[data-testid="journal-streak"]')).toBeAttached();
+	});
+
+	test("Journal entry round-trip", async ({ request }) => {
+		const r = await request.post(`${BE}/api/life/logs`, {
+			data: { title: "e2e entry", body: "playwright", mood: 8, tags: "e2e" },
+		});
+		expect(r.status()).toBe(200);
+		const { item } = await r.json();
+		const del = await request.delete(`${BE}/api/life/logs/${item.id}`);
+		expect(del.status()).toBe(200);
+	});
+
+	test("News page renders (aiwatcher bridge)", async ({ page }) => {
+		await page.goto(`${FE}/news`, { timeout: 15000 });
+		await expect(page.locator('[data-testid="news-page"]')).toBeAttached();
+		await expect(page.locator('[data-testid="news-search"]')).toBeAttached();
+	});
+
 	test("Dashboard shows life pulse", async ({ page }) => {
 		await page.goto(FE, { timeout: 15000 });
 		await expect(page.locator('[data-testid="dashboard"]')).toBeAttached();

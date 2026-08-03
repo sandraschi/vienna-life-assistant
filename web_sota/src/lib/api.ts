@@ -87,5 +87,18 @@ export const API = {
 		pet: "/api/life/pet",
 		subscriptions: "/api/life/subscriptions",
 		homeTasks: "/api/life/home-tasks",
+		logs: "/api/life/logs",
+		logsToday: "/api/life/logs/today",
+		logsStreak: "/api/life/logs/streak",
+		logsOnThisDay: "/api/life/logs/on-this-day",
+		logsSearch: (q: string) =>
+			`/api/life/logs/search?q=${encodeURIComponent(q)}`,
+	},
+	news: {
+		overview: "/api/news/overview",
+		top: "/api/news/top",
+		trends: "/api/news/trends",
+		search: (q: string) => `/api/news/search?q=${encodeURIComponent(q)}`,
+		morning: "/api/news/morning",
 	},
 } as const;

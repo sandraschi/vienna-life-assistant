@@ -52,6 +52,8 @@ Portmanteaus (see `vienna_life_mcp.py`):
 - `vienna_travel(operation=...)` — trips, packing, documents, expiring
 - `vienna_contacts(operation=...)` — list/add/update/delete, birthdays
 - `vienna_household(operation=...)` — subscriptions, tasks, pet
+- `vienna_log(operation=...)` — journal entries, streak, on_this_day, search
+- `vienna_news(operation=...)` — aiwatcher-fed top/trends/search/morning
 - `vienna_life_agentic(goal, ctx)` — sampling-based planning
 - `vienna_tips(category)` — culture tips
 

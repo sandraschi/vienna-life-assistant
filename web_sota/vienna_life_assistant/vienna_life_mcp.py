@@ -22,6 +22,7 @@ from vienna_life_assistant.models import (
     DoctorVisit,
     Expense,
     HomeTask,
+    JournalEntry,
     MedicalCondition,
     Medication,
     PackingItem,
@@ -45,7 +46,8 @@ mcp = FastMCP(
         "Portmanteaus: vienna_life (daily ops), vienna_health (doctor visits, "
         "medications, vitals), vienna_travel (trips, packing, documents), "
         "vienna_contacts (people, birthdays), vienna_household (subscriptions, "
-        "home tasks, pet care). Agentic vienna_life_agentic; resources "
+        "home tasks, pet care), vienna_log (personal journal), vienna_news "
+        "(aiwatcher-fed news). Agentic vienna_life_agentic; resources "
         "resource://vienna-life/*; skill://vienna-life/SKILL.md."
     ),
 )
@@ -108,6 +110,10 @@ def vienna_life_capabilities_resource() -> str:
 - `vienna_contacts(operation=...)` — list, add, update, delete, birthdays
 - `vienna_household(operation=...)` — subscriptions, subscription_add/update/delete,
   tasks, task_add/toggle/delete, pet, pet_add
+- `vienna_log(operation=...)` — entries, today, add, update, delete, streak,
+  on_this_day, search
+- `vienna_news(operation=...)` — top, trends, search, morning, overview, stats
+  (served by fleet aiwatcher :10946)
 
 ## Agentic / sampling
 - `vienna_life_agentic(goal)` — multi-step Vienna life plan via host LLM sampling
@@ -878,6 +884,246 @@ async def vienna_household(
             entity = Subscription
             label = "subscription"
             return _entity_crud(db, entity, label, operation, data=data, row_id=row_id)
+
+    return {"success": False, "error": f"Unknown operation: {operation}"}
+
+
+# --- Journal (personal log) --------------------------------------------------
+
+
+@mcp.tool(annotations=_READ_ONLY)
+async def vienna_log(
+    operation: Literal[
+        "entries",
+        "today",
+        "add",
+        "update",
+        "delete",
+        "streak",
+        "on_this_day",
+        "search",
+    ],
+    row_id: int | None = None,
+    data: dict[str, Any] | None = None,
+    query: str | None = None,
+) -> dict[str, Any]:
+    """Personal journal — daily entries with mood, tags, streak, and recall.
+
+    [RATIONALE] A personal log is the memory of a life assistant: entries,
+    streak, and on-this-day recall in one tool keep journaling one call away.
+
+    ## Return Format
+    {"success": bool, "message": str, "entries"|"entry"|"streak": ...}
+
+    ## Examples
+    await vienna_log(operation="today")
+    await vienna_log(operation="add", data={"title": "Salzburg day", "body": "…", "mood": 8, "tags": "travel"})
+    await vienna_log(operation="streak")
+    await vienna_log(operation="on_this_day")
+    await vienna_log(operation="search", query="Staatsoper")
+
+    ## Notes
+    - add accepts date (ISO, defaults today), time, title, body, mood (1-10), tags.
+    - streak counts consecutive days with an entry, ending today (or yesterday).
+    - on_this_day returns entries from previous years on today's month-day.
+    """
+    today = date.today().isoformat()
+
+    with SessionLocal() as db:
+        if operation == "entries":
+            rows = life_db.list_rows(
+                db, JournalEntry, order_by=JournalEntry.date, limit=100
+            )
+            return {
+                "success": True,
+                "message": f"{len(rows)} journal entries",
+                "entries": [r.to_dict() for r in rows],
+            }
+
+        if operation == "today":
+            rows = life_db.list_rows(
+                db,
+                JournalEntry,
+                order_by=JournalEntry.time,
+                where=JournalEntry.date == today,
+            )
+            return {
+                "success": True,
+                "message": f"{len(rows)} entries today",
+                "entries": [r.to_dict() for r in rows],
+            }
+
+        if operation == "add":
+            if not data:
+                return _error_response(
+                    "add requires data (title or body)", "validation"
+                )
+            entry = {
+                "date": data.get("date", today),
+                "time": data.get("time", "20:00"),
+                **data,
+            }
+            row = life_db.add_row(db, JournalEntry, entry)
+            return {
+                "success": True,
+                "message": f"Entry added (id {row.id})",
+                "entry": row.to_dict(),
+            }
+
+        if operation == "update":
+            row = life_db.update_row(db, JournalEntry, row_id or 0, data or {})
+            if row is None:
+                return _error_response(f"Entry {row_id} not found", "not_found")
+            return {"success": True, "message": "Entry updated", "entry": row.to_dict()}
+
+        if operation == "delete":
+            if not life_db.delete_row(db, JournalEntry, row_id or 0):
+                return _error_response(f"Entry {row_id} not found", "not_found")
+            return {"success": True, "message": "Entry deleted"}
+
+        if operation == "streak":
+            streak = life_db.journal_streak(db)
+            return {
+                "success": True,
+                "message": f"{streak}-day journal streak",
+                "streak": streak,
+            }
+
+        if operation == "on_this_day":
+            entries = life_db.journal_on_this_day(db)
+            return {
+                "success": True,
+                "message": f"{len(entries)} entries from previous years on this day",
+                "entries": entries,
+            }
+
+        if operation == "search":
+            entries = life_db.journal_search(db, query or "")
+            return {
+                "success": True,
+                "message": f"{len(entries)} matching entries",
+                "entries": entries,
+            }
+
+    return {"success": False, "error": f"Unknown operation: {operation}"}
+
+
+# --- News (aiwatcher bridge) -------------------------------------------------
+
+
+@mcp.tool(annotations=_READ_ONLY)
+async def vienna_news(
+    operation: Literal["top", "trends", "search", "morning", "overview", "stats"],
+    query: str | None = None,
+    hours: int = 24,
+    limit: int = 10,
+) -> dict[str, Any]:
+    """Personal news feed — served by the fleet aiwatcher engine (:10946).
+
+    [RATIONALE] The fleet's aiwatcher ingests and scores RSS + fleet events
+    daily; one tool surfaces its top stories, trends, and morning digest.
+
+    ## Return Format
+    {"success": bool, "message": str, "items"|"trends"|"stats": ...}
+
+    ## Examples
+    await vienna_news(operation="top", hours=24, limit=10)
+    await vienna_news(operation="trends", limit=15)
+    await vienna_news(operation="search", query="robotics")
+    await vienna_news(operation="morning")
+
+    ## Notes
+    - Items carry title, summary/distilled_summary, urgency_score, tags, url.
+    - When aiwatcher is down the tool returns success=False with a recovery hint.
+    """
+    from vienna_life_assistant.news_routes import _aw
+
+    if operation == "top":
+        payload = _aw("/api/items", {"limit": limit, "hours": hours})
+        items = payload.get("items", [])
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "aiwatcher unreachable"),
+                "recovery_options": [
+                    "Start aiwatcher-mcp (just up in aiwatcher-mcp) or check port 10946"
+                ],
+            }
+        return {
+            "success": True,
+            "message": f"{len(items)} top stories ({hours}h)",
+            "items": items,
+        }
+
+    if operation == "trends":
+        payload = _aw("/api/trends", {"days": 7, "limit": limit})
+        trends = payload.get("trends", [])
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "aiwatcher unreachable"),
+            }
+        return {
+            "success": True,
+            "message": f"{len(trends)} trending topics",
+            "trends": trends,
+        }
+
+    if operation == "search":
+        if not query:
+            return _error_response("search requires query", "validation")
+        payload = _aw("/api/search", {"q": query, "limit": limit})
+        items = payload.get("items", [])
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "aiwatcher unreachable"),
+            }
+        return {
+            "success": True,
+            "message": f"{len(items)} results for '{query}'",
+            "items": items,
+        }
+
+    if operation == "morning":
+        payload = _aw("/api/morning-news")
+        items = payload.get("items", [])
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "aiwatcher unreachable"),
+            }
+        return {
+            "success": True,
+            "message": f"{len(items)} stories in the morning digest",
+            "items": items,
+        }
+
+    if operation == "stats":
+        payload = _aw("/api/stats")
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "aiwatcher unreachable"),
+            }
+        return {"success": True, "message": "aiwatcher stats", "stats": payload}
+
+    if operation == "overview":
+        payload = _aw("/api/stats")
+        top = _aw("/api/items", {"limit": limit, "hours": hours})
+        trends = _aw("/api/trends", {"days": 7, "limit": limit})
+        if not payload.get("ok"):
+            return {
+                "success": False,
+                "error": payload.get("error", "aiwatcher unreachable"),
+            }
+        return {
+            "success": True,
+            "message": "News overview",
+            "stats": payload,
+            "top": top.get("items", []),
+            "trends": trends.get("trends", []),
+        }
 
     return {"success": False, "error": f"Unknown operation: {operation}"}
 

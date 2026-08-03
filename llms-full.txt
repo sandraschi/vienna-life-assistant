@@ -58,6 +58,19 @@ travel_documents, contacts, pet_care_events, subscriptions, home_tasks.
 - `tasks` / `task_add` / `task_toggle` / `task_delete` — home maintenance with frequency
 - `pet` / `pet_add` — pet care events with next-due dates
 
+### `vienna_log(operation)` — personal journal
+- `entries` / `today` / `add` / `update` / `delete` — daily entries (title, body, mood 1-10, tags)
+- `streak` — consecutive journaling days (today or yesterday anchored)
+- `on_this_day` — entries from previous years on today's month-day
+- `search(query)` — full-text over title, body, tags
+
+### `vienna_news(operation)` — personal news site (aiwatcher-fed)
+- `top(hours, limit)` — urgency-scored stories from the fleet aiwatcher engine (:10946)
+- `trends` — weekly trending tags
+- `search(query)` — across 12k+ indexed items
+- `morning` — the aiwatcher morning digest
+- `stats` / `overview` — feed/item health + top + trends
+
 ### Other
 - `vienna_life_agentic(goal, ctx)` — multi-step planning via MCP sampling
 - `vienna_tips(category)` — Vienna culture tips (coffee, music, museum)
@@ -81,6 +94,11 @@ travel_documents, contacts, pet_care_events, subscriptions, home_tasks.
 - `/api/life/pet`
 - `/api/life/subscriptions`
 - `/api/life/home-tasks`
+- `/api/life/logs` — journal entries (+ `/today`, `/streak`, `/on-this-day`, `/search`)
+
+### News (aiwatcher bridge)
+- `GET /api/news/overview` — stats + top + trends + morning in one call
+- `GET /api/news/top` / `trends` / `search?q=` / `morning` — proxied from aiwatcher :10946
 
 ### LLM
 - `GET /api/llm/providers`, `GET /api/llm/status`, `GET /api/llm/models`, `POST /api/llm/chat`
@@ -124,10 +142,14 @@ Copy `.env.example` to `.env` and configure:
 - **OpenAI** (manual API key)
 
 ## Testing
-- `uv run pytest tests/` — 27 tests, coverage gate 45%
-- `npx playwright test` — fleet audit (backend health, diagnostics, page renders, zero console errors)
+- `uv run pytest tests/` — 37 tests, coverage gate 45%
+- `npx playwright test` — 11 fleet-audit e2e (backend health, diagnostics, page renders, journal round-trip, zero console errors)
 
 ## Session context injection
 `.claude-plugin/` (Claude Code), `.cursorrules` + `.windsurfrules` (Cursor/Windsurf),
 `.github/copilot-instructions.md` (Copilot), `.opencode/skills/session-context/`
 (OpenCode), `.agents/skills/` (Antigravity).
+
+## News bridge
+- AIWATCHER_URL — aiwatcher-mcp base URL (default http://127.0.0.1:10946); AIWATCHER_TIMEOUT (s)
+- \/api/news/*\ proxies stats/items/trends/search/morning from aiwatcher
