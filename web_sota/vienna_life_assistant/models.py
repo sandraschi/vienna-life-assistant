@@ -230,3 +230,17 @@ class JournalEmbedding(Base, BaseMixin):
     entry_id: Mapped[int] = mapped_column(Integer, index=True, unique=True)
     embedding: Mapped[str] = mapped_column(Text)  # JSON list of floats
     created_at: Mapped[str] = mapped_column(String(19), default="")
+
+
+class UserProfile(Base, BaseMixin):
+    """Single-row profile — first-run onboarding state."""
+
+    __tablename__ = "user_profile"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    first_name: Mapped[str] = mapped_column(String(80), default="")
+    city: Mapped[str] = mapped_column(String(120), default="Vienna")
+    timezone: Mapped[str] = mapped_column(String(60), default="Europe/Vienna")
+    pet_name: Mapped[str] = mapped_column(String(80), default="")
+    onboarded: Mapped[bool] = mapped_column(Boolean, default=False)
+    onboarded_at: Mapped[str] = mapped_column(String(19), default="")

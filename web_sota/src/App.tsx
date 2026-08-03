@@ -18,6 +18,7 @@ import Logs from "./pages/Logs";
 import MuseumGuide from "./pages/MuseumGuide";
 import News from "./pages/News";
 import Notes from "./pages/Notes";
+import Onboarding from "./pages/Onboarding";
 import Settings from "./pages/Settings";
 import ShoppingOffers from "./pages/ShoppingOffers";
 import Skills from "./pages/Skills";
@@ -29,6 +30,7 @@ export default function App() {
 		<Routes>
 			<Route element={<AppLayout />}>
 				<Route index element={<Dashboard />} />
+				<Route path="onboarding" element={<Onboarding />} />
 				<Route path="dashboard" element={<Navigate to="/" replace />} />
 
 				{/* Fleet SOTA standard pages */}

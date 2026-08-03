@@ -437,3 +437,56 @@ def test_fritz_status_graceful_offline(monkeypatch):
     r = fleet_mcp.fritz_status()
     assert r["success"] is False
     assert "Fritz" in r["error"]
+
+
+# --- Onboarding ---------------------------------------------------------------
+
+
+def test_onboarding_not_onboarded_by_default(client):
+    r = client.get("/api/onboarding/status")
+    assert r.status_code == 200
+    body = r.json()
+    assert body["ok"] is True
+    assert body["onboarded"] is False
+    assert "mock_data_note" in body
+
+
+def test_onboarding_profile_and_complete(client):
+    r = client.post(
+        "/api/onboarding/profile", json={"first_name": "Sandra", "city": "Wien"}
+    )
+    assert r.status_code == 200
+    assert r.json()["profile"]["first_name"] == "Sandra"
+    assert r.json()["profile"]["city"] == "Wien"
+
+    r = client.post("/api/onboarding/complete")
+    assert r.status_code == 200
+    assert r.json()["profile"]["onboarded"] is True
+    assert r.json()["profile"]["onboarded_at"]
+
+    r = client.get("/api/onboarding/status")
+    assert r.json()["onboarded"] is True
+
+
+def test_onboarding_pet_creates_care_event(client):
+    r = client.post(
+        "/api/onboarding/pet",
+        json={
+            "pet_name": "Benny",
+            "event_type": "grooming",
+            "next_due": "2026-08-20",
+            "notes": "fur trim",
+        },
+    )
+    assert r.status_code == 200
+    assert r.json()["pet_name"] == "Benny"
+
+    from vienna_life_assistant import life_db
+    from vienna_life_assistant.db import SessionLocal
+    from vienna_life_assistant.models import PetCareEvent
+
+    with SessionLocal() as db:
+        events = life_db.list_rows(
+            db, PetCareEvent, where=PetCareEvent.pet_name == "Benny"
+        )
+    assert any(e.event_type == "grooming" for e in events)

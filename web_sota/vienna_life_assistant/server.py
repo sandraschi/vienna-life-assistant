@@ -40,6 +40,7 @@ from vienna_life_assistant.logs_routes import router as logs_router
 from vienna_life_assistant.llm_routes import router as llm_router
 from vienna_life_assistant.news_routes import router as news_router
 from vienna_life_assistant.notes_routes import router as notes_router
+from vienna_life_assistant.onboarding_routes import router as onboarding_router
 from vienna_life_assistant.pa_routes import router as pa_router, scheduler_loop
 from vienna_life_assistant.skills_routes import router as skills_router
 from vienna_life_assistant.vienna_life_mcp import mcp as vienna_life_mcp
@@ -199,6 +200,7 @@ app.include_router(notes_router)
 app.include_router(email_router)
 app.include_router(pa_router)
 app.include_router(environment_router)
+app.include_router(onboarding_router)
 
 
 @app.get("/api/settings")

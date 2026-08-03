@@ -142,4 +142,18 @@ test.describe("Fleet Audit", () => {
 			timeout: 15000,
 		});
 	});
+
+	test("Onboarding wizard runs end to end", async ({ page }) => {
+		await page.goto(`${FE}/onboarding`, { timeout: 15000 });
+		await expect(page.locator('[data-testid="onboarding-page"]')).toBeAttached();
+		await page.locator('[data-testid="onb-name"]').fill("Sandra");
+		await page.locator('[data-testid="onb-next"]').click();
+		await page.locator('[data-testid="onb-doctor"]').fill("Dr. Test");
+		await page.locator('[data-testid="onb-next"]').click();
+		await page.locator('[data-testid="onb-next"]').click();
+		await page.locator('[data-testid="onb-finish"]').click();
+		await expect(page.locator('[data-testid="onboarding-done"]')).toBeAttached({
+			timeout: 15000,
+		});
+	});
 });

@@ -151,4 +151,10 @@ export const API = {
 	environment: {
 		overview: "/api/environment/overview",
 	},
+	onboarding: {
+		status: "/api/onboarding/status",
+		profile: "/api/onboarding/profile",
+		pet: "/api/onboarding/pet",
+		complete: "/api/onboarding/complete",
+	},
 } as const;

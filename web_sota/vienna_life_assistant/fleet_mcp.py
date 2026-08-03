@@ -41,6 +41,11 @@ FLEET_SERVERS: dict[str, dict[str, Any]] = {
         "path": "/mcp",
         "purpose": "Fleet news engine: top stories, search items, tag trends, bundles, feeds",
     },
+    "benny-the-dog-mcp": {
+        "port": 11142,
+        "path": "/mcp",
+        "purpose": "Benny the dog care plane: water/bark/movement/sausage/movie/wake events, care log",
+    },
     "devices-mcp": {
         "port": 10717,
         "path": "/mcp",

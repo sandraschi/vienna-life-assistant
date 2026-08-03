@@ -14,6 +14,7 @@ import {
 	Plane,
 	Receipt,
 	RefreshCw,
+	Rocket,
 	Send,
 	ShoppingBag,
 	Sparkles,
@@ -105,6 +106,7 @@ export default function Dashboard() {
 		offline_devices: unknown[];
 		sensors: { id: string; name?: string; connected?: boolean }[];
 	} | null>(null);
+	const [onboarded, setOnboarded] = useState(true);
 
 	const refreshBrief = useCallback(() => {
 		apiPost<{
@@ -198,6 +200,9 @@ export default function Dashboard() {
 		}>(API.environment.overview)
 			.then((d) => setEnv(d))
 			.catch(() => {});
+		apiGet<{ onboarded: boolean }>(API.onboarding.status)
+			.then((d) => setOnboarded(d.onboarded))
+			.catch(() => {});
 	}, []);
 
 	return (
@@ -219,6 +224,20 @@ export default function Dashboard() {
 						and daily logistics. All data served from your own fleet, zero cloud
 						dependence.
 					</p>
+					{!onboarded && (
+						<div className="mt-6">
+							<a
+								href="/onboarding"
+								className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-red-500 hover:bg-red-600 text-white font-black uppercase tracking-widest text-sm shadow-lg shadow-red-500/30 animate-pulse"
+								data-testid="onboarding-cta"
+							>
+								<Rocket className="w-4 h-4" /> Set up ViLife in 2 minutes
+							</a>
+							<p className="text-xs text-slate-300 mt-2">
+								The demo data is a starting point — onboarding makes it yours.
+							</p>
+						</div>
+					)}
 				</div>
 			</div>
 
