@@ -13,7 +13,25 @@ from typing import Any, Optional
 from fastapi import FastAPI, Query
 from vienna_life_assistant.activity_log import install_log_handler, log_activity
 from vienna_life_assistant.capabilities import build_capabilities
+from vienna_life_assistant.db import init_db
 from vienna_life_assistant.fleet_overview import build_fleet_overview
+from vienna_life_assistant.life_db_routes import (
+    condition_routes,
+    contact_routes,
+    document_routes,
+    expense_routes,
+    health_routes,
+    home_task_routes,
+    life_routes,
+    medication_routes,
+    packing_routes,
+    pet_routes,
+    router as life_db_router,
+    subscription_routes,
+    todo_routes,
+    trip_routes,
+    vitals_routes,
+)
 from vienna_life_assistant.life_routes import router as life_router
 from vienna_life_assistant.logs_routes import router as logs_router
 from vienna_life_assistant.llm_routes import router as llm_router
@@ -40,11 +58,22 @@ async def lifespan(app: FastAPI):
         sys.path.append(backend_path)
         logger.info("Added %s to sys.path", backend_path)
 
+    # Initialize the ViLife SQLite life-data store (calendar, health, travel, …)
+    try:
+        init_db()
+        logger.info(
+            "ViLife SQLite store initialized at %s",
+            os.environ.get("VILIFE_DB_PATH", "web_sota/data/vilife.db"),
+        )
+    except Exception as e:
+        logger.error("ViLife SQLite init failed: %s", e)
+
     # Initialize DB from the main backend models
     try:
-        from models.base import init_db
+        import importlib
 
-        init_db()
+        _legacy_init_db = importlib.import_module("models.base").init_db
+        _legacy_init_db()
         logger.info("Main backend database initialized")
     except ImportError:
         logger.warning(
@@ -132,6 +161,21 @@ app.include_router(llm_router)
 app.include_router(skills_router)
 app.include_router(life_router)
 app.include_router(logs_router)
+app.include_router(life_db_router)
+app.include_router(life_routes)
+app.include_router(todo_routes)
+app.include_router(expense_routes)
+app.include_router(health_routes)
+app.include_router(condition_routes)
+app.include_router(medication_routes)
+app.include_router(vitals_routes)
+app.include_router(trip_routes)
+app.include_router(packing_routes)
+app.include_router(document_routes)
+app.include_router(contact_routes)
+app.include_router(pet_routes)
+app.include_router(subscription_routes)
+app.include_router(home_task_routes)
 
 
 @app.get("/api/settings")
@@ -195,34 +239,43 @@ async def fleet_overview(probe: int = Query(0, ge=0, le=1)):
 
 @app.get("/api/dashboard", response_model=dict[str, Any])
 async def get_dashboard_data():
-    """Aggregated dashboard statistics"""
+    """Aggregated dashboard statistics — DB-backed life data."""
+    from vienna_life_assistant import life_db
+    from vienna_life_assistant.db import SessionLocal
+
+    with SessionLocal() as db:
+        events = life_db.upcoming_events(db, days=1)
+        meds = life_db.active_medications(db)
+        trips = life_db.next_trips(db, limit=1)
+        total = life_db.expense_month_total(db)
+        birthdays = life_db.upcoming_birthdays(db, days=14)
     return {
         "stats": [
             {
-                "title": "Total Budget",
-                "value": "€4,250",
-                "change": "+12%",
-                "icon": "CreditCard",
-                "color": "text-emerald-400",
-            },
-            {
-                "title": "Shopping Items",
-                "value": "18",
-                "change": "5 urgent",
-                "icon": "ShoppingBag",
-                "color": "text-amber-400",
-            },
-            {
-                "title": "Upcoming Events",
-                "value": "3 today",
-                "change": "Next in 2h",
+                "title": "Today",
+                "value": str(len(events)),
+                "change": f"{len(events)} event(s) planned",
                 "icon": "Calendar",
                 "color": "text-cosmos-400",
             },
             {
-                "title": "Total Expenses",
-                "value": "€1,820",
-                "change": "-4% vs last month",
+                "title": "Active Medications",
+                "value": str(len(meds)),
+                "change": f"{len(meds)} with schedule",
+                "icon": "Pill",
+                "color": "text-emerald-400",
+            },
+            {
+                "title": "Next Trip",
+                "value": trips[0]["title"] if trips else "—",
+                "change": trips[0]["start_date"] if trips else "Nothing planned",
+                "icon": "Plane",
+                "color": "text-amber-400",
+            },
+            {
+                "title": "Month Expenses",
+                "value": f"€{total:,.0f}",
+                "change": f"{len(birthdays)} birthday(s) soon",
                 "icon": "TrendingUp",
                 "color": "text-blue-400",
             },
@@ -282,8 +335,16 @@ async def get_restaurants():
                 "is_favorite": True,
             },
             {"name": "Mast Weinbar", "address": "Servitengasse 3, 1090 Wien"},
-            {"name": "Steirereck", "address": "Am Heumarkt 2A, 1030 Wien", "note": "Austria's best restaurant"},
-            {"name": "Enopizzeria Toledo", "address": "Servitengasse 12, 1090 Wien", "is_favorite": True},
+            {
+                "name": "Steirereck",
+                "address": "Am Heumarkt 2A, 1030 Wien",
+                "note": "Austria's best restaurant",
+            },
+            {
+                "name": "Enopizzeria Toledo",
+                "address": "Servitengasse 12, 1090 Wien",
+                "is_favorite": True,
+            },
             {"name": "Plachutta", "address": "Wollzeile 38, 1010 Wien"},
             {"name": "Meissl & Schadn", "address": "Mariahilfer Straße 64, 1070 Wien"},
         ],
@@ -320,10 +381,28 @@ async def get_museum_exhibitions():
     ]
 
 
-@app.get("/api/vienna/transport", response_model=dict[str, list[TransitDeparture]])
+@app.get("/api/vienna/news")
+async def get_vienna_news():
+    """Vienna headlines from wien.ORF.at (public broadcaster)."""
+    from vienna_life_assistant.vienna_scraper import fetch_news
+
+    return fetch_news()
+
+
+@app.get("/api/vienna/press")
+async def get_vienna_press():
+    """City government announcements from presse.wien.gv.at."""
+    from vienna_life_assistant.vienna_scraper import fetch_press
+
+    return fetch_press()
+
+
+@app.get("/api/vienna/transport")
 async def get_transit_info():
-    """Get real-time departures for Sandra's local stations"""
+    """Static reference departures — mock. Live data: mywienerlinien (10896) / gtfs-mcp (10913)."""
     return {
+        "mock": True,
+        "source": "static reference — use mywienerlinien/gtfs-mcp for live departures",
         "Friedensbrücke": [
             {
                 "line": "U4",
@@ -370,18 +449,7 @@ async def get_transit_info():
 
 @app.get("/api/vienna/shopping/offers", response_model=list[ShoppingOffer])
 async def get_shopping_offers():
-    """Get curated shopping offers from Spar and Billa"""
-    # Prefer existing scrapers if available
-    try:
-        import importlib
-
-        importlib.util.find_spec("api.scrapers.spar")
-        importlib.util.find_spec("api.scrapers.billa")
-    except Exception:
-        pass
-    except ImportError:
-        pass
-
+    """Static reference offers — mock. Live: Spar/Billa scrapers when wired."""
     return [
         {
             "store": "spar",
@@ -426,9 +494,13 @@ async def get_diagnostics():
         "server": "vienna-life-assistant",
         "version": "0.2.0",
         "uptime_seconds": 0,
-        "tool_count": 3,
+        "tool_count": 7,
         "tools": [
-            {"name": "vienna_life", "operations": 8},
+            {"name": "vienna_life", "operations": 16},
+            {"name": "vienna_health", "operations": 12},
+            {"name": "vienna_travel", "operations": 11},
+            {"name": "vienna_contacts", "operations": 5},
+            {"name": "vienna_household", "operations": 12},
             {"name": "vienna_life_agentic"},
             {"name": "vienna_tips"},
         ],

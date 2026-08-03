@@ -1,3 +1,23 @@
+## [0.2.0] - 2026-08-03
+
+### Added — real life-assistant domains (SQLite-backed)
+- **Health**: doctor visit log, medical conditions, medications (dose/schedule/refill), vitals (BP, pulse, weight) — `vienna_health` portmanteau + `/api/life/health/*`
+- **Travel**: trips with countdown, per-trip packing checklists, travel documents with expiry alerts — `vienna_travel` portmanteau + `/api/life/travel/*`
+- **Contacts**: people, relationships, upcoming birthdays with age — `vienna_contacts` + `/api/life/contacts`
+- **Household**: subscriptions (monthly total + renewals), home maintenance tasks with frequency, pet care (Benny) — `vienna_household` + `/api/life/subscriptions`, `/home-tasks`, `/pet`
+- **Persistence**: SQLite via SQLAlchemy (`web_sota/vienna_life_assistant/db.py` + `models.py`); first-run seed replaces static mocks; mock endpoints now declare `"mock": true`
+- **Frontend**: Health, Contacts, Household pages; Travel countdown + packing toggle + documents; Calendar add-event; Dashboard KPI row + Life Pulse widget; `data-testid` on KPIs and forms
+- **MCP**: `vienna_life` extended with calendar/todo/expense CRUD; 4 new portmanteau tools (7 total)
+- **Tests**: 27 pytest tests (DB CRUD, REST round-trips, MCP ops) with coverage gate; Playwright fleet-audit e2e
+- **Session injection**: `.claude-plugin/`, refreshed `.cursorrules` + `.windsurfrules`, copilot-instructions, `.opencode/skills/session-context/`, `.agents/skills/`
+- **Infra**: `.github/workflows/ci.yml` (five-gate), `.pre-commit-config.yaml` + `scripts/pre-commit-biome.ps1`, pyright in dev-deps, `.mcpbignore` + `assets/prompts/`, Ctrl+0 zoom reset
+
+### Fixed
+- Tracked junk removed (ps_output.txt, docker_status.txt, ovienna-life-assistantbackend, celerybeat-schedule)
+- CUA smoke config health path (`/api/v1/health` → `/health`)
+- Port registry: frontend 10988 (WEBAPP_PORTS.md corrected from 10989)
+- pyright gate green (0 errors), ruff clean, tsc clean
+- Dead mock scraping block removed from shopping offers endpoint
 # Changelog
 
 All notable changes to this project will be documented in this file.

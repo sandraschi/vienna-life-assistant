@@ -25,29 +25,35 @@ Set-Location web_sota
 
 - `web_sota/start.ps1` — port cleanup, strict Vite, backend uvicorn
 - `web_sota/vienna_life_assistant/server.py` — FastAPI app, `/mcp` mount, settings API
-- `web_sota/vienna_life_assistant/vienna_life_mcp.py` — portmanteau MCP
+- `web_sota/vienna_life_assistant/db.py` — SQLite engine/session/init
+- `web_sota/vienna_life_assistant/models.py` — life-domain tables (calendar, health, travel, contacts, household)
+- `web_sota/vienna_life_assistant/life_db.py` — CRUD + seed + aggregations
+- `web_sota/vienna_life_assistant/life_db_routes.py` — generic CRUD REST routers
+- `web_sota/vienna_life_assistant/vienna_life_mcp.py` — portmanteau MCP tools
 - `web_sota/vienna_life_assistant/llm_routes.py` — Ollama / LM Studio / OpenAI
 - `web_sota/vienna_life_assistant/skills/` — Vienna SKILL.md bundles
-- `web_sota/src/pages/Chat.tsx`, `Settings.tsx` — chat + provider UI
-- `web_sota/src/lib/llm-settings.ts` — provider config shared by Chat/Settings
+- `web_sota/src/pages/` — React pages (Health, Contacts, Household, Travel, Calendar, Chat, Settings, ...)
+- `web_sota/src/lib/api.ts` — API paths + fetch helpers
+- `web_sota/tests/` — pytest suite (27 tests, coverage gate)
 
-## LLM providers
+## Life data (SQLite)
 
-Switchable in **Settings** (`/settings`):
-
-1. **Ollama** — URL + model dropdown from `/api/tags`
-2. **LM Studio** — OpenAI-compatible URL + `/v1/models`
-3. **OpenAI** — API key (password field), base URL, model dropdown from `/v1/models`
-
-Env vars (session, set via POST `/api/settings/llm`):
-
-- `LLM_PROVIDER`, `OLLAMA_URL`, `OLLAMA_MODEL`
-- `LMSTUDIO_URL`, `LMSTUDIO_MODEL`
-- `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_MODEL`
+All life domains persist in `web_sota/data/vilife.db` (gitignored; first run seeds
+demo content). New domain pattern: model in `models.py` → helpers in `life_db.py`
+→ CRUD router in `life_db_routes.py` → ops in the matching portmanteau in
+`vienna_life_mcp.py`. REST mirrors MCP: `/api/life/<domain>`.
 
 ## MCP tools
 
-Portmanteau: `vienna_life(operation=...)` — see `vienna_life_mcp.py`.
+Portmanteaus (see `vienna_life_mcp.py`):
+
+- `vienna_life(operation=...)` — calendar/todos/expenses CRUD, life_brief, health, help
+- `vienna_health(operation=...)` — visits, meds, vitals, conditions
+- `vienna_travel(operation=...)` — trips, packing, documents, expiring
+- `vienna_contacts(operation=...)` — list/add/update/delete, birthdays
+- `vienna_household(operation=...)` — subscriptions, tasks, pet
+- `vienna_life_agentic(goal, ctx)` — sampling-based planning
+- `vienna_tips(category)` — culture tips
 
 Capabilities: `GET /api/capabilities` (sampling, prompts, resources, skills).
 

@@ -1,4 +1,4 @@
-set windows-shell := ["pwsh.exe", "-NoLogo", "-Command"]
+set windows-shell := ["powershell.exe", "-NoProfile", "-Command"]
 import 'scripts/just/fleet.just'
 
 # Open the interactive recipe dashboard
@@ -56,14 +56,6 @@ build-native:
     Set-Location '{{justfile_directory()}}\native'
     .\build.ps1
 
-# Run CUA-NSIS smoke test
-cua-nsis-test:
-    uv run python scripts/cua-smoke.py
-
-# Build MCPB bundle
-mcpb-pack:
-    uv run mcpb pack . dist/vienna-life-assistant-v0.1.0.mcpb
-
 # Security audit
 check-sec:
     Set-Location '{{justfile_directory()}}\web_sota'
@@ -73,3 +65,9 @@ check-sec:
 audit-deps:
     Set-Location '{{justfile_directory()}}\web_sota'
     uv run safety check
+
+# Bootstrap: install dev deps + pre-commit hook
+bootstrap:
+    uv sync --group dev
+    uv run pre-commit install
+    Write-Host "Pre-commit hooks installed." -ForegroundColor Green

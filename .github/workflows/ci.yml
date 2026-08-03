@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  python:
+    name: Python gates (ruff, pyright, pytest)
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: web_sota
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: uv sync --group dev
+      - name: Ruff check
+        run: uv run ruff check .
+      - name: Ruff format check
+        run: uv run ruff format . --check
+      - name: Pyright
+        run: uv run pyright vienna_life_assistant tests
+      - name: Pytest
+        run: uv run pytest tests/ -q
+
+  frontend:
+    name: Frontend gates (tsc, lint, build)
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: web_sota
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: npm ci
+      - name: TypeScript typecheck
+        run: npx tsc --noEmit
+      - name: Biome check
+        run: npm run biome:ci
+      - name: Build
+        run: npm run build

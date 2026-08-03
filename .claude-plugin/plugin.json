@@ -1,0 +1,6 @@
+{
+  "name": "vienna-life-assistant",
+  "version": "0.2.0",
+  "description": "Vienna Life Assistant (ViLife) — personal life admin MCP for Vienna: calendar, health, travel, contacts, household.",
+  "hooks": "../hooks/hooks.json"
+}

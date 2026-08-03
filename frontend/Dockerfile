@@ -19,7 +19,7 @@ COPY . .
 RUN pnpm build
 
 # Production stage
-FROM nginx:alpine
+FROM nginx:1.27-alpine
 
 # Copy built assets from build stage
 COPY --from=build /app/dist /usr/share/nginx/html

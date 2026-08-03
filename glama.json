@@ -1,6 +1,6 @@
 {
   "name": "Vienna Life Assistant",
-  "description": "Personal life management with FastMCP — calendar, todos, expenses, shopping, travel, and Vienna cultural guides. Portmanteau tools with 8 operations, 6 prompts, 6 skills, and local LLM auto-discovery.",
+  "description": "Personal life management with FastMCP — calendar, todos, expenses, health (doctor visits, medications, vitals), travel (trips, packing, documents), contacts (birthdays), household (subscriptions, home tasks, pet care). Portmanteau tools, 6 prompts, 6 skills, local LLM auto-discovery, SQLite persistence.",
   "repository": "https://github.com/sandraschi/vienna-life-assistant",
   "server": {
     "runtime": "python",
@@ -11,7 +11,23 @@
   "tools": [
     {
       "name": "vienna_life",
-      "description": "Portmanteau: calendar_today, todo_list, expense_summary, shopping_list, life_brief, fleet_overview, health, help"
+      "description": "Daily life ops: calendar, todos, expenses, shopping list, life brief, fleet overview, health, help"
+    },
+    {
+      "name": "vienna_health",
+      "description": "Doctor visits, medications (active + refill), vitals, medical conditions"
+    },
+    {
+      "name": "vienna_travel",
+      "description": "Trips with countdown, packing checklists, travel documents with expiry alerts"
+    },
+    {
+      "name": "vienna_contacts",
+      "description": "People, relationships, upcoming birthdays with age"
+    },
+    {
+      "name": "vienna_household",
+      "description": "Subscriptions with monthly total, home maintenance tasks, pet care events"
     },
     {
       "name": "vienna_life_agentic",
@@ -28,6 +44,6 @@
     "resources",
     "skills-provider"
   ],
-  "categories": ["productivity", "personal-assistant", "life-management"],
+  "categories": ["productivity", "personal-assistant", "life-management", "health"],
   "version": "3.0.0-beta"
 }

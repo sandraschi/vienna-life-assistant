@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "text",
+            "text": "## Session Context (Vienna Life Assistant)\n\nYou have access to the ViLife MCP server at http://127.0.0.1:10922/mcp — personal life admin: vienna_life (calendar/todos/expenses/brief), vienna_health (doctor visits, medications, vitals), vienna_travel (trips, packing, documents), vienna_contacts (people, birthdays), vienna_household (subscriptions, home tasks, pet care).\n\n**Before starting work:**\n1. Check the morning brief: vienna_life(operation=\"life_brief\")\n2. Check active medications: vienna_health(operation=\"meds\")\n\n**At end of work, save insights:**\n- Log what you captured: vienna_health visits_add, vienna_travel trip_add, vienna_life expense_add, vienna_contacts add"
+          }
+        ]
+      }
+    ]
+  }
+}

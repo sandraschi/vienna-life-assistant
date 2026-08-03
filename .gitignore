@@ -74,10 +74,15 @@ mobile/macos/build/
 # Misc
 .cache/
 *.bak
+*.bak.*
 *.tmp
+*.mcpb
 receipts/
 uploads/
 .pytest_cache/
+
+# Life data (SQLite)
+web_sota/data/
 
 # OS
 .DS_Store
@@ -97,3 +102,6 @@ target/
 
 reports/
 _dashboard/
+# Playwright
+web_sota/test-results/
+web_sota/playwright-report/

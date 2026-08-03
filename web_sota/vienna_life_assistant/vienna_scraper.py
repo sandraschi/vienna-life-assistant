@@ -1,10 +1,12 @@
-"""Scraper for Vienna cultural events using Playwright headless Chromium + httpx.
+"""Scraper for Vienna cultural events, news, and city government announcements.
 
 Sources:
-- Wiener Staatsoper: schedule (JS SPA, Playwright)
-- Konzerthaus: program (JS SPA, Playwright)
 - Burgtheater: performances (server-rendered HTML, httpx)
+- Wiener Staatsoper: schedule (JS SPA, Playwright)
 - Belvedere: exhibitions (server-rendered HTML, httpx)
+- Gasthaus Orlik: lunch menu (server-rendered HTML, httpx)
+- wien.ORF.at: local news headlines (server-rendered HTML, httpx)
+- presse.wien.gv.at: city government press releases (server-rendered HTML, httpx)
 
 Caches responses in-memory with configurable TTL.
 """
@@ -55,29 +57,25 @@ def _fetch_html(url: str) -> str | None:
 
 
 def _render_spa(url: str, timeout_ms: int = 25000) -> str | None:
-    """Render a JS SPA page with Playwright headless Chromium."""
+    """Render a JS SPA page with Playwright headless Chromium (sync API —
+    safe to call from FastAPI async handlers where asyncio.run() would raise)."""
     try:
-        from playwright.async_api import async_playwright
+        from playwright.sync_api import sync_playwright
     except ImportError:
         logger.warning("playwright not installed")
         return None
 
-    import asyncio
-
-    async def _go():
-        async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
-            try:
-                ctx = await browser.new_context(user_agent=_USER_AGENT)
-                page = await ctx.new_page()
-                await page.goto(url, wait_until="domcontentloaded", timeout=timeout_ms)
-                await page.wait_for_timeout(5000)
-                return await page.inner_text("body")
-            finally:
-                await browser.close()
-
     try:
-        return asyncio.run(_go())
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            try:
+                ctx = browser.new_context(user_agent=_USER_AGENT)
+                page = ctx.new_page()
+                page.goto(url, wait_until="domcontentloaded", timeout=timeout_ms)
+                page.wait_for_timeout(5000)
+                return page.inner_text("body")
+            finally:
+                browser.close()
     except Exception as e:
         logger.warning("spa render failed for %s: %s", url, e)
         return None
@@ -168,6 +166,56 @@ def fetch_performances() -> list[dict[str, str]]:
     return all_events
 
 
+# --- News ---
+
+_NEWS_TTL = 600  # 10 min
+
+
+def fetch_news() -> list[dict[str, str]]:
+    """Fetch Vienna headlines from wien.ORF.at (public broadcaster)."""
+    cached = _cached("news", _NEWS_TTL)
+    if cached is not None:
+        return cached
+
+    headlines: list[dict[str, str]] = []
+    html = _fetch_html("https://wien.orf.at")
+    if html:
+        soup = BeautifulSoup(html, "lxml")
+        for a in soup.select("h2 a"):
+            text = a.get_text(strip=True)
+            href = str(a.get("href", "") or "")
+            if text and len(text) > 10:
+                headlines.append({"title": text, "url": href, "source": "ORF Wien"})
+
+    logger.info("news: %d headlines from ORF", len(headlines))
+    _set_cache("news", headlines)
+    return headlines
+
+
+def fetch_press() -> list[dict[str, str]]:
+    """Fetch city government press releases from presse.wien.gv.at."""
+    cached = _cached("press", _NEWS_TTL)
+    if cached is not None:
+        return cached
+
+    releases: list[dict[str, str]] = []
+    html = _fetch_html("https://presse.wien.gv.at")
+    if html:
+        soup = BeautifulSoup(html, "lxml")
+        for h2 in soup.select("article h2"):
+            a = h2.find("a")
+            text = a.get_text(strip=True) if a else h2.get_text(strip=True)
+            href = str(a.get("href", "") or "") if a else ""
+            if text and len(text) > 10:
+                releases.append(
+                    {"title": text, "url": href, "source": "Stadt Wien Presse"}
+                )
+
+    logger.info("press: %d releases from Stadt Wien", len(releases))
+    _set_cache("press", releases)
+    return releases
+
+
 # --- Exhibitions ---
 
 
@@ -208,13 +256,13 @@ def fetch_exhibitions() -> list[dict[str, str]]:
 _LUNCH_TTL = 3600  # 1 hour
 
 
-def fetch_lunch_menus() -> list[dict[str, str]]:
+def fetch_lunch_menus() -> list[dict[str, str | list[str]]]:
     """Fetch daily lunch menus from Gasthaus Orlik."""
     cached = _cached("lunch", _LUNCH_TTL)
     if cached is not None:
         return cached
 
-    menus: list[dict[str, str]] = []
+    menus: list[dict[str, str | list[str]]] = []
     html = _fetch_html("https://gasthaus-orlik.at/mittagmenues.html")
     if not html:
         _set_cache("lunch", menus)
