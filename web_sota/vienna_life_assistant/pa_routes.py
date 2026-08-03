@@ -257,7 +257,38 @@ async def regenerate_brief(db: Session) -> dict[str, Any]:
         "llm": pa_agent.resolve_llm() is not None,
     }
     save_state(state)
+    await _send_brief_email(state)
     return state
+
+
+async def _send_brief_email(state: dict[str, Any]) -> None:
+    """Proactive outbound: PA_BRIEF_EMAIL=1 + PA_BRIEF_RECIPIENT -> brief by email."""
+    if os.environ.get("PA_BRIEF_EMAIL", "0") != "1":
+        return
+    recipient = os.environ.get("PA_BRIEF_RECIPIENT", "").strip()
+    if not recipient:
+        logger.warning("PA_BRIEF_EMAIL=1 but PA_BRIEF_RECIPIENT not set — skipping")
+        return
+    try:
+        from vienna_life_assistant.email_routes import _em
+
+        alert_lines = "\n".join(f"- {a['text']}" for a in state.get("alerts", []))
+        body = f"{state.get('brief', '')}\n\n## Alerts\n{alert_lines or '- none'}"
+        result = _em(
+            "/api/send",
+            json_body={
+                "to": recipient,
+                "subject": f"ViLife brief {state.get('date')}",
+                "body": body,
+            },
+            method="POST",
+        )
+        if result.get("ok"):
+            logger.info("PA brief emailed to %s", recipient)
+        else:
+            logger.warning("PA brief email failed: %s", result.get("error"))
+    except Exception as e:  # noqa: BLE001 — email is best-effort
+        logger.warning("PA brief email failed: %s", e)
 
 
 # --- Endpoints ----------------------------------------------------------------
@@ -290,13 +321,45 @@ async def pa_ask(body: dict[str, Any], db: Session = Depends(get_db)) -> dict[st
     question = (body.get("question") or "").strip()
     if not question:
         return {"ok": False, "error": "question required"}
-    answer = pa_agent.answer_question(question, context_markdown(db))
+    ctx = context_markdown(db)
+    memory: list[dict[str, Any]] = []
+    # Journal memory — inject semantic hits so the answer can recall the past.
+    try:
+        from vienna_life_assistant import rag
+
+        memory = rag.semantic_search(db, question, limit=3)
+        if memory:
+            lines = ["\n## Journal memory (semantic matches)"]
+            lines += [
+                f"- {h['date']}: {h.get('title') or 'untitled'} — {(h.get('body') or '')[:220]}"
+                for h in memory
+            ]
+            ctx += "\n" + "\n".join(lines)
+    except Exception as e:  # noqa: BLE001 — RAG is best-effort
+        logger.warning("journal memory injection failed: %s", e)
+    answer = pa_agent.answer_question(question, ctx)
     if answer is None:
         return {
             "ok": False,
             "error": "No LLM configured/reachable — start Ollama or set a provider in Settings",
         }
-    return {"ok": True, "question": question, "answer": answer}
+    return {"ok": True, "question": question, "answer": answer, "memory": memory}
+
+
+@router.get("/rag/search")
+async def pa_rag_search(q: str, db: Session = Depends(get_db)) -> dict[str, Any]:
+    from vienna_life_assistant import rag
+
+    hits = rag.semantic_search(db, q, limit=5)
+    return {"ok": True, "count": len(hits), "entries": hits}
+
+
+@router.post("/rag/reindex")
+async def pa_rag_reindex(db: Session = Depends(get_db)) -> dict[str, Any]:
+    from vienna_life_assistant import rag
+
+    n = rag.reindex_all(db)
+    return {"ok": True, "reindexed": n}
 
 
 @router.post("/chat")

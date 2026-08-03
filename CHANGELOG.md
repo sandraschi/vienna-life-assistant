@@ -1,3 +1,16 @@
+### Added — journal RAG + proactive email + voice (2026-08-03)
+- **Journal RAG**: semantic search over the personal log via Ollama
+  embeddings (nomic-embed-text, /v1/embeddings, SQLite-stored vectors) —
+  `vienna_log(operation="search_semantic|reindex")`, `/api/pa/rag/*`, and
+  **journal memory injection** into `/api/pa/ask` ("what did I do last August?")
+- **Proactive email**: PA_BRIEF_EMAIL=1 + PA_BRIEF_RECIPIENT sends the daily
+  brief through the email-mcp gateway after regeneration
+- **Voice**: Web Speech mic input in Chat (STT) + read-aloud on assistant
+  messages and the PA brief (fleet speech standard: speech.ts, MicButton,
+  SpeakButton)
+- Fixed test isolation bug: env vars now set at conftest module level —
+  tests previously wrote to the real DB (collection-time import trap)
+- 6 new pytest (63 total)
 ### Added — PA engine + agent chat (2026-08-03)
 - **PA engine**: `/api/pa/*` — LLM morning brief over real life data (context
   grounding), rule-based alerts (refills, follow-ups, renewals, document expiry,

@@ -37,9 +37,18 @@ travel_documents, contacts, pet_care_events, subscriptions, home_tasks.
   document expiry, birthdays, overdue tasks, events today)
 - `GET /api/pa/context` — life snapshot (calendar, todos, meds, visits, trips,
   birthdays, renewals, expenses, journal streak)
-- `POST /api/pa/ask` — NL question over life context
+- `POST /api/pa/ask` — NL question over life context, grounded with **journal
+  memory** (semantic hits injected when the question matches the log)
+- `GET /api/pa/rag/search?q=` / `POST /api/pa/rag/reindex` — journal semantic
+  search (Ollama /v1/embeddings, RAG_EMBED_MODEL, stored in SQLite)
 - Daily scheduler regenerates the brief at server start + once per day
   (PA_AUTOBRIEF=0 disables; PA_STATE_FILE overrides the state path)
+- **Proactive email**: PA_BRIEF_EMAIL=1 + PA_BRIEF_RECIPIENT sends the daily
+  brief via the email-mcp gateway after regeneration
+
+### Voice
+- Chat has Web Speech mic input (STT) + per-message read-aloud (TTS):
+  `src/common/speech.ts`, `components/MicButton.tsx`, `SpeakButton.tsx`
 
 ## MCP Tools (portmanteaus)
 

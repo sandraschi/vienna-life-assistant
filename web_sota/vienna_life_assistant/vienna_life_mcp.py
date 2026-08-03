@@ -902,6 +902,8 @@ async def vienna_log(
         "streak",
         "on_this_day",
         "search",
+        "search_semantic",
+        "reindex",
     ],
     row_id: int | None = None,
     data: dict[str, Any] | None = None,
@@ -910,7 +912,8 @@ async def vienna_log(
     """Personal journal — daily entries with mood, tags, streak, and recall.
 
     [RATIONALE] A personal log is the memory of a life assistant: entries,
-    streak, and on-this-day recall in one tool keep journaling one call away.
+    streak, on-this-day recall, and semantic search in one tool keep journaling
+    one call away.
 
     ## Return Format
     {"success": bool, "message": str, "entries"|"entry"|"streak": ...}
@@ -921,13 +924,40 @@ async def vienna_log(
     await vienna_log(operation="streak")
     await vienna_log(operation="on_this_day")
     await vienna_log(operation="search", query="Staatsoper")
+    await vienna_log(operation="search_semantic", query="when was I in Salzburg?")
 
     ## Notes
     - add accepts date (ISO, defaults today), time, title, body, mood (1-10), tags.
     - streak counts consecutive days with an entry, ending today (or yesterday).
     - on_this_day returns entries from previous years on today's month-day.
+    - search_semantic embeds the journal via Ollama (RAG_EMBED_MODEL) and
+      returns top entries by similarity; reindex force-re-embeds everything.
     """
     today = date.today().isoformat()
+
+    if operation == "search_semantic":
+        if not query:
+            return _error_response("search_semantic requires query", "validation")
+        from vienna_life_assistant import rag
+
+        with SessionLocal() as db:
+            hits = rag.semantic_search(db, query)
+        return {
+            "success": True,
+            "message": f"{len(hits)} semantic matches",
+            "entries": hits,
+        }
+
+    if operation == "reindex":
+        from vienna_life_assistant import rag
+
+        with SessionLocal() as db:
+            n = rag.reindex_all(db)
+        return {
+            "success": True,
+            "message": f"Reindexed {n} journal entries",
+            "reindexed": n,
+        }
 
     with SessionLocal() as db:
         if operation == "entries":

@@ -2,7 +2,16 @@
 
 from __future__ import annotations
 
-from vienna_life_assistant import pa_agent
+from vienna_life_assistant import life_db, pa_agent
+from vienna_life_assistant.models import JournalEntry
+
+
+def life_db_add(db, i: int, title: str, body: str) -> None:
+    life_db.add_row(
+        db,
+        JournalEntry,
+        {"date": f"2026-07-{i + 1:02d}", "title": title, "body": body, "mood": 7},
+    )
 
 
 # --- Alerts + context (deterministic, no LLM) --------------------------------
@@ -203,3 +212,126 @@ def test_execute_tool_event_add(monkeypatch, db):
     )
     assert result["success"] is True
     assert result["event"]["category"] == "general"
+
+
+# --- Journal RAG --------------------------------------------------------------
+
+
+def _fake_embed(text: str) -> list[float]:
+    """Deterministic keyword vector for tests."""
+    keys = ["coffee", "Sacher", "Benny", "Salzburg"]
+    return [1.0 if k.lower() in text.lower() else 0.0 for k in keys] + [0.5]
+
+
+def test_rag_semantic_search_ranks_by_similarity(db, monkeypatch):
+    from vienna_life_assistant import rag
+
+    monkeypatch.setattr(rag, "embed", _fake_embed)
+    for i, (title, body) in enumerate(
+        [
+            ("Coffee day", "Melange at Café Berg with Ingrid"),
+            ("Sacher quest", "torte at the hotel"),
+            ("Benny walk", "Donaukanal morning walk"),
+        ]
+    ):
+        life_db_add(db, i, title, body)
+
+    hits = rag.semantic_search(db, "coffee with Ingrid", limit=2)
+    assert hits and hits[0]["title"] == "Coffee day"
+    assert hits[1]["title"] != "Coffee day"
+    assert hits[0]["score"] > hits[1]["score"]
+
+
+def test_rag_reindex_embeds_all(db, monkeypatch):
+    from vienna_life_assistant import rag
+
+    monkeypatch.setattr(rag, "embed", _fake_embed)
+    n1 = rag.reindex_all(db)
+    assert n1 >= 1
+    # force re-embed re-embeds everything; the lazy pass finds nothing new
+    n2 = rag.ensure_indexed(db)
+    assert n2 == 0
+
+
+def test_rag_api_search_and_reindex(client, monkeypatch):
+    from vienna_life_assistant import rag
+
+    monkeypatch.setattr(rag, "embed", _fake_embed)
+    r = client.post("/api/pa/rag/reindex")
+    assert r.status_code == 200
+    assert r.json()["ok"] is True
+    r = client.get("/api/pa/rag/search?q=coffee")
+    assert r.status_code == 200
+    assert "entries" in r.json()
+
+
+def test_pa_ask_injects_journal_memory(client, monkeypatch):
+    from vienna_life_assistant import pa_agent, rag
+
+    seen = {}
+
+    def fake_answer(question, ctx):
+        seen["ctx"] = ctx
+        return "yes"
+
+    monkeypatch.setattr(
+        rag,
+        "semantic_search",
+        lambda db, q, limit=3: (
+            [{"date": "2026-07-01", "title": "Coffee day", "body": "Café Berg"}] * 2
+        ),
+    )
+    monkeypatch.setattr(pa_agent, "answer_question", fake_answer)
+    r = client.post("/api/pa/ask", json={"question": "coffee with Ingrid?"})
+    assert r.status_code == 200
+    assert r.json()["ok"] is True
+    assert "Journal memory" in seen["ctx"]
+    assert len(r.json()["memory"]) == 2
+
+
+# --- Proactive brief email ----------------------------------------------------
+
+
+def test_brief_email_sent_when_enabled(client, monkeypatch):
+    from vienna_life_assistant import pa_agent
+    from vienna_life_assistant import email_routes
+
+    sent = {}
+
+    def fake_em(url, params=None, json_body=None, method="GET"):
+        if url == "/api/send":
+            sent.update(json_body or {})
+            return {"ok": True, "message": "sent"}
+        return {"ok": True}
+
+    monkeypatch.setenv("PA_BRIEF_EMAIL", "1")
+    monkeypatch.setenv("PA_BRIEF_RECIPIENT", "sandra@example.at")
+    monkeypatch.setattr(
+        pa_agent, "generate_brief", lambda ctx: "## Brief\n\nAll good today."
+    )
+    monkeypatch.setattr(pa_agent, "resolve_llm", lambda: None)
+    monkeypatch.setattr(email_routes, "_em", fake_em)
+
+    r = client.post("/api/pa/refresh")
+    assert r.status_code == 200
+    assert sent.get("to") == "sandra@example.at"
+    assert "ViLife brief" in sent.get("subject", "")
+    assert "All good today" in sent.get("body", "")
+
+
+def test_brief_email_skipped_when_disabled(client, monkeypatch):
+    from vienna_life_assistant import pa_agent
+    from vienna_life_assistant import email_routes
+
+    called = {"n": 0}
+
+    def fake_em(url, params=None, json_body=None, method="GET"):
+        called["n"] += 1
+        return {"ok": True}
+
+    monkeypatch.setenv("PA_BRIEF_EMAIL", "0")
+    monkeypatch.setattr(pa_agent, "generate_brief", lambda ctx: "brief")
+    monkeypatch.setattr(pa_agent, "resolve_llm", lambda: None)
+    monkeypatch.setattr(email_routes, "_em", fake_em)
+    client.post("/api/pa/refresh")
+    assert called["n"] == 0

@@ -10,6 +10,8 @@ import {
 	Wrench,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { MicButton } from "../components/MicButton";
+import { SpeakButton } from "../components/SpeakButton";
 import { API, apiGet } from "../lib/api";
 import {
 	DEFAULT_LLM_CONFIG,
@@ -351,8 +353,13 @@ export default function Chat() {
 								)}
 							</div>
 							<div className="max-w-[85%] space-y-2">
-								<div className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">
-									{msg.content}
+								<div className="flex items-start gap-2">
+									<div className="flex-1 text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">
+										{msg.content}
+									</div>
+									{msg.role === "assistant" && (
+										<SpeakButton text={msg.content} />
+									)}
 								</div>
 								{msg.trace && msg.trace.length > 0 && (
 									<div
@@ -404,6 +411,11 @@ export default function Chat() {
 						</button>
 					</div>
 					<div className="flex gap-2">
+						<MicButton
+							onTranscript={(t) =>
+								setInput((prev) => (prev ? `${prev} ${t}` : t))
+							}
+						/>
 						<input
 							data-testid="chat-input"
 							className="flex-1 bg-white/[0.03] border border-white/[0.08] rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cosmos-500/40"

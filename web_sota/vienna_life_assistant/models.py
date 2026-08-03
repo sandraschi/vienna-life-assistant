@@ -219,3 +219,14 @@ class JournalEntry(Base, BaseMixin):
     tags: Mapped[str] = mapped_column(String(300), default="")  # comma-separated
     created_at: Mapped[str] = mapped_column(String(19), default="")  # ISO datetime
     updated_at: Mapped[str] = mapped_column(String(19), default="")
+
+
+class JournalEmbedding(Base, BaseMixin):
+    """Stored embedding vector for one journal entry (semantic search)."""
+
+    __tablename__ = "journal_embeddings"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    entry_id: Mapped[int] = mapped_column(Integer, index=True, unique=True)
+    embedding: Mapped[str] = mapped_column(Text)  # JSON list of floats
+    created_at: Mapped[str] = mapped_column(String(19), default="")
