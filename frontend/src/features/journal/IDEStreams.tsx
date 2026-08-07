@@ -38,7 +38,7 @@ const IDE_CONFIG = {
 
 export const IDEStreams: React.FC<IDEStreamsProps> = ({ data }) => {
   const [selectedIDE, setSelectedIDE] = useState<string>('cursor');
-  const { date, streams = {} } = data;
+  const { date } = data;
 
   // Mock data for demonstration - in real implementation this would parse the ADN streams
   const mockStreams = {

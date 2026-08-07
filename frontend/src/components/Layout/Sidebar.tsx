@@ -6,8 +6,7 @@ import {
     ListItemIcon,
     ListItemText,
     Typography,
-    alpha,
-    Tooltip
+    alpha
 } from '@mui/material';
 import {
     CalendarToday,

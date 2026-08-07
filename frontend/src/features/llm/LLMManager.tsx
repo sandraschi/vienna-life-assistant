@@ -75,10 +75,6 @@ export default function LLMManager() {
       setModels(modelsRes.data.models || []);
       setRecommended(recommendedRes.data.models || []);
       
-      console.log('LLM data loaded successfully:', {
-        connected: statusRes.data.connected,
-        modelCount: modelsRes.data.models?.length || 0
-      });
     } catch (err: any) {
       console.error('Failed to load LLM data:', err);
       const errorMsg = err.response?.data?.detail || err.message || 'Failed to load LLM data';

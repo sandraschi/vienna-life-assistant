@@ -15,7 +15,7 @@ interface DailyConsolidatedProps {
 }
 
 export const DailyConsolidated: React.FC<DailyConsolidatedProps> = ({ data }) => {
-  const { date, content } = data;
+  const { date } = data;
 
   // Mock data structure for demonstration - in real implementation this would parse the ADN content
   const mockData = {
