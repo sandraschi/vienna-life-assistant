@@ -1,7 +1,6 @@
 """
 Test Todos API endpoints
 """
-import pytest
 
 
 def test_create_todo(client, sample_todo_data):

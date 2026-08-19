@@ -11,13 +11,11 @@ using Celery. Tasks are organized by category and demonstrate various use cases:
 """
 
 from workers.celery_app import celery_app
-from sqlalchemy.orm import Session
-from models.base import get_db, SessionLocal
+from models.base import SessionLocal
 from services.email_service import EmailService
 from services.llm_service import LLMService
-from services.advanced_memory import AdvancedMemoryService
 import logging
-from typing import List, Dict, Any
+from typing import Dict, Any
 from datetime import datetime, timedelta
 import json
 

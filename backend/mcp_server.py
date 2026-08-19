@@ -11,10 +11,9 @@ This MCP server allows AI agents and other tools to:
 Follows FastMCP 2.13+ standards and portmanteau pattern.
 """
 from fastmcp import FastMCP
-from typing import Optional, List
+from typing import Optional
 from datetime import datetime, date
-from pydantic import BaseModel, Field
-import os
+from pydantic import BaseModel
 
 # Create MCP server instance
 mcp = FastMCP(

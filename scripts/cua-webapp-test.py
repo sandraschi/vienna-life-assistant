@@ -20,7 +20,6 @@ Phases:
     9. Cleanup: kill spawned processes
 """
 import argparse
-import glob
 import json
 import os
 import re
@@ -188,7 +187,6 @@ def open_browser():
 def find_webapp_window():
     """Find the browser window showing the webapp (by title regex, prefer one with links)."""
     try:
-        import pywinauto
         from pywinauto import Desktop
         desktop = Desktop(backend="uia")
         candidates = []
@@ -252,7 +250,6 @@ def wait_connected_badge(timeout=None):
 
 def nav_click_through(output_dir, win):
     """Title-matching sidebar walk (same strategy as cua-smoke template v3)."""
-    import pywinauto
     nav_routes = cfg("nav_routes", [])
     if not isinstance(nav_routes, list) or not nav_routes:
         log("No nav_routes in config — nav walk skipped")

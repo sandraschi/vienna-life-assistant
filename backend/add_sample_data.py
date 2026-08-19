@@ -6,7 +6,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from models.base import SessionLocal
 from models.todo import TodoItem
 from models.shopping import StoreOffer
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 
 print("🔧 Adding sample data to database...")
 
@@ -91,7 +91,7 @@ try:
     total_todos = db.query(TodoItem).count()
     total_offers = db.query(StoreOffer).count()
     
-    print(f"\n📊 Database now has:")
+    print("\n📊 Database now has:")
     print(f"   Todos: {total_todos}")
     print(f"   Offers: {total_offers}")
     print("\n✅ Sample data added successfully!")

@@ -2,7 +2,7 @@
 Todo Item Model
 Stores todos with recurring task support
 """
-from sqlalchemy import Column, String, DateTime, Text, Boolean, JSON, Enum as SQLEnum
+from sqlalchemy import Column, String, DateTime, Text, Boolean, JSON
 from sqlalchemy import ForeignKey
 import uuid
 from datetime import datetime

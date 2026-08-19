@@ -165,11 +165,11 @@ try:
     total_amount = db.query(func.sum(Expense.amount)).scalar() or 0
     
     # By category
-    print(f"\n📊 Database now has:")
+    print("\n📊 Database now has:")
     print(f"   Total expenses: {total_expenses}")
     print(f"   Total amount: €{float(total_amount):.2f}")
     
-    print(f"\n💶 By Category:")
+    print("\n💶 By Category:")
     category_stats = db.query(
         Expense.category,
         func.sum(Expense.amount),

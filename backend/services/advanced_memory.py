@@ -6,7 +6,7 @@ This integrates with the MCP Advanced Memory server for note management.
 """
 
 import logging
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 from services.mcp_clients import mcp_clients
 
 logger = logging.getLogger(__name__)

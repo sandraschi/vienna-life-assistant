@@ -4,7 +4,7 @@ CRUD operations for todo items
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, or_
+from sqlalchemy import and_
 from typing import Optional
 from datetime import datetime
 import logging

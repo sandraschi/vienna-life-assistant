@@ -2,7 +2,7 @@
 Expense Model
 Tracks spending and receipts
 """
-from sqlalchemy import Column, String, DateTime, Numeric, Date, Text, Enum as SQLEnum, JSON
+from sqlalchemy import Column, String, DateTime, Numeric, Date, Text, JSON
 import uuid
 from datetime import datetime
 import enum

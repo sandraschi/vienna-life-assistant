@@ -2,11 +2,11 @@
 Shopping API Routes
 Store offers and shopping lists
 """
-from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
+from fastapi import APIRouter, Depends, Query, BackgroundTasks
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, or_
-from typing import Optional, List
-from datetime import datetime, date
+from sqlalchemy import and_
+from typing import Optional
+from datetime import date
 from models import get_db, StoreOffer, Store
 from api.scrapers.spar import SparScraper
 from api.scrapers.billa import BillaScraper

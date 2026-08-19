@@ -128,7 +128,7 @@ try:
         CalendarEvent.start_time >= datetime.now()
     ).count()
     
-    print(f"\n📊 Database now has:")
+    print("\n📊 Database now has:")
     print(f"   Total events: {total_events}")
     print(f"   Upcoming: {upcoming}")
     
@@ -137,7 +137,7 @@ try:
         CalendarEvent.start_time >= datetime.now()
     ).order_by(CalendarEvent.start_time).limit(3).all()
     
-    print(f"\n📅 Next 3 events:")
+    print("\n📅 Next 3 events:")
     for event in next_events:
         print(f"   • {event.title} - {event.start_time.strftime('%a %d %b, %H:%M')}")
     

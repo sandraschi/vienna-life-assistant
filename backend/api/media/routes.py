@@ -2,7 +2,7 @@
 Media & Home Integration API Routes
 Plex, Calibre, Immich, Tapo integrations via MCP clients
 """
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from services.mcp_clients import mcp_clients
 from services.plex_service import plex_service
 from services.calibre_service import calibre_service

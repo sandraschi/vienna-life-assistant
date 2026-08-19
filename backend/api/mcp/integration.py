@@ -10,7 +10,7 @@ from typing import Dict, Any, List
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel, Field
 
-from services.vienna_live_mcp_client import get_mcp_client, ViennaLiveMCPClient
+from services.vienna_live_mcp_client import get_mcp_client
 
 logger = logging.getLogger(__name__)
 

@@ -4,8 +4,7 @@ Tests for streaming chat, personalities, prompt enhancement, tools, and conversa
 """
 import pytest
 import json
-from unittest.mock import patch, AsyncMock, MagicMock
-from httpx import AsyncClient
+from unittest.mock import patch
 
 
 class TestChatStreaming:

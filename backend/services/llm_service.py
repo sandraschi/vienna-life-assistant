@@ -6,9 +6,7 @@ This integrates with both local Ollama and cloud LLM providers.
 """
 
 import logging
-from typing import Dict, Any, Optional
 from services.ollama_service import ollama_service
-from services.cloud_llm_service import cloud_llm_service
 from services.settings_service import settings_service
 from models.base import SessionLocal
 

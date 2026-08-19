@@ -3,7 +3,7 @@ Plex Service
 Integration with Plex Media Server (50k anime + 5k movies)
 """
 import httpx
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 import logging
 import os
 

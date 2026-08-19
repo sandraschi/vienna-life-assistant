@@ -28,7 +28,6 @@ async def lifespan(app: FastAPI):
     print(">>> Initializing SQLite database...")
     try:
         # Import models to register them with SQLAlchemy
-        from models import todo, calendar, shopping, expense, conversation, settings
         from models.base import init_db, get_db
         from services.settings_service import settings_service
         init_db()

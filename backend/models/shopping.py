@@ -2,8 +2,8 @@
 Shopping Models
 Shopping lists, items, and store offers
 """
-from sqlalchemy import Column, String, DateTime, Numeric, Boolean, Integer, Date, Text, JSON
-from sqlalchemy import ForeignKey, Enum as SQLEnum
+from sqlalchemy import Column, String, DateTime, Numeric, Boolean, Integer, Date, Text
+from sqlalchemy import ForeignKey
 import uuid
 from datetime import datetime
 import enum

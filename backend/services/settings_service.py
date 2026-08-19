@@ -6,7 +6,6 @@ from sqlalchemy.orm import Session
 from typing import Dict, Any, Optional, List
 import logging
 from models.settings import Settings, DEFAULT_SETTINGS
-from models.base import get_db
 
 logger = logging.getLogger(__name__)
 

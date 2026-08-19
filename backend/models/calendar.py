@@ -2,7 +2,7 @@
 Calendar Event Model
 Stores calendar events with Outlook integration support
 """
-from sqlalchemy import Column, String, DateTime, Text, JSON, Enum as SQLEnum
+from sqlalchemy import Column, String, DateTime, Text, JSON
 import uuid
 from datetime import datetime
 import enum

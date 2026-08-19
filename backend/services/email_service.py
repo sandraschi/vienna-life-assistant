@@ -6,7 +6,6 @@ This is a placeholder implementation - integrate with your preferred email servi
 """
 
 import logging
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 

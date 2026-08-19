@@ -1,7 +1,6 @@
 """
 Test Calendar API endpoints
 """
-import pytest
 from datetime import datetime, timedelta
 
 
