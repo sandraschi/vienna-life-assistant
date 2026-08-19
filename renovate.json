@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "dependencyDashboard": true,
+  "stabilityDays": 3,
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2,
+  "schedule": ["on Monday"],
+  "packageRules": [
+    {
+      "groupName": "Python dependencies",
+      "matchManagers": ["uv"]
+    },
+    {
+      "groupName": "Webapp dependencies",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchManagers": ["github-actions"],
+      "automerge": true
+    }
+  ]
+}

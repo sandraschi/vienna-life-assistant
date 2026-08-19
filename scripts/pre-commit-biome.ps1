@@ -1,4 +1,4 @@
-# Pre-commit Biome hook — runs tsc + biome in web_sota on staged web files.
+# Pre-commit Biome hook - runs tsc + biome in web_sota on staged web files.
 # Falls back gracefully when node_modules is missing (CI/first clone).
 param()
 $ErrorActionPreference = "Stop"
@@ -6,7 +6,7 @@ $Root = Split-Path -Parent $PSScriptRoot
 $WebRoot = Join-Path $Root "web_sota"
 
 if (-not (Test-Path (Join-Path $WebRoot "node_modules"))) {
-    Write-Host "  [biome-hook] node_modules missing — skipping frontend check" -ForegroundColor DarkYellow
+    Write-Host "  [biome-hook] node_modules missing - skipping frontend check" -ForegroundColor DarkYellow
     exit 0
 }
 

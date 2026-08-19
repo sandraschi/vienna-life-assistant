@@ -36,10 +36,16 @@ export default function ConcertHall() {
 		return <div className="p-8 text-white">Tuning the orchestra...</div>;
 
 	return (
-		<div className="space-y-8 page-enter animate-in fade-in slide-in-from-bottom-4 duration-700">
+		<div
+			data-testid="concert-hall-page"
+			className="space-y-8 page-enter animate-in fade-in slide-in-from-bottom-4 duration-700"
+		>
 			<div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
 				<div className="space-y-1">
-					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
+					<h1
+						data-testid="concert-hall-title"
+						className="text-4xl font-black gradient-text tracking-tighter uppercase italic"
+					>
 						Concert Hall
 					</h1>
 					<p className="text-slate-300 font-medium tracking-tight uppercase flex items-center gap-2">
@@ -85,6 +91,7 @@ export default function ConcertHall() {
 
 					<div className="flex flex-wrap gap-4">
 						<button
+							data-testid="concert-hall-action"
 							type="button"
 							className="px-8 py-4 rounded-2xl bg-white text-black text-sm font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl flex items-center gap-3"
 						>
@@ -92,6 +99,7 @@ export default function ConcertHall() {
 							Secure Standplatz
 						</button>
 						<button
+							data-testid="concert-hall-action"
 							type="button"
 							className="px-8 py-4 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] text-white text-sm font-black uppercase tracking-widest border border-white/[0.1] transition-all flex items-center gap-3"
 						>
@@ -143,6 +151,7 @@ export default function ConcertHall() {
 								</span>
 							</div>
 							<button
+								data-testid="concert-hall-action"
 								type="button"
 								title="View details"
 								className="p-3 rounded-xl bg-white/[0.03] hover:bg-cosmos-500/10 text-slate-300 hover:text-cosmos-400 transition-all border border-transparent hover:border-cosmos-500/20"

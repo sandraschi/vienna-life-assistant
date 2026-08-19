@@ -147,7 +147,7 @@ export default function Expenses() {
 			{summary && (
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 					<div className="glass-card p-8">
-						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+						<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 							This month
 						</p>
 						<p className="text-4xl font-black text-white mt-2 tabular-nums">
@@ -159,7 +159,7 @@ export default function Expenses() {
 						</p>
 					</div>
 					<div className="glass-card p-8">
-						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+						<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 							Budget used
 						</p>
 						<p className="text-4xl font-black text-white mt-2 tabular-nums">
@@ -170,7 +170,7 @@ export default function Expenses() {
 						</p>
 					</div>
 					<div className="glass-card p-8">
-						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+						<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 							Top store
 						</p>
 						<p className="text-4xl font-black text-white mt-2 uppercase italic">
@@ -226,7 +226,7 @@ export default function Expenses() {
 									<p className="text-sm font-black text-white uppercase">
 										{e.store}
 									</p>
-									<p className="text-xs text-slate-300 mt-1">
+									<p className="text-sm text-slate-300 mt-1">
 										{e.note} · {e.date}
 									</p>
 								</div>
@@ -234,7 +234,7 @@ export default function Expenses() {
 									<p className="text-sm font-black text-white tabular-nums">
 										€{e.amount_eur.toFixed(2)}
 									</p>
-									<p className="text-xs text-slate-300 uppercase">
+									<p className="text-sm text-slate-300 uppercase">
 										{e.category}
 									</p>
 								</div>

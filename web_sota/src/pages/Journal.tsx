@@ -266,14 +266,14 @@ export default function Journal() {
 							<div className="space-y-4">
 								{onThisDay.map((e) => (
 									<div key={e.id}>
-										<p className="text-xs text-slate-300 font-bold uppercase tracking-widest">
+										<p className="text-sm text-slate-300 font-bold uppercase tracking-widest">
 											{e.date}
 										</p>
 										<p className="text-sm text-slate-300 mt-1 font-bold">
 											{e.title || "Untitled"}
 										</p>
 										{e.body && (
-											<p className="text-xs text-slate-300 mt-1 line-clamp-3">
+											<p className="text-sm text-slate-300 mt-1 line-clamp-3">
 												{e.body}
 											</p>
 										)}
@@ -319,7 +319,7 @@ export default function Journal() {
 											<p className="text-sm font-black text-white uppercase tracking-tight truncate">
 												{e.title || "Untitled entry"}
 											</p>
-											<p className="text-xs text-slate-300 font-bold uppercase tracking-widest mt-1">
+											<p className="text-sm text-slate-300 font-bold uppercase tracking-widest mt-1">
 												{e.date} · {e.time}
 											</p>
 										</div>
@@ -384,7 +384,7 @@ export default function Journal() {
 				</div>
 			</div>
 
-			<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
+			<p className="text-sm text-slate-300 uppercase tracking-widest flex items-center gap-2">
 				<NotebookPen className="w-3.5 h-3.5" />
 				MCP: vienna_log(operation=entries|add|streak|on_this_day|search) · REST
 				/api/life/logs

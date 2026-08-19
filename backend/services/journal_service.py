@@ -7,8 +7,7 @@ Integrates with the MCP Advanced Memory server to read daily consolidated and ID
 
 import logging
 import re
-from typing import Dict, Any, Optional, List
-from datetime import datetime
+from typing import Dict, Any
 from services.mcp_clients import mcp_clients
 
 logger = logging.getLogger(__name__)
@@ -45,7 +44,9 @@ class JournalService:
 
             if not result.get("success"):
                 error_msg = result.get("error", "Unknown error")
-                self.logger.warning(f"Failed to read consolidated note for {date}: {error_msg}")
+                self.logger.warning(
+                    f"Failed to read consolidated note for {date}: {error_msg}"
+                )
                 raise Exception(f"Note not found: {error_msg}")
 
             note_result = result.get("result", {})
@@ -69,7 +70,7 @@ class JournalService:
                     "tags": note_data.get("tags", []),
                     "created_at": note_data.get("created_at"),
                     "updated_at": note_data.get("updated_at"),
-                }
+                },
             }
 
         except Exception as e:
@@ -98,7 +99,9 @@ class JournalService:
                 note_identifier = f"daily-{ide}-{date}"
 
                 try:
-                    result = await mcp_clients.advanced_memory.read_note(note_identifier)
+                    result = await mcp_clients.advanced_memory.read_note(
+                        note_identifier
+                    )
 
                     if result.get("success"):
                         note_result = result.get("result", {})
@@ -107,7 +110,9 @@ class JournalService:
                             content = note_result
                             note_data = {"title": note_identifier, "content": content}
                         else:
-                            content = note_result.get("content", note_result.get("text", ""))
+                            content = note_result.get(
+                                "content", note_result.get("text", "")
+                            )
                             note_data = note_result
 
                         parsed = self._parse_ide_note(content, ide, date)
@@ -122,7 +127,7 @@ class JournalService:
                                 "tags": note_data.get("tags", []),
                                 "created_at": note_data.get("created_at"),
                                 "updated_at": note_data.get("updated_at"),
-                            }
+                            },
                         }
                     else:
                         # Note doesn't exist for this IDE, skip it
@@ -140,8 +145,8 @@ class JournalService:
                 "streams": streams,
                 "metadata": {
                     "available_ides": list(streams.keys()),
-                    "total_streams": len(streams)
-                }
+                    "total_streams": len(streams),
+                },
             }
 
         except Exception as e:
@@ -165,17 +170,17 @@ class JournalService:
                 "maintenance": {},
                 "research": {},
                 "insights": {},
-                "mcp-news": {}
+                "mcp-news": {},
             },
             "metrics": {
                 "activeProjects": 0,
                 "maintenanceTasks": 0,
                 "researchOutputs": 0,
                 "keyInsights": 0,
-                "mcpTools": 0
+                "mcpTools": 0,
             },
             "achievement": "",
-            "priorities": []
+            "priorities": [],
         }
 
         lines = content.split("\n")
@@ -184,11 +189,9 @@ class JournalService:
         in_achievement_section = False
         in_priorities_section = False
         achievement_lines = []
-        priority_counter = 0
 
         for i, line in enumerate(lines):
             line_stripped = line.strip()
-            original_line = line
 
             # Detect section headers (##)
             if line_stripped.startswith("## "):
@@ -196,23 +199,39 @@ class JournalService:
                 in_achievement_section = False
                 in_priorities_section = False
                 current_ide = None
-                
+
                 # Map section titles to categories
                 if "new project" in section_title or "new projects" in section_title:
                     current_category = "new-projects"
-                elif "maintenance" in section_title or "fix" in section_title or "fixing" in section_title:
+                elif (
+                    "maintenance" in section_title
+                    or "fix" in section_title
+                    or "fixing" in section_title
+                ):
                     current_category = "maintenance"
                 elif "research" in section_title or "documentation" in section_title:
                     current_category = "research"
-                elif "insight" in section_title or "learning" in section_title or "learnings" in section_title:
+                elif (
+                    "insight" in section_title
+                    or "learning" in section_title
+                    or "learnings" in section_title
+                ):
                     current_category = "insights"
-                elif "mcp" in section_title or "server zoo" in section_title or "ecosystem" in section_title:
+                elif (
+                    "mcp" in section_title
+                    or "server zoo" in section_title
+                    or "ecosystem" in section_title
+                ):
                     current_category = "mcp-news"
                 elif "achievement" in section_title:
                     in_achievement_section = True
                     current_category = None
                     achievement_lines = []
-                elif "priority" in section_title or "tomorrow" in section_title or "focus" in section_title:
+                elif (
+                    "priority" in section_title
+                    or "tomorrow" in section_title
+                    or "focus" in section_title
+                ):
                     in_priorities_section = True
                     current_category = None
                     parsed["priorities"] = []
@@ -236,28 +255,34 @@ class JournalService:
             # Parse list items
             elif line_stripped.startswith("- ") or line_stripped.startswith("* "):
                 item_text = line_stripped[2:].strip()
-                
+
                 if in_priorities_section:
                     # Extract priority text (remove numbering if present)
-                    priority_text = re.sub(r'^\d+\.\s*', '', item_text)
+                    priority_text = re.sub(r"^\d+\.\s*", "", item_text)
                     if priority_text:
                         parsed["priorities"].append(priority_text)
                 elif current_category and current_ide:
                     if current_ide not in parsed["highlights"][current_category]:
                         parsed["highlights"][current_category][current_ide] = []
-                    parsed["highlights"][current_category][current_ide].append(item_text)
+                    parsed["highlights"][current_category][current_ide].append(
+                        item_text
+                    )
                 elif in_achievement_section:
                     achievement_lines.append(item_text)
 
             # Parse numbered priorities (1. 2. 3. etc.)
-            elif re.match(r'^\d+\.\s+', line_stripped):
+            elif re.match(r"^\d+\.\s+", line_stripped):
                 if in_priorities_section:
-                    priority_text = re.sub(r'^\d+\.\s*', '', line_stripped)
+                    priority_text = re.sub(r"^\d+\.\s*", "", line_stripped)
                     if priority_text:
                         parsed["priorities"].append(priority_text)
 
             # Capture achievement text (non-list lines in achievement section)
-            elif in_achievement_section and line_stripped and not line_stripped.startswith("#"):
+            elif (
+                in_achievement_section
+                and line_stripped
+                and not line_stripped.startswith("#")
+            ):
                 achievement_lines.append(line_stripped)
 
         # Extract achievement text
@@ -297,7 +322,7 @@ class JournalService:
             "maintenance": [],
             "research": [],
             "insights": [],
-            "mcp-news": []
+            "mcp-news": [],
         }
 
         lines = content.split("\n")
@@ -309,7 +334,7 @@ class JournalService:
             # Detect section headers
             if line.startswith("## "):
                 section_title = line[3:].strip().lower()
-                
+
                 if "new project" in section_title or "new projects" in section_title:
                     current_category = "new-projects"
                 elif "maintenance" in section_title or "fix" in section_title:
@@ -326,7 +351,7 @@ class JournalService:
             # Parse list items
             elif line.startswith("- ") or line.startswith("* "):
                 item_text = line[2:].strip()
-                
+
                 if current_category and current_category in parsed:
                     parsed[current_category].append(item_text)
 

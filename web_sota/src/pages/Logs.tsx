@@ -70,10 +70,13 @@ export default function Logs() {
 	};
 
 	return (
-		<div className="space-y-8 page-enter">
+		<div data-testid="logs-page" className="space-y-8 page-enter">
 			<div className="flex items-center justify-between flex-wrap gap-4">
 				<div>
-					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
+					<h1
+						data-testid="logs-title"
+						className="text-4xl font-black gradient-text tracking-tighter uppercase italic"
+					>
 						Event Logs
 					</h1>
 					<p className="text-slate-300 mt-2 text-sm">
@@ -82,6 +85,7 @@ export default function Logs() {
 				</div>
 				<div className="flex gap-2">
 					<button
+						data-testid="logs-action"
 						type="button"
 						onClick={() => void refresh()}
 						className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06]"
@@ -90,6 +94,7 @@ export default function Logs() {
 						<RefreshCw className="w-5 h-5" />
 					</button>
 					<button
+						data-testid="logs-action"
 						type="button"
 						onClick={() => void exportLogs()}
 						className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06]"
@@ -98,6 +103,7 @@ export default function Logs() {
 						<Download className="w-5 h-5" />
 					</button>
 					<button
+						data-testid="logs-action"
 						type="button"
 						onClick={() => void clearLogs()}
 						className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06]"

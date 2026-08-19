@@ -120,7 +120,7 @@ export default function Goliath() {
 					>
 						<div className="flex flex-wrap items-center justify-between gap-4">
 							<div>
-								<p className="text-xs font-black uppercase tracking-widest opacity-80">
+								<p className="text-sm font-black uppercase tracking-widest opacity-80">
 									Verdict
 								</p>
 								<p className="text-3xl font-black uppercase italic tracking-tighter">
@@ -130,7 +130,7 @@ export default function Goliath() {
 									{verdictHint[data.verdict.label] ?? data.verdict.reason}
 								</p>
 							</div>
-							<p className="font-mono text-xs opacity-80">
+							<p className="font-mono text-sm opacity-80">
 								{data.verdict.reason}
 							</p>
 						</div>
@@ -152,13 +152,13 @@ export default function Goliath() {
 								<>
 									<Gauge label="Utilization" value={cpu.util} />
 									{cpu.load_1m != null && (
-										<p className="text-xs text-slate-400">
+										<p className="text-sm text-slate-400">
 											load 1m: {cpu.load_1m}
 										</p>
 									)}
 									{cpu.per_core.length > 0 && (
 										<div>
-											<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-2">
+											<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-2">
 												Per core
 											</p>
 											<div className="grid grid-cols-4 gap-1.5">
@@ -198,7 +198,7 @@ export default function Goliath() {
 								warn={data.ram.pressure_pct >= 85}
 							/>
 							{data.ram.pressure_pct >= 85 && (
-								<p className="text-xs font-bold text-red-400 uppercase tracking-widest">
+								<p className="text-sm font-bold text-red-400 uppercase tracking-widest">
 									High memory pressure - pagefile risk
 								</p>
 							)}
@@ -228,7 +228,7 @@ export default function Goliath() {
 									</div>
 									{gpu.apps.length > 0 && (
 										<div>
-											<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-2">
+											<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-2">
 												GPU processes
 											</p>
 											<ul className="space-y-0.5 text-xs text-slate-400">
@@ -256,13 +256,13 @@ export default function Goliath() {
 							What is it doing right now?
 						</h3>
 						{data.top_processes.length === 0 && data.gpu_apps.length === 0 ? (
-							<p className="text-sm text-slate-500">
+							<p className="text-sm text-slate-400">
 								Nothing significant - the machine is idle.
 							</p>
 						) : (
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 								<div>
-									<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-2">
+									<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-2">
 										Top CPU
 									</p>
 									<ul className="space-y-1">
@@ -273,7 +273,7 @@ export default function Goliath() {
 											>
 												<span className="text-slate-300">
 													{p.name}{" "}
-													<span className="text-slate-500">({p.pid})</span>
+													<span className="text-slate-400">({p.pid})</span>
 												</span>
 												<span className="font-mono text-xs text-slate-400">
 													{p.cpu_percent}%
@@ -284,7 +284,7 @@ export default function Goliath() {
 								</div>
 								{data.gpu_apps.length > 0 && (
 									<div>
-										<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-2">
+										<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-2">
 											On the GPU
 										</p>
 										<ul className="space-y-1">
@@ -295,7 +295,7 @@ export default function Goliath() {
 												>
 													<span className="text-slate-300">
 														{a.name}{" "}
-														<span className="text-slate-500">({a.pid})</span>
+														<span className="text-slate-400">({a.pid})</span>
 													</span>
 													<span className="font-mono text-xs text-slate-400">
 														{a.vram_gb} GB VRAM

@@ -84,12 +84,15 @@ export default function Fleet() {
 			: ships.filter((s) => s.ship_class === filter || s.category === filter);
 
 	return (
-		<div className="space-y-10 page-enter">
+		<div data-testid="fleet-page" className="space-y-10 page-enter">
 			<div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/[0.04] pb-8">
 				<div>
 					<div className="flex items-center gap-3 mb-2">
 						<Anchor className="w-8 h-8 text-cosmos-400" />
-						<h1 className="text-4xl font-black gradient-text uppercase italic tracking-tighter">
+						<h1
+							data-testid="fleet-title"
+							className="text-4xl font-black gradient-text uppercase italic tracking-tighter"
+						>
 							Fleet Command
 						</h1>
 					</div>
@@ -108,6 +111,7 @@ export default function Fleet() {
 						Health probe
 					</label>
 					<button
+						data-testid="fleet-action"
 						type="button"
 						onClick={() => load(probe)}
 						className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white/[0.05] border border-white/[0.08] text-sm font-black uppercase tracking-widest hover:bg-white/[0.1] transition-all"
@@ -121,7 +125,7 @@ export default function Fleet() {
 			{data?.summary && (
 				<div className="grid grid-cols-2 md:grid-cols-4 gap-6">
 					<div className="glass-card p-6">
-						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+						<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 							Registered
 						</p>
 						<p className="text-3xl font-black text-white mt-2">
@@ -129,7 +133,7 @@ export default function Fleet() {
 						</p>
 					</div>
 					<div className="glass-card p-6">
-						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+						<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 							Online
 						</p>
 						<p className="text-3xl font-black text-emerald-400 mt-2">
@@ -137,7 +141,7 @@ export default function Fleet() {
 						</p>
 					</div>
 					<div className="glass-card p-6">
-						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+						<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 							Quarantined
 						</p>
 						<p className="text-3xl font-black text-amber-400 mt-2">
@@ -145,7 +149,7 @@ export default function Fleet() {
 						</p>
 					</div>
 					<div className="glass-card p-6">
-						<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+						<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 							Categories
 						</p>
 						<p className="text-3xl font-black text-cosmos-400 mt-2">
@@ -168,6 +172,7 @@ export default function Fleet() {
 					"Infra",
 				].map((f) => (
 					<button
+						data-testid="fleet-action"
 						key={f}
 						type="button"
 						onClick={() => setFilter(f)}
@@ -210,7 +215,7 @@ export default function Fleet() {
 										<h3 className="text-sm font-black text-white uppercase tracking-tight">
 											{ship.name}
 										</h3>
-										<p className="text-xs font-bold text-slate-300 uppercase tracking-widest">
+										<p className="text-sm font-bold text-slate-300 uppercase tracking-widest">
 											{CLASS_LABELS[ship.ship_class] ?? ship.ship_class} ·{" "}
 											{ship.category}
 										</p>
@@ -263,7 +268,7 @@ export default function Fleet() {
 			</div>
 
 			{data?.ops_root && (
-				<p className="text-xs text-slate-700 font-mono">
+				<p className="text-sm text-slate-400 font-mono">
 					Registry: {data.ops_root}
 				</p>
 			)}

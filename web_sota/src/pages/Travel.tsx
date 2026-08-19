@@ -235,7 +235,7 @@ export default function Travel() {
 											<p className="text-lg font-black text-white uppercase tracking-tight">
 												{trip.title}
 											</p>
-											<p className="text-xs text-slate-300 mt-2 uppercase font-bold">
+											<p className="text-sm text-slate-300 mt-2 uppercase font-bold">
 												{trip.start_date} → {trip.end_date || "TBA"}
 											</p>
 										</div>
@@ -258,7 +258,7 @@ export default function Travel() {
 										{trip.destination || trip.title}
 									</p>
 									{trip.ref && (
-										<p className="text-xs text-cosmos-400 mt-2 font-mono">
+										<p className="text-sm text-cosmos-400 mt-2 font-mono">
 											Ref {trip.ref}
 										</p>
 									)}
@@ -314,11 +314,11 @@ export default function Travel() {
 								className="flex items-center justify-between gap-3 text-sm"
 							>
 								<div>
-									<p className="text-slate-300 font-bold uppercase tracking-tight text-xs">
+									<p className="text-slate-300 font-bold uppercase tracking-tight text-sm">
 										{d.name}
 									</p>
 									{d.number && (
-										<p className="text-xs text-slate-300 font-mono">
+										<p className="text-sm text-slate-300 font-mono">
 											{d.number}
 										</p>
 									)}
@@ -331,7 +331,7 @@ export default function Travel() {
 							</div>
 						))}
 						{docs.length === 0 && (
-							<p className="text-xs text-slate-300 uppercase tracking-widest">
+							<p className="text-sm text-slate-300 uppercase tracking-widest">
 								No documents tracked
 							</p>
 						)}

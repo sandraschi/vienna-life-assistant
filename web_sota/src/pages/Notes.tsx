@@ -260,7 +260,7 @@ export default function Notes() {
 										</button>
 									</div>
 									{p.content && (
-										<p className="text-xs text-slate-300 mt-2 line-clamp-3">
+										<p className="text-sm text-slate-300 mt-2 line-clamp-3">
 											{p.content}
 										</p>
 									)}
@@ -276,7 +276,7 @@ export default function Notes() {
 				</>
 			)}
 
-			<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
+			<p className="text-sm text-slate-300 uppercase tracking-widest flex items-center gap-2">
 				<NotebookText className="w-3.5 h-3.5" />
 				Gateway: onenote-mcp :10907 (token stays there) · MCP:
 				vienna_notes(operation=notebooks|search|create|export_journal)

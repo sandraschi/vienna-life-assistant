@@ -178,7 +178,7 @@ export default function Calendar() {
 									{ev.time}
 								</p>
 								{ev.date && (
-									<p className="text-xs font-bold text-slate-300 uppercase tracking-widest mt-1">
+									<p className="text-sm font-bold text-slate-300 uppercase tracking-widest mt-1">
 										{ev.date}
 									</p>
 								)}
@@ -187,7 +187,7 @@ export default function Calendar() {
 								<p className="text-sm font-black text-white uppercase tracking-tight">
 									{ev.title}
 								</p>
-								<p className="text-xs text-slate-300 mt-2 flex items-center gap-2 uppercase font-bold">
+								<p className="text-sm text-slate-300 mt-2 flex items-center gap-2 uppercase font-bold">
 									<MapPin className="w-3 h-3" />
 									{ev.location}
 								</p>
@@ -205,7 +205,7 @@ export default function Calendar() {
 				</div>
 			</div>
 
-			<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
+			<p className="text-sm text-slate-300 uppercase tracking-widest flex items-center gap-2">
 				<Clock className="w-3 h-3" />
 				Source: GET /api/life/calendar — MCP
 				vienna_life(operation=calendar_today)

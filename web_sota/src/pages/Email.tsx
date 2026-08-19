@@ -189,7 +189,7 @@ export default function Email() {
 							className="glass-card px-5 py-3"
 							data-testid="kpi-email-unread"
 						>
-							<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 								Unread
 							</p>
 							<p className="text-2xl font-black text-cosmos-400">
@@ -199,7 +199,7 @@ export default function Email() {
 					)}
 					{stats.total !== undefined && (
 						<div className="glass-card px-5 py-3" data-testid="kpi-email-total">
-							<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 								Total
 							</p>
 							<p className="text-2xl font-black text-emerald-400">
@@ -286,7 +286,7 @@ export default function Email() {
 											<p className="text-sm font-black text-white uppercase tracking-tight">
 												{String(selected.subject ?? "Untitled")}
 											</p>
-											<p className="text-xs text-slate-300 mt-1">
+											<p className="text-sm text-slate-300 mt-1">
 												{String(selected.from ?? "")} ·{" "}
 												{fmtDate(String(selected.date ?? ""))}
 											</p>
@@ -328,7 +328,7 @@ export default function Email() {
 													{fmtDate(e.date)}
 												</span>
 											</div>
-											<p className="text-xs text-slate-300 mt-1 truncate">
+											<p className="text-sm text-slate-300 mt-1 truncate">
 												{e.from}
 											</p>
 										</button>
@@ -345,7 +345,7 @@ export default function Email() {
 				</>
 			)}
 
-			<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
+			<p className="text-sm text-slate-300 uppercase tracking-widest flex items-center gap-2">
 				<MailQuestion className="w-3.5 h-3.5" />
 				Gateway: email-mcp :10813 (credentials + Graph token stay there) · MCP:
 				vienna_email(operation=status|inbox|search|send|mark_read)

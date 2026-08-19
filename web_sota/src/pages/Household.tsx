@@ -206,7 +206,7 @@ export default function Household() {
 						<>
 							<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 								<div className="glass-card p-5">
-									<p className="text-xs font-black text-white uppercase tracking-widest mb-1">
+									<p className="text-sm font-black text-white uppercase tracking-widest mb-1">
 										Monthly total
 									</p>
 									<p
@@ -217,7 +217,7 @@ export default function Household() {
 									</p>
 								</div>
 								<div className="glass-card p-5">
-									<p className="text-xs font-black text-white uppercase tracking-widest mb-1">
+									<p className="text-sm font-black text-white uppercase tracking-widest mb-1">
 										Subscriptions
 									</p>
 									<p
@@ -228,7 +228,7 @@ export default function Household() {
 									</p>
 								</div>
 								<div className="glass-card p-5">
-									<p className="text-xs font-black text-white uppercase tracking-widest mb-1">
+									<p className="text-sm font-black text-white uppercase tracking-widest mb-1">
 										Next renewal
 									</p>
 									<p className="text-3xl font-black text-amber-400">
@@ -310,7 +310,7 @@ export default function Household() {
 											<p className="text-sm font-black text-white uppercase tracking-tight">
 												{s.name}
 											</p>
-											<p className="text-xs text-slate-300 uppercase tracking-widest">
+											<p className="text-sm text-slate-300 uppercase tracking-widest">
 												{s.category}
 												{s.auto_renew ? " · auto-renew" : " · manual"}
 											</p>
@@ -418,7 +418,7 @@ export default function Household() {
 											<p className="text-sm font-black text-white uppercase tracking-tight">
 												{t.name}
 											</p>
-											<p className="text-xs text-slate-300 uppercase tracking-widest">
+											<p className="text-sm text-slate-300 uppercase tracking-widest">
 												{t.category}
 												{t.frequency_days > 0
 													? ` · every ${t.frequency_days}d`
@@ -502,7 +502,7 @@ export default function Household() {
 												{p.pet_name} — {p.event_type}
 											</p>
 											{p.notes && (
-												<p className="text-xs text-slate-300 mt-1">{p.notes}</p>
+												<p className="text-sm text-slate-300 mt-1">{p.notes}</p>
 											)}
 										</div>
 										<span className="text-xs font-bold text-amber-400 uppercase tracking-widest">
@@ -521,7 +521,7 @@ export default function Household() {
 				</div>
 			)}
 
-			<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
+			<p className="text-sm text-slate-300 uppercase tracking-widest flex items-center gap-2">
 				<HomeIcon className="w-3.5 h-3.5" /> MCP:
 				vienna_household(operation=subscriptions|tasks|pet) · REST /api/life/*
 			</p>

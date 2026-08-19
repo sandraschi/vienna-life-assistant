@@ -34,4 +34,3 @@ if (-not $configPath) {
 }
 
 Start-FleetWebapp @PSBoundParameters -ConfigPath $configPath -LauncherRoot $PSScriptRoot
-

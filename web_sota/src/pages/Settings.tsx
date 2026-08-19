@@ -159,7 +159,7 @@ export default function Settings() {
 	};
 
 	return (
-		<div className="space-y-8 page-enter max-w-2xl">
+		<div data-testid="settings-page" className="space-y-8 page-enter max-w-2xl">
 			<div>
 				<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
 					Settings

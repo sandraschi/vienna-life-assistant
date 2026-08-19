@@ -39,9 +39,12 @@ export default function Tools() {
 		: [];
 
 	return (
-		<div className="space-y-8 page-enter">
+		<div data-testid="tools-page" className="space-y-8 page-enter">
 			<div>
-				<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
+				<h1
+					data-testid="tools-title"
+					className="text-4xl font-black gradient-text tracking-tighter uppercase italic"
+				>
 					MCP Tools
 				</h1>
 				<p className="text-slate-300 mt-2 text-sm">
@@ -63,7 +66,7 @@ export default function Tools() {
 			)}
 			{caps && (
 				<>
-					<div className="glass-card p-6">
+					<div data-testid="tools-capabilities" className="glass-card p-6">
 						<p className="text-sm text-slate-300 uppercase tracking-widest font-black mb-3">
 							{caps.server.name} v{caps.server.version} ·{" "}
 							{caps.server.fastmcp ?? "FastMCP"}
@@ -83,7 +86,7 @@ export default function Tools() {
 							))}
 						</div>
 						{caps.runtime && (
-							<p className="text-xs text-slate-300 mt-4 uppercase tracking-widest">
+							<p className="text-sm text-slate-300 mt-4 uppercase tracking-widest">
 								Transport: {caps.runtime.transport} · Surface:{" "}
 								{caps.runtime.surface_mode}
 							</p>

@@ -215,7 +215,7 @@ export default function Health() {
 
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 				<div className="glass-card p-5">
-					<p className="text-xs font-black text-white uppercase tracking-widest mb-1">
+					<p className="text-sm font-black text-white uppercase tracking-widest mb-1">
 						Active medications
 					</p>
 					<p
@@ -224,12 +224,12 @@ export default function Health() {
 					>
 						{activeMeds.length}
 					</p>
-					<p className="text-xs text-slate-300 mt-1">
+					<p className="text-sm text-slate-300 mt-1">
 						{activeMeds.map((m) => m.name).join(", ") || "None"}
 					</p>
 				</div>
 				<div className="glass-card p-5">
-					<p className="text-xs font-black text-white uppercase tracking-widest mb-1">
+					<p className="text-sm font-black text-white uppercase tracking-widest mb-1">
 						Next follow-up
 					</p>
 					<p
@@ -242,13 +242,13 @@ export default function Health() {
 								a.follow_up_date.localeCompare(b.follow_up_date),
 							)[0]?.follow_up_date ?? "—"}
 					</p>
-					<p className="text-xs text-slate-300 mt-1">
+					<p className="text-sm text-slate-300 mt-1">
 						Conditions:{" "}
 						{conditions.map((c) => c.name).join(" · ") || "None tracked"}
 					</p>
 				</div>
 				<div className="glass-card p-5">
-					<p className="text-xs font-black text-white uppercase tracking-widest mb-1">
+					<p className="text-sm font-black text-white uppercase tracking-widest mb-1">
 						Latest vitals
 					</p>
 					<p
@@ -257,7 +257,7 @@ export default function Health() {
 					>
 						{vitals[0] ? `${vitals[0].systolic}/${vitals[0].diastolic}` : "—"}
 					</p>
-					<p className="text-xs text-slate-300 mt-1">
+					<p className="text-sm text-slate-300 mt-1">
 						{vitals[0]
 							? `pulse ${vitals[0].pulse} · ${vitals[0].weight_kg ? `${vitals[0].weight_kg} kg` : "no weight"} · ${vitals[0].date}`
 							: "No readings yet"}
@@ -363,7 +363,7 @@ export default function Health() {
 													{v.date}
 												</span>
 											</div>
-											<p className="text-xs text-slate-300 mt-1 uppercase tracking-widest">
+											<p className="text-sm text-slate-300 mt-1 uppercase tracking-widest">
 												{v.specialty}
 												{v.reason ? ` · ${v.reason}` : ""}
 											</p>
@@ -373,7 +373,7 @@ export default function Health() {
 												</p>
 											)}
 											{v.follow_up_date && (
-												<p className="text-xs text-amber-400 mt-2 font-bold uppercase tracking-widest">
+												<p className="text-sm text-amber-400 mt-2 font-bold uppercase tracking-widest">
 													Follow-up: {v.follow_up_date}
 												</p>
 											)}
@@ -482,13 +482,13 @@ export default function Health() {
 													</span>
 												)}
 											</p>
-											<p className="text-xs text-slate-300 mt-1 uppercase tracking-widest">
+											<p className="text-sm text-slate-300 mt-1 uppercase tracking-widest">
 												{m.frequency || "as needed"}
 												{m.times ? ` · ${m.times}` : ""}
 												{m.with_food ? " · with food" : ""}
 											</p>
 											{m.refill_date && (
-												<p className="text-xs text-amber-400 mt-1 font-bold uppercase tracking-widest">
+												<p className="text-sm text-amber-400 mt-1 font-bold uppercase tracking-widest">
 													Refill: {m.refill_date}
 												</p>
 											)}
@@ -711,7 +711,7 @@ export default function Health() {
 												{c.name}
 											</p>
 											{c.notes && (
-												<p className="text-xs text-slate-300 mt-1">{c.notes}</p>
+												<p className="text-sm text-slate-300 mt-1">{c.notes}</p>
 											)}
 										</div>
 										<div className="text-right shrink-0">
@@ -727,7 +727,7 @@ export default function Health() {
 												{c.status}
 											</span>
 											{c.since && (
-												<p className="text-xs text-slate-300 uppercase tracking-widest mt-0.5">
+												<p className="text-sm text-slate-300 uppercase tracking-widest mt-0.5">
 													since {c.since}
 												</p>
 											)}
@@ -746,7 +746,7 @@ export default function Health() {
 			)}
 
 			<div className="flex items-center justify-between">
-				<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
+				<p className="text-sm text-slate-300 uppercase tracking-widest flex items-center gap-2">
 					<HeartPulse className="w-3.5 h-3.5" /> MCP:
 					vienna_health(operation=visits|meds|vitals) · REST /api/life/health/*
 				</p>

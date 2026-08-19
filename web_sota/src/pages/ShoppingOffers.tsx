@@ -31,7 +31,10 @@ export default function ShoppingOffers() {
 		return <div className="p-8 text-white">Scanning the shelves...</div>;
 
 	return (
-		<div className="space-y-8 page-enter animate-in fade-in slide-in-from-bottom-4 duration-1000">
+		<div
+			data-testid="shopping-page"
+			className="space-y-8 page-enter animate-in fade-in slide-in-from-bottom-4 duration-1000"
+		>
 			<div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
 				<div>
 					<div className="flex items-center gap-2 mb-2">
@@ -39,7 +42,10 @@ export default function ShoppingOffers() {
 							Price Monitor
 						</span>
 					</div>
-					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic leading-none">
+					<h1
+						data-testid="shopping-title"
+						className="text-4xl font-black gradient-text tracking-tighter uppercase italic leading-none"
+					>
 						Shopping Offers
 					</h1>
 					<p className="text-slate-300 font-medium tracking-tight uppercase flex items-center gap-2 mt-2">
@@ -85,13 +91,13 @@ export default function ShoppingOffers() {
 					</p>
 					<div className="flex items-center gap-6">
 						<div className="p-4 rounded-3xl bg-white/[0.03] border border-white/[0.06] flex-1">
-							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 								Top Discount
 							</p>
 							<p className="text-2xl font-black text-red-500">-34%</p>
 						</div>
 						<div className="p-4 rounded-3xl bg-white/[0.03] border border-white/[0.06] flex-1">
-							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 								Active Offers
 							</p>
 							<p className="text-2xl font-black text-white">42</p>
@@ -116,13 +122,13 @@ export default function ShoppingOffers() {
 					</p>
 					<div className="flex items-center gap-6">
 						<div className="p-4 rounded-3xl bg-white/[0.03] border border-white/[0.06] flex-1">
-							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 								Top Discount
 							</p>
 							<p className="text-2xl font-black text-amber-500">-33%</p>
 						</div>
 						<div className="p-4 rounded-3xl bg-white/[0.03] border border-white/[0.06] flex-1">
-							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 								Active Offers
 							</p>
 							<p className="text-2xl font-black text-white">38</p>
@@ -166,7 +172,7 @@ export default function ShoppingOffers() {
 
 						<div className="flex items-end justify-between pt-6 border-t border-white/[0.04]">
 							<div>
-								<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1 line-through">
+								<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1 line-through">
 									{offer.old_price ? `€${offer.old_price.toFixed(2)}` : ""}
 								</p>
 								<div className="flex items-center gap-2">
@@ -179,6 +185,7 @@ export default function ShoppingOffers() {
 								</div>
 							</div>
 							<button
+								data-testid="shopping-action"
 								type="button"
 								title="Add to shopping list"
 								className="p-3 rounded-2xl bg-white/[0.03] hover:bg-emerald-500/10 text-slate-300 hover:text-emerald-400 transition-all border border-transparent hover:border-emerald-500/20"

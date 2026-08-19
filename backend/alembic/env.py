@@ -27,11 +27,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # Import all models for autogenerate support
-from models import Base
-from models.calendar import CalendarEvent
-from models.todo import TodoItem
-from models.shopping import ShoppingList, ShoppingItem, StoreOffer
-from models.expense import Expense
+from models import Base  # noqa: E402
 
 target_metadata = Base.metadata
 
@@ -79,9 +75,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

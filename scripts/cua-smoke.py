@@ -36,16 +36,22 @@ import urllib.error
 
 # ── Config ────────────────────────────────────────────────────────────
 
-DEFAULT_CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cua-nsis-config.json")
+DEFAULT_CONFIG_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "cua-nsis-config.json"
+)
 
 
 def load_config(path: str | None = None) -> dict:
     p = path or DEFAULT_CONFIG_PATH
     if not os.path.exists(p):
-        print(f"  [cua] WARNING: config not found at {p}, using built-in defaults", flush=True)
+        print(
+            f"  [cua] WARNING: config not found at {p}, using built-in defaults",
+            flush=True,
+        )
         return {}
     with open(p) as f:
         cfg = json.load(f)
+
     # Expand env vars in string values
     def _expand(v):
         if isinstance(v, str):
@@ -53,6 +59,7 @@ def load_config(path: str | None = None) -> dict:
         if isinstance(v, list):
             return [_expand(x) for x in v]
         return v
+
     return {k: _expand(v) for k, v in cfg.items()}
 
 
@@ -62,16 +69,23 @@ CUA_SMOKE_VERSION = 2  # bump when template changes; see docstring
 def _check_version():
     """Warn if this file doesn't match the template version."""
     from pathlib import Path
-    ver_file = Path(__file__)
+
     # If the template path exists, compare versions
-    tpl = Path(os.getenv("MCP_CENTRAL_DOCS", "")) / "templates/tauri-native/scripts/cua-smoke.py"
+    tpl = (
+        Path(os.getenv("MCP_CENTRAL_DOCS", ""))
+        / "templates/tauri-native/scripts/cua-smoke.py"
+    )
     if tpl.exists():
         tpl_text = tpl.read_text(encoding="utf-8")
         import re
-        m = re.search(r'CUA_SMOKE_VERSION\s*=\s*(\d+)', tpl_text)
+
+        m = re.search(r"CUA_SMOKE_VERSION\s*=\s*(\d+)", tpl_text)
         if m and int(m.group(1)) > CUA_SMOKE_VERSION:
-            print(f"  [cua] WARNING: cua-smoke.py v{CUA_SMOKE_VERSION} is outdated "
-                  f"(template v{m.group(1)}). Copy template over.", flush=True)
+            print(
+                f"  [cua] WARNING: cua-smoke.py v{CUA_SMOKE_VERSION} is outdated "
+                f"(template v{m.group(1)}). Copy template over.",
+                flush=True,
+            )
 
 
 def cfg(key: str, default=""):
@@ -92,8 +106,13 @@ WINDOW_TITLE_RE = cfg("window_title_re", "Pywinauto MCP")
 BRIDGE_OK_TEXT = cfg("bridge_ok_text", "REST bridge reachable")
 INSTALL_DIR = cfg("install_dir", "%LOCALAPPDATA%\\Pywinauto MCP Operator")
 OPERATOR_EXE = cfg("operator_exe", "pywinauto-mcp-operator.exe")
-PROCESS_NAMES = cfg("backend_process_names", ["pywinauto-mcp-operator", "pywinauto-mcp-backend"])
-NSIS_GLOB = cfg("nsis_glob", "web_sota/src-tauri/target/release/bundle/nsis/Pywinauto MCP Operator_*_x64-setup.exe")
+PROCESS_NAMES = cfg(
+    "backend_process_names", ["pywinauto-mcp-operator", "pywinauto-mcp-backend"]
+)
+NSIS_GLOB = cfg(
+    "nsis_glob",
+    "web_sota/src-tauri/target/release/bundle/nsis/Pywinauto MCP Operator_*_x64-setup.exe",
+)
 REGISTRY_FILTER = cfg("uninstall_registry_filter", "*Pywinauto*")
 MAX_RETRY = 10
 RETRY_DELAY = 3
@@ -103,8 +122,10 @@ _INSTALLED = False
 
 # ── Helpers (must be before CUA client) ────────────────────────────
 
+
 def log(msg: str):
     print(f"  [cua] {msg}", flush=True)
+
 
 def log_warn(msg: str):
     print(f"  [WARN] {msg}", flush=True)
@@ -114,6 +135,7 @@ def log_warn(msg: str):
 
 _CUA_CLIENT_OK = False  # Did we connect to pywinauto-mcp?
 
+
 def _init_cua_client():
     """Try pywinauto-mcp HTTP API first, then direct imports, then flag unavailable."""
     global _CUA_CLIENT_OK
@@ -121,7 +143,7 @@ def _init_cua_client():
     try:
         r = urllib.request.urlopen("http://127.0.0.1:10789/api/v1/health", timeout=2)
         if r.status == 200:
-            log(f"pywinauto-mcp HTTP API reachable at :10789")
+            log("pywinauto-mcp HTTP API reachable at :10789")
             _CUA_CLIENT_OK = True
             return "http"
     except Exception:
@@ -129,6 +151,7 @@ def _init_cua_client():
     # Try direct import
     try:
         import pywinauto  # noqa: F401
+
         log("pywinauto direct import OK")
         _CUA_CLIENT_OK = True
         return "direct"
@@ -163,23 +186,30 @@ def _cua_call_direct(tool: str, params: dict) -> dict | None:
     try:
         if tool == "automation_windows":
             from pywinauto_mcp.tools.portmanteau_windows import automation_windows
+
             op = params.get("operation", "find")
-            result = automation_windows(op, **{k: v for k, v in params.items() if k != "operation"})
+            result = automation_windows(
+                op, **{k: v for k, v in params.items() if k != "operation"}
+            )
             return {"result": result}
         elif tool == "automation_visual":
             from pywinauto_mcp.tools.portmanteau_visual import automation_visual
+
             result = automation_visual(**params)
             return {"result": result}
         elif tool == "automation_elements":
             from pywinauto_mcp.tools.portmanteau_elements import automation_elements
+
             result = automation_elements(**params)
             return {"result": result}
         elif tool == "automation_mouse":
             from pywinauto_mcp.tools.portmanteau_mouse import automation_mouse
+
             result = automation_mouse(**params)
             return {"result": result}
         elif tool == "get_window_state":
             from pywinauto_mcp.tools.window_state import get_window_state
+
             result = get_window_state(**params)
             return {"result": result}
     except Exception as e:
@@ -196,7 +226,9 @@ def cua_available() -> bool:
 
 def cua_find_window(title_re: str = "") -> dict | None:
     """Find a window by title regex. Returns {handle, title, rect} or None."""
-    result = _cua_call("automation_windows", {"operation": "find", "title": title_re, "partial": True})
+    result = _cua_call(
+        "automation_windows", {"operation": "find", "title": title_re, "partial": True}
+    )
     if result and result.get("result", {}).get("status") == "success":
         windows = result["result"].get("data", {}).get("windows", [])
         if windows:
@@ -204,15 +236,18 @@ def cua_find_window(title_re: str = "") -> dict | None:
     # Fallback to pywinauto directly
     try:
         import pywinauto
+
         app = pywinauto.Application(backend="uia").connect(title_re=title_re)
         win = app.window(title_re=title_re)
         win.wait("visible", timeout=5)
         rect = win.rectangle()
         w = rect.width if isinstance(rect.width, int) else rect.width()
         h = rect.height if isinstance(rect.height, int) else rect.height()
-        return {"handle": win.handle, "title": win.window_text(), "rect": {
-            "left": rect.left, "top": rect.top, "width": w, "height": h
-        }}
+        return {
+            "handle": win.handle,
+            "title": win.window_text(),
+            "rect": {"left": rect.left, "top": rect.top, "width": w, "height": h},
+        }
     except Exception:
         return None
 
@@ -220,16 +255,22 @@ def cua_find_window(title_re: str = "") -> dict | None:
 def cua_screenshot(window_handle: int = 0, output_path: str = "") -> str | None:
     """Take a screenshot. Returns path or None."""
     if _CUA_CLIENT_MODE == "http":
-        result = _cua_call("automation_visual", {
-            "operation": "screenshot", "window_handle": window_handle, "format": "png",
-            "output_path": output_path,
-        })
+        result = _cua_call(
+            "automation_visual",
+            {
+                "operation": "screenshot",
+                "window_handle": window_handle,
+                "format": "png",
+                "output_path": output_path,
+            },
+        )
         if result and result.get("result", {}).get("status") == "success":
             path = result["result"].get("data", {}).get("screenshot_path", output_path)
             if os.path.exists(path):
                 return path
     try:
         import pywinauto
+
         app = pywinauto.Application(backend="uia").connect(title_re=WINDOW_TITLE_RE)
         win = app.window(title_re=WINDOW_TITLE_RE)
         win.set_focus()
@@ -245,23 +286,33 @@ def cua_ocr_text(window_handle: int = 0, image_path: str = "") -> str:
     """Run OCR on a window screenshot. Returns text."""
     # Try HTTP API OCR
     if _CUA_CLIENT_MODE == "http" and window_handle:
-        result = _cua_call("automation_visual", {
-            "operation": "extract_text", "window_handle": window_handle,
-        })
+        result = _cua_call(
+            "automation_visual",
+            {
+                "operation": "extract_text",
+                "window_handle": window_handle,
+            },
+        )
         if result and result.get("result", {}).get("status") == "success":
             return result["result"].get("data", {}).get("text", "")
     # Try direct pytesseract
     try:
         import pytesseract
-        pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
+        pytesseract.pytesseract.tesseract_cmd = (
+            r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+        )
         if image_path and os.path.exists(image_path):
             from PIL import Image
+
             return pytesseract.image_to_string(Image.open(image_path))
         if window_handle:
             import pywinauto
+
             app = pywinauto.Application(backend="uia").connect(title_re=WINDOW_TITLE_RE)
             win = app.window(title_re=WINDOW_TITLE_RE)
             from PIL import Image
+
             capture = win.capture_as_image()
             return pytesseract.image_to_string(capture)
     except Exception:
@@ -272,17 +323,21 @@ def cua_ocr_text(window_handle: int = 0, image_path: str = "") -> str:
 def cua_click(window_handle: int, x: int, y: int):
     """Click at (x,y) relative to window."""
     if _CUA_CLIENT_MODE == "http":
-        _cua_call("automation_mouse", {"operation": "click", "x": x, "y": y, "absolute": True})
+        _cua_call(
+            "automation_mouse", {"operation": "click", "x": x, "y": y, "absolute": True}
+        )
         return
     if _CUA_CLIENT_MODE == "direct":
         try:
             import pywinauto.mouse
+
             pywinauto.mouse.click(button="left", coords=(x, y))
         except Exception:
             pass
 
 
 # ── Helpers ───────────────────────────────────────────────────────────
+
 
 class PhaseFailed(Exception):
     """Non-fatal phase failure — script continues to uninstall."""
@@ -300,17 +355,24 @@ def phase_fail(msg: str):
 
 # ── Phase 1: Kill stale ───────────────────────────────────────────────
 
+
 def kill_stale():
     for name in PROCESS_NAMES:
-        subprocess.run(["taskkill", "/F", "/IM", f"{name}.exe", "/T"], capture_output=True, timeout=10)
+        subprocess.run(
+            ["taskkill", "/F", "/IM", f"{name}.exe", "/T"],
+            capture_output=True,
+            timeout=10,
+        )
     time.sleep(1)
     log("Stale processes killed")
 
 
 # ── Phase 2: Install ──────────────────────────────────────────────────
 
+
 def find_installer() -> str:
     import glob
+
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     pattern = os.path.join(repo_root, *NSIS_GLOB.replace("/", "\\").split("\\"))
     matches = sorted(glob.glob(pattern), key=os.path.getmtime, reverse=True)
@@ -331,6 +393,7 @@ def silent_install(installer: str):
 
 
 # ── Phase 3: Launch ──────────────────────────────────────────────────
+
 
 def launch_app():
     exe = os.path.join(INSTALL_DIR, OPERATOR_EXE)
@@ -358,6 +421,7 @@ def launch_app():
 
 # ── Phase 4: Verify window ───────────────────────────────────────────
 
+
 def verify_window():
     if not cua_available():
         log("CUA client unavailable -- window check skipped")
@@ -368,13 +432,20 @@ def verify_window():
         w = r.get("width", 0) or 0
         h = r.get("height", 0) or 0
         log(f"Window '{win.get('title', '?')}' found: {w}x{h}")
-        if (isinstance(w, int) and isinstance(h, int) and w > 0 and h > 0 and (w < 100 or h < 100)):
+        if (
+            isinstance(w, int)
+            and isinstance(h, int)
+            and w > 0
+            and h > 0
+            and (w < 100 or h < 100)
+        ):
             phase_fail(f"Window too small: {w}x{h}")
     else:
         log(f"Window matching '{WINDOW_TITLE_RE}' not found")
 
 
 # ── Phase 5: Screenshot ──────────────────────────────────────────────
+
 
 def take_screenshot(output_dir: str):
     os.makedirs(output_dir, exist_ok=True)
@@ -387,6 +458,7 @@ def take_screenshot(output_dir: str):
 
 
 # ── Phase 6: Feature-route smoke ─────────────────────────────────────
+
 
 def check_feature_route():
     try:
@@ -401,6 +473,7 @@ def check_feature_route():
 
 # ── Phase 7: Diagnostics ─────────────────────────────────────────────
 
+
 def check_diagnostics():
     try:
         resp = urllib.request.urlopen(f"{BACKEND_URL}{DIAGNOSTICS_PATH}", timeout=5)
@@ -408,9 +481,13 @@ def check_diagnostics():
         if data.get("success"):
             d = data["data"]
             log(f"Backend: {d['backend'].get('status')} v{d['backend'].get('version')}")
-            log(f"System: CPU {d['system'].get('cpu_percent')}% | Mem {d['system'].get('memory_percent')}% | Disk {d['system'].get('disk_percent')}%")
+            log(
+                f"System: CPU {d['system'].get('cpu_percent')}% | Mem {d['system'].get('memory_percent')}% | Disk {d['system'].get('disk_percent')}%"
+            )
             log(f"Tools: {d['tools'].get('total')} registered")
-            log(f"CUA: Tesseract={d['cua_status']['tesseract_available']} Window={d['cua_status']['window_found']}")
+            log(
+                f"CUA: Tesseract={d['cua_status']['tesseract_available']} Window={d['cua_status']['window_found']}"
+            )
             if d.get("errors", {}).get("count", 0) > 0:
                 log(f"WARNING: {d['errors']['count']} errors logged")
         else:
@@ -420,6 +497,7 @@ def check_diagnostics():
 
 
 # ── Phase 8: WebView bridge proof (OCR) ──────────────────────────────
+
 
 def verify_webview_bridge(output_dir: str):
     if not cua_available():
@@ -436,12 +514,15 @@ def verify_webview_bridge(output_dir: str):
     elif text:
         os.makedirs(output_dir, exist_ok=True)
         log(f"WebView OCR text: {text[:200]}")
-        phase_fail(f"WebView bridge not OK — likely API_BASE/CSP/CORS (expected '{BRIDGE_OK_TEXT}')")
+        phase_fail(
+            f"WebView bridge not OK — likely API_BASE/CSP/CORS (expected '{BRIDGE_OK_TEXT}')"
+        )
     else:
         log("WebView bridge check skipped (no OCR available)")
 
 
 # ── Phase 9: Nav click-through ──────────────────────────────────────
+
 
 def nav_click_through(output_dir: str):
     """Click each sidebar nav item, verify page loads via OCR."""
@@ -449,7 +530,15 @@ def nav_click_through(output_dir: str):
         log("CUA client unavailable -- nav click-through skipped")
         return
 
-    nav_routes = cfg("nav_routes", [["Dashboard", "Automation Dashboard"], ["Logging", "Logs"], ["Settings", "Settings"], ["Help", "Help"]])
+    nav_routes = cfg(
+        "nav_routes",
+        [
+            ["Dashboard", "Automation Dashboard"],
+            ["Logging", "Logs"],
+            ["Settings", "Settings"],
+            ["Help", "Help"],
+        ],
+    )
     if isinstance(nav_routes, list):
         nav_routes = [(r[0], r[1]) for r in nav_routes if len(r) >= 2]
 
@@ -465,7 +554,14 @@ def nav_click_through(output_dir: str):
 
     for label, expected_header in nav_routes:
         try:
-            idx = next((i for i, (l, _) in enumerate(nav_routes) if l == label), 0)
+            idx = next(
+                (
+                    i
+                    for i, (route_label, _) in enumerate(nav_routes)
+                    if route_label == label
+                ),
+                0,
+            )
             sidebar_click_x = int(cfg("sidebar_click_x", 30))
             sidebar_first_y = int(cfg("sidebar_first_y", 90))
             sidebar_step_y = int(cfg("sidebar_step_y", 55))
@@ -474,7 +570,10 @@ def nav_click_through(output_dir: str):
             clicked = False
             try:
                 import pywinauto
-                app = pywinauto.Application(backend="uia").connect(handle=win.get("handle", 0))
+
+                app = pywinauto.Application(backend="uia").connect(
+                    handle=win.get("handle", 0)
+                )
                 w = app.window(handle=win.get("handle", 0))
                 link = w.descendants(title=label)
                 if link:
@@ -487,9 +586,11 @@ def nav_click_through(output_dir: str):
             time.sleep(2)
 
             # OCR after click
-            snap_path = os.path.join(snap_dir, f"nav-{label.lower()}-{int(time.time())}.png")
+            snap_path = os.path.join(
+                snap_dir, f"nav-{label.lower()}-{int(time.time())}.png"
+            )
             os.makedirs(snap_dir, exist_ok=True)
-            result = cua_screenshot(win.get("handle", 0), snap_path)
+            cua_screenshot(win.get("handle", 0), snap_path)
             text = cua_ocr_text(win.get("handle", 0), snap_path)
 
             if expected_header.lower() in text.lower():
@@ -507,11 +608,14 @@ def nav_click_through(output_dir: str):
 
 # ── Phase 10: Log analysis ────────────────────────────────────────────
 
+
 def analyze_logs():
     """Read the Tauri app logs and report errors/warnings."""
     log_paths = [
         os.path.join(INSTALL_DIR, "pywinauto-mcp.log"),
-        os.path.expandvars(r"%APPDATA%\com.sandraschi.pywinauto-mcp\logs\backend-spawn.log"),
+        os.path.expandvars(
+            r"%APPDATA%\com.sandraschi.pywinauto-mcp\logs\backend-spawn.log"
+        ),
     ]
     errors = []
     warnings = []
@@ -551,6 +655,7 @@ def analyze_logs():
 
 # ── Phase 11: Uninstall ───────────────────────────────────────────────
 
+
 def uninstall():
     uninstaller = os.path.join(INSTALL_DIR, "uninstall.exe")
     if not os.path.exists(uninstaller):
@@ -561,9 +666,15 @@ def uninstall():
     log(f"Uninstaller exited with code {r.returncode}")
     time.sleep(2)
     remaining = subprocess.run(
-        ["powershell", "-NoProfile", "-Command",
-         f"Get-ItemProperty 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*' -ErrorAction SilentlyContinue | Where-Object {{ $_.DisplayName -like '{REGISTRY_FILTER}' }}"],
-        capture_output=True, text=True, timeout=15,
+        [
+            "powershell",
+            "-NoProfile",
+            "-Command",
+            f"Get-ItemProperty 'HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*' -ErrorAction SilentlyContinue | Where-Object {{ $_.DisplayName -like '{REGISTRY_FILTER}' }}",
+        ],
+        capture_output=True,
+        text=True,
+        timeout=15,
     )
     if remaining.stdout.strip():
         log("WARNING: App may still be registered")
@@ -573,6 +684,7 @@ def uninstall():
 
 # ── Main ──────────────────────────────────────────────────────────────
 
+
 def main():
     # Self-check: warn if template version differs
     _check_version()
@@ -580,32 +692,38 @@ def main():
     parser = argparse.ArgumentParser(description="CUA-NSIS smoke test")
     parser.add_argument("--installer", help="Path to NSIS installer .exe")
     parser.add_argument("--config", help="Path to cua-nsis-config.json")
-    parser.add_argument("--output-dir", default="cua-reports", help="Screenshot output directory")
+    parser.add_argument(
+        "--output-dir", default="cua-reports", help="Screenshot output directory"
+    )
     args = parser.parse_args()
 
     if args.config:
         _CONFIG.update(load_config(args.config))
 
     phases = [
-        (True,  "Kill stale processes",  lambda: kill_stale()),
-        (True,  "Install NSIS",          lambda: silent_install(args.installer or find_installer())),
-        (True,  "Launch app",            launch_app),
-        (False, "Verify window",         verify_window),
-        (False, "Screenshot",            lambda: take_screenshot(args.output_dir)),
-        (False, "Feature route",         check_feature_route),
-        (False, "Check diagnostics",     check_diagnostics),
-        (False, "WebView bridge",        lambda: verify_webview_bridge(args.output_dir)),
-        (False, "Nav click-through",     lambda: nav_click_through(args.output_dir)),
-        (False, "Analyze app logs",      analyze_logs),
-        (False, "Uninstall",             uninstall),
+        (True, "Kill stale processes", lambda: kill_stale()),
+        (
+            True,
+            "Install NSIS",
+            lambda: silent_install(args.installer or find_installer()),
+        ),
+        (True, "Launch app", launch_app),
+        (False, "Verify window", verify_window),
+        (False, "Screenshot", lambda: take_screenshot(args.output_dir)),
+        (False, "Feature route", check_feature_route),
+        (False, "Check diagnostics", check_diagnostics),
+        (False, "WebView bridge", lambda: verify_webview_bridge(args.output_dir)),
+        (False, "Nav click-through", lambda: nav_click_through(args.output_dir)),
+        (False, "Analyze app logs", analyze_logs),
+        (False, "Uninstall", uninstall),
     ]
 
     passed = failed = 0
     fatal_failed = False
 
-    print(f"\n{'='*50}")
+    print(f"\n{'=' * 50}")
     print(f"  CUA Smoke Test — {PRODUCT_NAME}")
-    print(f"{'='*50}\n")
+    print(f"{'=' * 50}\n")
 
     for is_fatal, name, fn in phases:
         print(f"  Phase {phases.index((is_fatal, name, fn)) + 1}: {name}")
@@ -624,15 +742,15 @@ def main():
             if is_fatal:
                 fatal_failed = True
 
-    print(f"{'='*50}")
+    print(f"{'=' * 50}")
     print(f"  Result: {passed}/{passed + failed} phases passed")
     if failed:
         print(f"  {failed} phase(s) FAILED")
     if fatal_failed:
-        print(f"  FATAL phase failure — see above")
+        print("  FATAL phase failure — see above")
         sys.exit(1)
-    print(f"  ALL PHASES PASSED")
-    print(f"{'='*50}\n")
+    print("  ALL PHASES PASSED")
+    print(f"{'=' * 50}\n")
 
 
 if __name__ == "__main__":

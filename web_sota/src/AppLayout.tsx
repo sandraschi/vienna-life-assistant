@@ -37,6 +37,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { API_BASE } from "./lib/api";
 import useZoom from "./lib/use-zoom";
 import { cn } from "./lib/utils";
 
@@ -197,7 +198,7 @@ export default function AppLayout() {
 		})();
 		const check = async () => {
 			try {
-				const r = await fetch(`http://127.0.0.1:10922/health`);
+				const r = await fetch(`${API_BASE}/health`);
 				setBackendOk(r.ok);
 			} catch {
 				setBackendOk(false);
@@ -449,10 +450,10 @@ export default function AppLayout() {
 
 						<div className="flex items-center gap-4 pl-6 border-l border-white/[0.04] group cursor-pointer">
 							<div className="text-right hidden sm:block">
-								<p className="text-xs font-black text-white uppercase tracking-widest leading-none mb-1">
+								<p className="text-sm font-black text-white uppercase tracking-widest leading-none mb-1">
 									Sandra Schipal
 								</p>
-								<p className="text-xs text-slate-300 font-bold uppercase tracking-widest leading-none">
+								<p className="text-sm text-slate-300 font-bold uppercase tracking-widest leading-none">
 									Architect
 								</p>
 							</div>

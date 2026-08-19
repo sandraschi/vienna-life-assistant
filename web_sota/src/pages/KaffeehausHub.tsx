@@ -38,10 +38,16 @@ export default function KaffeehausHub() {
 		return <div className="p-8 text-white">Loading the Melange...</div>;
 
 	return (
-		<div className="space-y-8 page-enter animate-in fade-in slide-in-from-bottom-4 duration-500">
+		<div
+			data-testid="kaffeehaus-page"
+			className="space-y-8 page-enter animate-in fade-in slide-in-from-bottom-4 duration-500"
+		>
 			<div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
 				<div>
-					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
+					<h1
+						data-testid="kaffeehaus-title"
+						className="text-4xl font-black gradient-text tracking-tighter uppercase italic"
+					>
 						Kaffeehaus Hub
 					</h1>
 					<p className="text-slate-300 mt-2 font-medium tracking-tight">
@@ -85,7 +91,7 @@ export default function KaffeehausHub() {
 									<Coffee className="w-5 h-5" />
 								</div>
 								<div>
-									<p className="text-xs text-slate-300 font-bold uppercase tracking-widest">
+									<p className="text-sm text-slate-300 font-bold uppercase tracking-widest">
 										Recommended
 									</p>
 									<p className="text-sm font-bold text-white uppercase italic">
@@ -98,7 +104,7 @@ export default function KaffeehausHub() {
 									<CheckCircle2 className="w-5 h-5" />
 								</div>
 								<div>
-									<p className="text-xs text-slate-300 font-bold uppercase tracking-widest">
+									<p className="text-sm text-slate-300 font-bold uppercase tracking-widest">
 										Atmosphere
 									</p>
 									<p className="text-sm font-bold text-white uppercase italic">
@@ -127,6 +133,7 @@ export default function KaffeehausHub() {
 						foam architecture."
 					</p>
 					<button
+						data-testid="kaffeehaus-action"
 						type="button"
 						className="w-full py-4 rounded-2xl bg-cosmos-600 hover:bg-cosmos-500 text-white text-sm font-black uppercase tracking-widest transition-all shadow-lg shadow-cosmos-500/20 mt-4"
 					>
@@ -198,6 +205,7 @@ export default function KaffeehausHub() {
 								</span>
 							</div>
 							<button
+								data-testid="kaffeehaus-action"
 								type="button"
 								title="Café details"
 								className="p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all"

@@ -188,7 +188,7 @@ export default function Contacts() {
 									<p className="text-sm font-black text-white uppercase tracking-tight truncate">
 										{c.name}
 									</p>
-									<p className="text-xs text-slate-300 uppercase tracking-widest">
+									<p className="text-sm text-slate-300 uppercase tracking-widest">
 										{c.relationship || "—"}
 										{c.favorite && (
 											<Heart className="w-3 h-3 inline ml-1 text-pink-400 fill-pink-400" />

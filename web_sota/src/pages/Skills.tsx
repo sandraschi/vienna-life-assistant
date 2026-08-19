@@ -35,16 +35,22 @@ export default function Skills() {
 
 	if (loading) {
 		return (
-			<div className="flex justify-center py-20 page-enter">
+			<div
+				data-testid="skills-page"
+				className="flex justify-center py-20 page-enter"
+			>
 				<Loader2 className="w-8 h-8 animate-spin text-cosmos-400" />
 			</div>
 		);
 	}
 
 	return (
-		<div className="space-y-8 page-enter">
+		<div data-testid="skills-page" className="space-y-8 page-enter">
 			<div>
-				<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
+				<h1
+					data-testid="skills-title"
+					className="text-4xl font-black gradient-text tracking-tighter uppercase italic"
+				>
 					Skills
 				</h1>
 				<p className="text-slate-300 mt-2 text-sm">
@@ -54,11 +60,12 @@ export default function Skills() {
 
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				<div className="glass-card p-4 space-y-2">
-					<p className="text-xs font-black text-slate-300 uppercase tracking-widest px-2 mb-2">
+					<p className="text-sm font-black text-slate-300 uppercase tracking-widest px-2 mb-2">
 						Vienna skills
 					</p>
 					{skills.map((s) => (
 						<button
+							data-testid="skills-action"
 							key={s.name}
 							type="button"
 							onClick={() => setSelected(s.name)}
@@ -75,7 +82,7 @@ export default function Skills() {
 				</div>
 
 				<div className="lg:col-span-2 glass-card p-6 overflow-auto max-h-[32rem]">
-					<pre className="text-xs text-slate-300 whitespace-pre-wrap font-mono leading-relaxed">
+					<pre className="text-sm text-slate-300 whitespace-pre-wrap font-mono leading-relaxed">
 						{content}
 					</pre>
 				</div>
@@ -83,7 +90,7 @@ export default function Skills() {
 
 			{prompts.length > 0 && (
 				<div className="glass-card p-6">
-					<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-4">
+					<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-4">
 						MCP preprompts
 					</p>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-3">

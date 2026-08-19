@@ -115,7 +115,7 @@ export default function ControlTower() {
 				</div>
 				<div className="flex items-center gap-3">
 					{data?.generated_at && (
-						<span className="text-xs font-mono text-slate-500">
+						<span className="text-xs font-mono text-slate-400">
 							{new Date(data.generated_at).toLocaleTimeString()}
 						</span>
 					)}
@@ -172,7 +172,7 @@ export default function ControlTower() {
 						</div>
 						<div className="grid grid-cols-3 gap-3">
 							<div>
-								<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+								<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 									Registered
 								</p>
 								<p className="text-2xl font-black text-white">
@@ -180,7 +180,7 @@ export default function ControlTower() {
 								</p>
 							</div>
 							<div>
-								<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+								<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 									Online
 								</p>
 								<p className="text-2xl font-black text-emerald-400">
@@ -188,7 +188,7 @@ export default function ControlTower() {
 								</p>
 							</div>
 							<div>
-								<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+								<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 									Offline
 								</p>
 								<p className="text-2xl font-black text-red-400">
@@ -198,7 +198,7 @@ export default function ControlTower() {
 								</p>
 							</div>
 						</div>
-						<p className="text-xs text-slate-400">
+						<p className="text-sm text-slate-400">
 							Fleet registry + live health. Full view:{" "}
 							<span className="text-cosmos-400">Fleet Command</span> and{" "}
 							<span className="text-cosmos-400">Services</span>.
@@ -220,7 +220,7 @@ export default function ControlTower() {
 						{ws?.source_ok ? (
 							<div className="grid grid-cols-3 gap-3">
 								<div>
-									<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+									<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 										Running
 									</p>
 									<p className="text-2xl font-black text-emerald-400">
@@ -228,7 +228,7 @@ export default function ControlTower() {
 									</p>
 								</div>
 								<div>
-									<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+									<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 										NSSM
 									</p>
 									<p className="text-2xl font-black text-amber-400">
@@ -236,7 +236,7 @@ export default function ControlTower() {
 									</p>
 								</div>
 								<div>
-									<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+									<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 										Naked
 									</p>
 									<p className="text-2xl font-black text-white">
@@ -249,7 +249,7 @@ export default function ControlTower() {
 								Win32_Service probe offline
 							</p>
 						)}
-						<p className="text-xs text-slate-400">
+						<p className="text-sm text-slate-400">
 							NSSM = service managed by the NSSM wrapper (restart-safe).
 						</p>
 					</Link>
@@ -288,7 +288,7 @@ export default function ControlTower() {
 									</span>
 								</div>
 								{g.top_processes[0] && (
-									<p className="text-xs text-slate-400">
+									<p className="text-sm text-slate-400">
 										Top: {g.top_processes[0].name} (
 										{g.top_processes[0].cpu_percent}%)
 									</p>

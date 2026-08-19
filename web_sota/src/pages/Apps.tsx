@@ -24,9 +24,12 @@ export default function Apps() {
 	}, []);
 
 	return (
-		<div className="space-y-8 page-enter">
+		<div data-testid="apps-page" className="space-y-8 page-enter">
 			<div>
-				<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
+				<h1
+					data-testid="apps-title"
+					className="text-4xl font-black gradient-text tracking-tighter uppercase italic"
+				>
 					Apps Hub
 				</h1>
 				<p className="text-slate-300 mt-2 text-sm">
@@ -40,6 +43,7 @@ export default function Apps() {
 					{ships.slice(0, 24).map((s) => (
 						<a
 							key={s.id}
+							data-testid="app-card"
 							href={s.url ?? `http://127.0.0.1:${s.frontend_port}`}
 							target="_blank"
 							rel="noopener noreferrer"
@@ -52,7 +56,7 @@ export default function Apps() {
 							<h3 className="font-black text-white mt-4 text-sm uppercase tracking-widest">
 								{s.name}
 							</h3>
-							<p className="text-xs text-slate-300 mt-2">
+							<p className="text-sm text-slate-300 mt-2">
 								:{s.frontend_port} · {s.status}
 							</p>
 						</a>

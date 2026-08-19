@@ -233,7 +233,7 @@ export default function Dashboard() {
 							>
 								<Rocket className="w-4 h-4" /> Set up ViLife in 2 minutes
 							</a>
-							<p className="text-xs text-slate-300 mt-2">
+							<p className="text-sm text-slate-300 mt-2">
 								The demo data is a starting point — onboarding makes it yours.
 							</p>
 						</div>
@@ -250,13 +250,13 @@ export default function Dashboard() {
 							className="glass-card p-5"
 							data-testid={`kpi-${s.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
 						>
-							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 								{s.title}
 							</p>
 							<p className="text-2xl font-black text-white truncate">
 								{s.value}
 							</p>
-							<p className="text-xs text-slate-300 mt-1 truncate">{s.change}</p>
+							<p className="text-sm text-slate-300 mt-1 truncate">{s.change}</p>
 						</div>
 					))}
 				</div>
@@ -270,7 +270,7 @@ export default function Dashboard() {
 					</h3>
 					<div className="grid grid-cols-2 md:grid-cols-5 gap-4">
 						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 								Medications
 							</p>
 							<p
@@ -283,7 +283,7 @@ export default function Dashboard() {
 							</p>
 						</div>
 						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 								Next doctor
 							</p>
 							<p
@@ -296,7 +296,7 @@ export default function Dashboard() {
 							</p>
 						</div>
 						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 								Next trip
 							</p>
 							<p
@@ -309,7 +309,7 @@ export default function Dashboard() {
 							</p>
 						</div>
 						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 								Birthdays soon
 							</p>
 							<p
@@ -324,7 +324,7 @@ export default function Dashboard() {
 							</p>
 						</div>
 						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 								Renewals soon
 							</p>
 							<p
@@ -422,7 +422,7 @@ export default function Dashboard() {
 							className="mt-4 rounded-xl bg-white/[0.02] border border-white/[0.06] p-4"
 							data-testid="pa-answer"
 						>
-							<p className="text-xs font-black text-amber-400 uppercase tracking-widest mb-1">
+							<p className="text-sm font-black text-amber-400 uppercase tracking-widest mb-1">
 								{paAnswer.question}
 							</p>
 							<p className="text-sm text-slate-300 leading-relaxed">
@@ -442,7 +442,7 @@ export default function Dashboard() {
 					<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 						{env.weather && (
 							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-								<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+								<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 									Indoor
 								</p>
 								<p
@@ -455,7 +455,7 @@ export default function Dashboard() {
 						)}
 						{env.energy && (
 							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-								<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+								<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 									Energy
 								</p>
 								<p
@@ -468,7 +468,7 @@ export default function Dashboard() {
 						)}
 						{env.fritz && (
 							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-								<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+								<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 									Fritz!Box
 								</p>
 								<p
@@ -481,7 +481,7 @@ export default function Dashboard() {
 						)}
 						{env.sensors.length > 0 && (
 							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-								<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+								<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 									Sensors
 								</p>
 								<p
@@ -494,7 +494,7 @@ export default function Dashboard() {
 						)}
 					</div>
 					{env.offline_devices.length > 0 && (
-						<p className="text-xs text-red-400 uppercase tracking-widest mt-3">
+						<p className="text-sm text-red-400 uppercase tracking-widest mt-3">
 							Offline: {env.offline_devices.join(", ")}
 						</p>
 					)}
@@ -545,7 +545,7 @@ export default function Dashboard() {
 										<Music className="w-5 h-5" />
 									</div>
 									<div className="flex-1 min-w-0">
-										<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+										<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 											{item.venue}
 										</p>
 										<p className="text-sm font-bold text-white truncate">
@@ -571,7 +571,7 @@ export default function Dashboard() {
 										<Coffee className="w-5 h-5" />
 									</div>
 									<div className="flex-1 min-w-0">
-										<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+										<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 											{item.name}
 										</p>
 										<p className="text-sm font-bold text-white">
@@ -592,7 +592,7 @@ export default function Dashboard() {
 										<Palette className="w-5 h-5" />
 									</div>
 									<div className="flex-1 min-w-0">
-										<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+										<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 											{item.museum}
 										</p>
 										<p className="text-sm font-bold text-white truncate">
@@ -633,7 +633,7 @@ export default function Dashboard() {
 									rel="noopener noreferrer"
 									className="block p-3 rounded-xl bg-white/[0.01] hover:bg-white/[0.04] border border-white/[0.04] hover:border-white/20 transition-all group"
 								>
-									<p className="text-xs font-bold text-white group-hover:text-cosmos-400 transition-colors leading-relaxed">
+									<p className="text-sm font-bold text-white group-hover:text-cosmos-400 transition-colors leading-relaxed">
 										{item.title}
 									</p>
 								</a>
@@ -657,7 +657,7 @@ export default function Dashboard() {
 									key={i}
 									className="block p-3 rounded-xl bg-white/[0.01] border border-white/[0.04] hover:border-white/20 transition-all group"
 								>
-									<p className="text-xs font-bold text-white leading-relaxed">
+									<p className="text-sm font-bold text-white leading-relaxed">
 										{item.title}
 									</p>
 								</div>

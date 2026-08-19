@@ -120,7 +120,10 @@ export default function Services() {
 						<Stat label="Naked" value={data.naked_count} />
 					</div>
 
-					<div className="flex flex-wrap gap-2 items-center">
+					<div
+						className="flex flex-wrap gap-2 items-center"
+						data-testid="services-filters"
+					>
 						{(["all", "running", "stopped"] as const).map((f) => (
 							<FilterChip
 								key={f}
@@ -163,7 +166,7 @@ export default function Services() {
 										<td className="px-4 py-2.5">
 											<div className="font-bold text-white">{s.name}</div>
 											{s.display_name !== s.name && (
-												<div className="text-xs text-slate-500">
+												<div className="text-xs text-slate-400">
 													{s.display_name}
 												</div>
 											)}
@@ -193,12 +196,12 @@ export default function Services() {
 													NSSM
 												</span>
 											) : (
-												<span className="text-xs text-slate-500 uppercase">
+												<span className="text-xs text-slate-400 uppercase">
 													sc
 												</span>
 											)}
 										</td>
-										<td className="px-4 py-2.5 font-mono text-[11px] text-slate-500 max-w-md truncate">
+										<td className="px-4 py-2.5 font-mono text-[11px] text-slate-400 max-w-md truncate">
 											{s.path_name || "—"}
 										</td>
 									</tr>
@@ -206,7 +209,7 @@ export default function Services() {
 							</tbody>
 						</table>
 						{rows.length === 0 && (
-							<p className="p-6 text-sm text-slate-500">
+							<p className="p-6 text-sm text-slate-400">
 								No services match the current filters.
 							</p>
 						)}
@@ -217,7 +220,7 @@ export default function Services() {
 							<h3 className="text-sm font-black text-amber-400 uppercase tracking-widest mb-3">
 								NSSM-managed services ({nssmRows.length})
 							</h3>
-							<p className="text-xs text-slate-400 leading-relaxed mb-3">
+							<p className="text-sm text-slate-400 leading-relaxed mb-3">
 								NSSM wraps the service binary and restarts it on crash - restart
 								via the service manager only (
 								<code className="text-slate-300">sc.exe stop/start</code>),
@@ -228,9 +231,9 @@ export default function Services() {
 									<li key={s.name} className="text-sm text-slate-300">
 										<span className="text-amber-400">{s.name}</span>
 										{s.app_name && (
-											<span className="text-slate-500"> → {s.app_name}</span>
+											<span className="text-slate-400"> → {s.app_name}</span>
 										)}
-										<span className="text-slate-500"> · {s.state}</span>
+										<span className="text-slate-400"> · {s.state}</span>
 									</li>
 								))}
 							</ul>
@@ -253,7 +256,7 @@ function Stat({
 }) {
 	return (
 		<div className="glass-card p-6">
-			<p className="text-xs font-black text-slate-300 uppercase tracking-widest">
+			<p className="text-sm font-black text-slate-300 uppercase tracking-widest">
 				{label}
 			</p>
 			<p className={`text-3xl font-black mt-2 ${accent}`}>{value}</p>

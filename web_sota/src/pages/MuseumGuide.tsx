@@ -37,10 +37,16 @@ export default function MuseumGuide() {
 		return <div className="p-8 text-white">Curating the collections...</div>;
 
 	return (
-		<div className="space-y-8 page-enter animate-in fade-in slide-in-from-bottom-4 duration-800">
+		<div
+			data-testid="museum-guide-page"
+			className="space-y-8 page-enter animate-in fade-in slide-in-from-bottom-4 duration-800"
+		>
 			<div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
 				<div>
-					<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
+					<h1
+						data-testid="museum-guide-title"
+						className="text-4xl font-black gradient-text tracking-tighter uppercase italic"
+					>
 						Museum Guide
 					</h1>
 					<p className="text-slate-300 font-medium tracking-tight uppercase flex items-center gap-2">
@@ -50,12 +56,14 @@ export default function MuseumGuide() {
 				</div>
 				<div className="flex items-center gap-3">
 					<button
+						data-testid="museum-guide-action"
 						type="button"
 						className="px-5 py-2.5 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] text-white text-xs font-black uppercase tracking-widest border border-white/[0.1] transition-all"
 					>
 						MuseumsQuartier (MQ)
 					</button>
 					<button
+						data-testid="museum-guide-action"
 						type="button"
 						className="px-5 py-2.5 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] text-white text-xs font-black uppercase tracking-widest border border-white/[0.1] transition-all"
 					>
@@ -87,6 +95,7 @@ export default function MuseumGuide() {
 
 						<div className="flex items-center gap-4">
 							<button
+								data-testid="museum-guide-action"
 								type="button"
 								className="px-6 py-3 rounded-xl bg-white text-black text-xs font-black uppercase tracking-widest shadow-xl flex items-center gap-2"
 							>
@@ -111,6 +120,7 @@ export default function MuseumGuide() {
 							masterpieces to SOTA digital art.
 						</p>
 						<button
+							data-testid="museum-guide-action"
 							type="button"
 							className="text-sm font-black text-indigo-400 uppercase tracking-widest flex items-center gap-2 group-hover:translate-x-1 transition-all"
 						>
@@ -126,7 +136,7 @@ export default function MuseumGuide() {
 							<p className="text-xl font-black text-white leading-none uppercase tracking-tighter mb-4">
 								Mumok
 							</p>
-							<p className="text-xs text-slate-300 italic">
+							<p className="text-sm text-slate-300 italic">
 								"The dark stone monolith of modern art."
 							</p>
 						</div>
@@ -137,7 +147,7 @@ export default function MuseumGuide() {
 							<p className="text-xl font-black text-white leading-none uppercase tracking-tighter mb-4">
 								Leopold
 							</p>
-							<p className="text-xs text-slate-300 italic">
+							<p className="text-sm text-slate-300 italic">
 								"Schiele and Klimt at their peaks."
 							</p>
 						</div>
@@ -178,6 +188,7 @@ export default function MuseumGuide() {
 								</span>
 							</div>
 							<button
+								data-testid="museum-guide-action"
 								type="button"
 								className="p-2 rounded-lg bg-white/[0.02] hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all"
 							>

@@ -2,6 +2,7 @@
 LLM API Routes
 Support for Ollama (local) and cloud LLM providers (OpenAI, Anthropic)
 """
+
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
@@ -19,6 +20,7 @@ router = APIRouter()
 
 class GenerateRequest(BaseModel):
     """Request model for text generation"""
+
     prompt: str
     model: Optional[str] = None
     system: Optional[str] = None
@@ -27,6 +29,7 @@ class GenerateRequest(BaseModel):
 
 class LLMConfigUpdate(BaseModel):
     """Request model for updating LLM configuration"""
+
     provider: str
     settings: Dict[str, Any]
 
@@ -37,18 +40,14 @@ async def get_llm_status(db: Session = Depends(get_db)):
     config = settings_service.get_llm_config(db)
     provider = config["provider"]
 
-    status = {
-        "provider": provider,
-        "config": config,
-        "providers_status": {}
-    }
+    status = {"provider": provider, "config": config, "providers_status": {}}
 
     # Check Ollama status
     ollama_connected = await ollama_service.check_connection()
     status["providers_status"]["ollama"] = {
         "connected": ollama_connected,
         "base_url": config["ollama"]["base_url"],
-        "default_model": config["ollama"]["default_model"]
+        "default_model": config["ollama"]["default_model"],
     }
     if ollama_connected:
         running = await ollama_service.get_running_models()
@@ -65,18 +64,18 @@ async def get_llm_status(db: Session = Depends(get_db)):
                 status["providers_status"][cloud_provider] = {
                     "configured": True,
                     "connected": connected,
-                    "default_model": config[cloud_provider]["default_model"]
+                    "default_model": config[cloud_provider]["default_model"],
                 }
             except Exception as e:
                 status["providers_status"][cloud_provider] = {
                     "configured": True,
                     "connected": False,
-                    "error": str(e)
+                    "error": str(e),
                 }
         else:
             status["providers_status"][cloud_provider] = {
                 "configured": False,
-                "message": f"{cloud_provider.title()} API key not configured"
+                "message": f"{cloud_provider.title()} API key not configured",
             }
 
     return status
@@ -86,27 +85,24 @@ async def get_llm_status(db: Session = Depends(get_db)):
 async def list_models():
     """List all available Ollama models"""
     models = await ollama_service.list_models()
-    
+
     if not models:
         return {
             "models": [],
-            "message": "No models found. Pull a model with: ollama pull llama3.2:3b"
+            "message": "No models found. Pull a model with: ollama pull llama3.2:3b",
         }
-    
-    return {
-        "models": models,
-        "default_model": ollama_service.default_model
-    }
+
+    return {"models": models, "default_model": ollama_service.default_model}
 
 
 @router.post("/models/{model_name}/load")
 async def load_model(model_name: str):
     """Load a model into memory"""
     result = await ollama_service.load_model(model_name)
-    
+
     if not result.get("success"):
         raise HTTPException(status_code=400, detail=result.get("error"))
-    
+
     return result
 
 
@@ -121,10 +117,10 @@ async def unload_model(model_name: str):
 async def pull_model(model_name: str):
     """Download a model from Ollama library"""
     result = await ollama_service.pull_model(model_name)
-    
+
     if not result.get("success"):
         raise HTTPException(status_code=400, detail=result.get("error"))
-    
+
     return result
 
 
@@ -132,10 +128,10 @@ async def pull_model(model_name: str):
 async def delete_model(model_name: str):
     """Delete a model"""
     result = await ollama_service.delete_model(model_name)
-    
+
     if not result.get("success"):
         raise HTTPException(status_code=400, detail=result.get("error"))
-    
+
     return result
 
 
@@ -163,20 +159,22 @@ async def generate_text(request: GenerateRequest, db: Session = Depends(get_db))
         result = await ollama_service.generate(
             prompt=request.prompt,
             model=request.model or config["ollama"]["default_model"],
-            system=request.system
+            system=request.system,
         )
     elif provider in ["openai", "anthropic"]:
         provider_enum = LLMProvider(provider)
         api_key = config[provider]["api_key"]
         if not api_key:
-            raise HTTPException(status_code=400, detail=f"{provider.title()} API key not configured")
+            raise HTTPException(
+                status_code=400, detail=f"{provider.title()} API key not configured"
+            )
 
         cloud_llm_service.configure_provider(provider_enum, api_key)
         result = await cloud_llm_service.generate(
             provider=provider_enum,
             prompt=request.prompt,
             model=request.model or config[provider]["default_model"],
-            system=request.system
+            system=request.system,
         )
     else:
         raise HTTPException(status_code=400, detail=f"Unsupported provider: {provider}")
@@ -208,10 +206,12 @@ async def get_llm_config(db: Session = Depends(get_db)):
 async def update_llm_config(request: LLMConfigUpdate, db: Session = Depends(get_db)):
     """Update LLM configuration"""
     try:
-        result = settings_service.update_llm_config(db, request.provider, request.settings)
+        settings_service.update_llm_config(db, request.provider, request.settings)
         return {"success": True, "message": "Configuration updated"}
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Failed to update config: {str(e)}")
+        raise HTTPException(
+            status_code=400, detail=f"Failed to update config: {str(e)}"
+        )
 
 
 @router.get("/providers")
@@ -224,22 +224,32 @@ async def get_available_providers():
                 "name": "Ollama (Local)",
                 "description": "Run LLMs locally on your machine",
                 "requires_api_key": False,
-                "models": ["llama3.2:3b", "llama3.2:1b", "llama3.1:8b", "mistral:7b", "qwen2.5:7b"]
+                "models": [
+                    "llama3.2:3b",
+                    "llama3.2:1b",
+                    "llama3.1:8b",
+                    "mistral:7b",
+                    "qwen2.5:7b",
+                ],
             },
             {
                 "id": "openai",
                 "name": "OpenAI",
                 "description": "GPT models via OpenAI API",
                 "requires_api_key": True,
-                "models": ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "gpt-3.5-turbo"]
+                "models": ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "gpt-3.5-turbo"],
             },
             {
                 "id": "anthropic",
                 "name": "Anthropic",
                 "description": "Claude models via Anthropic API",
                 "requires_api_key": True,
-                "models": ["claude-3-5-sonnet-20241022", "claude-3-5-haiku-20241022", "claude-3-opus-20240229"]
-            }
+                "models": [
+                    "claude-3-5-sonnet-20241022",
+                    "claude-3-5-haiku-20241022",
+                    "claude-3-opus-20240229",
+                ],
+            },
         ]
     }
 
@@ -255,37 +265,36 @@ async def get_recommended_models():
                 "size": "~2GB",
                 "use_case": "Fast general-purpose (default)",
                 "speed": "very-fast",
-                "quality": "good"
+                "quality": "good",
             },
             {
                 "name": "llama3.2:1b",
                 "size": "~1GB",
                 "use_case": "Ultra-fast, low resource",
                 "speed": "blazing-fast",
-                "quality": "decent"
+                "quality": "decent",
             },
             {
                 "name": "llama3.1:8b",
                 "size": "~4.5GB",
                 "use_case": "Better quality, still fast",
                 "speed": "fast",
-                "quality": "very-good"
+                "quality": "very-good",
             },
             {
                 "name": "mistral:7b",
                 "size": "~4GB",
                 "use_case": "Great for code and reasoning",
                 "speed": "fast",
-                "quality": "excellent"
+                "quality": "excellent",
             },
             {
                 "name": "qwen2.5:7b",
                 "size": "~4.5GB",
                 "use_case": "Multilingual, excellent",
                 "speed": "fast",
-                "quality": "excellent"
-            }
+                "quality": "excellent",
+            },
         ],
-        "note": "Recommended default: llama3.2:3b (best balance of speed and quality)"
+        "note": "Recommended default: llama3.2:3b (best balance of speed and quality)",
     }
-

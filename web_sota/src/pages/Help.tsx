@@ -28,9 +28,12 @@ export default function Help() {
 	}, []);
 
 	return (
-		<div className="space-y-8 page-enter max-w-4xl">
+		<div data-testid="help-page" className="space-y-8 page-enter max-w-4xl">
 			<div>
-				<h1 className="text-4xl font-black gradient-text tracking-tighter uppercase italic">
+				<h1
+					data-testid="help-title"
+					className="text-4xl font-black gradient-text tracking-tighter uppercase italic"
+				>
 					Help
 				</h1>
 				<p className="text-slate-300 mt-2 text-sm">
@@ -119,6 +122,7 @@ export default function Help() {
 						].map((p) => (
 							<a
 								key={p.path}
+								data-testid="help-nav-link"
 								href={p.path}
 								className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] text-slate-300 hover:text-white hover:border-cosmos-500/30 transition-colors"
 							>
@@ -182,7 +186,7 @@ export default function Help() {
 							</code>
 							:
 						</p>
-						<p className="text-xs font-mono text-slate-300">
+						<p className="text-sm font-mono text-slate-300">
 							calendar_today · todo_list · expense_summary · shopping_list ·
 							life_brief · fleet_overview · health · help
 						</p>

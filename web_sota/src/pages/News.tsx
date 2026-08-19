@@ -141,7 +141,7 @@ export default function News() {
 			{!error && data?.stats_payload && (
 				<div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
 					<div className="glass-card p-5">
-						<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+						<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 							Last 24h
 						</p>
 						<p
@@ -150,10 +150,10 @@ export default function News() {
 						>
 							{data.stats_payload.items_last_24h ?? 0}
 						</p>
-						<p className="text-xs text-slate-300 mt-1">stories ingested</p>
+						<p className="text-sm text-slate-300 mt-1">stories ingested</p>
 					</div>
 					<div className="glass-card p-5">
-						<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+						<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 							Feeds
 						</p>
 						<p
@@ -162,14 +162,14 @@ export default function News() {
 						>
 							{data.stats_payload.active_feeds ?? 0}
 						</p>
-						<p className="text-xs text-slate-300 mt-1">
+						<p className="text-sm text-slate-300 mt-1">
 							{data.stats_payload.degraded_feeds
 								? `${data.stats_payload.degraded_feeds} degraded`
 								: "all healthy"}
 						</p>
 					</div>
 					<div className="glass-card p-5">
-						<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+						<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 							Critical
 						</p>
 						<p
@@ -178,10 +178,10 @@ export default function News() {
 						>
 							{data.stats_payload.critical_items ?? 0}
 						</p>
-						<p className="text-xs text-slate-300 mt-1">high-urgency items</p>
+						<p className="text-sm text-slate-300 mt-1">high-urgency items</p>
 					</div>
 					<div className="glass-card p-5">
-						<p className="text-xs font-black text-slate-300 uppercase tracking-widest mb-1">
+						<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
 							Archive
 						</p>
 						<p
@@ -190,7 +190,7 @@ export default function News() {
 						>
 							{data.stats_payload.total_items ?? 0}
 						</p>
-						<p className="text-xs text-slate-300 mt-1">items indexed</p>
+						<p className="text-sm text-slate-300 mt-1">items indexed</p>
 					</div>
 				</div>
 			)}
@@ -255,7 +255,7 @@ export default function News() {
 										{(item.urgency_score ?? 0).toFixed(1)}
 									</span>
 								</div>
-								<p className="text-xs text-slate-300 mt-2 line-clamp-2">
+								<p className="text-sm text-slate-300 mt-2 line-clamp-2">
 									{item.distilled_summary || item.summary}
 								</p>
 								<div className="flex items-center justify-between mt-3">
@@ -294,11 +294,11 @@ export default function News() {
 							</h2>
 							{data.morning.slice(0, 10).map((item) => (
 								<div key={item.id} className="glass-card p-4">
-									<p className="text-xs font-bold text-slate-200 leading-relaxed">
+									<p className="text-sm font-bold text-slate-200 leading-relaxed">
 										{item.title}
 									</p>
 									{item.distilled_summary && (
-										<p className="text-xs text-slate-300 mt-1 line-clamp-2">
+										<p className="text-sm text-slate-300 mt-1 line-clamp-2">
 											{item.distilled_summary}
 										</p>
 									)}
@@ -309,7 +309,7 @@ export default function News() {
 				</div>
 			)}
 
-			<p className="text-xs text-slate-300 uppercase tracking-widest flex items-center gap-2">
+			<p className="text-sm text-slate-300 uppercase tracking-widest flex items-center gap-2">
 				<Newspaper className="w-3.5 h-3.5" />
 				Upstream: aiwatcher-mcp :10946 · MCP:
 				vienna_news(operation=top|trends|search|morning) · REST /api/news/*

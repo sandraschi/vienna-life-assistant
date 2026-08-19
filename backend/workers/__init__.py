@@ -21,6 +21,6 @@ Usage:
 
 # Import main components for easy access
 from .celery_app import celery_app
-from .tasks import *
+from .tasks import *  # noqa: F403
 
-__all__ = ['celery_app']
+__all__ = ["celery_app"]

@@ -40,7 +40,7 @@ export default function TransitWidget() {
 		return (
 			<div className="glass-card p-6 h-full flex flex-col justify-center items-center">
 				<Zap className="w-8 h-8 text-cosmos-500 animate-pulse" />
-				<p className="text-xs uppercase tracking-widest mt-4 font-bold text-slate-300">
+				<p className="text-sm uppercase tracking-widest mt-4 font-bold text-slate-300">
 					Connecting Wiener Linien...
 				</p>
 			</div>
@@ -61,7 +61,7 @@ export default function TransitWidget() {
 						<h3 className="font-bold text-sm tracking-widest uppercase mb-0.5">
 							Transit Monitor
 						</h3>
-						<p className="text-xs text-slate-300 font-medium">
+						<p className="text-sm text-slate-300 font-medium">
 							9. Alsergrund Real-time
 						</p>
 					</div>
