@@ -100,7 +100,7 @@ export default function Contacts() {
 			)}
 
 			<div className="glass-card p-6">
-				<h2 className="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+				<h2 className="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
 					<Plus className="w-4 h-4 text-cosmos-400" /> Add contact
 				</h2>
 				<div className="grid grid-cols-1 md:grid-cols-5 gap-3">
@@ -144,7 +144,7 @@ export default function Contacts() {
 						type="button"
 						data-testid="contact-add"
 						onClick={addContact}
-						className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest"
+						className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-sm font-black uppercase tracking-widest"
 					>
 						Add
 					</button>
@@ -153,7 +153,7 @@ export default function Contacts() {
 
 			{birthdays.length > 0 && (
 				<div className="glass-card p-6 border-amber-500/30">
-					<h2 className="text-xs font-black text-amber-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+					<h2 className="text-sm font-black text-amber-400 uppercase tracking-widest mb-4 flex items-center gap-2">
 						<Cake className="w-4 h-4" /> Birthdays in the next 30 days
 					</h2>
 					<div className="flex flex-wrap gap-3">

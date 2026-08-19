@@ -64,7 +64,7 @@ export default function ConcertHall() {
 							</div>
 						))}
 					</div>
-					<span className="text-xs font-black uppercase tracking-widest pl-4 pr-6 text-slate-300 group-hover:text-white transition-colors">
+					<span className="text-sm font-black uppercase tracking-widest pl-4 pr-6 text-slate-300 group-hover:text-white transition-colors">
 						3 Exclusive Highlights
 					</span>
 				</div>
@@ -77,7 +77,7 @@ export default function ConcertHall() {
 
 				<div className="relative p-12 lg:p-16 h-full flex flex-col justify-end min-h-[500px]">
 					<div className="flex items-center gap-2 mb-6">
-						<span className="px-4 py-1 rounded-full bg-cosmos-500/20 text-cosmos-400 text-xs font-black uppercase tracking-[0.3em] border border-cosmos-500/30">
+						<span className="px-4 py-1 rounded-full bg-cosmos-500/20 text-cosmos-400 text-sm font-black uppercase tracking-[0.3em] border border-cosmos-500/30">
 							Masterpiece Tonight
 						</span>
 					</div>
@@ -122,7 +122,7 @@ export default function ConcertHall() {
 								<Music className="w-6 h-6" />
 							</div>
 							<span
-								className={`text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full border ${
+								className={`text-sm font-black uppercase tracking-widest px-3 py-1.5 rounded-full border ${
 									concert.tickets === "Sold Out"
 										? "bg-red-500/10 text-red-500 border-red-500/20"
 										: concert.tickets === "Last Few"

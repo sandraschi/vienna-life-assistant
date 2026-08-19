@@ -123,7 +123,7 @@ export default function Notes() {
 								<AlertTriangle className="w-4 h-4 text-amber-400" />
 							)}
 							<span
-								className={`text-xs font-black uppercase tracking-widest ${
+								className={`text-sm font-black uppercase tracking-widest ${
 									online && status.authenticated
 										? "text-emerald-400"
 										: "text-amber-400"
@@ -172,7 +172,7 @@ export default function Notes() {
 							{notebooks.map((n) => (
 								<span
 									key={n.id}
-									className="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
+									className="px-3 py-1.5 rounded-full text-sm font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
 									data-testid={`notebook-${n.id}`}
 								>
 									{n.display_name ?? n.name ?? n.id}
@@ -182,7 +182,7 @@ export default function Notes() {
 					)}
 
 					<div className="glass-card p-6">
-						<h2 className="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+						<h2 className="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
 							<Plus className="w-4 h-4 text-emerald-400" /> New page
 						</h2>
 						<div className="grid grid-cols-1 md:grid-cols-4 gap-3">
@@ -220,7 +220,7 @@ export default function Notes() {
 								type="button"
 								onClick={createPage}
 								disabled={creating || !online || !form.title}
-								className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white text-xs font-black uppercase tracking-widest h-fit"
+								className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white text-sm font-black uppercase tracking-widest h-fit"
 							>
 								{creating ? "Creating…" : "Create page"}
 							</button>
@@ -254,7 +254,7 @@ export default function Notes() {
 													"_blank",
 												)
 											}
-											className="flex items-center gap-1 text-xs text-cosmos-400 uppercase tracking-widest shrink-0"
+											className="flex items-center gap-1 text-sm text-cosmos-400 uppercase tracking-widest shrink-0"
 										>
 											Open <ArrowUpRight className="w-3 h-3" />
 										</button>

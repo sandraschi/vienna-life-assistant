@@ -275,7 +275,7 @@ export default function Chat() {
 					</p>
 				</div>
 				<div className="flex items-center gap-2">
-					<span className="text-xs uppercase tracking-wider text-slate-300 font-mono bg-slate-800 px-2 py-0.5 rounded">
+					<span className="text-sm uppercase tracking-wider text-slate-300 font-mono bg-slate-800 px-2 py-0.5 rounded">
 						skill:vienna-guide
 					</span>
 					<select
@@ -315,7 +315,7 @@ export default function Chat() {
 							type="button"
 							onClick={() => sendMessage(p.message)}
 							disabled={sending}
-							className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border border-cosmos-500/30 text-cosmos-400 bg-cosmos-500/10 hover:bg-cosmos-500/20 transition-colors"
+							className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-black uppercase tracking-widest border border-cosmos-500/30 text-cosmos-400 bg-cosmos-500/10 hover:bg-cosmos-500/20 transition-colors"
 						>
 							<Sparkles className="w-3 h-3" />
 							{p.label}
@@ -326,7 +326,7 @@ export default function Chat() {
 						type="button"
 						key={p}
 						onClick={() => setInput(p)}
-						className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs border border-cosmos-500/20 text-slate-300 hover:text-cosmos-400 hover:border-cosmos-500/40 transition-colors bg-slate-900/50"
+						className="flex items-center gap-1 px-2.5 py-1 rounded-full text-sm border border-cosmos-500/20 text-slate-300 hover:text-cosmos-400 hover:border-cosmos-500/40 transition-colors bg-slate-900/50"
 					>
 						<Sparkles className="w-2.5 h-2.5" />
 						{p}
@@ -372,7 +372,7 @@ export default function Chat() {
 											<span
 												// biome-ignore lint/suspicious/noArrayIndexKey: tool trace has no stable id
 												key={ti}
-												className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
+												className="flex items-center gap-1 px-2 py-0.5 rounded-full text-sm font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
 												title={`${JSON.stringify(t.args)}`}
 											>
 												<Wrench className="w-2.5 h-2.5" />

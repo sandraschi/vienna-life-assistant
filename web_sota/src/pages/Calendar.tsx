@@ -91,7 +91,7 @@ export default function Calendar() {
 							key={k}
 							type="button"
 							onClick={() => setTab(k)}
-							className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors ${
+							className={`px-4 py-2 rounded-xl text-sm font-black uppercase tracking-widest transition-colors ${
 								tab === k
 									? "bg-cosmos-500 text-white"
 									: "text-slate-300 hover:text-white"
@@ -104,7 +104,7 @@ export default function Calendar() {
 			</div>
 
 			<div className="glass-card p-6" data-testid="calendar-add">
-				<h2 className="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+				<h2 className="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
 					<Plus className="w-4 h-4 text-cosmos-400" /> Add event
 				</h2>
 				<div className="grid grid-cols-1 md:grid-cols-6 gap-3">
@@ -147,7 +147,7 @@ export default function Calendar() {
 						type="button"
 						data-testid="event-add"
 						onClick={addEvent}
-						className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest md:col-span-6 justify-self-start"
+						className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-sm font-black uppercase tracking-widest md:col-span-6 justify-self-start"
 					>
 						Add event
 					</button>
@@ -163,7 +163,7 @@ export default function Calendar() {
 			<div className="glass-card overflow-hidden">
 				<div className="px-8 py-5 border-b border-white/[0.06] flex items-center gap-3">
 					<CalendarIcon className="w-5 h-5 text-cosmos-400" />
-					<span className="text-xs font-black uppercase tracking-widest text-white">
+					<span className="text-sm font-black uppercase tracking-widest text-white">
 						{events.length} events
 					</span>
 				</div>
@@ -192,7 +192,7 @@ export default function Calendar() {
 									{ev.location}
 								</p>
 							</div>
-							<span className="text-xs font-black text-cosmos-400 uppercase tracking-widest self-center">
+							<span className="text-sm font-black text-cosmos-400 uppercase tracking-widest self-center">
 								{ev.category}
 							</span>
 						</div>

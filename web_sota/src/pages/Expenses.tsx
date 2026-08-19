@@ -90,7 +90,7 @@ export default function Expenses() {
 			)}
 
 			<div className="glass-card p-6">
-				<h2 className="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+				<h2 className="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
 					<Plus className="w-4 h-4 text-emerald-400" /> Log expense
 				</h2>
 				<div className="grid grid-cols-1 md:grid-cols-6 gap-3">
@@ -137,7 +137,7 @@ export default function Expenses() {
 						type="button"
 						onClick={addExpense}
 						disabled={!form.store || form.amount_eur <= 0}
-						className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white text-xs font-black uppercase tracking-widest justify-self-start"
+						className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white text-sm font-black uppercase tracking-widest justify-self-start"
 					>
 						Log expense
 					</button>
@@ -186,7 +186,7 @@ export default function Expenses() {
 
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 				<div className="glass-card p-8 space-y-4">
-					<h2 className="text-xs font-black text-white uppercase tracking-widest">
+					<h2 className="text-sm font-black text-white uppercase tracking-widest">
 						By category
 					</h2>
 					{summary?.categories.map((c) => (
@@ -212,7 +212,7 @@ export default function Expenses() {
 				<div className="glass-card overflow-hidden">
 					<div className="px-8 py-5 border-b border-white/[0.06] flex items-center gap-3">
 						<CreditCard className="w-5 h-5 text-cosmos-400" />
-						<span className="text-xs font-black uppercase tracking-widest text-white">
+						<span className="text-sm font-black uppercase tracking-widest text-white">
 							Recent
 						</span>
 					</div>

@@ -106,7 +106,7 @@ export default function Help() {
 							Pages
 						</h2>
 					</div>
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs font-bold uppercase tracking-widest">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm font-bold uppercase tracking-widest">
 						{[
 							{ path: "/", label: "Dashboard" },
 							{ path: "/chat", label: "Chat", icon: MessageCircle },
@@ -139,7 +139,7 @@ export default function Help() {
 							REST API
 						</h2>
 					</div>
-					<div className="bg-black/40 rounded-xl p-4 font-mono text-xs text-slate-300 space-y-2 border border-white/[0.06] overflow-x-auto">
+					<div className="bg-black/40 rounded-xl p-4 font-mono text-sm text-slate-300 space-y-2 border border-white/[0.06] overflow-x-auto">
 						<p>
 							<span className="text-emerald-400">GET</span>{" "}
 							/api/life/calendar/today
@@ -220,7 +220,7 @@ export default function Help() {
 							{Object.entries(caps.features).map(([k, v]) => (
 								<span
 									key={k}
-									className={`px-2 py-1 rounded-lg text-xs font-black uppercase tracking-widest border ${
+									className={`px-2 py-1 rounded-lg text-sm font-black uppercase tracking-widest border ${
 										v
 											? "border-emerald-500/30 text-emerald-400 bg-emerald-500/10"
 											: "border-white/10 text-slate-300"

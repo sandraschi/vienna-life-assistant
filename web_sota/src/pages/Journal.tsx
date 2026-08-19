@@ -185,7 +185,7 @@ export default function Journal() {
 				{/* Compose + on this day */}
 				<div className="space-y-6">
 					<div className="glass-card p-6">
-						<h2 className="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+						<h2 className="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
 							<Plus className="w-4 h-4 text-cosmos-400" /> Log today
 						</h2>
 						<div className="space-y-3">
@@ -228,7 +228,7 @@ export default function Journal() {
 								className="input-dark"
 							/>
 							<div className="flex items-center gap-3">
-								<span className="text-xs font-black text-slate-300 uppercase tracking-widest">
+								<span className="text-sm font-black text-slate-300 uppercase tracking-widest">
 									Mood
 								</span>
 								<input
@@ -251,7 +251,7 @@ export default function Journal() {
 								type="button"
 								onClick={addEntry}
 								disabled={!form.title && !form.body.trim()}
-								className="w-full py-2.5 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 disabled:opacity-40 text-white text-xs font-black uppercase tracking-widest transition-colors"
+								className="w-full py-2.5 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 disabled:opacity-40 text-white text-sm font-black uppercase tracking-widest transition-colors"
 							>
 								Log entry
 							</button>
@@ -260,7 +260,7 @@ export default function Journal() {
 
 					{onThisDay.length > 0 && (
 						<div className="glass-card p-6 border-amber-500/20">
-							<h2 className="text-xs font-black text-amber-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+							<h2 className="text-sm font-black text-amber-400 uppercase tracking-widest mb-4 flex items-center gap-2">
 								<History className="w-4 h-4" /> On this day
 							</h2>
 							<div className="space-y-4">
@@ -301,7 +301,7 @@ export default function Journal() {
 							<button
 								type="button"
 								onClick={clearSearch}
-								className="px-4 py-2 rounded-xl bg-white/[0.03] border border-white/[0.08] text-xs font-black uppercase tracking-widest text-slate-300 hover:text-white transition-colors"
+								className="px-4 py-2 rounded-xl bg-white/[0.03] border border-white/[0.08] text-sm font-black uppercase tracking-widest text-slate-300 hover:text-white transition-colors"
 							>
 								Clear
 							</button>
@@ -363,7 +363,7 @@ export default function Journal() {
 												.map((t) => (
 													<span
 														key={t}
-														className="px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
+														className="px-2 py-0.5 rounded-full text-sm font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
 													>
 														{t}
 													</span>

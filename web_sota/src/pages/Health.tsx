@@ -201,7 +201,7 @@ export default function Health() {
 							type="button"
 							data-testid={`health-tab-${key}`}
 							onClick={() => setTab(key)}
-							className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors flex items-center gap-2 ${
+							className={`px-4 py-2 rounded-xl text-sm font-black uppercase tracking-widest transition-colors flex items-center gap-2 ${
 								tab === key
 									? "bg-cosmos-500 text-white"
 									: "text-slate-300 hover:text-white"
@@ -281,7 +281,7 @@ export default function Health() {
 					{tab === "visits" && (
 						<>
 							<div className="glass-card p-6">
-								<h2 className="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+								<h2 className="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
 									<Plus className="w-4 h-4 text-cosmos-400" /> Log a doctor
 									visit
 								</h2>
@@ -339,7 +339,7 @@ export default function Health() {
 										type="button"
 										data-testid="visit-add"
 										onClick={addVisit}
-										className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest"
+										className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-sm font-black uppercase tracking-widest"
 									>
 										Log visit
 									</button>
@@ -359,7 +359,7 @@ export default function Health() {
 												<p className="text-sm font-black text-white uppercase tracking-tight">
 													{v.doctor}
 												</p>
-												<span className="text-xs font-bold text-slate-300 uppercase tracking-widest">
+												<span className="text-sm font-bold text-slate-300 uppercase tracking-widest">
 													{v.date}
 												</span>
 											</div>
@@ -392,7 +392,7 @@ export default function Health() {
 					{tab === "meds" && (
 						<>
 							<div className="glass-card p-6">
-								<h2 className="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+								<h2 className="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
 									<Plus className="w-4 h-4 text-emerald-400" /> Add medication
 								</h2>
 								<div className="grid grid-cols-1 md:grid-cols-6 gap-3">
@@ -455,7 +455,7 @@ export default function Health() {
 										type="button"
 										data-testid="med-add"
 										onClick={addMed}
-										className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-black uppercase tracking-widest md:col-span-6 justify-self-start"
+										className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-black uppercase tracking-widest md:col-span-6 justify-self-start"
 									>
 										Add medication
 									</button>
@@ -494,7 +494,7 @@ export default function Health() {
 											)}
 										</div>
 										<span
-											className={`text-xs font-black uppercase tracking-widest ${m.active ? "text-emerald-400" : "text-slate-300"}`}
+											className={`text-sm font-black uppercase tracking-widest ${m.active ? "text-emerald-400" : "text-slate-300"}`}
 										>
 											{m.active ? "Active" : "Stopped"}
 										</span>
@@ -512,12 +512,12 @@ export default function Health() {
 					{tab === "vitals" && (
 						<>
 							<div className="glass-card p-6">
-								<h2 className="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+								<h2 className="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
 									<Plus className="w-4 h-4 text-amber-400" /> Record vitals
 								</h2>
 								<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
 									<label className="flex flex-col gap-1">
-										<span className="text-xs text-slate-300 uppercase tracking-widest">
+										<span className="text-sm text-slate-300 uppercase tracking-widest">
 											Systolic
 										</span>
 										<input
@@ -534,7 +534,7 @@ export default function Health() {
 										/>
 									</label>
 									<label className="flex flex-col gap-1">
-										<span className="text-xs text-slate-300 uppercase tracking-widest">
+										<span className="text-sm text-slate-300 uppercase tracking-widest">
 											Diastolic
 										</span>
 										<input
@@ -551,7 +551,7 @@ export default function Health() {
 										/>
 									</label>
 									<label className="flex flex-col gap-1">
-										<span className="text-xs text-slate-300 uppercase tracking-widest">
+										<span className="text-sm text-slate-300 uppercase tracking-widest">
 											Pulse
 										</span>
 										<input
@@ -565,7 +565,7 @@ export default function Health() {
 										/>
 									</label>
 									<label className="flex flex-col gap-1">
-										<span className="text-xs text-slate-300 uppercase tracking-widest">
+										<span className="text-sm text-slate-300 uppercase tracking-widest">
 											Weight (kg)
 										</span>
 										<input
@@ -586,7 +586,7 @@ export default function Health() {
 										type="button"
 										data-testid="vitals-add"
 										onClick={addVitals}
-										className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-black uppercase tracking-widest col-span-2 md:col-span-4 justify-self-start"
+										className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-sm font-black uppercase tracking-widest col-span-2 md:col-span-4 justify-self-start"
 									>
 										Record
 									</button>
@@ -613,7 +613,7 @@ export default function Health() {
 												{v.weight_kg} kg
 											</p>
 										)}
-										<span className="ml-auto text-xs text-slate-300 uppercase tracking-widest">
+										<span className="ml-auto text-sm text-slate-300 uppercase tracking-widest">
 											{v.date} {v.time}
 										</span>
 									</div>
@@ -630,7 +630,7 @@ export default function Health() {
 					{tab === "conditions" && (
 						<>
 							<div className="glass-card p-6">
-								<h2 className="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+								<h2 className="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
 									<Plus className="w-4 h-4 text-cosmos-400" /> Add condition
 								</h2>
 								<div className="grid grid-cols-1 md:grid-cols-5 gap-3">
@@ -691,7 +691,7 @@ export default function Health() {
 										type="button"
 										data-testid="condition-add"
 										onClick={addCondition}
-										className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest justify-self-start"
+										className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-sm font-black uppercase tracking-widest justify-self-start"
 									>
 										Add condition
 									</button>
@@ -716,7 +716,7 @@ export default function Health() {
 										</div>
 										<div className="text-right shrink-0">
 											<span
-												className={`text-xs font-black uppercase tracking-widest ${
+												className={`text-sm font-black uppercase tracking-widest ${
 													c.status === "resolved"
 														? "text-emerald-400"
 														: c.status === "seasonal"

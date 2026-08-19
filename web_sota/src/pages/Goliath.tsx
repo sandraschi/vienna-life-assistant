@@ -144,7 +144,7 @@ export default function Goliath() {
 								<h3 className="text-sm font-black text-white uppercase tracking-tight">
 									CPU
 								</h3>
-								<span className="ml-auto text-xs font-mono text-slate-400">
+								<span className="ml-auto text-sm font-mono text-slate-400">
 									{cpu?.cores} cores / {cpu?.threads} threads
 								</span>
 							</div>
@@ -188,7 +188,7 @@ export default function Goliath() {
 								<h3 className="text-sm font-black text-white uppercase tracking-tight">
 									RAM
 								</h3>
-								<span className="ml-auto text-xs font-mono text-slate-400">
+								<span className="ml-auto text-sm font-mono text-slate-400">
 									{data.ram.used_gb}/{data.ram.total_gb} GB
 								</span>
 							</div>
@@ -211,7 +211,7 @@ export default function Goliath() {
 								<h3 className="text-sm font-black text-white uppercase tracking-tight">
 									GPU
 								</h3>
-								<span className="ml-auto text-xs font-mono text-slate-400">
+								<span className="ml-auto text-sm font-mono text-slate-400">
 									{gpu ? "RTX 4090" : "no GPU"}
 								</span>
 							</div>
@@ -231,7 +231,7 @@ export default function Goliath() {
 											<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-2">
 												GPU processes
 											</p>
-											<ul className="space-y-0.5 text-xs text-slate-400">
+											<ul className="space-y-0.5 text-sm text-slate-400">
 												{gpu.apps.map((a) => (
 													<li key={a.pid}>
 														<span className="text-slate-300">{a.name}</span>{" "}
@@ -275,7 +275,7 @@ export default function Goliath() {
 													{p.name}{" "}
 													<span className="text-slate-400">({p.pid})</span>
 												</span>
-												<span className="font-mono text-xs text-slate-400">
+												<span className="font-mono text-sm text-slate-400">
 													{p.cpu_percent}%
 												</span>
 											</li>
@@ -297,7 +297,7 @@ export default function Goliath() {
 														{a.name}{" "}
 														<span className="text-slate-400">({a.pid})</span>
 													</span>
-													<span className="font-mono text-xs text-slate-400">
+													<span className="font-mono text-sm text-slate-400">
 														{a.vram_gb} GB VRAM
 													</span>
 												</li>
@@ -331,7 +331,7 @@ function Gauge({
 				: "bg-emerald-500";
 	return (
 		<div>
-			<div className="flex justify-between text-xs font-black uppercase tracking-widest text-slate-300 mb-1">
+			<div className="flex justify-between text-sm font-black uppercase tracking-widest text-slate-300 mb-1">
 				<span>{label}</span>
 				<span>{Math.round(value)}%</span>
 			</div>

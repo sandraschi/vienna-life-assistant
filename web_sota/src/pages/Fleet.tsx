@@ -101,7 +101,7 @@ export default function Fleet() {
 					</p>
 				</div>
 				<div className="flex items-center gap-3">
-					<label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-300 cursor-pointer">
+					<label className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-slate-300 cursor-pointer">
 						<input
 							type="checkbox"
 							checked={probe}
@@ -176,7 +176,7 @@ export default function Fleet() {
 						key={f}
 						type="button"
 						onClick={() => setFilter(f)}
-						className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border transition-all ${
+						className={`px-4 py-2 rounded-xl text-sm font-black uppercase tracking-widest border transition-all ${
 							filter === f
 								? "bg-cosmos-500/20 border-cosmos-500/40 text-white"
 								: "bg-white/[0.02] border-white/[0.06] text-slate-300 hover:text-white"
@@ -235,7 +235,7 @@ export default function Fleet() {
 							</p>
 
 							<div className="flex items-center justify-between mt-auto pt-2 border-t border-white/[0.04]">
-								<span className="text-xs font-mono text-slate-300">
+								<span className="text-sm font-mono text-slate-300">
 									{ship.frontend_port > 0
 										? `:${ship.frontend_port}`
 										: ship.backend_port > 0
@@ -243,7 +243,7 @@ export default function Fleet() {
 											: "no port"}
 								</span>
 								{quarantined ? (
-									<span className="flex items-center gap-1 text-xs font-black text-amber-500 uppercase">
+									<span className="flex items-center gap-1 text-sm font-black text-amber-500 uppercase">
 										<AlertTriangle className="w-3 h-3" />
 										{ship.status}
 									</span>
@@ -252,12 +252,12 @@ export default function Fleet() {
 										href={ship.url}
 										target="_blank"
 										rel="noopener noreferrer"
-										className="flex items-center gap-1 text-xs font-black text-cosmos-400 uppercase tracking-widest hover:text-white transition-colors"
+										className="flex items-center gap-1 text-sm font-black text-cosmos-400 uppercase tracking-widest hover:text-white transition-colors"
 									>
 										Open <ExternalLink className="w-3 h-3" />
 									</a>
 								) : (
-									<span className="text-xs text-slate-300 uppercase">
+									<span className="text-sm text-slate-300 uppercase">
 										stdio only
 									</span>
 								)}

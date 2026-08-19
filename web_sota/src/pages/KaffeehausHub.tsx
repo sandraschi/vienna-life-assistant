@@ -73,7 +73,7 @@ export default function KaffeehausHub() {
 
 					<div className="relative p-10 h-full flex flex-col justify-end min-h-[400px]">
 						<div className="flex items-center gap-2 mb-4">
-							<span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-black uppercase tracking-[0.2em] border border-emerald-500/30">
+							<span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-black uppercase tracking-[0.2em] border border-emerald-500/30">
 								Sandra's High-Level Choice
 							</span>
 						</div>
@@ -169,7 +169,7 @@ export default function KaffeehausHub() {
 							</div>
 							<div className="flex flex-col items-end gap-2">
 								<span
-									className={`text-xs font-black uppercase tracking-widest px-2 py-1 rounded-full ${
+									className={`text-sm font-black uppercase tracking-widest px-2 py-1 rounded-full ${
 										cafe.status === "Crowded"
 											? "bg-red-500/10 text-red-500"
 											: cafe.status === "Busy"
@@ -180,7 +180,7 @@ export default function KaffeehausHub() {
 									{cafe.status}
 								</span>
 								{cafe.is_aida && (
-									<span className="text-xs font-black uppercase tracking-widest px-2 py-1 rounded-full bg-[#E89AB0]/20 text-[#E89AB0] border border-[#E89AB0]/30 animate-pulse">
+									<span className="text-sm font-black uppercase tracking-widest px-2 py-1 rounded-full bg-[#E89AB0]/20 text-[#E89AB0] border border-[#E89AB0]/30 animate-pulse">
 										AIDA Special
 									</span>
 								)}
@@ -200,7 +200,7 @@ export default function KaffeehausHub() {
 						<div className="flex items-center justify-between pt-4 border-t border-white/[0.04]">
 							<div className="flex items-center gap-1.5">
 								<MapPin className="w-3 h-3 text-slate-300" />
-								<span className="text-xs font-bold text-slate-300 uppercase tracking-widest">
+								<span className="text-sm font-bold text-slate-300 uppercase tracking-widest">
 									{cafe.is_favorite ? "ALSERGRUND" : "INNER CITY"}
 								</span>
 							</div>

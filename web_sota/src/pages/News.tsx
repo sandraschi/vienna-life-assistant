@@ -197,7 +197,7 @@ export default function News() {
 
 			{data?.trends && data.trends.length > 0 && !results && (
 				<div className="glass-card p-6">
-					<h2 className="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+					<h2 className="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
 						<TrendingUp className="w-4 h-4 text-emerald-400" /> Trending this
 						week
 					</h2>
@@ -207,7 +207,7 @@ export default function News() {
 								key={t.tag}
 								type="button"
 								onClick={() => runSearch(t.tag)}
-								className="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest bg-white/[0.03] border border-white/[0.08] text-slate-300 hover:text-cosmos-400 hover:border-cosmos-500/40 transition-colors"
+								className="px-3 py-1.5 rounded-full text-sm font-bold uppercase tracking-widest bg-white/[0.03] border border-white/[0.08] text-slate-300 hover:text-cosmos-400 hover:border-cosmos-500/40 transition-colors"
 								data-testid={`trend-${t.tag}`}
 							>
 								{t.tag} <span className="text-slate-300 ml-1">{t.count}</span>
@@ -233,7 +233,7 @@ export default function News() {
 			) : (
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 					<div className="space-y-3">
-						<h2 className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+						<h2 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
 							<Flame className="w-4 h-4 text-amber-400" />
 							{results ? `Search: ${query}` : "Top stories"}
 						</h2>
@@ -250,7 +250,7 @@ export default function News() {
 										{item.title}
 									</p>
 									<span
-										className={`text-xs font-black uppercase tracking-widest shrink-0 ${urgencyColor(item.urgency_score ?? 0)}`}
+										className={`text-sm font-black uppercase tracking-widest shrink-0 ${urgencyColor(item.urgency_score ?? 0)}`}
 									>
 										{(item.urgency_score ?? 0).toFixed(1)}
 									</span>
@@ -263,18 +263,18 @@ export default function News() {
 										{tagList(item.tags).map((t) => (
 											<span
 												key={t}
-												className="px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
+												className="px-2 py-0.5 rounded-full text-sm font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
 											>
 												{t}
 											</span>
 										))}
 									</div>
-									<span className="text-xs text-slate-300 font-bold uppercase tracking-widest shrink-0 ml-2">
+									<span className="text-sm text-slate-300 font-bold uppercase tracking-widest shrink-0 ml-2">
 										{fmtTime(item.published_at)}
 									</span>
 								</div>
 								{item.url && (
-									<span className="flex items-center gap-1 text-xs text-cosmos-400 uppercase tracking-widest mt-2">
+									<span className="flex items-center gap-1 text-sm text-cosmos-400 uppercase tracking-widest mt-2">
 										Open <ArrowUpRight className="w-3 h-3" />
 									</span>
 								)}
@@ -289,7 +289,7 @@ export default function News() {
 
 					{data?.morning && data.morning.length > 0 && !results && (
 						<div className="space-y-3">
-							<h2 className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+							<h2 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
 								<Newspaper className="w-4 h-4 text-cosmos-400" /> Morning digest
 							</h2>
 							{data.morning.slice(0, 10).map((item) => (

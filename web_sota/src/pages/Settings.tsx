@@ -186,7 +186,7 @@ export default function Settings() {
 
 						<label
 							htmlFor="llm-provider-select"
-							className="block text-xs font-black text-slate-300 uppercase tracking-widest"
+							className="block text-sm font-black text-slate-300 uppercase tracking-widest"
 						>
 							Provider
 						</label>
@@ -362,14 +362,14 @@ function ModelSelect({
 			<div className="flex items-center justify-between">
 				<label
 					htmlFor="llm-model-select"
-					className="text-xs font-black text-slate-300 uppercase tracking-widest"
+					className="text-sm font-black text-slate-300 uppercase tracking-widest"
 				>
 					{label}
 				</label>
 				<button
 					type="button"
 					onClick={onRefresh}
-					className="flex items-center gap-1 text-xs text-cosmos-400 uppercase tracking-widest"
+					className="flex items-center gap-1 text-sm text-cosmos-400 uppercase tracking-widest"
 				>
 					{loading ? (
 						<Loader2 className="w-3 h-3 animate-spin" />

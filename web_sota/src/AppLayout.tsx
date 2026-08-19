@@ -63,7 +63,7 @@ function NavSection({
 				type="button"
 				onClick={onToggle}
 				title={collapsed ? `Expand ${title}` : `Collapse ${title}`}
-				className="w-full px-4 mb-2 flex items-center justify-between text-xs font-black text-slate-300 uppercase tracking-[0.3em] hover:text-white transition-colors"
+				className="w-full px-4 mb-2 flex items-center justify-between text-sm font-black text-slate-300 uppercase tracking-[0.3em] hover:text-white transition-colors"
 			>
 				<span>{title}</span>
 				<span className="flex items-center gap-2">
@@ -279,7 +279,7 @@ export default function AppLayout() {
 							<span className="font-black text-sm text-white uppercase tracking-[0.3em] leading-none mb-1">
 								Vienna Life
 							</span>
-							<span className="text-xs text-slate-300 font-bold uppercase tracking-widest leading-none">
+							<span className="text-sm text-slate-300 font-bold uppercase tracking-widest leading-none">
 								Assistant SOTA
 							</span>
 						</div>
@@ -412,7 +412,7 @@ export default function AppLayout() {
 								data-testid="backend-dot"
 							></div>
 							<span
-								className={`text-xs font-black uppercase tracking-widest ${backendOk === null ? "text-slate-300" : backendOk ? "text-emerald-500" : "text-red-400"}`}
+								className={`text-sm font-black uppercase tracking-widest ${backendOk === null ? "text-slate-300" : backendOk ? "text-emerald-500" : "text-red-400"}`}
 							>
 								{backendOk === null
 									? "Connecting..."

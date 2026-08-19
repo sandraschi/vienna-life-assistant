@@ -38,7 +38,7 @@ export default function ShoppingOffers() {
 			<div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
 				<div>
 					<div className="flex items-center gap-2 mb-2">
-						<span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-black uppercase tracking-widest border border-emerald-500/20">
+						<span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-sm font-black uppercase tracking-widest border border-emerald-500/20">
 							Price Monitor
 						</span>
 					</div>
@@ -55,16 +55,16 @@ export default function ShoppingOffers() {
 				</div>
 
 				<div className="flex items-center gap-4 bg-white/[0.03] p-1.5 rounded-2xl border border-white/[0.06]">
-					<div className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-black uppercase tracking-widest flex items-center gap-2">
+					<div className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-black uppercase tracking-widest flex items-center gap-2">
 						<Store className="w-3.5 h-3.5" />
 						All Stores
 					</div>
-					<div className="px-4 py-2 text-slate-300 text-xs font-black uppercase tracking-widest hover:text-white transition-colors cursor-pointer border border-transparent">
+					<div className="px-4 py-2 text-slate-300 text-sm font-black uppercase tracking-widest hover:text-white transition-colors cursor-pointer border border-transparent">
 						Favorites Only
 					</div>
 					<div className="w-px h-4 bg-white/[0.1] mx-2"></div>
 					<div className="flex items-center gap-2 pr-4 text-slate-300 hover:text-white transition-colors cursor-pointer group">
-						<span className="text-xs font-black uppercase tracking-widest">
+						<span className="text-sm font-black uppercase tracking-widest">
 							Catgeory
 						</span>
 						<ChevronDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
@@ -152,7 +152,7 @@ export default function ShoppingOffers() {
 								<div
 									className={`w-3 h-3 rounded-full ${offer.store === "spar" ? "bg-red-600" : "bg-amber-500"}`}
 								></div>
-								<span className="text-xs font-black text-slate-300 uppercase tracking-widest">
+								<span className="text-sm font-black text-slate-300 uppercase tracking-widest">
 									{offer.store}
 								</span>
 							</div>
@@ -179,7 +179,7 @@ export default function ShoppingOffers() {
 									<span className="text-2xl font-black text-white italic tracking-tighter">
 										€{offer.price.toFixed(2)}
 									</span>
-									<span className="text-xs font-black text-emerald-500">
+									<span className="text-sm font-black text-emerald-500">
 										-{offer.discount}%
 									</span>
 								</div>

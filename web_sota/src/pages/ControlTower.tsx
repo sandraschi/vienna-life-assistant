@@ -115,7 +115,7 @@ export default function ControlTower() {
 				</div>
 				<div className="flex items-center gap-3">
 					{data?.generated_at && (
-						<span className="text-xs font-mono text-slate-400">
+						<span className="text-sm font-mono text-slate-400">
 							{new Date(data.generated_at).toLocaleTimeString()}
 						</span>
 					)}
@@ -135,7 +135,7 @@ export default function ControlTower() {
 					{Object.entries(data.source_health).map(([k, v]) => (
 						<div
 							key={k}
-							className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-300"
+							className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-slate-300"
 							data-testid={`ct-source-${k}`}
 						>
 							<span className={`w-2 h-2 rounded-full ${sourceColor(v)}`} />
@@ -274,7 +274,7 @@ export default function ControlTower() {
 									{g.gpu && <Bar label="GPU" value={g.gpu.util_pct} />}
 								</div>
 								<div className="flex items-center justify-between">
-									<span className="text-xs font-mono text-slate-400">
+									<span className="text-sm font-mono text-slate-400">
 										{g.ram.used_gb}/{g.ram.total_gb} GB ·{" "}
 										{g.gpu
 											? `${g.gpu.vram_used_gb}/${g.gpu.vram_total_gb} GB VRAM`
@@ -282,7 +282,7 @@ export default function ControlTower() {
 									</span>
 									<span
 										data-testid="ct-goliath-verdict"
-										className={`rounded-xl border px-3 py-1 text-xs font-black uppercase tracking-widest ${verdictColor(g.verdict.label)}`}
+										className={`rounded-xl border px-3 py-1 text-sm font-black uppercase tracking-widest ${verdictColor(g.verdict.label)}`}
 									>
 										{g.verdict.label}
 									</span>
@@ -313,7 +313,7 @@ function Bar({ label, value }: { label: string; value: number }) {
 				: "bg-emerald-500";
 	return (
 		<div>
-			<div className="flex justify-between text-xs font-black uppercase tracking-widest text-slate-300 mb-1">
+			<div className="flex justify-between text-sm font-black uppercase tracking-widest text-slate-300 mb-1">
 				<span>{label}</span>
 				<span>{Math.round(value)}%</span>
 			</div>

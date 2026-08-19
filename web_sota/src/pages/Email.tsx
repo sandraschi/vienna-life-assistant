@@ -150,7 +150,7 @@ export default function Email() {
 								<AlertTriangle className="w-4 h-4 text-amber-400" />
 							)}
 							<span
-								className={`text-xs font-black uppercase tracking-widest ${online ? "text-emerald-400" : "text-amber-400"}`}
+								className={`text-sm font-black uppercase tracking-widest ${online ? "text-emerald-400" : "text-amber-400"}`}
 							>
 								{online ? "email-mcp connected" : "email-mcp offline"}
 							</span>
@@ -217,7 +217,7 @@ export default function Email() {
 					{/* Compose + status KPIs */}
 					<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 						<div className="glass-card p-6">
-							<h2 className="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+							<h2 className="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
 								<Send className="w-4 h-4 text-emerald-400" /> Compose
 							</h2>
 							<div className="space-y-3">
@@ -260,7 +260,7 @@ export default function Email() {
 										!compose.subject ||
 										!compose.body
 									}
-									className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white text-xs font-black uppercase tracking-widest transition-colors"
+									className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white text-sm font-black uppercase tracking-widest transition-colors"
 								>
 									{sending ? "Sending…" : "Send"}
 								</button>
@@ -294,7 +294,7 @@ export default function Email() {
 										<button
 											type="button"
 											onClick={() => setSelected(null)}
-											className="text-xs font-black uppercase tracking-widest text-cosmos-400 shrink-0"
+											className="text-sm font-black uppercase tracking-widest text-cosmos-400 shrink-0"
 										>
 											Close
 										</button>
@@ -324,7 +324,7 @@ export default function Email() {
 													)}
 													{e.subject || "(no subject)"}
 												</p>
-												<span className="text-xs text-slate-300 font-bold uppercase tracking-widest shrink-0">
+												<span className="text-sm text-slate-300 font-bold uppercase tracking-widest shrink-0">
 													{fmtDate(e.date)}
 												</span>
 											</div>

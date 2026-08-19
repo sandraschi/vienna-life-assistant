@@ -117,7 +117,7 @@ export default function Onboarding() {
 					</p>
 					<a
 						href="/"
-						className="inline-block px-6 py-3 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest"
+						className="inline-block px-6 py-3 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-sm font-black uppercase tracking-widest"
 						data-testid="onboarding-go"
 					>
 						Go to dashboard
@@ -146,7 +146,7 @@ export default function Onboarding() {
 					{STEPS.map((s, i) => (
 						<div
 							key={s.key}
-							className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border transition-colors ${
+							className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-black uppercase tracking-widest border transition-colors ${
 								i === step
 									? "bg-cosmos-500 text-white border-cosmos-500"
 									: "text-slate-300 border-white/[0.08]"
@@ -294,7 +294,7 @@ export default function Onboarding() {
 						type="button"
 						onClick={() => setStep((s) => Math.max(0, s - 1))}
 						disabled={step === 0 || saving}
-						className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-slate-300 hover:text-white disabled:opacity-30 text-xs font-black uppercase tracking-widest"
+						className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-slate-300 hover:text-white disabled:opacity-30 text-sm font-black uppercase tracking-widest"
 					>
 						<ArrowLeft className="w-3.5 h-3.5" /> Back
 					</button>
@@ -302,7 +302,7 @@ export default function Onboarding() {
 						<button
 							type="button"
 							onClick={() => setStep((s) => Math.min(3, s + 1))}
-							className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest"
+							className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-sm font-black uppercase tracking-widest"
 							data-testid="onb-next"
 						>
 							Next <ArrowRight className="w-3.5 h-3.5" />
@@ -312,7 +312,7 @@ export default function Onboarding() {
 							type="button"
 							onClick={saveStep}
 							disabled={saving}
-							className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white text-xs font-black uppercase tracking-widest"
+							className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white text-sm font-black uppercase tracking-widest"
 							data-testid="onb-finish"
 						>
 							{saving ? "Saving…" : "Finish setup"}

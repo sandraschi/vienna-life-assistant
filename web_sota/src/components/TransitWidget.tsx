@@ -75,7 +75,7 @@ export default function TransitWidget() {
 						type="button"
 						key={station}
 						onClick={() => setActiveTab(station as keyof TransitData)}
-						className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider transition-all border-b-2 ${
+						className={`flex-1 py-3 text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
 							activeTab === station
 								? "border-emerald-500 text-white bg-white/[0.02]"
 								: "border-transparent text-slate-300 hover:text-slate-300"
@@ -119,7 +119,7 @@ export default function TransitWidget() {
 								) : (
 									<Zap className="w-3 h-3 text-orange-400" />
 								)}
-								<span className="text-xs text-slate-300 font-medium tracking-wide uppercase">
+								<span className="text-sm text-slate-300 font-medium tracking-wide uppercase">
 									{departure.type}
 								</span>
 							</div>
@@ -137,7 +137,7 @@ export default function TransitWidget() {
 
 			<div className="p-3 bg-white/[0.02] border-t border-white/[0.06] flex items-center justify-center gap-2">
 				<AlertCircle className="w-3 h-3 text-amber-500" />
-				<span className="text-xs font-bold text-slate-300 uppercase tracking-widest">
+				<span className="text-sm font-bold text-slate-300 uppercase tracking-widest">
 					Normal operation on all lines
 				</span>
 			</div>

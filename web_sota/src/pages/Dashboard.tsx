@@ -384,7 +384,7 @@ export default function Dashboard() {
 								<span
 									// biome-ignore lint/suspicious/noArrayIndexKey: alerts have no stable id
 									key={i}
-									className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border ${
+									className={`px-3 py-1 rounded-full text-sm font-bold uppercase tracking-widest border ${
 										a.level === "warn"
 											? "bg-amber-500/10 border-amber-500/30 text-amber-400"
 											: "bg-cosmos-500/10 border-cosmos-500/20 text-cosmos-400"
@@ -411,7 +411,7 @@ export default function Dashboard() {
 							type="button"
 							onClick={askPa}
 							disabled={paBusy || !paQuestion.trim()}
-							className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 disabled:opacity-40 text-white text-xs font-black uppercase tracking-widest transition-colors"
+							className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 disabled:opacity-40 text-white text-sm font-black uppercase tracking-widest transition-colors"
 							data-testid="pa-ask-send"
 						>
 							{paBusy ? "Thinking…" : <Send className="w-3.5 h-3.5" />}
@@ -510,7 +510,7 @@ export default function Dashboard() {
 							type="button"
 							key={link.label}
 							onClick={() => navigate(link.path)}
-							className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] hover:border-white/20 text-slate-300 hover:text-white text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap"
+							className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] hover:border-white/20 text-slate-300 hover:text-white text-sm font-black uppercase tracking-widest transition-all whitespace-nowrap"
 						>
 							<Icon className="w-3.5 h-3.5" />
 							{link.label}
@@ -553,7 +553,7 @@ export default function Dashboard() {
 										</p>
 									</div>
 									<span
-										className={`text-xs font-black uppercase tracking-widest shrink-0 ${item.tickets === "Available" ? "text-emerald-500" : item.tickets === "Last Few" ? "text-amber-500" : "text-red-500"}`}
+										className={`text-sm font-black uppercase tracking-widest shrink-0 ${item.tickets === "Available" ? "text-emerald-500" : item.tickets === "Last Few" ? "text-amber-500" : "text-red-500"}`}
 									>
 										{item.tickets}
 									</span>
@@ -606,7 +606,7 @@ export default function Dashboard() {
 						<button
 							type="button"
 							onClick={() => navigate("/vienna/coffee")}
-							className="w-full py-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white text-xs font-black uppercase tracking-[0.2em] transition-all border border-white/[0.06] mt-2"
+							className="w-full py-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white text-sm font-black uppercase tracking-[0.2em] transition-all border border-white/[0.06] mt-2"
 						>
 							Vienna Guide
 						</button>

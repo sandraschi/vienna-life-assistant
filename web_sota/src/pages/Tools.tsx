@@ -75,7 +75,7 @@ export default function Tools() {
 							{Object.entries(caps.features).map(([key, on]) => (
 								<span
 									key={key}
-									className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest border ${
+									className={`px-3 py-1 rounded-full text-sm font-black uppercase tracking-widest border ${
 										on
 											? "border-emerald-500/40 text-emerald-400 bg-emerald-500/10"
 											: "border-slate-700 text-slate-300"

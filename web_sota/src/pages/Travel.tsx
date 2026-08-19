@@ -152,7 +152,7 @@ export default function Travel() {
 			)}
 
 			<div className="glass-card p-6">
-				<h2 className="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+				<h2 className="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
 					<Plus className="w-4 h-4 text-cosmos-400" /> Plan a trip
 				</h2>
 				<div className="grid grid-cols-1 md:grid-cols-6 gap-3">
@@ -206,7 +206,7 @@ export default function Travel() {
 						type="button"
 						data-testid="trip-add"
 						onClick={addTrip}
-						className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest justify-self-start"
+						className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-sm font-black uppercase tracking-widest justify-self-start"
 					>
 						Plan
 					</button>
@@ -241,12 +241,12 @@ export default function Travel() {
 										</div>
 										<div className="text-right">
 											<span
-												className={`text-xs font-black uppercase tracking-widest ${statusColor[trip.status] || "text-slate-300"}`}
+												className={`text-sm font-black uppercase tracking-widest ${statusColor[trip.status] || "text-slate-300"}`}
 											>
 												{trip.status}
 											</span>
 											<p
-												className={`text-xs font-black uppercase tracking-widest mt-1 ${days < 0 ? "text-slate-300" : days <= 3 ? "text-red-400" : "text-amber-400"}`}
+												className={`text-sm font-black uppercase tracking-widest mt-1 ${days < 0 ? "text-slate-300" : days <= 3 ? "text-red-400" : "text-amber-400"}`}
 											>
 												{days < 0 ? "started" : `T-${days}`}
 											</p>
@@ -270,7 +270,7 @@ export default function Travel() {
 													type="button"
 													key={item.id}
 													onClick={() => togglePack(item)}
-													className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border transition-colors ${
+													className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold uppercase tracking-widest border transition-colors ${
 														item.done
 															? "text-slate-300 border-slate-700 bg-slate-900/40 line-through"
 															: "text-slate-300 border-white/[0.08] hover:border-emerald-500/40 hover:text-emerald-400"
@@ -287,7 +287,7 @@ export default function Travel() {
 										<button
 											type="button"
 											onClick={() => addPackItem(trip.id)}
-											className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border border-dashed border-white/[0.15] text-slate-300 hover:text-white transition-colors"
+											className="flex items-center gap-1 px-3 py-1 rounded-full text-sm font-bold uppercase tracking-widest border border-dashed border-white/[0.15] text-slate-300 hover:text-white transition-colors"
 										>
 											<Plus className="w-3 h-3" /> item
 										</button>
@@ -305,7 +305,7 @@ export default function Travel() {
 
 				<div className="space-y-6">
 					<div className="glass-card p-8 space-y-4 h-fit">
-						<h2 className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+						<h2 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
 							<FileText className="w-4 h-4 text-cosmos-400" /> Documents
 						</h2>
 						{docs.map((d) => (
@@ -324,7 +324,7 @@ export default function Travel() {
 									)}
 								</div>
 								<span
-									className={`text-xs font-black uppercase tracking-widest ${docWarn(d.expiry_date)}`}
+									className={`text-sm font-black uppercase tracking-widest ${docWarn(d.expiry_date)}`}
 								>
 									{daysUntil(d.expiry_date)}d
 								</span>

@@ -148,7 +148,7 @@ export default function Services() {
 					<div className="glass-card overflow-x-auto">
 						<table className="w-full text-left">
 							<thead>
-								<tr className="border-b border-white/[0.06] text-xs font-black text-slate-300 uppercase tracking-widest">
+								<tr className="border-b border-white/[0.06] text-sm font-black text-slate-300 uppercase tracking-widest">
 									<th className="px-4 py-3">Service</th>
 									<th className="px-4 py-3">State</th>
 									<th className="px-4 py-3">Start</th>
@@ -166,7 +166,7 @@ export default function Services() {
 										<td className="px-4 py-2.5">
 											<div className="font-bold text-white">{s.name}</div>
 											{s.display_name !== s.name && (
-												<div className="text-xs text-slate-400">
+												<div className="text-sm text-slate-400">
 													{s.display_name}
 												</div>
 											)}
@@ -176,15 +176,15 @@ export default function Services() {
 												<span
 													className={`w-2 h-2 rounded-full ${stateColor(s.state)}`}
 												/>
-												<span className="uppercase text-xs font-black text-slate-300">
+												<span className="uppercase text-sm font-black text-slate-300">
 													{s.state}
 												</span>
 											</div>
 										</td>
-										<td className="px-4 py-2.5 text-xs font-mono text-slate-400">
+										<td className="px-4 py-2.5 text-sm font-mono text-slate-400">
 											{s.start_mode}
 										</td>
-										<td className="px-4 py-2.5 text-xs font-mono text-slate-400">
+										<td className="px-4 py-2.5 text-sm font-mono text-slate-400">
 											{s.pid > 0 ? s.pid : "—"}
 										</td>
 										<td className="px-4 py-2.5">
@@ -196,7 +196,7 @@ export default function Services() {
 													NSSM
 												</span>
 											) : (
-												<span className="text-xs text-slate-400 uppercase">
+												<span className="text-sm text-slate-400 uppercase">
 													sc
 												</span>
 											)}
@@ -277,7 +277,7 @@ function FilterChip({
 		<button
 			type="button"
 			onClick={onClick}
-			className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border transition-all ${
+			className={`px-4 py-2 rounded-xl text-sm font-black uppercase tracking-widest border transition-all ${
 				active
 					? "bg-cosmos-500/20 border-cosmos-500/40 text-white"
 					: "bg-white/[0.02] border-white/[0.06] text-slate-300 hover:text-white"
