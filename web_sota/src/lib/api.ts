@@ -52,6 +52,10 @@ export const API = {
 	health: "/health",
 	capabilities: "/api/capabilities",
 	fleetOverview: (probe = 0) => `/api/fleet/overview?probe=${probe}`,
+	controlTower: (probe = 1, fresh = 0) =>
+		`/api/control-tower?probe=${probe}&fresh=${fresh}`,
+	services: "/api/services",
+	goliath: "/api/goliath",
 	dashboard: "/api/dashboard",
 	llmStatus: "/api/llm/status",
 	llmProviders: "/api/llm/providers",

@@ -19,19 +19,22 @@ def test_journal_streak_counts_consecutive_days(db):
 
 
 def test_journal_on_this_day_returns_previous_years(db):
-    # Seed has no Aug-03 previous-year entry; add one and re-check.
+    # Seed a previous-year entry dated exactly today (month/day) and re-check.
+    from datetime import date
+
+    last_year = date.today().replace(year=date.today().year - 1)
     life_db.add_row(
         db,
         JournalEntry,
         {
-            "date": "2025-08-03",
+            "date": last_year.isoformat(),
             "title": "Last year on this day",
             "body": "…",
             "mood": 7,
         },
     )
     hits = life_db.journal_on_this_day(db)
-    assert any("2025-08-03" == e["date"] for e in hits)
+    assert any(last_year.isoformat() == e["date"] for e in hits)
 
 
 def test_journal_search_matches_title_and_tags(db):

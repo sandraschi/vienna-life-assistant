@@ -1,10 +1,14 @@
+import type { LucideIcon } from "lucide-react";
 import {
 	Anchor,
 	Bell,
 	BookOpen,
 	Calendar,
+	ChevronDown,
 	ChevronRight,
 	Coffee,
+	Cpu,
+	Gauge,
 	Grid3X3,
 	HeartPulse,
 	Home,
@@ -22,6 +26,7 @@ import {
 	Receipt,
 	ScrollText,
 	Search,
+	Server,
 	Settings,
 	ShoppingCart,
 	Sparkles,
@@ -35,6 +40,94 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 import useZoom from "./lib/use-zoom";
 import { cn } from "./lib/utils";
 
+type NavItem = { title: string; icon: LucideIcon; path: string };
+
+/** A collapsible sidebar group: clickable header with item count + chevron. */
+function NavSection({
+	title,
+	count,
+	collapsed,
+	onToggle,
+	children,
+}: {
+	title: string;
+	count: number;
+	collapsed: boolean;
+	onToggle: () => void;
+	children: React.ReactNode;
+}) {
+	return (
+		<div>
+			<button
+				type="button"
+				onClick={onToggle}
+				title={collapsed ? `Expand ${title}` : `Collapse ${title}`}
+				className="w-full px-4 mb-2 flex items-center justify-between text-xs font-black text-slate-300 uppercase tracking-[0.3em] hover:text-white transition-colors"
+			>
+				<span>{title}</span>
+				<span className="flex items-center gap-2">
+					<span className="rounded-full bg-white/[0.06] px-1.5 py-0.5 text-[10px] text-slate-300">
+						{count}
+					</span>
+					<ChevronDown
+						className={`w-3.5 h-3.5 transition-transform duration-300 ${
+							collapsed ? "" : "rotate-180"
+						}`}
+					/>
+				</span>
+			</button>
+			{!collapsed && <div className="space-y-1">{children}</div>}
+		</div>
+	);
+}
+
+/** A single nav link - full label when the rail is expanded, icon-only when collapsed. */
+function SidebarItem({
+	item,
+	active,
+	rail,
+	end = false,
+	accent = false,
+}: {
+	item: NavItem;
+	active: boolean;
+	rail: boolean;
+	end?: boolean;
+	accent?: boolean;
+}) {
+	const Icon = item.icon;
+	return (
+		<NavLink
+			key={item.path}
+			to={item.path}
+			end={end}
+			className={cn(
+				"nav-item group",
+				accent && "border-l-2 border-transparent",
+				active &&
+					(accent
+						? "active border-l-emerald-500 bg-emerald-500/[0.03]"
+						: "active"),
+				rail && "justify-center px-0",
+			)}
+		>
+			<Icon
+				className={`w-5 h-5 flex-shrink-0 transition-colors ${
+					accent ? "group-hover:text-emerald-400" : "group-hover:text-white"
+				}`}
+			/>
+			{!rail && (
+				<span className="font-bold text-sm uppercase tracking-widest">
+					{item.title}
+				</span>
+			)}
+			{!rail && active && !accent && (
+				<ChevronRight className="w-3.5 h-3.5 ml-auto opacity-40 group-hover:opacity-100 transition-opacity" />
+			)}
+		</NavLink>
+	);
+}
+
 export default function AppLayout() {
 	useZoom();
 	const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -46,6 +139,32 @@ export default function AppLayout() {
 			return false;
 		}
 	});
+
+	// Persisted per-section collapse state (default: the long Life group folded).
+	const [collapsedSections, setCollapsedSections] = useState<
+		Record<string, boolean>
+	>(() => {
+		try {
+			const raw = localStorage.getItem("vilife-sidebar-sections");
+			return raw
+				? (JSON.parse(raw) as Record<string, boolean>)
+				: { life: true };
+		} catch {
+			return { life: true };
+		}
+	});
+
+	const toggleSection = (key: string) => {
+		setCollapsedSections((prev) => {
+			const next = { ...prev, [key]: !prev[key] };
+			try {
+				localStorage.setItem("vilife-sidebar-sections", JSON.stringify(next));
+			} catch {
+				/* ignore */
+			}
+			return next;
+		});
+	};
 
 	const toggleTheme = () => {
 		const light = !isLight;
@@ -124,7 +243,10 @@ export default function AppLayout() {
 	];
 
 	const systemNav = [
+		{ title: "Control Tower", icon: Gauge, path: "/control-tower" },
 		{ title: "Fleet Command", icon: Anchor, path: "/fleet" },
+		{ title: "Services", icon: Server, path: "/services" },
+		{ title: "Goliath", icon: Cpu, path: "/goliath" },
 		{ title: "Settings", icon: Settings, path: "/settings" },
 	];
 
@@ -162,6 +284,7 @@ export default function AppLayout() {
 						</div>
 					)}
 					<button
+						type="button"
 						onClick={() => setIsSidebarOpen(!isSidebarOpen)}
 						className="ml-auto w-8 h-8 rounded-xl flex items-center justify-center text-slate-300 hover:text-white hover:bg-white/[0.05] transition-all flex-shrink-0"
 						title={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
@@ -175,129 +298,89 @@ export default function AppLayout() {
 				</div>
 
 				<nav className="flex-1 px-4 py-4 space-y-8 overflow-y-auto no-scrollbar">
-					{/* Main Section */}
-					<div>
-						{isSidebarOpen && (
-							<p className="px-4 mb-4 text-xs font-black text-slate-300 uppercase tracking-[0.3em]">
-								Fleet SOTA
-							</p>
-						)}
-						<div className="space-y-1">
-							{mainNav.map((item) => (
-								<NavLink
-									key={item.path}
-									to={item.path}
-									end={item.path === "/"}
-									className={cn(
-										"nav-item group",
-										isActive(item.path) && "active",
-										!isSidebarOpen && "justify-center px-0",
-									)}
-								>
-									<item.icon className="w-5 h-5 flex-shrink-0 transition-colors group-hover:text-white" />
-									{isSidebarOpen && (
-										<span className="font-bold text-sm uppercase tracking-widest">
-											{item.title}
-										</span>
-									)}
-									{isSidebarOpen && isActive(item.path) && (
-										<ChevronRight className="w-3.5 h-3.5 ml-auto opacity-40 group-hover:opacity-100 transition-opacity" />
-									)}
-								</NavLink>
-							))}
-						</div>
-					</div>
+					{isSidebarOpen ? (
+						<>
+							<NavSection
+								title="Fleet SOTA"
+								count={mainNav.length}
+								collapsed={!!collapsedSections.main}
+								onToggle={() => toggleSection("main")}
+							>
+								{mainNav.map((item) => (
+									<SidebarItem
+										key={item.path}
+										item={item}
+										active={isActive(item.path)}
+										rail={false}
+										end={item.path === "/"}
+									/>
+								))}
+							</NavSection>
 
-					<div>
-						{isSidebarOpen && (
-							<p className="px-4 mb-4 text-xs font-black text-slate-300 uppercase tracking-[0.3em]">
-								Life
-							</p>
-						)}
-						<div className="space-y-1">
-							{lifeNav.map((item) => (
-								<NavLink
-									key={item.path}
-									to={item.path}
-									className={cn(
-										"nav-item group",
-										isActive(item.path) && "active",
-										!isSidebarOpen && "justify-center px-0",
-									)}
-								>
-									<item.icon className="w-5 h-5 flex-shrink-0 transition-colors group-hover:text-white" />
-									{isSidebarOpen && (
-										<span className="font-bold text-sm uppercase tracking-widest">
-											{item.title}
-										</span>
-									)}
-								</NavLink>
-							))}
-						</div>
-					</div>
+							<NavSection
+								title="Life"
+								count={lifeNav.length}
+								collapsed={!!collapsedSections.life}
+								onToggle={() => toggleSection("life")}
+							>
+								{lifeNav.map((item) => (
+									<SidebarItem
+										key={item.path}
+										item={item}
+										active={isActive(item.path)}
+										rail={false}
+									/>
+								))}
+							</NavSection>
 
-					{/* Vienna Life Section */}
-					<div>
-						{isSidebarOpen && (
-							<p className="px-4 mb-4 text-xs font-black text-emerald-500/60 uppercase tracking-[0.3em]">
-								Vienna Today
-							</p>
-						)}
-						<div className="space-y-1">
-							{viennaLifeNav.map((item) => (
-								<NavLink
-									key={item.path}
-									to={item.path}
-									className={({ isActive }) =>
-										cn(
-											"nav-item border-l-2 border-transparent group",
-											isActive &&
-												"active border-l-emerald-500 bg-emerald-500/[0.03]",
-											!isSidebarOpen && "justify-center px-0",
-										)
-									}
-								>
-									<item.icon className="w-5 h-5 flex-shrink-0 transition-colors group-hover:text-emerald-400" />
-									{isSidebarOpen && (
-										<span className="font-bold text-sm uppercase tracking-widest">
-											{item.title}
-										</span>
-									)}
-								</NavLink>
-							))}
-						</div>
-					</div>
+							<NavSection
+								title="Vienna Today"
+								count={viennaLifeNav.length}
+								collapsed={!!collapsedSections.vienna}
+								onToggle={() => toggleSection("vienna")}
+							>
+								{viennaLifeNav.map((item) => (
+									<SidebarItem
+										key={item.path}
+										item={item}
+										active={isActive(item.path)}
+										rail={false}
+										accent
+									/>
+								))}
+							</NavSection>
 
-					{/* System Section */}
-					<div>
-						{isSidebarOpen && (
-							<p className="px-4 mb-4 text-xs font-black text-slate-300 uppercase tracking-[0.3em]">
-								System
-							</p>
-						)}
+							<NavSection
+								title="System"
+								count={systemNav.length}
+								collapsed={!!collapsedSections.system}
+								onToggle={() => toggleSection("system")}
+							>
+								{systemNav.map((item) => (
+									<SidebarItem
+										key={item.path}
+										item={item}
+										active={isActive(item.path)}
+										rail={false}
+									/>
+								))}
+							</NavSection>
+						</>
+					) : (
+						// Icon-only rail: ignore section collapse so every page stays reachable.
 						<div className="space-y-1">
-							{systemNav.map((item) => (
-								<NavLink
-									key={item.path}
-									to={item.path}
-									className={({ isActive }) =>
-										cn(
-											"nav-item group",
-											isActive && "active",
-											!isSidebarOpen && "justify-center px-0",
-										)
-									}
-								>
-									<item.icon className="w-5 h-5 flex-shrink-0" />
-									{isSidebarOpen && (
-										<span className="font-bold text-sm uppercase tracking-widest">
-											{item.title}
-										</span>
-									)}
-								</NavLink>
-							))}
+							{[...mainNav, ...lifeNav, ...viennaLifeNav, ...systemNav].map(
+								(item) => (
+									<SidebarItem
+										key={item.path}
+										item={item}
+										active={isActive(item.path)}
+										rail
+									/>
+								),
+							)}
 						</div>
-					</div>
+					)}
 				</nav>
 			</aside>
 
@@ -356,6 +439,7 @@ export default function AppLayout() {
 						</button>
 
 						<button
+							type="button"
 							className="p-3 rounded-2xl hover:bg-white/[0.05] text-slate-300 hover:text-white transition-all relative group"
 							aria-label="Notifications"
 						>

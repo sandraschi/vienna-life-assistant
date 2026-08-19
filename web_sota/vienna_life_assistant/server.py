@@ -262,6 +262,31 @@ async def fleet_overview(probe: int = Query(0, ge=0, le=1)):
     return build_fleet_overview(probe=bool(probe))
 
 
+@app.get("/api/control-tower")
+def control_tower(probe: int = Query(1, ge=0, le=1), fresh: int = Query(0, ge=0, le=1)):
+    """Fleet Control Tower aggregate (SPEC Phase 1+2): fleet services with
+    concurrent health, Windows services (naked sc + NSSM), Goliath PC stats."""
+    from vienna_life_assistant.control_tower import build_control_tower
+
+    return build_control_tower(probe=bool(probe), fresh=bool(fresh))
+
+
+@app.get("/api/services")
+def services():
+    """Every Windows service with NSSM classification (read-only)."""
+    from vienna_life_assistant.control_tower import windows_services
+
+    return windows_services()
+
+
+@app.get("/api/goliath")
+def goliath():
+    """Goliath host overview: CPU/RAM (psutil) + GPU (nvidia-smi) + verdict."""
+    from vienna_life_assistant.control_tower import goliath_stats
+
+    return goliath_stats()
+
+
 @app.get("/api/dashboard", response_model=dict[str, Any])
 async def get_dashboard_data():
     """Aggregated dashboard statistics — DB-backed life data."""

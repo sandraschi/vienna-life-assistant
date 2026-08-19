@@ -1,6 +1,8 @@
 # Fleet Control Tower - SPEC
 
-**Status:** Spec - not implemented
+**Status:** Phase 1+2 **implemented** (2026-08-19): `/api/control-tower`,
+`/api/services`, `/api/goliath` on backend 10922 + Control Tower, Services and
+Goliath pages on webapp 10988. Phases 3-6 remain spec.
 **Date:** 2026-08-19
 **Home:** vienna-life-assistant (VLA) backend 10922 / webapp 10988
 **Trajectory:** "Sandra the dev life assistant" - this is the **dev-life tab**

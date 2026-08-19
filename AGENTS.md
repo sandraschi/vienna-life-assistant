@@ -25,6 +25,8 @@ Set-Location web_sota
 
 - `web_sota/start.ps1` — port cleanup, strict Vite, backend uvicorn
 - `web_sota/vienna_life_assistant/server.py` — FastAPI app, `/mcp` mount, settings API
+- `web_sota/vienna_life_assistant/control_tower.py` — Fleet Control Tower (services sc+NSSM, Goliath CPU/GPU/RAM, aggregate) — standalone, migratable to meta_mcp
+- `web_sota/src/pages/ControlTower.tsx` / `Services.tsx` / `Goliath.tsx` — Control Tower, Windows services, Goliath PC pages
 - `web_sota/vienna_life_assistant/db.py` — SQLite engine/session/init
 - `web_sota/vienna_life_assistant/models.py` — life-domain tables (calendar, health, travel, contacts, household)
 - `web_sota/vienna_life_assistant/life_db.py` — CRUD + seed + aggregations

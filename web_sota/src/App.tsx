@@ -5,10 +5,12 @@ import Calendar from "./pages/Calendar";
 import Chat from "./pages/Chat";
 import ConcertHall from "./pages/ConcertHall";
 import Contacts from "./pages/Contacts";
+import ControlTower from "./pages/ControlTower";
 import Dashboard from "./pages/Dashboard";
 import Email from "./pages/Email";
 import Expenses from "./pages/Expenses";
 import Fleet from "./pages/Fleet";
+import Goliath from "./pages/Goliath";
 import Health from "./pages/Health";
 import Help from "./pages/Help";
 import Household from "./pages/Household";
@@ -19,6 +21,7 @@ import MuseumGuide from "./pages/MuseumGuide";
 import News from "./pages/News";
 import Notes from "./pages/Notes";
 import Onboarding from "./pages/Onboarding";
+import Services from "./pages/Services";
 import Settings from "./pages/Settings";
 import ShoppingOffers from "./pages/ShoppingOffers";
 import Skills from "./pages/Skills";
@@ -43,6 +46,9 @@ export default function App() {
 				<Route path="settings" element={<Settings />} />
 
 				<Route path="fleet" element={<Fleet />} />
+				<Route path="control-tower" element={<ControlTower />} />
+				<Route path="services" element={<Services />} />
+				<Route path="goliath" element={<Goliath />} />
 
 				{/* Vienna Life domain */}
 				<Route path="vienna/coffee" element={<KaffeehausHub />} />
