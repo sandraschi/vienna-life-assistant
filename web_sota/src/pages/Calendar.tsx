@@ -144,6 +144,7 @@ export default function Calendar() {
 						className="input-dark"
 					/>
 					<button
+						type="button"
 						data-testid="event-add"
 						onClick={addEvent}
 						className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest md:col-span-6 justify-self-start"

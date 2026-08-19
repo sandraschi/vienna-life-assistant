@@ -382,6 +382,7 @@ export default function Dashboard() {
 						<div className="flex flex-wrap gap-2 mt-4">
 							{paState.alerts.map((a, i) => (
 								<span
+									// biome-ignore lint/suspicious/noArrayIndexKey: alerts have no stable id
 									key={i}
 									className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border ${
 										a.level === "warn"
@@ -506,6 +507,7 @@ export default function Dashboard() {
 					const Icon = link.icon;
 					return (
 						<button
+							type="button"
 							key={link.label}
 							onClick={() => navigate(link.path)}
 							className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] hover:border-white/20 text-slate-300 hover:text-white text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap"
@@ -532,9 +534,11 @@ export default function Dashboard() {
 
 						<div className="space-y-4">
 							{viennaTips.music?.slice(0, 2).map((item, _i) => (
-								<div
+								<button
+									type="button"
+									// biome-ignore lint/suspicious/noArrayIndexKey: music items have no stable id
 									key={_i}
-									className="flex items-center gap-4 group cursor-pointer"
+									className="flex w-full items-center gap-4 text-left group cursor-pointer"
 									onClick={() => navigate("/vienna/music")}
 								>
 									<div className="w-10 h-10 rounded-xl bg-cosmos-500/10 text-cosmos-500 border border-cosmos-500/20 flex items-center justify-center group-hover:scale-110 transition-all shrink-0">
@@ -553,12 +557,14 @@ export default function Dashboard() {
 									>
 										{item.tickets}
 									</span>
-								</div>
+								</button>
 							))}
 							{viennaTips.coffee?.slice(0, 1).map((item, i) => (
-								<div
+								<button
+									type="button"
+									// biome-ignore lint/suspicious/noArrayIndexKey: coffee items have no stable id
 									key={`coffee-${i}`}
-									className="flex items-center gap-4 group cursor-pointer"
+									className="flex w-full items-center gap-4 text-left group cursor-pointer"
 									onClick={() => navigate("/vienna/coffee")}
 								>
 									<div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-all shrink-0">
@@ -572,12 +578,14 @@ export default function Dashboard() {
 											{item.status}
 										</p>
 									</div>
-								</div>
+								</button>
 							))}
 							{viennaTips.museums?.slice(0, 1).map((item, i) => (
-								<div
+								<button
+									type="button"
+									// biome-ignore lint/suspicious/noArrayIndexKey: museum items have no stable id
 									key={`museum-${i}`}
-									className="flex items-center gap-4 group cursor-pointer"
+									className="flex w-full items-center gap-4 text-left group cursor-pointer"
 									onClick={() => navigate("/vienna/museums")}
 								>
 									<div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center group-hover:scale-110 transition-all shrink-0">
@@ -591,11 +599,12 @@ export default function Dashboard() {
 											{item.title}
 										</p>
 									</div>
-								</div>
+								</button>
 							))}
 						</div>
 
 						<button
+							type="button"
 							onClick={() => navigate("/vienna/coffee")}
 							className="w-full py-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white text-xs font-black uppercase tracking-[0.2em] transition-all border border-white/[0.06] mt-2"
 						>
@@ -616,9 +625,9 @@ export default function Dashboard() {
 							</h3>
 						</div>
 						<div className="space-y-2">
-							{headlines.slice(0, 6).map((item, i) => (
+							{headlines.slice(0, 6).map((item) => (
 								<a
-									key={i}
+									key={item.url}
 									href={item.url}
 									target="_blank"
 									rel="noopener noreferrer"
@@ -644,6 +653,7 @@ export default function Dashboard() {
 						<div className="space-y-2">
 							{press.slice(0, 6).map((item, i) => (
 								<div
+									// biome-ignore lint/suspicious/noArrayIndexKey: press items have no stable id
 									key={i}
 									className="block p-3 rounded-xl bg-white/[0.01] border border-white/[0.04] hover:border-white/20 transition-all group"
 								>

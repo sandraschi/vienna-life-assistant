@@ -288,6 +288,7 @@ export default function Household() {
 										className="input-dark"
 									/>
 									<button
+										type="button"
 										data-testid="sub-add"
 										onClick={addSub}
 										className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-black uppercase tracking-widest justify-self-start"
@@ -325,6 +326,7 @@ export default function Household() {
 										<button
 											onClick={() => deleteSub(s)}
 											className="text-xs text-slate-300 hover:text-red-400 transition-colors uppercase tracking-widest"
+											type="button"
 											title="Delete"
 										>
 											×
@@ -389,6 +391,7 @@ export default function Household() {
 										className="input-dark"
 									/>
 									<button
+										type="button"
 										data-testid="task-add"
 										onClick={addTask}
 										className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-black uppercase tracking-widest justify-self-start"
@@ -404,6 +407,7 @@ export default function Household() {
 										className="glass-card px-6 py-4 flex items-center gap-4"
 									>
 										<button
+											type="button"
 											data-testid={`task-toggle-${t.id}`}
 											onClick={() => toggleTask(t)}
 											className="shrink-0"
@@ -475,6 +479,7 @@ export default function Household() {
 										className="input-dark"
 									/>
 									<button
+										type="button"
 										data-testid="pet-add"
 										onClick={addPet}
 										className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-black uppercase tracking-widest justify-self-start"

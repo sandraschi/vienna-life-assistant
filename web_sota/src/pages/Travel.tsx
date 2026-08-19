@@ -136,6 +136,7 @@ export default function Travel() {
 					</p>
 				</div>
 				<button
+					type="button"
 					onClick={load}
 					className="p-2 rounded-xl text-slate-300 hover:text-white transition-colors"
 					title="Refresh"
@@ -202,6 +203,7 @@ export default function Travel() {
 						<option value="car">Car</option>
 					</select>
 					<button
+						type="button"
 						data-testid="trip-add"
 						onClick={addTrip}
 						className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest justify-self-start"
@@ -265,6 +267,7 @@ export default function Travel() {
 											.filter((p) => p.trip_id === trip.id)
 											.map((item) => (
 												<button
+													type="button"
 													key={item.id}
 													onClick={() => togglePack(item)}
 													className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border transition-colors ${
@@ -282,6 +285,7 @@ export default function Travel() {
 												</button>
 											))}
 										<button
+											type="button"
 											onClick={() => addPackItem(trip.id)}
 											className="flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border border-dashed border-white/[0.15] text-slate-300 hover:text-white transition-colors"
 										>

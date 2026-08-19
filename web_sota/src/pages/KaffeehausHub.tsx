@@ -126,7 +126,10 @@ export default function KaffeehausHub() {
 						"A double-shot espresso with steamed milk and a signature Berg-style
 						foam architecture."
 					</p>
-					<button className="w-full py-4 rounded-2xl bg-cosmos-600 hover:bg-cosmos-500 text-white text-sm font-black uppercase tracking-widest transition-all shadow-lg shadow-cosmos-500/20 mt-4">
+					<button
+						type="button"
+						className="w-full py-4 rounded-2xl bg-cosmos-600 hover:bg-cosmos-500 text-white text-sm font-black uppercase tracking-widest transition-all shadow-lg shadow-cosmos-500/20 mt-4"
+					>
 						Remind to try
 					</button>
 				</div>
@@ -195,6 +198,7 @@ export default function KaffeehausHub() {
 								</span>
 							</div>
 							<button
+								type="button"
 								title="Café details"
 								className="p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all"
 							>

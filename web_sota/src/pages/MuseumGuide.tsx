@@ -49,10 +49,16 @@ export default function MuseumGuide() {
 					</p>
 				</div>
 				<div className="flex items-center gap-3">
-					<button className="px-5 py-2.5 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] text-white text-xs font-black uppercase tracking-widest border border-white/[0.1] transition-all">
+					<button
+						type="button"
+						className="px-5 py-2.5 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] text-white text-xs font-black uppercase tracking-widest border border-white/[0.1] transition-all"
+					>
 						MuseumsQuartier (MQ)
 					</button>
-					<button className="px-5 py-2.5 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] text-white text-xs font-black uppercase tracking-widest border border-white/[0.1] transition-all">
+					<button
+						type="button"
+						className="px-5 py-2.5 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] text-white text-xs font-black uppercase tracking-widest border border-white/[0.1] transition-all"
+					>
 						Inner City
 					</button>
 				</div>
@@ -80,7 +86,10 @@ export default function MuseumGuide() {
 						</p>
 
 						<div className="flex items-center gap-4">
-							<button className="px-6 py-3 rounded-xl bg-white text-black text-xs font-black uppercase tracking-widest shadow-xl flex items-center gap-2">
+							<button
+								type="button"
+								className="px-6 py-3 rounded-xl bg-white text-black text-xs font-black uppercase tracking-widest shadow-xl flex items-center gap-2"
+							>
 								<Eye className="w-3.5 h-3.5" />
 								Interactive Tour
 							</button>
@@ -101,7 +110,10 @@ export default function MuseumGuide() {
 							Experience the pulse of contemporary Vienna. From post-war
 							masterpieces to SOTA digital art.
 						</p>
-						<button className="text-sm font-black text-indigo-400 uppercase tracking-widest flex items-center gap-2 group-hover:translate-x-1 transition-all">
+						<button
+							type="button"
+							className="text-sm font-black text-indigo-400 uppercase tracking-widest flex items-center gap-2 group-hover:translate-x-1 transition-all"
+						>
 							Current Program <ArrowRight className="w-3.5 h-3.5" />
 						</button>
 					</div>
@@ -165,7 +177,10 @@ export default function MuseumGuide() {
 									{ex.dates}
 								</span>
 							</div>
-							<button className="p-2 rounded-lg bg-white/[0.02] hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all">
+							<button
+								type="button"
+								className="p-2 rounded-lg bg-white/[0.02] hover:bg-white/[0.08] text-slate-300 hover:text-white transition-all"
+							>
 								<Info className="w-3.5 h-3.5" />
 							</button>
 						</div>

@@ -84,11 +84,17 @@ export default function ConcertHall() {
 					</p>
 
 					<div className="flex flex-wrap gap-4">
-						<button className="px-8 py-4 rounded-2xl bg-white text-black text-sm font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl flex items-center gap-3">
+						<button
+							type="button"
+							className="px-8 py-4 rounded-2xl bg-white text-black text-sm font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl flex items-center gap-3"
+						>
 							<Ticket className="w-4 h-4" />
 							Secure Standplatz
 						</button>
-						<button className="px-8 py-4 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] text-white text-sm font-black uppercase tracking-widest border border-white/[0.1] transition-all flex items-center gap-3">
+						<button
+							type="button"
+							className="px-8 py-4 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] text-white text-sm font-black uppercase tracking-widest border border-white/[0.1] transition-all flex items-center gap-3"
+						>
 							<PlayCircle className="w-4 h-4" />
 							Listen Preview
 						</button>
@@ -137,6 +143,7 @@ export default function ConcertHall() {
 								</span>
 							</div>
 							<button
+								type="button"
 								title="View details"
 								className="p-3 rounded-xl bg-white/[0.03] hover:bg-cosmos-500/10 text-slate-300 hover:text-cosmos-400 transition-all border border-transparent hover:border-cosmos-500/20"
 							>

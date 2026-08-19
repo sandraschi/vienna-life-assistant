@@ -72,6 +72,7 @@ export default function TransitWidget() {
 			<div className="flex border-b border-white/[0.04]">
 				{Object.keys(data).map((station) => (
 					<button
+						type="button"
 						key={station}
 						onClick={() => setActiveTab(station as keyof TransitData)}
 						className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider transition-all border-b-2 ${
@@ -88,6 +89,7 @@ export default function TransitWidget() {
 			<div className="divide-y divide-white/[0.04] flex-1">
 				{currentDepartures.map((departure, idx) => (
 					<div
+						// biome-ignore lint/suspicious/noArrayIndexKey: line+dest repeats; idx disambiguates
 						key={`${departure.line}-${departure.destination}-${idx}`}
 						className="px-6 py-3.5 hover:bg-white/[0.02] transition-colors flex items-center gap-4 group"
 					>

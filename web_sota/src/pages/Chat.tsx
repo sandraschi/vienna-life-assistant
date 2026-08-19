@@ -323,6 +323,7 @@ export default function Chat() {
 					))}
 				{EXAMPLE_PROMPTS.filter(() => preprompts.length === 0).map((p) => (
 					<button
+						type="button"
 						key={p}
 						onClick={() => setInput(p)}
 						className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs border border-cosmos-500/20 text-slate-300 hover:text-cosmos-400 hover:border-cosmos-500/40 transition-colors bg-slate-900/50"
@@ -342,6 +343,7 @@ export default function Chat() {
 					className="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"
 				>
 					{messages.map((msg, i) => (
+						// biome-ignore lint/suspicious/noArrayIndexKey: append-only chat log, no stable ids
 						<div key={i} className="flex gap-3">
 							<div
 								className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${msg.role === "user" ? "bg-white/[0.05] border-white/10" : "bg-cosmos-500/10 border-cosmos-500/30"}`}
@@ -368,6 +370,7 @@ export default function Chat() {
 									>
 										{msg.trace.map((t, ti) => (
 											<span
+												// biome-ignore lint/suspicious/noArrayIndexKey: tool trace has no stable id
 												key={ti}
 												className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-widest bg-cosmos-500/10 border border-cosmos-500/20 text-cosmos-400"
 												title={`${JSON.stringify(t.args)}`}
@@ -392,6 +395,7 @@ export default function Chat() {
 				<div className="p-4 border-t border-white/[0.06] flex flex-col gap-2">
 					<div className="flex gap-1">
 						<button
+							type="button"
 							data-testid="chat-export"
 							onClick={handleExport}
 							disabled={messages.length === 0}
@@ -401,6 +405,7 @@ export default function Chat() {
 							<Download className="w-3.5 h-3.5" />
 						</button>
 						<button
+							type="button"
 							data-testid="chat-clear"
 							onClick={handleClear}
 							disabled={messages.length === 0}

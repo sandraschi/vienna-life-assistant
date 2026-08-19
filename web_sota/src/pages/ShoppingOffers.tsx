@@ -135,6 +135,7 @@ export default function ShoppingOffers() {
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 				{offers.map((offer, idx) => (
 					<div
+						// biome-ignore lint/suspicious/noArrayIndexKey: store+product repeat; idx disambiguates
 						key={`${offer.store}-${offer.product}-${idx}`}
 						className="glass-card p-6 group hover:translate-y-[-4px] transition-all duration-300"
 					>
@@ -178,6 +179,7 @@ export default function ShoppingOffers() {
 								</div>
 							</div>
 							<button
+								type="button"
 								title="Add to shopping list"
 								className="p-3 rounded-2xl bg-white/[0.03] hover:bg-emerald-500/10 text-slate-300 hover:text-emerald-400 transition-all border border-transparent hover:border-emerald-500/20"
 							>
@@ -204,6 +206,8 @@ function Plus({ className }: { className?: string }) {
 			strokeLinecap="round"
 			strokeLinejoin="round"
 			className={className}
+			role="img"
+			aria-label="Add"
 		>
 			<line x1="12" y1="5" x2="12" y2="19"></line>
 			<line x1="5" y1="12" x2="19" y2="12"></line>

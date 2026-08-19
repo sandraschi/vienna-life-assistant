@@ -84,6 +84,7 @@ export default function Contacts() {
 					</p>
 				</div>
 				<button
+					type="button"
 					onClick={load}
 					className="p-2 rounded-xl text-slate-300 hover:text-white transition-colors"
 					title="Refresh"
@@ -140,6 +141,7 @@ export default function Contacts() {
 						className="input-dark md:col-span-4"
 					/>
 					<button
+						type="button"
 						data-testid="contact-add"
 						onClick={addContact}
 						className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest"

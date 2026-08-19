@@ -336,6 +336,7 @@ export default function Health() {
 										className="input-dark md:col-span-4"
 									/>
 									<button
+										type="button"
 										data-testid="visit-add"
 										onClick={addVisit}
 										className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest"
@@ -451,6 +452,7 @@ export default function Health() {
 										className="input-dark"
 									/>
 									<button
+										type="button"
 										data-testid="med-add"
 										onClick={addMed}
 										className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-black uppercase tracking-widest md:col-span-6 justify-self-start"
@@ -581,6 +583,7 @@ export default function Health() {
 										/>
 									</label>
 									<button
+										type="button"
 										data-testid="vitals-add"
 										onClick={addVitals}
 										className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-black uppercase tracking-widest col-span-2 md:col-span-4 justify-self-start"
@@ -685,6 +688,7 @@ export default function Health() {
 										className="input-dark md:col-span-4"
 									/>
 									<button
+										type="button"
 										data-testid="condition-add"
 										onClick={addCondition}
 										className="px-4 py-2 rounded-xl bg-cosmos-500 hover:bg-cosmos-600 text-white text-xs font-black uppercase tracking-widest justify-self-start"
@@ -750,6 +754,7 @@ export default function Health() {
 					onClick={load}
 					className="p-2 rounded-xl text-slate-300 hover:text-white transition-colors"
 					title="Refresh"
+					type="button"
 					data-testid="health-refresh"
 				>
 					<RefreshCw className="w-4 h-4" />
