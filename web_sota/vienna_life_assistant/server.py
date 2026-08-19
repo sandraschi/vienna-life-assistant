@@ -10,7 +10,7 @@ import os
 import sys
 from contextlib import asynccontextmanager
 from typing import Any, Optional
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from vienna_life_assistant.activity_log import install_log_handler, log_activity
 from vienna_life_assistant.capabilities import build_capabilities
 from vienna_life_assistant.db import init_db
@@ -285,6 +285,44 @@ def goliath():
     from vienna_life_assistant.control_tower import goliath_stats
 
     return goliath_stats()
+
+
+@app.get("/api/control-tower/orphans")
+def control_tower_orphans(fresh: int = Query(0, ge=0, le=1)):
+    """Orphaned MCP/agent servers on Goliath + socket pressure (blooper #23)."""
+    from vienna_life_assistant.control_tower import scan_orphans
+
+    return scan_orphans(fresh=bool(fresh))
+
+
+@app.post("/api/control-tower/orphans/{pid}/kill")
+def control_tower_orphan_kill(pid: int, request: Request):
+    """Kill one orphaned server. Requires header X-Vienna-Confirm: 1."""
+    if request.headers.get("X-Vienna-Confirm") != "1":
+        raise HTTPException(
+            status_code=403, detail="Killing requires header X-Vienna-Confirm: 1"
+        )
+    from vienna_life_assistant.control_tower import kill_orphan
+
+    result = kill_orphan(int(pid))
+    if result.get("success") is False:
+        raise HTTPException(status_code=409, detail=result.get("error", "Kill failed"))
+    return result
+
+
+@app.post("/api/control-tower/orphans/reap-all")
+def control_tower_orphan_reap_all(request: Request):
+    """Kill every orphaned server. Requires header X-Vienna-Confirm: 1."""
+    if request.headers.get("X-Vienna-Confirm") != "1":
+        raise HTTPException(
+            status_code=403, detail="Killing requires header X-Vienna-Confirm: 1"
+        )
+    from vienna_life_assistant.control_tower import reap_all
+
+    result = reap_all()
+    if not result.get("source_ok"):
+        raise HTTPException(status_code=409, detail=result.get("error", "Reap failed"))
+    return result
 
 
 @app.get("/api/dashboard", response_model=dict[str, Any])

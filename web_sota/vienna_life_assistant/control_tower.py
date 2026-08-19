@@ -20,6 +20,7 @@ source_ok=False with an error string, never raises.
 from __future__ import annotations
 
 import concurrent.futures
+import http.client
 import json
 import logging
 import re
@@ -64,7 +65,10 @@ def _probe_many(ports: list[int], timeout: float = 1.0) -> dict[int, str]:
             req = Request(f"http://127.0.0.1:{port}/health", method="GET")
             with urlopen(req, timeout=timeout) as resp:
                 return port, ("online" if 200 <= resp.status < 300 else "degraded")
-        except (URLError, OSError, TimeoutError):
+        except (URLError, OSError, TimeoutError, http.client.HTTPException):
+            # HTTPException covers BadStatusLine: a registry port that is not
+            # HTTP at all (e.g. an SSH service) must probe as offline, never
+            # bubble up and 500 the whole control tower.
             return port, "offline"
 
     result: dict[int, str] = {}
@@ -428,6 +432,177 @@ def goliath_stats(*, fresh: bool = False) -> dict[str, Any]:
         }
 
     return _cached_call("goliath", _fetch, fresh=fresh)
+
+
+# -------------------------------------------------------------- orphaned servers
+
+# Same detection logic as the fleet reaper (mcp-central-docs/scripts/fleet-watchdog.ps1
+# -Reap): stdio MCP/agent spawn signatures, parent PID dead, excluding
+# fleet-managed daemons that legitimately outlive their short-lived spawner.
+_PS_ORPHANS = (
+    "$OutputEncoding = [Console]::OutputEncoding = [System.Text.Encoding]::UTF8\n"
+    "$pattern = '(?i)(\\.main|__main__|mcp --transport|advanced-memory.* mcp)'\n"
+    "$managed = @('robofang.main','meta_mcp.main','fleet_agent','aiwatcher_mcp','devices_mcp','advanced_memory','advanced-memory')\n"
+    "$est = @{}\n"
+    "foreach ($line in (netstat -ano | Select-String 'ESTABLISHED')) {\n"
+    "  $parts = $line.Line -split '\\s+'\n"
+    "  if ($parts.Count -ge 5) {\n"
+    "    $procId = $parts[$parts.Count - 1]\n"
+    "    if ($procId -match '^\\d+$') {\n"
+    "      if ($est.ContainsKey($procId)) { $est[$procId] = $est[$procId] + 1 } else { $est[$procId] = 1 }\n"
+    "    }\n"
+    "  }\n"
+    "}\n"
+    "$procs = @()\n"
+    "foreach ($w in (Get-CimInstance Win32_Process -Filter \"Name='python.exe' OR Name='uv.exe'\" -ErrorAction SilentlyContinue)) {\n"
+    "  $cmd = $w.CommandLine\n"
+    "  if (-not $cmd -or ($cmd -notmatch $pattern)) { continue }\n"
+    "  $isManaged = $false\n"
+    "  foreach ($m in $managed) { if ($cmd.Contains($m)) { $isManaged = $true; break } }\n"
+    '  $parentAlive = [bool](Get-CimInstance Win32_Process -Filter "ProcessId=$($w.ParentProcessId)" -ErrorAction SilentlyContinue)\n'
+    "  $proc = Get-Process -Id $w.ProcessId -ErrorAction SilentlyContinue\n"
+    "  $started = $null\n"
+    "  if ($proc) { $started = $proc.StartTime.ToString('o') }\n"
+    "  $estCount = 0\n"
+    "  $key = [string]$w.ProcessId\n"
+    "  if ($est.ContainsKey($key)) { $estCount = $est[$key] }\n"
+    "  $procs += [PSCustomObject]@{ pid = $w.ProcessId; ppid = $w.ParentProcessId; parent_alive = $parentAlive; name = $w.Name; managed = $isManaged; cmdline = $cmd; started = $started; established = $estCount }\n"
+    "}\n"
+    "$total = 0\n"
+    "foreach ($v in $est.Values) { $total = $total + $v }\n"
+    "[PSCustomObject]@{ total_established = $total; processes = @($procs) } | ConvertTo-Json -Depth 4 -Compress"
+)
+
+
+def _run_powershell(script: str, timeout: float = 30.0) -> tuple[bool, str]:
+    try:
+        proc = subprocess.run(
+            [
+                "powershell.exe",
+                "-NoProfile",
+                "-NonInteractive",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-Command",
+                script,
+            ],
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            encoding="utf-8",
+            errors="replace",
+        )
+    except (subprocess.SubprocessError, OSError) as exc:
+        return False, str(exc)
+    if proc.returncode != 0:
+        return False, (proc.stderr or f"exit {proc.returncode}").strip()[:300]
+    return True, (proc.stdout or "").strip()
+
+
+def _age_seconds(started_iso: str | None) -> float | None:
+    if not started_iso:
+        return None
+    try:
+        dt = datetime.fromisoformat(started_iso.replace("Z", "+00:00"))
+        return max(0.0, time.time() - dt.timestamp())
+    except ValueError:
+        return None
+
+
+def scan_orphans(*, fresh: bool = False) -> dict[str, Any]:
+    """Orphaned MCP/agent servers on Goliath + socket pressure (fail-soft)."""
+
+    def _fetch() -> dict[str, Any]:
+        ok, out = _run_powershell(_PS_ORPHANS)
+        if not ok:
+            logger.warning("orphan scan failed: %s", out)
+            return {
+                "source_ok": False,
+                "error": out,
+                "total_orphans": None,
+                "total_established": None,
+                "orphans": [],
+                "checked_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+            }
+        try:
+            data = json.loads(out)
+        except json.JSONDecodeError:
+            return {
+                "source_ok": False,
+                "error": "invalid orphan scan output",
+                "total_orphans": None,
+                "total_established": None,
+                "orphans": [],
+                "checked_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+            }
+        orphans: list[dict[str, Any]] = []
+        for p in data.get("processes") or []:
+            if p.get("managed") or p.get("parent_alive"):
+                continue
+            started = p.get("started")
+            orphans.append(
+                {
+                    "pid": int(p.get("pid") or 0),
+                    "ppid": int(p.get("ppid") or 0),
+                    "parent_alive": False,
+                    "name": p.get("name") or "python.exe",
+                    "cmdline": p.get("cmdline") or "",
+                    "started": started,
+                    "age_seconds": _age_seconds(started),
+                    "established": int(p.get("established") or 0),
+                }
+            )
+        orphans.sort(key=lambda o: o.get("established", 0), reverse=True)
+        return {
+            "source_ok": True,
+            "total_orphans": len(orphans),
+            "total_established": int(data.get("total_established") or 0),
+            "orphans": orphans,
+            "checked_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        }
+
+    return _cached_call("orphans", _fetch, ttl=10, fresh=fresh)
+
+
+def kill_orphan(pid: int) -> dict[str, Any]:
+    """Kill one orphaned server, refusing if it is no longer flagged as orphan."""
+    state = scan_orphans(fresh=True)
+    if not state.get("source_ok"):
+        return state
+    if not any(int(o["pid"]) == int(pid) for o in state["orphans"]):
+        return {
+            "source_ok": True,
+            "success": False,
+            "error": f"PID {pid} is not an orphaned MCP server (nothing killed)",
+            **{k: v for k, v in state.items() if k != "source_ok"},
+        }
+    ok, err = _run_powershell(f"Stop-Process -Id {int(pid)} -Force", timeout=15.0)
+    if not ok:
+        return {
+            "source_ok": True,
+            "success": False,
+            "error": f"Kill failed: {err}",
+            **{k: v for k, v in state.items() if k != "source_ok"},
+        }
+    logger.info("killed orphan PID %s", pid)
+    refreshed = scan_orphans(fresh=True)
+    refreshed["killed"] = [int(pid)]
+    return refreshed
+
+
+def reap_all() -> dict[str, Any]:
+    """Kill every currently orphaned MCP server."""
+    state = scan_orphans(fresh=True)
+    if not state.get("source_ok"):
+        return state
+    killed: list[int] = []
+    for o in list(state["orphans"]):
+        res = kill_orphan(int(o["pid"]))
+        if res.get("success") is not False:
+            killed.append(int(o["pid"]))
+    final = scan_orphans(fresh=True)
+    final["killed"] = killed
+    return final
 
 
 # ------------------------------------------------------------------- aggregate

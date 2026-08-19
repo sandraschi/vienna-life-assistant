@@ -12,11 +12,14 @@ export async function apiSend<T = unknown>(
 	path: string,
 	method: "POST" | "PUT" | "DELETE",
 	body?: unknown,
+	confirm = false,
 ): Promise<T> {
+	const headers: Record<string, string> = {};
+	if (body !== undefined) headers["Content-Type"] = "application/json";
+	if (confirm) headers["X-Vienna-Confirm"] = "1";
 	const res = await fetch(path.startsWith("/") ? path : `/${path}`, {
 		method,
-		headers:
-			body !== undefined ? { "Content-Type": "application/json" } : undefined,
+		headers: Object.keys(headers).length ? headers : undefined,
 		body: body !== undefined ? JSON.stringify(body) : undefined,
 	});
 	if (!res.ok) {
@@ -25,8 +28,11 @@ export async function apiSend<T = unknown>(
 	return res.json() as Promise<T>;
 }
 
-export const apiPost = <T = unknown>(path: string, body?: unknown) =>
-	apiSend<T>(path, "POST", body);
+export const apiPost = <T = unknown>(
+	path: string,
+	body?: unknown,
+	confirm = false,
+) => apiSend<T>(path, "POST", body, confirm);
 export const apiPut = <T = unknown>(path: string, body?: unknown) =>
 	apiSend<T>(path, "PUT", body);
 export const apiDelete = <T = unknown>(path: string) =>
@@ -54,6 +60,11 @@ export const API = {
 	fleetOverview: (probe = 0) => `/api/fleet/overview?probe=${probe}`,
 	controlTower: (probe = 1, fresh = 0) =>
 		`/api/control-tower?probe=${probe}&fresh=${fresh}`,
+	controlTowerOrphans: (fresh = 0) =>
+		`/api/control-tower/orphans?fresh=${fresh}`,
+	controlTowerOrphanKill: (pid: number) =>
+		`/api/control-tower/orphans/${pid}/kill`,
+	controlTowerOrphanReap: "/api/control-tower/orphans/reap-all",
 	services: "/api/services",
 	goliath: "/api/goliath",
 	dashboard: "/api/dashboard",
