@@ -5,7 +5,7 @@ export default defineConfig({
     timeout: 60000,
     retries: 1,
     use: {
-        baseURL: 'http://127.0.0.1:10988',
+        baseURL: 'http://127.0.0.1:10931',
         headless: true,
         screenshot: 'only-on-failure',
     },
@@ -18,8 +18,8 @@ export default defineConfig({
             reuseExistingServer: true,
         },
         {
-            command: 'npx vite --port 10988 --host 127.0.0.1',
-            port: 10988,
+            command: 'npx vite --port 10931 --host 127.0.0.1',
+            port: 10931,
             cwd: '.',
             timeout: 30000,
             reuseExistingServer: true,

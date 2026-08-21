@@ -56,7 +56,7 @@ export default function Help() {
 						</li>
 						<li>
 							Open{" "}
-							<strong className="text-slate-200">http://127.0.0.1:10988</strong>
+							<strong className="text-slate-200">http://127.0.0.1:10931</strong>
 						</li>
 						<li>
 							<strong className="text-slate-200">Settings</strong> — pick
@@ -78,7 +78,7 @@ export default function Help() {
 					</div>
 					<ul className="text-sm text-slate-300 space-y-2">
 						<li>
-							Frontend (Vite): <code className="text-cosmos-400">10988</code>
+							Frontend (Vite): <code className="text-cosmos-400">10931</code>
 						</li>
 						<li>
 							Backend + MCP: <code className="text-cosmos-400">10922</code> —{" "}
@@ -238,7 +238,7 @@ export default function Help() {
 						Troubleshooting
 					</h2>
 					<ul className="text-sm text-slate-300 space-y-2 list-disc pl-5">
-						<li>Blank UI — hard refresh; confirm Vite on 10988 (not 10990)</li>
+						<li>Blank UI — hard refresh; confirm Vite on 10931 (not 10990)</li>
 						<li>
 							LLM offline — Ollama 11434, LM Studio 1234, or OpenAI key in
 							Settings
@@ -246,7 +246,7 @@ export default function Help() {
 						<li>
 							Port squatters — re-run{" "}
 							<code className="text-cosmos-400">start.ps1</code> (kills
-							10988/10922)
+							10931/10922)
 						</li>
 						<li>
 							MCP from Cursor — backend must be up on 10922 before connecting

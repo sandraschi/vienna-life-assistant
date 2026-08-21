@@ -7,4 +7,4 @@ if (-not (Test-Path -LiteralPath $FleetStartPath)) {
 }
 . $FleetStartPath
 
-if (-not (Stop-FleetPortListeners -Ports @(10988, 10922, 10989, 10990) -Label "vienna-life-assistant")) { exit 1 }
+if (-not (Stop-FleetPortListeners -Ports @(10931, 10922, 10989, 10990) -Label "vienna-life-assistant")) { exit 1 }

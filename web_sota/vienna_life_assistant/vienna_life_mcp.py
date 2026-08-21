@@ -6,6 +6,7 @@ are editable through both MCP and REST. Seed data is loaded on first run.
 """
 
 from __future__ import annotations
+
 import logging
 from datetime import date
 from pathlib import Path
@@ -123,7 +124,7 @@ def vienna_life_capabilities_resource() -> str:
 
 ## HTTP
 - MCP: http://127.0.0.1:10922/mcp
-- Frontend: http://127.0.0.1:10988
+- Frontend: http://127.0.0.1:10931
 """
 
 
@@ -1254,9 +1255,9 @@ async def vienna_notes(
     if operation == "export_journal":
         if not entry_id:
             return _error_response("export_journal requires entry_id", "validation")
+        from vienna_life_assistant.db import SessionLocal
         from vienna_life_assistant.life_db import get_row
         from vienna_life_assistant.models import JournalEntry
-        from vienna_life_assistant.db import SessionLocal
 
         with SessionLocal() as db:
             entry = get_row(db, JournalEntry, entry_id)

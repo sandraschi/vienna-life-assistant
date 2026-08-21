@@ -4,7 +4,7 @@
     Name         = 'vienna-life-assistant'
     RepoRoot     = 'D:\Dev\repos\vienna-life-assistant'
     BackendPort  = 10922
-    FrontendPort = 10988
+    FrontendPort = 10931
     HealthPath   = '/health'
     WebRoot      = 'D:\Dev\repos\vienna-life-assistant\web_sota'
     Backend = @{

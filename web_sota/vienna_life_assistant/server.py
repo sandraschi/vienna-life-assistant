@@ -9,8 +9,12 @@ import logging
 import os
 import sys
 from contextlib import asynccontextmanager
-from typing import Any, Optional
+from typing import Any
+
 from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
 from vienna_life_assistant.activity_log import install_log_handler, log_activity
 from vienna_life_assistant.capabilities import build_capabilities
 from vienna_life_assistant.db import init_db
@@ -29,23 +33,24 @@ from vienna_life_assistant.life_db_routes import (
     medication_routes,
     packing_routes,
     pet_routes,
-    router as life_db_router,
     subscription_routes,
     todo_routes,
     trip_routes,
     vitals_routes,
 )
+from vienna_life_assistant.life_db_routes import (
+    router as life_db_router,
+)
 from vienna_life_assistant.life_routes import router as life_router
-from vienna_life_assistant.logs_routes import router as logs_router
 from vienna_life_assistant.llm_routes import router as llm_router
+from vienna_life_assistant.logs_routes import router as logs_router
 from vienna_life_assistant.news_routes import router as news_router
 from vienna_life_assistant.notes_routes import router as notes_router
 from vienna_life_assistant.onboarding_routes import router as onboarding_router
-from vienna_life_assistant.pa_routes import router as pa_router, scheduler_loop
+from vienna_life_assistant.pa_routes import router as pa_router
+from vienna_life_assistant.pa_routes import scheduler_loop
 from vienna_life_assistant.skills_routes import router as skills_router
 from vienna_life_assistant.vienna_life_mcp import mcp as vienna_life_mcp
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 
 logger = logging.getLogger("vienna-life-assistant.server")
 
@@ -122,8 +127,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:10922",
         "http://127.0.0.1:10922",
-        "http://localhost:10988",
-        "http://127.0.0.1:10988",
+        "http://localhost:10931",
+        "http://127.0.0.1:10931",
         "http://tauri.localhost",
         "https://tauri.localhost",
         "tauri://localhost",
@@ -163,14 +168,14 @@ class Exhibition(BaseModel):
     museum: str
     title: str
     dates: str
-    image: Optional[str] = None
+    image: str | None = None
 
 
 class ShoppingOffer(BaseModel):
     store: str
     product: str
     price: float
-    old_price: Optional[float] = None
+    old_price: float | None = None
     discount: int
     category: str
 
@@ -268,7 +273,16 @@ def control_tower(probe: int = Query(1, ge=0, le=1), fresh: int = Query(0, ge=0,
     concurrent health, Windows services (naked sc + NSSM), Goliath PC stats."""
     from vienna_life_assistant.control_tower import build_control_tower
 
-    return build_control_tower(probe=bool(probe), fresh=bool(fresh))
+    try:
+        return build_control_tower(probe=bool(probe), fresh=bool(fresh))
+    except Exception as exc:
+        logger.exception("control_tower endpoint failed")
+        return {
+            "error": str(exc),
+            "services": {"summary": {"total": 0}, "ships": []},
+            "windows_services": {"items": [], "source_ok": False},
+            "goliath": {"source_ok": False},
+        }
 
 
 @app.get("/api/services")

@@ -11,7 +11,7 @@ export default defineConfig({
 	},
 	server: {
 		allowedHosts: ["goliath"],
-		port: 10988,
+		port: 10931,
 		host: "127.0.0.1",
 		proxy: {
 			"/api": {

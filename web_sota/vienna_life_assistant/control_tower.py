@@ -20,15 +20,14 @@ source_ok=False with an error string, never raises.
 from __future__ import annotations
 
 import concurrent.futures
-import http.client
 import json
 import logging
 import re
 import subprocess
 import time
+from collections.abc import Callable
 from datetime import datetime
-from typing import Any, Callable
-from urllib.error import URLError
+from typing import Any
 from urllib.request import Request, urlopen
 
 logger = logging.getLogger("vienna-life-assistant.control_tower")
@@ -42,6 +41,39 @@ CACHE_TTL = 30
 _CACHE: dict[str, tuple[float, Any]] = {}
 
 
+def _ascii_normalize(obj: Any) -> Any:
+    """Recursively normalize strings to ASCII: em/en dashes -> '-', smart quotes -> ' / ", strip emojis/non-ascii."""
+    if isinstance(obj, str):
+        if obj.isascii() and not any(
+            c in obj
+            for c in (
+                "\u2014",
+                "\u2013",
+                "\ufffd",
+                "\u201c",
+                "\u201d",
+                "\u2018",
+                "\u2019",
+            )
+        ):
+            return obj
+        s = obj.replace("\u2014", "-").replace("\u2013", "-").replace("\ufffd", "-")
+        s = s.replace("\u201c", '"').replace("\u201d", '"')
+        s = s.replace("\u2018", "'").replace("\u2019", "'")
+        return s.encode("ascii", "ignore").decode("ascii")
+    elif isinstance(obj, dict):
+        new_d = {k: _ascii_normalize(v) for k, v in obj.items()}
+        if all(new_d[k] is obj[k] for k in obj):
+            return obj
+        return new_d
+    elif isinstance(obj, list):
+        new_l = [_ascii_normalize(x) for x in obj]
+        if all(new_l[i] is obj[i] for i in range(len(obj))):
+            return obj
+        return new_l
+    return obj
+
+
 def _cached_call(
     key: str, fn: Callable[[], Any], ttl: float = CACHE_TTL, fresh: bool = False
 ) -> Any:
@@ -49,7 +81,7 @@ def _cached_call(
     entry = _CACHE.get(key)
     if not fresh and entry and now - entry[0] < ttl:
         return entry[1]
-    data = fn()
+    data = _ascii_normalize(fn())
     _CACHE[key] = (now, data)
     return data
 
@@ -65,16 +97,18 @@ def _probe_many(ports: list[int], timeout: float = 1.0) -> dict[int, str]:
             req = Request(f"http://127.0.0.1:{port}/health", method="GET")
             with urlopen(req, timeout=timeout) as resp:
                 return port, ("online" if 200 <= resp.status < 300 else "degraded")
-        except (URLError, OSError, TimeoutError, http.client.HTTPException):
-            # HTTPException covers BadStatusLine: a registry port that is not
-            # HTTP at all (e.g. an SSH service) must probe as offline, never
-            # bubble up and 500 the whole control tower.
+        except Exception:  # noqa: BLE001
+            # Catch all exceptions during probing so non-HTTP services, protocol
+            # errors, or socket disconnects never bubble up and 500 the control tower.
             return port, "offline"
 
     result: dict[int, str] = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=16) as ex:
-        for port, status in ex.map(probe, ports):
-            result[port] = status
+        try:
+            for port, status in ex.map(probe, ports):
+                result[port] = status
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("_probe_many worker failure: %s", exc)
     return result
 
 
@@ -85,25 +119,31 @@ def build_fleet_section(*, probe: bool = True) -> dict[str, Any]:
     def _build() -> dict[str, Any]:
         from .fleet_overview import build_fleet_overview
 
-        overview = build_fleet_overview(probe=False)
+        try:
+            overview = build_fleet_overview(probe=False)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("build_fleet_overview failed: %s", exc)
+            return {"summary": {"total": 0, "error": str(exc)}, "ships": []}
+
         ships = overview.get("ships") or []
         ports = sorted(
             {
-                s["backend_port"] or s["frontend_port"]
+                (s.get("backend_port") or s.get("frontend_port") or 0)
                 for s in ships
-                if (s["backend_port"] or s["frontend_port"]) > 0
+                if (s.get("backend_port") or s.get("frontend_port") or 0) > 0
             }
         )
         health = _probe_many(ports, timeout=1.0) if probe else {}
         online = 0
         for s in ships:
-            port = s["backend_port"] or s["frontend_port"]
+            port = s.get("backend_port") or s.get("frontend_port") or 0
             h = health.get(port, "unknown")
             s["health"] = h
             if h == "online":
                 online += 1
-        overview["summary"]["online"] = online if probe else None
-        overview["summary"]["probed"] = probe
+        summary = overview.setdefault("summary", {})
+        summary["online"] = online if probe else None
+        summary["probed"] = probe
         return overview
 
     return _cached_call("fleet_section", _build, fresh=False)
@@ -612,9 +652,24 @@ def build_control_tower(*, probe: bool = True, fresh: bool = False) -> dict[str,
     """Merged payload for the Control Tower page (SPEC section 4 contract)."""
 
     def _build() -> dict[str, Any]:
-        services = build_fleet_section(probe=probe)
-        win_services = windows_services(fresh=fresh)
-        goliath = goliath_stats(fresh=fresh)
+        try:
+            services = build_fleet_section(probe=probe)
+        except Exception as exc:
+            logger.exception("build_fleet_section failed")
+            services = {"summary": {"total": 0, "error": str(exc)}, "ships": []}
+
+        try:
+            win_services = windows_services(fresh=fresh)
+        except Exception as exc:
+            logger.exception("windows_services failed")
+            win_services = {"items": [], "source_ok": False, "error": str(exc)}
+
+        try:
+            goliath = goliath_stats(fresh=fresh)
+        except Exception as exc:
+            logger.exception("goliath_stats failed")
+            goliath = {"source_ok": False, "error": str(exc)}
+
         return {
             "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
             "cached_for": int(CACHE_TTL),
@@ -622,7 +677,10 @@ def build_control_tower(*, probe: bool = True, fresh: bool = False) -> dict[str,
             "windows_services": win_services,
             "goliath": goliath,
             "source_health": {
-                "fleet-registry": "ok",
+                "fleet-registry": "ok"
+                if not services.get("summary", {}).get("error")
+                and services.get("ships") is not None
+                else "offline",
                 "windows-services": "ok"
                 if win_services.get("source_ok")
                 else "offline",

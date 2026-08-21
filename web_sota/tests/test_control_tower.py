@@ -6,7 +6,6 @@ import json
 import types
 
 import pytest
-
 from vienna_life_assistant import control_tower as ct
 
 
@@ -170,3 +169,27 @@ def test_control_tower_routes(client, monkeypatch):
     r = client.get("/api/goliath")
     assert r.status_code == 200
     assert r.json()["source_ok"] is True
+
+
+def test_probe_many_handles_exceptions(monkeypatch):
+    def bad_urlopen(*a, **k):
+        raise RuntimeError("Unexpected probe failure")
+
+    monkeypatch.setattr("vienna_life_assistant.control_tower.urlopen", bad_urlopen)
+    res = ct._probe_many([10922], timeout=0.1)
+    assert res == {10922: "offline"}
+
+
+def test_build_control_tower_fail_soft(monkeypatch):
+    def broken_fleet(*a, **k):
+        raise ValueError("Corrupted fleet registry data")
+
+    monkeypatch.setattr(ct, "build_fleet_section", broken_fleet)
+    monkeypatch.setattr(
+        ct, "windows_services", lambda *, fresh=False: {"items": [], "source_ok": True}
+    )
+    monkeypatch.setattr(ct, "goliath_stats", lambda *, fresh=False: {"source_ok": True})
+
+    payload = ct.build_control_tower(probe=False, fresh=True)
+    assert payload["source_health"]["fleet-registry"] == "offline"
+    assert "Corrupted fleet registry data" in payload["services"]["summary"]["error"]
