@@ -1,3 +1,8 @@
+### Fixed - Control Tower error resilience and ASCII output hygiene (2026-08-21)
+- **Control Tower fail-soft & crash prevention**: `_probe_many()` catches all probe exceptions so dead ports, protocol disconnects, or socket resets safely mark ports as offline instead of raising a 500 error. Wrapped `build_fleet_section`, `windows_services`, and `goliath_stats` in fail-soft `try...except` blocks in `build_control_tower` and `/api/control-tower` route.
+- **ASCII Output & Unicode Hygiene**: Integrated `_ascii_normalize()` in `control_tower.py` to ensure all returned data (including Win32_Service display names and Goliath stats) normalizes em/en dashes and smart quotes to plain ASCII hyphens and straight quotes, and strips unicode emojis/pictographs. Added ASCII Output Rule to `VIENNA_SYSTEM_PREPROMPT`.
+- **Test suite**: Added unit tests for `_probe_many` exception safety and `build_control_tower` fail-soft behavior (9/9 tests passing).
+
 ### Added — fleet orchestration (2026-08-03)
 - **Fleet MCP orchestration**: the agent can call any allowlisted fleet server
   over MCP streamable HTTP — fleet_tools (discover), fleet_call (invoke),

@@ -1,7 +1,8 @@
 # Vienna Life Assistant - Project Status
 
 **Created**: 2025-12-03  
-**Status**: ✅ Initial Scaffold Complete  
+**Last Updated**: 2026-08-21  
+**Status**: ACTIVE - ViLife web_sota (FastMCP 3.2, Control Tower fail-soft, ASCII hygiene)  
 
 ## 🎉 What's Been Created
 
