@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.join(_here, "web_sota"))
 
 from vienna_life_assistant.server import app  # noqa: E402
 
-port = os.environ.get("MCP_PORT") or os.environ.get("PORT")
+port = os.environ.get("VIENNA_LIFE_ASSISTANT_PORT") or os.environ.get("MCP_PORT") or os.environ.get("PORT")
 if port:
     host = os.environ.get("MCP_HOST", "127.0.0.1")
     uvicorn.run(app, host=host, port=int(port), log_level="info")
