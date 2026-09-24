@@ -39,8 +39,12 @@ from vienna_life_assistant.models import (
 
 logger = logging.getLogger("vienna-life-assistant.mcp")
 
-_READ_ONLY = {"readonly": True}
-_MUTATING = {}
+# MCP tool annotations (MCP spec keys: readOnlyHint / destructiveHint / ...).
+# NOTE: the old {"readonly": True} key was not a spec key and was silently
+# ignored by clients. Portmanteaus that expose any add/update/delete/send op
+# are marked mutating even though they also serve reads.
+_READ_ONLY = {"readOnlyHint": True}
+_MUTATING = {"readOnlyHint": False}
 
 mcp = FastMCP(
     "vienna-life-mcp",
@@ -229,7 +233,7 @@ async def vienna_tips(category: str) -> str:
     return f"Enjoy the Viennese vibe in the {category} scene!"
 
 
-@mcp.tool(annotations=_READ_ONLY)
+@mcp.tool(annotations=_MUTATING)
 async def vienna_life_agentic(goal: str, ctx: Context) -> dict[str, Any]:
     """Plan a multi-step Vienna life workflow using MCP sampling (SEP-1577).
 
@@ -255,7 +259,7 @@ async def vienna_life_agentic(goal: str, ctx: Context) -> dict[str, Any]:
     return {"success": True, "plan": text.strip(), "goal": goal}
 
 
-@mcp.tool(annotations=_READ_ONLY)
+@mcp.tool(annotations=_MUTATING)
 async def vienna_life(
     operation: Literal[
         "calendar_today",
@@ -499,7 +503,7 @@ async def vienna_life(
 # --- Health ---------------------------------------------------------------
 
 
-@mcp.tool(annotations=_READ_ONLY)
+@mcp.tool(annotations=_MUTATING)
 async def vienna_health(
     operation: Literal[
         "visits",
@@ -570,7 +574,7 @@ async def vienna_health(
 # --- Travel ----------------------------------------------------------------
 
 
-@mcp.tool(annotations=_READ_ONLY)
+@mcp.tool(annotations=_MUTATING)
 async def vienna_travel(
     operation: Literal[
         "trips",
@@ -710,7 +714,7 @@ async def vienna_travel(
 # --- Contacts --------------------------------------------------------------
 
 
-@mcp.tool(annotations=_READ_ONLY)
+@mcp.tool(annotations=_MUTATING)
 async def vienna_contacts(
     operation: Literal["list", "add", "update", "delete", "birthdays"],
     row_id: int | None = None,
@@ -764,7 +768,7 @@ async def vienna_contacts(
 # --- Household --------------------------------------------------------------
 
 
-@mcp.tool(annotations=_READ_ONLY)
+@mcp.tool(annotations=_MUTATING)
 async def vienna_household(
     operation: Literal[
         "subscriptions",
@@ -894,7 +898,7 @@ async def vienna_household(
 # --- Journal (personal log) --------------------------------------------------
 
 
-@mcp.tool(annotations=_READ_ONLY)
+@mcp.tool(annotations=_MUTATING)
 async def vienna_log(
     operation: Literal[
         "entries",
@@ -1164,7 +1168,7 @@ async def vienna_news(
 # --- Notes (OneNote bridge) --------------------------------------------------
 
 
-@mcp.tool(annotations=_READ_ONLY)
+@mcp.tool(annotations=_MUTATING)
 async def vienna_notes(
     operation: Literal[
         "status", "notebooks", "search", "page", "create", "export_journal"
@@ -1307,7 +1311,7 @@ async def vienna_notes(
 # --- Email (email-mcp bridge) -------------------------------------------------
 
 
-@mcp.tool(annotations=_READ_ONLY)
+@mcp.tool(annotations=_MUTATING)
 async def vienna_email(
     operation: Literal[
         "status", "inbox", "get", "search", "send", "mark_read", "stats"
@@ -1476,7 +1480,17 @@ async def vienna_environment(operation: Literal["overview"]) -> dict[str, Any]:
 # --- Self-termination (agent-callable) ---------------------------------------
 
 
-@mcp.tool(annotations=_MUTATING)
+@mcp.tool(
+    annotations=_MUTATING,
+    output_schema={
+        "type": "object",
+        "properties": {
+            "success": {"type": "boolean"},
+            "message": {"type": "string"},
+        },
+        "required": ["success", "message"],
+    },
+)
 async def vienna_shutdown() -> dict[str, Any]:
     """Gracefully stop the ViLife backend process.
 

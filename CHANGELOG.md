@@ -17,6 +17,13 @@
   `cua-nsis-test`, `certify`; ruff T20 print-ban enforced.
 - **Tests**: 80 passed, coverage 54% (gate 45). Note: suite takes ~80 s when no
   local Ollama is running (embedding waits); `test_pa.py` alone is ~65 s.
+- **Deferred-fix follow-up (2026-09-24)**: MCP annotations now use spec keys
+  (`readOnlyHint`; the old `readonly` key was silently ignored) with read-only
+  only on `vienna_tips`/`vienna_news`/`vienna_environment`; explicit
+  `output_schema` on `vienna_shutdown` (string returns cannot carry object
+  schemas per MCP limits, so `vienna_tips` stays schema-less); fixed
+  `test_mcp.py` standalone order-dependence (was `no such table` without a
+  full-suite run — proven pre-existing via stash check); 81 tests pass.
 
 ### Fixed - Control Tower error resilience and ASCII output hygiene (2026-08-21)
 - **Control Tower fail-soft & crash prevention**: `_probe_many()` catches all probe exceptions so dead ports, protocol disconnects, or socket resets safely mark ports as offline instead of raising a 500 error. Wrapped `build_fleet_section`, `windows_services`, and `goliath_stats` in fail-soft `try...except` blocks in `build_control_tower` and `/api/control-tower` route.

@@ -8,6 +8,17 @@ from __future__ import annotations
 
 import asyncio
 
+import pytest
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _init_db():
+    """test_mcp exercises tools directly (no client fixture), so init the
+    isolated DB here instead of relying on other files' fixtures."""
+    from vienna_life_assistant.db import init_db
+
+    init_db()
+
 
 def run(coro):
     return asyncio.get_event_loop().run_until_complete(coro)
@@ -23,9 +34,39 @@ def test_all_portmanteaus_registered():
         "vienna_travel",
         "vienna_contacts",
         "vienna_household",
+        "vienna_log",
+        "vienna_news",
+        "vienna_notes",
+        "vienna_email",
+        "vienna_environment",
+        "vienna_life_agentic",
         "vienna_tips",
+        "vienna_shutdown",
     ):
         assert expected in names, f"missing {expected}"
+
+
+def test_tool_annotations_use_spec_keys():
+    """Annotations must use MCP spec keys (readOnlyHint/...), and only pure
+    read tools may claim readOnlyHint=True."""
+    from vienna_life_assistant.vienna_life_mcp import mcp
+
+    tools = {t.name: t for t in run(mcp.list_tools())}
+    read_only = {"vienna_tips", "vienna_news", "vienna_environment"}
+    for name, tool in tools.items():
+        ann = tool.annotations
+        assert ann is not None, f"{name} has no annotations"
+        keys = set(ann.model_dump(exclude_none=True))
+        assert keys <= {
+            "title",
+            "readOnlyHint",
+            "destructiveHint",
+            "idempotentHint",
+            "openWorldHint",
+        }, f"{name} has non-spec annotation keys: {keys}"
+        assert (ann.readOnlyHint is True) == (name in read_only), (
+            f"{name} readOnlyHint mismatch"
+        )
 
 
 def test_vienna_life_health_op():
