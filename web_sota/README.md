@@ -8,7 +8,7 @@ FastMCP 3.2 fleet webapp for Vienna Life Assistant.
 .\start.ps1
 ```
 
-- **Frontend:** http://127.0.0.1:10988
+- **Frontend:** http://127.0.0.1:10931
 - **Backend + MCP:** http://127.0.0.1:10922
 
 ## LLM

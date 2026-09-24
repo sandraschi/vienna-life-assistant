@@ -54,57 +54,69 @@ from vienna_life_assistant.vienna_life_mcp import mcp as vienna_life_mcp
 
 logger = logging.getLogger("vienna-life-assistant.server")
 
+# MCP sub-app — built BEFORE the parent FastAPI app (STARLETTE_NO_PYDANTIC_STANDARD
+# § Mounting FastMCP's http_app: BUG-008 + BUG-038). path="/" avoids the
+# double-prefix under the /mcp mount; its lifespan is folded into the parent
+# lifespan below so the streamable-HTTP session manager actually starts.
+mcp_app = vienna_life_mcp.http_app(path="/")
+
 
 # Create FastAPI instance
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifecycle management for the SOTA backend"""
-    install_log_handler()
-    log_activity("system", "ViLife backend starting", level="INFO")
-    logger.info("Vienna SOTA Backend starting...")
+    # Fold the mounted MCP sub-app's lifespan into ours so its
+    # StreamableHTTPSessionManager starts (BUG-038). The whole startup /
+    # shutdown sequence below runs nested inside it.
+    async with mcp_app.router.lifespan_context(app):
+        global _scheduler_task
+        install_log_handler()
+        log_activity("system", "ViLife backend starting", level="INFO")
+        logger.info("Vienna SOTA Backend starting...")
 
-    # Ensure backend folder is in path for imports
-    # web_sota is the CWD, backend is sibling to web_sota
-    backend_path = os.path.abspath(os.path.join(os.getcwd(), "..", "backend"))
-    if backend_path not in sys.path:
-        sys.path.append(backend_path)
-        logger.info("Added %s to sys.path", backend_path)
+        # Ensure backend folder is in path for imports
+        # web_sota is the CWD, backend is sibling to web_sota
+        backend_path = os.path.abspath(os.path.join(os.getcwd(), "..", "backend"))
+        if backend_path not in sys.path:
+            sys.path.append(backend_path)
+            logger.info("Added %s to sys.path", backend_path)
 
-    # Initialize the ViLife SQLite life-data store (calendar, health, travel, …)
-    try:
-        init_db()
-        logger.info(
-            "ViLife SQLite store initialized at %s",
-            os.environ.get("VILIFE_DB_PATH", "web_sota/data/vilife.db"),
-        )
-    except Exception as e:
-        logger.error("ViLife SQLite init failed: %s", e)
+        # Initialize the ViLife SQLite life-data store (calendar, health, travel, …)
+        try:
+            init_db()
+            logger.info(
+                "ViLife SQLite store initialized at %s",
+                os.environ.get("VILIFE_DB_PATH", "web_sota/data/vilife.db"),
+            )
+        except Exception as e:
+            logger.error("ViLife SQLite init failed: %s", e)
 
-    # Initialize DB from the main backend models
-    try:
-        import importlib
+        # Initialize DB from the main backend models
+        try:
+            import importlib
 
-        _legacy_init_db = importlib.import_module("models.base").init_db
-        _legacy_init_db()
-        logger.info("Main backend database initialized")
-    except ImportError:
-        logger.warning(
-            "Could not find main backend models. Running in standalone/mock mode."
-        )
-    except Exception as e:
-        logger.error("Database initialization failed: %s", e)
+            _legacy_init_db = importlib.import_module("models.base").init_db
+            _legacy_init_db()
+            logger.info("Main backend database initialized")
+        except ImportError:
+            logger.warning(
+                "Could not find main backend models. Running in standalone/mock mode."
+            )
+        except Exception as e:
+            logger.error("Database initialization failed: %s", e)
 
-    # Start the PA daily-brief scheduler
-    _scheduler_task = asyncio.create_task(scheduler_loop())
+        # Start the PA daily-brief scheduler
+        _scheduler_task = asyncio.create_task(scheduler_loop())
 
-    yield
-    logger.info("Vienna SOTA Backend shutting down...")
+        yield
+        logger.info("Vienna SOTA Backend shutting down...")
 
-    _scheduler_task.cancel()
-    try:
-        await _scheduler_task
-    except (asyncio.CancelledError, Exception):  # noqa: BLE001
-        pass
+        if _scheduler_task is not None:
+            _scheduler_task.cancel()
+            try:
+                await _scheduler_task
+            except (asyncio.CancelledError, Exception):  # noqa: BLE001
+                pass
 
 
 _scheduler_task: asyncio.Task | None = None
@@ -602,7 +614,7 @@ async def get_diagnostics():
         "server": "vienna-life-assistant",
         "version": "0.2.0",
         "uptime_seconds": 0,
-        "tool_count": 11,
+        "tool_count": 13,
         "tools": [
             {"name": "vienna_life", "operations": 16},
             {"name": "vienna_health", "operations": 12},
@@ -613,6 +625,8 @@ async def get_diagnostics():
             {"name": "vienna_news", "operations": 6},
             {"name": "vienna_notes", "operations": 6},
             {"name": "vienna_email", "operations": 7},
+            {"name": "vienna_environment", "operations": 1},
+            {"name": "vienna_shutdown"},
             {"name": "vienna_life_agentic"},
             {"name": "vienna_tips"},
         ],
@@ -621,8 +635,10 @@ async def get_diagnostics():
     }
 
 
-# Mount vienna_life MCP at /mcp (P3)
-app.mount("/mcp", vienna_life_mcp.http_app(path="/"))
+# Mount vienna_life MCP at /mcp (P3) — mcp_app built at module top with
+# path="/" (no BUG-008 double-prefix); its lifespan is folded into the
+# parent lifespan above (no BUG-038 session-manager outage).
+app.mount("/mcp", mcp_app)
 
 
 @app.post("/api/shutdown")

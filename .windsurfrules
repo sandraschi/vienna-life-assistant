@@ -4,7 +4,7 @@
 Personal life management app + MCP server for Vienna life admin: calendar, todos,
 expenses, health (doctor visits, medications, vitals), travel (trips, packing,
 documents), contacts (people, birthdays), and household (subscriptions, home tasks,
-pet care). Backend + MCP at 127.0.0.1:10922, frontend (Vite) at 127.0.0.1:10988.
+pet care). Backend + MCP at 127.0.0.1:10922, frontend (Vite) at 127.0.0.1:10931.
 
 ## Tech Stack (web_sota/ is the active surface)
 - **Frontend**: React 19 + TypeScript + Vite 7 + TailwindCSS 3 + Radix UI + Lucide

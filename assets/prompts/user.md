@@ -66,7 +66,7 @@ warns you 120 days before anything lapses.
 
 ## 7. Troubleshooting
 
-- **Server not running**: `cd web_sota; .\start.ps1` (backend 10922, frontend 10988)
+- **Server not running**: `cd web_sota; .\start.ps1` (backend 10922, frontend 10931)
 - **Empty data**: the first run seeds realistic demo content; afterwards it is
   all yours.
 - **Agent says data missing**: confirm the MCP server is registered in the IDE

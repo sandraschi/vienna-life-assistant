@@ -46,12 +46,20 @@
       "description": "Email via email-mcp gateway: inbox, search, read, mark-read, send"
     },
     {
+      "name": "vienna_environment",
+      "description": "Environment sensors and Fritz!Box status via devices-mcp gateway"
+    },
+    {
       "name": "vienna_life_agentic",
       "description": "Multi-step life planning via MCP sampling"
     },
     {
       "name": "vienna_tips",
       "description": "Vienna culture tips (coffee, music, museum)"
+    },
+    {
+      "name": "vienna_shutdown",
+      "description": "Graceful backend stop (mirrors POST /api/shutdown)"
     }
   ],
   "features": [

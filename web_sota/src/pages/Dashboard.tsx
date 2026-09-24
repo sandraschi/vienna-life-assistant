@@ -229,7 +229,7 @@ export default function Dashboard() {
 							<a
 								href="/onboarding"
 								className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-red-500 hover:bg-red-600 text-white font-black uppercase tracking-widest text-sm shadow-lg shadow-red-500/30 animate-pulse"
-								data-testid="onboarding-cta"
+								data-testid="onboarding-cue"
 							>
 								<Rocket className="w-4 h-4" /> Set up ViLife in 2 minutes
 							</a>

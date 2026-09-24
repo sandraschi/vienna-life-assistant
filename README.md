@@ -37,7 +37,7 @@ Set-Location web_sota
 
 | Surface | URL |
 |---------|-----|
-| Frontend | http://127.0.0.1:10988 |
+| Frontend | http://127.0.0.1:10931 |
 | Backend + MCP | http://127.0.0.1:10922 (`/mcp`, `/api/*`) |
 
 **Pages:** Dashboard · Health · Calendar · Travel · Journal · News · Notes · Email · Contacts · Household · Expenses · Shopping · Chat · Skills · Tools · Settings · Help · Apps · Logs
@@ -61,9 +61,10 @@ scheduler. Works with Ollama / LM Studio / OpenAI.
 
 **LLM (Settings):** Switch **Ollama** (11434), **LM Studio** (1234/v1), or **OpenAI** (API key). Each provider has a **model dropdown** populated from `/api/llm/models`. Chat uses the saved provider + model with Vienna system preprompt.
 
-**MCP:** 11 portmanteau tools — `vienna_life`, `vienna_health`, `vienna_travel`,
+**MCP:** 13 portmanteau tools — `vienna_life`, `vienna_health`, `vienna_travel`,
 `vienna_contacts`, `vienna_household`, `vienna_log`, `vienna_news`, `vienna_notes`,
-`vienna_email`, `vienna_life_agentic`, `vienna_tips` — plus 6 Vienna skills, 6 prompts, SQLite
+`vienna_email`, `vienna_environment`, `vienna_life_agentic`, `vienna_tips`,
+`vienna_shutdown` — plus 6 Vienna skills, 6 prompts, SQLite
 persistence, sampling via `vienna_life_agentic`.
 
 See [`docs/PRD.md`](docs/PRD.md) and [`CHANGELOG.md`](CHANGELOG.md) for 0.2.0 details.

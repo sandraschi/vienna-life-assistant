@@ -7,7 +7,9 @@ are editable through both MCP and REST. Seed data is loaded on first run.
 
 from __future__ import annotations
 
+import asyncio
 import logging
+import os
 from datetime import date
 from pathlib import Path
 from typing import Any, Literal
@@ -1469,6 +1471,33 @@ async def vienna_environment(operation: Literal["overview"]) -> dict[str, Any]:
             ],
         }
     return {"success": True, "message": "environment overview", **env}
+
+
+# --- Self-termination (agent-callable) ---------------------------------------
+
+
+@mcp.tool(annotations=_MUTATING)
+async def vienna_shutdown() -> dict[str, Any]:
+    """Gracefully stop the ViLife backend process.
+
+    ## Return Format
+    {"success": True, "message": str}
+
+    ## Examples
+    await vienna_shutdown()
+
+    ## Notes
+    - Mirrors POST /api/shutdown (used by the fleet launcher before restarts).
+    - The process exits ~0.5 s after the response so the caller sees the ack.
+    """
+    logger.warning("Shutdown requested via vienna_shutdown MCP tool")
+    asyncio.create_task(_delayed_exit())
+    return {"success": True, "message": "Shutting down..."}
+
+
+async def _delayed_exit() -> None:
+    await asyncio.sleep(0.5)
+    os._exit(0)
 
 
 def _add_skills_provider() -> None:

@@ -11,11 +11,12 @@ import asyncio
 import json
 import logging
 import os
+import uuid
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, BackgroundTasks, Depends
 from sqlalchemy.orm import Session
 
 from vienna_life_assistant import life_db, pa_agent
@@ -419,11 +420,43 @@ async def pa_rag_search(q: str, db: Session = Depends(get_db)) -> dict[str, Any]
 
 
 @router.post("/rag/reindex")
-async def pa_rag_reindex(db: Session = Depends(get_db)) -> dict[str, Any]:
+async def pa_rag_reindex(background: BackgroundTasks) -> dict[str, Any]:
+    """Start a journal re-embed as a background job; returns immediately.
+
+    Embedding the whole journal can take minutes (one Ollama call per entry),
+    so it must never block the request handler (RAG_OPERATIONS_STANDARD §2.1).
+    Poll GET /api/pa/rag/reindex/{job_id} for status.
+    """
+    job_id = uuid.uuid4().hex[:12]
+    _RAG_JOBS[job_id] = {"status": "queued", "reindexed": 0}
+    background.add_task(_run_rag_reindex, job_id)
+    return {"ok": True, "job_id": job_id, "status": "queued"}
+
+
+@router.get("/rag/reindex/{job_id}")
+async def pa_rag_reindex_status(job_id: str) -> dict[str, Any]:
+    """Status of a reindex job: queued / running / done / error."""
+    job = _RAG_JOBS.get(job_id)
+    if job is None:
+        return {"ok": False, "error": f"unknown job {job_id}"}
+    return {"ok": True, "job_id": job_id, **job}
+
+
+_RAG_JOBS: dict[str, dict[str, Any]] = {}
+
+
+def _run_rag_reindex(job_id: str) -> None:
+    """Background worker: full journal re-embed on its own DB session."""
     from vienna_life_assistant import rag
 
-    n = rag.reindex_all(db)
-    return {"ok": True, "reindexed": n}
+    _RAG_JOBS[job_id]["status"] = "running"
+    try:
+        with SessionLocal() as db:
+            n = rag.reindex_all(db)
+        _RAG_JOBS[job_id].update(status="done", reindexed=n)
+    except Exception as e:  # noqa: BLE001 — job status must record the failure
+        logger.warning("RAG reindex job %s failed: %s", job_id, e)
+        _RAG_JOBS[job_id].update(status="error", error=str(e))
 
 
 @router.post("/chat")

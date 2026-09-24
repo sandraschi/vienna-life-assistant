@@ -259,7 +259,12 @@ def test_rag_api_search_and_reindex(client, monkeypatch):
     monkeypatch.setattr(rag, "embed", _fake_embed)
     r = client.post("/api/pa/rag/reindex")
     assert r.status_code == 200
-    assert r.json()["ok"] is True
+    body = r.json()
+    assert body["ok"] is True
+    # TestClient runs background tasks before returning, so the job is done.
+    r = client.get(f"/api/pa/rag/reindex/{body['job_id']}")
+    assert r.status_code == 200
+    assert r.json()["status"] == "done"
     r = client.get("/api/pa/rag/search?q=coffee")
     assert r.status_code == 200
     assert "entries" in r.json()

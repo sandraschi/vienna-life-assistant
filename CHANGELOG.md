@@ -1,3 +1,23 @@
+### Fixed — MCP-over-HTTP outage + assfix pass (2026-09-24)
+- **BUG-038 class outage fixed**: `app.mount("/mcp", vienna_life_mcp.http_app(path="/"))`
+  never ran the sub-app lifespan, so every real MCP client call failed with
+  `500 StreamableHTTPSessionManager task group was not initialized` while
+  `/health` stayed green. The MCP lifespan is now folded into the parent
+  lifespan (`mcp_app.router.lifespan_context`, per STARLETTE_NO_PYDANTIC_STANDARD);
+  verified live with `fastmcp.Client("http://127.0.0.1:10922/mcp")` — 13 tools
+  listed, `vienna_tips` call succeeds.
+- **New `vienna_shutdown` MCP tool** (mirrors `POST /api/shutdown`); diagnostics
+  now reports all 13 tools (was stale at 11, missing `vienna_environment`).
+- **RAG reindex is now a background job**: `POST /api/pa/rag/reindex` returns
+  `{job_id}` immediately; poll `GET /api/pa/rag/reindex/{job_id}` (queued /
+  running / done / error). Previously the full re-embed blocked the request.
+- **Docs**: frontend port :10988 → :10931 sweep (12 files; moved 2026-08-27);
+  new `docs/CONFIGURATION.md`, `docs/DEVELOPMENT.md`, `docs/TOOLS.md`,
+  `docs/TROUBLESHOOTING.md`; `justfile` gains `fmt`, `cua-webapp-test`,
+  `cua-nsis-test`, `certify`; ruff T20 print-ban enforced.
+- **Tests**: 80 passed, coverage 54% (gate 45). Note: suite takes ~80 s when no
+  local Ollama is running (embedding waits); `test_pa.py` alone is ~65 s.
+
 ### Fixed - Control Tower error resilience and ASCII output hygiene (2026-08-21)
 - **Control Tower fail-soft & crash prevention**: `_probe_many()` catches all probe exceptions so dead ports, protocol disconnects, or socket resets safely mark ports as offline instead of raising a 500 error. Wrapped `build_fleet_section`, `windows_services`, and `goliath_stats` in fail-soft `try...except` blocks in `build_control_tower` and `/api/control-tower` route.
 - **ASCII Output & Unicode Hygiene**: Integrated `_ascii_normalize()` in `control_tower.py` to ensure all returned data (including Win32_Service display names and Goliath stats) normalizes em/en dashes and smart quotes to plain ASCII hyphens and straight quotes, and strips unicode emojis/pictographs. Added ASCII Output Rule to `VIENNA_SYSTEM_PREPROMPT`.

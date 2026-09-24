@@ -15,7 +15,7 @@ Set-Location web_sota
 
 | Surface | Port |
 |---------|------|
-| Frontend | 10988 |
+| Frontend | 10931 |
 | Backend + MCP | 10922 |
 
 ## Key files

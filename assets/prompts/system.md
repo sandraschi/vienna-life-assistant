@@ -81,4 +81,4 @@ Café Berg coffee, Staatsoper Stehplatz culture.
 
 - MCP: http://127.0.0.1:10922/mcp
 - REST: http://127.0.0.1:10922/api/life/* (generic CRUD per domain)
-- Frontend: http://127.0.0.1:10988
+- Frontend: http://127.0.0.1:10931

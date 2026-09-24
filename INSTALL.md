@@ -46,7 +46,7 @@ If you prefer not to use `just`:
    Set-Location web_sota
    .\start.ps1
    ```
-   - Frontend: **http://127.0.0.1:10988**
+    - Frontend: **http://127.0.0.1:10931**
    - Backend + MCP: **http://127.0.0.1:10922** (`/mcp`, `/api/*`)
 
 5. **LLM providers (Settings page):**

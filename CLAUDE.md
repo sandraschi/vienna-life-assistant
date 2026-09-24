@@ -6,7 +6,7 @@ health, travel, contacts, household. Active surface: `web_sota/` (FastAPI + Fast
 3.4 + SQLAlchemy/SQLite + React 19/Vite/Tailwind).
 
 ## Entry points
-- `web_sota/start.ps1` — start backend (10922) + frontend (10988)
+- `web_sota/start.ps1` — start backend (10922) + frontend (10931)
 - `web_sota/vienna_life_assistant/server.py` — FastAPI app, mounts MCP at `/mcp`
 - `web_sota/vienna_life_assistant/vienna_life_mcp.py` — MCP portmanteau tools
 - `web_sota/vienna_life_assistant/life_db.py` — SQLite CRUD + seed
@@ -24,4 +24,4 @@ health, travel, contacts, household. Active surface: `web_sota/` (FastAPI + Fast
   `"mock": true`.
 
 ## Ports
-Backend + MCP 10922 · Frontend 10988 (registry: WEBAPP_PORTS.md).
+Backend + MCP 10922 · Frontend 10931 (registry: WEBAPP_PORTS.md).

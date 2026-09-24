@@ -25,6 +25,10 @@ lint:
 fix:
     Set-Location '{{justfile_directory()}}\web_sota'; uv run ruff check . --fix --unsafe-fixes; uv run ruff format .
 
+# Alias: fmt (fleet gate name for fix+format)
+fmt:
+    Set-Location '{{justfile_directory()}}\web_sota'; uv run ruff check . --fix --unsafe-fixes; uv run ruff format .
+
 # Run tests
 test:
     Set-Location '{{justfile_directory()}}\web_sota'; uv run pytest . -v
@@ -37,10 +41,21 @@ types:
 e2e:
     Set-Location '{{justfile_directory()}}\web_sota'; npx playwright test
 
+# CUA pre-Tauri browser walk (see cua_webapp_testing.md)
+cua-webapp-test:
+    powershell.exe -NoProfile -File '{{justfile_directory()}}\scripts\just\cua-webapp-test.ps1'
+
+# CUA NSIS smoke (install -> launch -> nav walk -> uninstall)
+cua-nsis-test:
+    powershell.exe -NoProfile -File '{{justfile_directory()}}\scripts\just\cua-nsis-test.ps1'
+
 # Run all gates
 gates-green: lint types
-    Set-Location '{{justfile_directory()}}\web_sota'
-    uv run pytest . -q
+    Set-Location '{{justfile_directory()}}\web_sota'; uv run pytest . -q
+
+# Full certification gate (alias of gates-green)
+certify: lint types
+    Set-Location '{{justfile_directory()}}\web_sota'; uv run pytest tests/ -q
 
 # Build Tauri/NSIS installer
 build-native:

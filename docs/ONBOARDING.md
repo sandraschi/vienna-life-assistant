@@ -6,7 +6,7 @@ medications, your dog, your routines. Everything entered here is editable
 later on the page forms or by asking the Chat.
 
 **Where**: the big red **"Set up ViLife in 2 minutes"** button on the
-Dashboard, or directly at `http://127.0.0.1:10988/onboarding`.
+Dashboard, or directly at `http://127.0.0.1:10931/onboarding`.
 
 ## What you fill in
 
