@@ -261,7 +261,7 @@ export default function AppLayout() {
 			{/* Sidebar */}
 			<aside
 				className={cn(
-					"glass-sidebar transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col z-50 h-screen",
+					"glass-sidebar transition-all duration-500 ease-in-out flex flex-col z-50 h-screen",
 					isSidebarOpen ? "w-64" : "w-20",
 				)}
 			>
