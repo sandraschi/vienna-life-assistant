@@ -18,7 +18,7 @@ Set-Location web_sota
 
 | Surface | Port |
 |---------|------|
-| Frontend (Vite) | 10988 |
+| Frontend (Vite) | 10931 |
 | Backend + MCP | 10922 |
 
 ## Key files

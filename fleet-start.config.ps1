@@ -2,16 +2,13 @@
 # Edit ports/backend target here - start.ps1 is fleet-standard.
 @{
     Name         = 'vienna-life-assistant'
-    RepoRoot     = 'D:\Dev\repos\vienna-life-assistant'
     BackendPort  = 10922
     FrontendPort = 10931
     HealthPath   = '/health'
-    WebRoot      = 'D:\Dev\repos\vienna-life-assistant\web_sota'
+    WebRoot      = 'web_sota'
     Backend = @{
-        Kind          = 'uvicorn'
-        WorkDir       = 'D:\Dev\repos\vienna-life-assistant\web_sota'
-        UvProject     = 'D:\Dev\repos\vienna-life-assistant\web_sota'
-        UvicornTarget = 'vienna_life_assistant.server:app'
+        Kind       = 'module-serve'
+        Module     = 'vienna_life_assistant'
     }
     Frontend = @{
         Kind           = 'vite-npm'
