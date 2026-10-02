@@ -7,8 +7,11 @@
     HealthPath   = '/health'
     WebRoot      = 'web_sota'
     Backend = @{
-        Kind       = 'module-serve'
-        Module     = 'vienna_life_assistant'
+        Kind          = 'uvicorn'
+        UvicornTarget = 'vienna_life_assistant.server:app'
+        UvProject     = 'web_sota'
+        WorkDir       = 'web_sota'
+        PythonPath    = 'web_sota'
     }
     Frontend = @{
         Kind           = 'vite-npm'
