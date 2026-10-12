@@ -8,6 +8,7 @@ when email-mcp is down or unauthenticated, responses carry
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
 from typing import Any
@@ -59,7 +60,7 @@ def _em(
 @router.get("/status")
 async def email_status() -> dict[str, Any]:
     """Reachability + service state for the Email UI banner."""
-    payload = _em("/api/status")
+    payload = await asyncio.to_thread(_em, "/api/status")
     if not payload.get("ok"):
         return {"ok": True, "reachable": False, "error": payload.get("error")}
     return {"ok": True, "reachable": True, "payload": payload}
@@ -67,7 +68,7 @@ async def email_status() -> dict[str, Any]:
 
 @router.get("/stats")
 async def email_stats() -> dict[str, Any]:
-    return _em("/api/stats")
+    return await asyncio.to_thread(_em, "/api/stats")
 
 
 @router.get("/inbox")
@@ -77,7 +78,8 @@ async def email_inbox(
     folder: str = "INBOX",
     service: str = "default",
 ) -> dict[str, Any]:
-    return _em(
+    return await asyncio.to_thread(
+        _em,
         "/api/inbox",
         {
             "limit": limit,
@@ -90,22 +92,26 @@ async def email_inbox(
 
 @router.get("/message/{message_id}")
 async def email_message(message_id: str) -> dict[str, Any]:
-    return _em(f"/api/inbox/{message_id}")
+    return await asyncio.to_thread(_em, f"/api/inbox/{message_id}")
 
 
 @router.post("/message/{message_id}/mark-read")
 async def email_mark_read(message_id: str) -> dict[str, Any]:
-    return _em(f"/api/inbox/{message_id}/mark-read", json_body={}, method="POST")
+    return await asyncio.to_thread(
+        _em, f"/api/inbox/{message_id}/mark-read", json_body={}, method="POST"
+    )
 
 
 @router.post("/message/{message_id}/unread")
 async def email_mark_unread(message_id: str) -> dict[str, Any]:
-    return _em(f"/api/inbox/{message_id}/unread", json_body={}, method="POST")
+    return await asyncio.to_thread(
+        _em, f"/api/inbox/{message_id}/unread", json_body={}, method="POST"
+    )
 
 
 @router.get("/search")
 async def email_search(q: str = Query(..., min_length=2)) -> dict[str, Any]:
-    return _em("/api/search", {"q": q})
+    return await asyncio.to_thread(_em, "/api/search", {"q": q})
 
 
 @router.post("/send")
@@ -113,4 +119,4 @@ async def email_send(body: dict[str, Any]) -> dict[str, Any]:
     """Send an email via email-mcp. Body: {to, subject, body, cc?, service?}."""
     if not body.get("to") or not body.get("subject") or not body.get("body"):
         return {"ok": False, "error": "to, subject, and body are required"}
-    return _em("/api/send", json_body=body, method="POST")
+    return await asyncio.to_thread(_em, "/api/send", json_body=body, method="POST")

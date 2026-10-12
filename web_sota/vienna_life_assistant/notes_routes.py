@@ -8,6 +8,7 @@ show a friendly state.
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
 from typing import Any
@@ -65,7 +66,7 @@ def _on(
 @router.get("/status")
 async def notes_status() -> dict[str, Any]:
     """Auth + reachability state for the Notes UI banner."""
-    payload = _on("/api/auth/status")
+    payload = await asyncio.to_thread(_on, "/api/auth/status")
     if not payload.get("ok"):
         return {
             "ok": True,
@@ -82,24 +83,24 @@ async def notes_status() -> dict[str, Any]:
 
 @router.get("/notebooks")
 async def notes_notebooks() -> dict[str, Any]:
-    return _on("/api/notebooks")
+    return await asyncio.to_thread(_on, "/api/notebooks")
 
 
 @router.get("/search")
 async def notes_search(q: str = Query(..., min_length=2)) -> dict[str, Any]:
-    return _on("/api/search", {"q": q})
+    return await asyncio.to_thread(_on, "/api/search", {"q": q})
 
 
 @router.get("/page/{page_id}")
 async def notes_page(page_id: str) -> dict[str, Any]:
-    return _on(f"/api/pages/{page_id}")
+    return await asyncio.to_thread(_on, f"/api/pages/{page_id}")
 
 
 @router.post("/pages")
 async def notes_create_page(body: dict[str, Any]) -> dict[str, Any]:
     if not body.get("notebook_id") or not body.get("title"):
         return {"ok": False, "error": "notebook_id and title are required"}
-    return _on("/api/pages", json_body=body, method="POST")
+    return await asyncio.to_thread(_on, "/api/pages", json_body=body, method="POST")
 
 
 @router.post("/export-journal")
@@ -114,7 +115,7 @@ async def notes_export_journal(
     if entry is None:
         return {"ok": False, "error": f"Journal entry {entry_id} not found"}
 
-    notebooks = _on("/api/notebooks")
+    notebooks = await asyncio.to_thread(_on, "/api/notebooks")
     if not notebooks.get("ok") or not notebooks.get("notebooks"):
         return {
             "ok": False,
@@ -129,7 +130,8 @@ async def notes_export_journal(
         f"{entry.date} {entry.time} · Mood {entry.mood}/10 · Tags: {tags}\n\n"
         f"{entry.body}"
     )
-    result = _on(
+    result = await asyncio.to_thread(
+        _on,
         "/api/pages",
         json_body={"notebook_id": notebook_id, "title": title, "content": content},
         method="POST",

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 from typing import Any
@@ -174,7 +175,7 @@ async def llm_status() -> dict[str, Any]:
         model = os.environ.get("OLLAMA_MODEL", "")
         try:
             req = Request(f"{url}/api/tags", method="GET")
-            with urlopen(req, timeout=5) as resp:
+            with await asyncio.to_thread(urlopen, req, timeout=5) as resp:
                 data = json.loads(resp.read())
             models = [m["name"] for m in data.get("models", [])]
             result["ok"] = bool(models)
@@ -185,7 +186,7 @@ async def llm_status() -> dict[str, Any]:
             result["local_llm"] = result["ok"]
         except Exception as exc:
             result["error"] = str(exc)
-            ok, auto_model = _detect_ollama()
+            ok, auto_model = await asyncio.to_thread(_detect_ollama)
             if ok:
                 result.update(
                     {
@@ -206,7 +207,7 @@ async def llm_status() -> dict[str, Any]:
                 method="GET",
                 headers={"Content-Type": "application/json"},
             )
-            with urlopen(req, timeout=5) as resp:
+            with await asyncio.to_thread(urlopen, req, timeout=5) as resp:
                 data = json.loads(resp.read())
             models = [m["id"] for m in data.get("data", [])]
             result["ok"] = bool(models)
@@ -231,7 +232,7 @@ async def llm_status() -> dict[str, Any]:
                     method="GET",
                     headers=_openai_headers(key),
                 )
-                with urlopen(req, timeout=10) as resp:
+                with await asyncio.to_thread(urlopen, req, timeout=10) as resp:
                     json.loads(resp.read())
                 result["ok"] = True
             except Exception as exc:
@@ -239,7 +240,7 @@ async def llm_status() -> dict[str, Any]:
                 result["ok"] = True
 
     if not result["ok"] and provider != "openai":
-        ollama_ok, ollama_model = _detect_ollama()
+        ollama_ok, ollama_model = await asyncio.to_thread(_detect_ollama)
         if ollama_ok and provider == "ollama":
             result.update(
                 {
@@ -262,7 +263,7 @@ async def llm_models(
         url = base_url or os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
         try:
             req = Request(f"{url}/api/tags", method="GET")
-            with urlopen(req, timeout=5) as resp:
+            with await asyncio.to_thread(urlopen, req, timeout=5) as resp:
                 data = json.loads(resp.read())
             models = [m["name"] for m in data.get("models", [])]
             return {"ok": True, "provider": "ollama", "models": models}
@@ -277,7 +278,7 @@ async def llm_models(
                 method="GET",
                 headers={"Content-Type": "application/json"},
             )
-            with urlopen(req, timeout=5) as resp:
+            with await asyncio.to_thread(urlopen, req, timeout=5) as resp:
                 data = json.loads(resp.read())
             models = [m["id"] for m in data.get("data", [])]
             return {"ok": True, "provider": "lmstudio", "models": models}
@@ -301,7 +302,7 @@ async def llm_models(
         url = (base_url or _openai_base()).rstrip("/")
         try:
             req = Request(f"{url}/models", method="GET", headers=_openai_headers(key))
-            with urlopen(req, timeout=10) as resp:
+            with await asyncio.to_thread(urlopen, req, timeout=10) as resp:
                 data = json.loads(resp.read())
             models = sorted(
                 m["id"]
@@ -366,7 +367,7 @@ async def llm_chat(body: dict[str, Any]) -> dict[str, Any]:
                 data=payload,
                 headers={"Content-Type": "application/json"},
             )
-            with urlopen(req, timeout=120) as resp:
+            with await asyncio.to_thread(urlopen, req, timeout=120) as resp:
                 data = json.loads(resp.read())
             return {"ok": True, "response": data.get("message", {}).get("content", "")}
         except Exception as exc:
@@ -378,7 +379,8 @@ async def llm_chat(body: dict[str, Any]) -> dict[str, Any]:
             "LMSTUDIO_URL", "http://127.0.0.1:1234/v1"
         )
         try:
-            content = _chat_completions(
+            content = await asyncio.to_thread(
+                _chat_completions,
                 url,
                 {"model": model, "messages": messages, "max_tokens": 2048},
                 {"Content-Type": "application/json"},
@@ -394,7 +396,8 @@ async def llm_chat(body: dict[str, Any]) -> dict[str, Any]:
         model = body.get("model") or os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
         url = body.get("openai_base_url") or _openai_base()
         try:
-            content = _chat_completions(
+            content = await asyncio.to_thread(
+                _chat_completions,
                 url,
                 {"model": model, "messages": messages, "max_tokens": 2048},
                 _openai_headers(api_key),

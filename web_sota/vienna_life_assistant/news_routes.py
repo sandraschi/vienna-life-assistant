@@ -7,6 +7,7 @@ carry {"ok": False, "error": ...} so the UI can show a friendly offline state.
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
 from typing import Any
@@ -43,10 +44,10 @@ async def news_overview(
     limit: int = Query(12, ge=1, le=50),
 ) -> dict[str, Any]:
     """Dashboard bundle: stats + top stories + trends + morning news."""
-    stats = _aw("/api/stats")
-    top = _aw("/api/items", {"limit": limit, "hours": hours})
-    trends = _aw("/api/trends", {"days": 7, "limit": 15})
-    morning = _aw("/api/morning-news")
+    stats = await asyncio.to_thread(_aw, "/api/stats")
+    top = await asyncio.to_thread(_aw, "/api/items", {"limit": limit, "hours": hours})
+    trends = await asyncio.to_thread(_aw, "/api/trends", {"days": 7, "limit": 15})
+    morning = await asyncio.to_thread(_aw, "/api/morning-news")
     return {
         "ok": True,
         "stats": stats.get("items_last_24h") if stats.get("ok") else None,
@@ -63,7 +64,7 @@ async def news_top(
     hours: int = Query(24, ge=1, le=168),
     limit: int = Query(15, ge=1, le=50),
 ) -> dict[str, Any]:
-    return _aw("/api/items", {"limit": limit, "hours": hours})
+    return await asyncio.to_thread(_aw, "/api/items", {"limit": limit, "hours": hours})
 
 
 @router.get("/trends")
@@ -71,7 +72,7 @@ async def news_trends(
     days: int = Query(7, ge=1, le=30),
     limit: int = Query(15, ge=1, le=30),
 ) -> dict[str, Any]:
-    return _aw("/api/trends", {"days": days, "limit": limit})
+    return await asyncio.to_thread(_aw, "/api/trends", {"days": days, "limit": limit})
 
 
 @router.get("/search")
@@ -79,9 +80,9 @@ async def news_search(
     q: str = Query(..., min_length=2),
     limit: int = Query(15, ge=1, le=50),
 ) -> dict[str, Any]:
-    return _aw("/api/search", {"q": q, "limit": limit})
+    return await asyncio.to_thread(_aw, "/api/search", {"q": q, "limit": limit})
 
 
 @router.get("/morning")
 async def news_morning() -> dict[str, Any]:
-    return _aw("/api/morning-news")
+    return await asyncio.to_thread(_aw, "/api/morning-news")
