@@ -1,14 +1,18 @@
 import type { LucideIcon } from "lucide-react";
 import {
 	Anchor,
+	BedDouble,
 	Bell,
 	BookOpen,
+	Briefcase,
 	Calendar,
 	ChevronDown,
 	ChevronRight,
+	Clapperboard,
 	Coffee,
 	Cpu,
 	Gauge,
+	GraduationCap,
 	Grid3X3,
 	HeartPulse,
 	Home,
@@ -24,6 +28,7 @@ import {
 	Palette,
 	Plane,
 	Receipt,
+	Scale,
 	ScrollText,
 	Search,
 	Server,
@@ -33,6 +38,7 @@ import {
 	Sun,
 	User,
 	Users,
+	UtensilsCrossed,
 	Wrench,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -234,13 +240,24 @@ export default function AppLayout() {
 		{ title: "Contacts", icon: Users, path: "/contacts" },
 		{ title: "Household", icon: Home, path: "/household" },
 		{ title: "Expenses", icon: Receipt, path: "/expenses" },
-		{ title: "Shopping", icon: ShoppingCart, path: "/vienna/shopping" },
 	];
 
 	const viennaLifeNav = [
+		{
+			title: "Restaurants",
+			icon: UtensilsCrossed,
+			path: "/vienna/restaurants",
+		},
 		{ title: "Coffee houses", icon: Coffee, path: "/vienna/coffee" },
+		{ title: "Kultur", icon: Clapperboard, path: "/vienna/culture" },
 		{ title: "Concert Hall", icon: Music, path: "/vienna/music" },
 		{ title: "Museums", icon: Palette, path: "/vienna/museums" },
+		{ title: "Shopping", icon: ShoppingCart, path: "/vienna/shopping" },
+		{ title: "Wohnen", icon: BedDouble, path: "/vienna/accommodation" },
+		{ title: "Geschichte", icon: ScrollText, path: "/vienna/history" },
+		{ title: "Bildung", icon: GraduationCap, path: "/vienna/education" },
+		{ title: "Wirtschaft", icon: Briefcase, path: "/vienna/economy" },
+		{ title: "Politik", icon: Scale, path: "/vienna/politics" },
 	];
 
 	const systemNav = [
@@ -335,7 +352,7 @@ export default function AppLayout() {
 							</NavSection>
 
 							<NavSection
-								title="Vienna Today"
+								title="Wien"
 								count={viennaLifeNav.length}
 								collapsed={!!collapsedSections.vienna}
 								onToggle={() => toggleSection("vienna")}

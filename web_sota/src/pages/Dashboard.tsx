@@ -1,25 +1,26 @@
 import {
 	ArrowRight,
+	BedDouble,
+	Briefcase,
 	Building2,
-	Calendar as CalendarIcon,
+	Clapperboard,
 	CloudSun,
 	Coffee,
+	GraduationCap,
 	HeartPulse,
 	Home,
-	MessageSquare,
 	Moon,
 	Music,
 	Newspaper,
 	Palette,
-	Plane,
-	Receipt,
 	RefreshCw,
 	Rocket,
+	Scale,
+	ScrollText,
 	Send,
-	ShoppingBag,
 	Sparkles,
 	Sun,
-	Users,
+	UtensilsCrossed,
 	Volume2,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -55,15 +56,17 @@ interface LifeOverview {
 	renewals: { name: string; renewal_date: string }[];
 }
 
+// Vienna discovery shortcuts — the sidebar owns life-admin + system nav,
+// so the dashboard row points at Wien content instead of duplicating it.
 const quickLinks = [
-	{ label: "Health", icon: HeartPulse, path: "/health" },
-	{ label: "Calendar", icon: CalendarIcon, path: "/calendar" },
-	{ label: "Travel", icon: Plane, path: "/travel" },
-	{ label: "Contacts", icon: Users, path: "/contacts" },
-	{ label: "Household", icon: Home, path: "/household" },
-	{ label: "Expenses", icon: Receipt, path: "/expenses" },
-	{ label: "Shopping", icon: ShoppingBag, path: "/vienna/shopping" },
-	{ label: "Chat", icon: MessageSquare, path: "/chat" },
+	{ label: "Restaurants", icon: UtensilsCrossed, path: "/vienna/restaurants" },
+	{ label: "Kaffeehäuser", icon: Coffee, path: "/vienna/coffee" },
+	{ label: "Kultur", icon: Clapperboard, path: "/vienna/culture" },
+	{ label: "Wohnen", icon: BedDouble, path: "/vienna/accommodation" },
+	{ label: "Geschichte", icon: ScrollText, path: "/vienna/history" },
+	{ label: "Bildung", icon: GraduationCap, path: "/vienna/education" },
+	{ label: "Wirtschaft", icon: Briefcase, path: "/vienna/economy" },
+	{ label: "Politik", icon: Scale, path: "/vienna/politics" },
 ];
 
 function useTimeGreeting() {
@@ -213,14 +216,14 @@ export default function Dashboard() {
 					<div className="flex items-center gap-3 text-cosmos-400 mb-4">
 						<GreetIcon className="w-5 h-5" />
 						<span className="text-sm font-black uppercase tracking-[0.3em]">
-							{greeting.text}, Alsergrund.
+							{greeting.text}, Wien.
 						</span>
 					</div>
 					<h1 className="text-4xl md:text-5xl font-black gradient-text tracking-tighter uppercase italic leading-tight mb-3">
 						Vienna Life
 					</h1>
 					<p className="text-slate-300 text-sm max-w-xl leading-relaxed">
-						Your local layer for the 9th district — transit, culture, coffee,
+						Your local layer for Vienna — transit, culture, coffee,
 						and daily logistics. All data served from your own fleet, zero cloud
 						dependence.
 					</p>
@@ -241,104 +244,23 @@ export default function Dashboard() {
 				</div>
 			</div>
 
-			{/* KPIs */}
-			{stats.length > 0 && (
-				<div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-					{stats.map((s) => (
-						<div
-							key={s.title}
-							className="glass-card p-5"
-							data-testid={`kpi-${s.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+			{/* Vienna discovery shortcuts (sidebar owns life-admin + system) */}
+			<div className="flex items-center gap-3 overflow-x-auto pb-1">
+				{quickLinks.map((link) => {
+					const Icon = link.icon;
+					return (
+						<button
+							type="button"
+							key={link.label}
+							onClick={() => navigate(link.path)}
+							className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] hover:border-white/20 text-slate-300 hover:text-white text-sm font-black uppercase tracking-widest transition-all whitespace-nowrap"
 						>
-							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
-								{s.title}
-							</p>
-							<p className="text-2xl font-black text-white truncate">
-								{s.value}
-							</p>
-							<p className="text-sm text-slate-300 mt-1 truncate">{s.change}</p>
-						</div>
-					))}
-				</div>
-			)}
-
-			{/* Life pulse */}
-			{life && (
-				<div className="glass-card p-6">
-					<h3 className="font-black text-sm tracking-[0.3em] uppercase text-white italic mb-4 flex items-center gap-3">
-						<HeartPulse className="w-4 h-4 text-cosmos-400" /> Life Pulse
-					</h3>
-					<div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
-								Medications
-							</p>
-							<p
-								className="text-sm font-bold text-emerald-400"
-								data-testid="pulse-meds"
-							>
-								{life.active_medications.length > 0
-									? life.active_medications.map((m) => m.name).join(", ")
-									: "None"}
-							</p>
-						</div>
-						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
-								Next doctor
-							</p>
-							<p
-								className="text-sm font-bold text-cosmos-400"
-								data-testid="pulse-visit"
-							>
-								{life.next_visits[0]
-									? `${life.next_visits[0].doctor} (${life.next_visits[0].date})`
-									: "None scheduled"}
-							</p>
-						</div>
-						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
-								Next trip
-							</p>
-							<p
-								className="text-sm font-bold text-amber-400"
-								data-testid="pulse-trip"
-							>
-								{life.trips[0]
-									? `${life.trips[0].title} (${life.trips[0].start_date})`
-									: "None planned"}
-							</p>
-						</div>
-						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
-								Birthdays soon
-							</p>
-							<p
-								className="text-sm font-bold text-pink-400"
-								data-testid="pulse-birthdays"
-							>
-								{life.birthdays.length > 0
-									? life.birthdays
-											.map((b) => `${b.name} in ${b.days_until}d`)
-											.join(", ")
-									: "None"}
-							</p>
-						</div>
-						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
-								Renewals soon
-							</p>
-							<p
-								className="text-sm font-bold text-red-400"
-								data-testid="pulse-renewals"
-							>
-								{life.renewals.length > 0
-									? life.renewals.map((r) => r.name).join(", ")
-									: "None"}
-							</p>
-						</div>
-					</div>
-				</div>
-			)}
+							<Icon className="w-3.5 h-3.5" />
+							{link.label}
+						</button>
+					);
+				})}
+			</div>
 
 			{/* PA brief */}
 			{paState && (
@@ -433,91 +355,104 @@ export default function Dashboard() {
 				</div>
 			)}
 
-			{/* Environment monitor (devices-mcp) */}
-			{env && (
-				<div className="glass-card p-6" data-testid="environment-widget">
+			{/* Life pulse */}
+			{life && (
+				<div className="glass-card p-6">
 					<h3 className="font-black text-sm tracking-[0.3em] uppercase text-white italic mb-4 flex items-center gap-3">
-						<Home className="w-4 h-4 text-emerald-400" /> Environment
+						<HeartPulse className="w-4 h-4 text-cosmos-400" /> Life Pulse
 					</h3>
-					<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-						{env.weather && (
-							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-								<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
-									Indoor
-								</p>
-								<p
-									className="text-sm font-bold text-white"
-									data-testid="env-temp"
-								>
-									{env.weather.temperature_c}°C
-								</p>
-							</div>
-						)}
-						{env.energy && (
-							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-								<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
-									Energy
-								</p>
-								<p
-									className="text-sm font-bold text-white"
-									data-testid="env-energy"
-								>
-									{env.energy.on}/{env.energy.total} on
-								</p>
-							</div>
-						)}
-						{env.fritz && (
-							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-								<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
-									Fritz!Box
-								</p>
-								<p
-									className={`text-sm font-bold ${env.fritz.ok ? "text-emerald-400" : "text-red-400"}`}
-									data-testid="env-fritz"
-								>
-									{env.fritz.ok ? "OK" : `${env.fritz.critical} critical`}
-								</p>
-							</div>
-						)}
-						{env.sensors.length > 0 && (
-							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
-								<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
-									Sensors
-								</p>
-								<p
-									className="text-sm font-bold text-white"
-									data-testid="env-sensors"
-								>
-									{env.sensors.map((s) => s.name ?? s.id).join(", ")}
-								</p>
-							</div>
-						)}
+					<div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
+								Medications
+							</p>
+							<p
+								className="text-sm font-bold text-emerald-400"
+								data-testid="pulse-meds"
+							>
+								{life.active_medications.length > 0
+									? life.active_medications.map((m) => m.name).join(", ")
+									: "None"}
+							</p>
+						</div>
+						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
+								Next doctor
+							</p>
+							<p
+								className="text-sm font-bold text-cosmos-400"
+								data-testid="pulse-visit"
+							>
+								{life.next_visits[0]
+									? `${life.next_visits[0].doctor} (${life.next_visits[0].date})`
+									: "None scheduled"}
+							</p>
+						</div>
+						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
+								Next trip
+							</p>
+							<p
+								className="text-sm font-bold text-amber-400"
+								data-testid="pulse-trip"
+							>
+								{life.trips[0]
+									? `${life.trips[0].title} (${life.trips[0].start_date})`
+									: "None planned"}
+							</p>
+						</div>
+						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
+								Birthdays soon
+							</p>
+							<p
+								className="text-sm font-bold text-pink-400"
+								data-testid="pulse-birthdays"
+							>
+								{life.birthdays.length > 0
+									? life.birthdays
+											.map((b) => `${b.name} in ${b.days_until}d`)
+											.join(", ")
+									: "None"}
+							</p>
+						</div>
+						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
+								Renewals soon
+							</p>
+							<p
+								className="text-sm font-bold text-red-400"
+								data-testid="pulse-renewals"
+							>
+								{life.renewals.length > 0
+									? life.renewals.map((r) => r.name).join(", ")
+									: "None"}
+							</p>
+						</div>
 					</div>
-					{env.offline_devices.length > 0 && (
-						<p className="text-sm text-red-400 uppercase tracking-widest mt-3">
-							Offline: {env.offline_devices.join(", ")}
-						</p>
-					)}
 				</div>
 			)}
 
-			{/* Quick nav */}
-			<div className="flex items-center gap-3 overflow-x-auto pb-1">
-				{quickLinks.map((link) => {
-					const Icon = link.icon;
-					return (
-						<button
-							type="button"
-							key={link.label}
-							onClick={() => navigate(link.path)}
-							className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] hover:border-white/20 text-slate-300 hover:text-white text-sm font-black uppercase tracking-widest transition-all whitespace-nowrap"
+			{/* KPIs */}
+			{stats.length > 0 && (
+				<div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+					{stats.map((s) => (
+						<div
+							key={s.title}
+							className="glass-card p-5"
+							data-testid={`kpi-${s.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
 						>
-							<Icon className="w-3.5 h-3.5" />
-							{link.label}
-						</button>
-					);
-				})}
-			</div>
+							<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
+								{s.title}
+							</p>
+							<p className="text-2xl font-black text-white truncate">
+								{s.value}
+							</p>
+							<p className="text-sm text-slate-300 mt-1 truncate">{s.change}</p>
+						</div>
+					))}
+				</div>
+			)}
 
 			{/* Content grid */}
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -605,7 +540,7 @@ export default function Dashboard() {
 
 						<button
 							type="button"
-							onClick={() => navigate("/vienna/coffee")}
+							onClick={() => navigate("/vienna/culture")}
 							className="w-full py-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white text-sm font-black uppercase tracking-[0.2em] transition-all border border-white/[0.06] mt-2"
 						>
 							Vienna Guide
@@ -666,6 +601,74 @@ export default function Dashboard() {
 					</div>
 				)}
 			</div>
+
+			{/* Environment monitor (devices-mcp) */}
+			{env && (
+				<div className="glass-card p-6" data-testid="environment-widget">
+					<h3 className="font-black text-sm tracking-[0.3em] uppercase text-white italic mb-4 flex items-center gap-3">
+						<Home className="w-4 h-4 text-emerald-400" /> Environment
+					</h3>
+					<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+						{env.weather && (
+							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+								<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
+									Indoor
+								</p>
+								<p
+									className="text-sm font-bold text-white"
+									data-testid="env-temp"
+								>
+									{env.weather.temperature_c}°C
+								</p>
+							</div>
+						)}
+						{env.energy && (
+							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+								<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
+									Energy
+								</p>
+								<p
+									className="text-sm font-bold text-white"
+									data-testid="env-energy"
+								>
+									{env.energy.on}/{env.energy.total} on
+								</p>
+							</div>
+						)}
+						{env.fritz && (
+							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+								<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
+									Fritz!Box
+								</p>
+								<p
+									className={`text-sm font-bold ${env.fritz.ok ? "text-emerald-400" : "text-red-400"}`}
+									data-testid="env-fritz"
+								>
+									{env.fritz.ok ? "OK" : `${env.fritz.critical} critical`}
+								</p>
+							</div>
+						)}
+						{env.sensors.length > 0 && (
+							<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
+								<p className="text-sm font-black text-slate-300 uppercase tracking-widest mb-1">
+									Sensors
+								</p>
+								<p
+									className="text-sm font-bold text-white"
+									data-testid="env-sensors"
+								>
+									{env.sensors.map((s) => s.name ?? s.id).join(", ")}
+								</p>
+							</div>
+						)}
+					</div>
+					{env.offline_devices.length > 0 && (
+						<p className="text-sm text-red-400 uppercase tracking-widest mt-3">
+							Offline: {env.offline_devices.join(", ")}
+						</p>
+					)}
+				</div>
+			)}
 		</div>
 	);
 }
