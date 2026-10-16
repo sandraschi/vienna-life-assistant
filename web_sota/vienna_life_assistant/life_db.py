@@ -6,8 +6,10 @@ and REST routers both call into these functions — one behavior, two surfaces.
 
 from __future__ import annotations
 
+import json
 import logging
 from datetime import date, timedelta
+from pathlib import Path
 from typing import Any, TypeVar
 
 from sqlalchemy import select
@@ -260,6 +262,75 @@ def journal_search(db: Session, query: str, limit: int = 20) -> list[dict]:
         if len(hits) >= limit:
             break
     return hits
+
+
+# --- PII overlay (gitignored) --------------------------------------------------
+# web_sota/data/pii.json holds Sandra's real doctor/meds/conditions. The file
+# lives under web_sota/data/ (gitignored) and is NEVER committed. This overlay
+# upserts its rows idempotently on every init_db() so real data survives
+# restarts without touching the demo seed. Missing file -> silent no-op.
+
+
+def _pii_path() -> Path:
+    return Path(__file__).resolve().parent.parent / "data" / "pii.json"
+
+
+def _upsert_by_name(db: Session, model, data: dict[str, Any]) -> str:
+    """Insert or update a row matched by name. Only non-empty values overwrite."""
+    name = (data.get("name") or "").strip()
+    if not name:
+        return "skipped"
+    row = db.scalar(select(model).where(model.name == name))
+    if row is None:
+        row = model(name=name)
+        db.add(row)
+        created = True
+    else:
+        created = False
+    for key, value in data.items():
+        if key == "name" or key == "id":
+            continue
+        if value is None or value == "":
+            continue
+        if hasattr(row, key):
+            setattr(row, key, value)
+    return "created" if created else "updated"
+
+
+def apply_pii_overlay(db: Session) -> dict[str, int]:
+    """Read data/pii.json (if present) and upsert meds/conditions/hausarzt."""
+    path = _pii_path()
+    result = {"medications": 0, "conditions": 0, "visits": 0}
+    if not path.is_file():
+        return result
+    try:
+        pii = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        logger.warning("PII overlay unreadable (%s) — skipping", exc)
+        return result
+    for med in pii.get("medications", []) or []:
+        if _upsert_by_name(db, Medication, dict(med)) != "skipped":
+            result["medications"] += 1
+    for cond in pii.get("conditions", []) or []:
+        if _upsert_by_name(db, MedicalCondition, dict(cond)) != "skipped":
+            result["conditions"] += 1
+    doc = pii.get("hausarzt", {}) or {}
+    doc_name = (doc.get("name") or "").strip()
+    if doc_name:
+        existing = db.scalar(select(DoctorVisit).where(DoctorVisit.doctor == doc_name))
+        if existing is None:
+            db.add(
+                DoctorVisit(
+                    date="",
+                    doctor=doc_name,
+                    specialty=doc.get("specialty", "") or "",
+                    reason="Hausarzt (aus PII-Block)",
+                )
+            )
+            result["visits"] += 1
+    db.commit()
+    logger.info("PII overlay applied: %s", result)
+    return result
 
 
 # --- Seed --------------------------------------------------------------------

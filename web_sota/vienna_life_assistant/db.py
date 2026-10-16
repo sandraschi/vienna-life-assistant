@@ -36,10 +36,11 @@ def init_db() -> None:
     import vienna_life_assistant.models  # noqa: F401
 
     Base.metadata.create_all(engine)
-    from vienna_life_assistant.life_db import seed_if_empty
+    from vienna_life_assistant.life_db import apply_pii_overlay, seed_if_empty
 
     with SessionLocal() as db:
         seed_if_empty(db)
+        apply_pii_overlay(db)
 
 
 def get_db():

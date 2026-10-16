@@ -14,6 +14,7 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from urllib.parse import quote_plus
 
 from vienna_life_assistant.activity_log import install_log_handler, log_activity
 from vienna_life_assistant.capabilities import build_capabilities
@@ -53,6 +54,22 @@ from vienna_life_assistant.skills_routes import router as skills_router
 from vienna_life_assistant.vienna_life_mcp import mcp as vienna_life_mcp
 
 logger = logging.getLogger("vienna-life-assistant.server")
+
+
+def _with_urls(items: list[dict], official: dict) -> list[dict]:
+    """Every object gets a link: official site when verified, else Maps search."""
+    out = []
+    for it in items:
+        it = dict(it)
+        if "url" not in it:
+            name = it.get("name", "")
+            if name in official:
+                it["url"] = official[name]
+            else:
+                q = quote_plus(f"{name} {it.get('address', '')} Wien".strip())
+                it["url"] = f"https://www.google.com/maps/search/?api=1&query={q}"
+        out.append(it)
+    return out
 
 # MCP sub-app — built BEFORE the parent FastAPI app (STARLETTE_NO_PYDANTIC_STANDARD
 # § Mounting FastMCP's http_app: BUG-008 + BUG-038). path="/" avoids the
@@ -438,31 +455,93 @@ async def get_coffee_houses():
 
 @app.get("/api/vienna/restaurants")
 async def get_restaurants():
-    """Get favorite Vienna restaurants with today's lunch menus."""
+    """Get Alsergrund/Servitenviertel restaurants (verified 2026-10-16) + live lunch menus."""
+    from vienna_life_assistant.restaurants_data import FETCHED_ON, SOURCES, get_official_urls, get_restaurants
     from vienna_life_assistant.vienna_scraper import fetch_lunch_menus
 
     return {
-        "restaurants": [
-            {
-                "name": "Gasthaus Orlik",
-                "address": "Servitengasse 7, 1090 Wien",
-                "is_favorite": True,
-            },
-            {"name": "Mast Weinbar", "address": "Servitengasse 3, 1090 Wien"},
-            {
-                "name": "Steirereck",
-                "address": "Am Heumarkt 2A, 1030 Wien",
-                "note": "Austria's best restaurant",
-            },
-            {
-                "name": "Enopizzeria Toledo",
-                "address": "Servitengasse 12, 1090 Wien",
-                "is_favorite": True,
-            },
-            {"name": "Plachutta", "address": "Wollzeile 38, 1010 Wien"},
-            {"name": "Meissl & Schadn", "address": "Mariahilfer Straße 64, 1070 Wien"},
-        ],
+        "restaurants": _with_urls(get_restaurants(), get_official_urls()),
         "lunch_menus": fetch_lunch_menus(),
+        "fetched_on": FETCHED_ON,
+        "sources": SOURCES,
+    }
+
+
+@app.get("/api/vienna/accommodation")
+async def get_accommodation():
+    """Vienna accommodation: Gemeindebau paean + stay entries (researched 2026-10-16)."""
+    from vienna_life_assistant.accommodation_data import FETCHED_ON, SOURCES, get_official_urls, get_paean, get_stays
+
+    return {
+        "paean": get_paean(),
+        "stays": _with_urls(get_stays(), get_official_urls()),
+        "fetched_on": FETCHED_ON,
+        "sources": SOURCES,
+    }
+
+
+@app.get("/api/vienna/culture")
+async def get_culture():
+    """Vienna culture: music to Schrammeln, museums, theater, film, festivals, galleries."""
+    from vienna_life_assistant.culture_data import FETCHED_ON, SOURCES, get_culture_intro, get_culture_venues, get_official_urls
+
+    return {
+        "intro": get_culture_intro(),
+        "venues": _with_urls(get_culture_venues(), get_official_urls()),
+        "fetched_on": FETCHED_ON,
+        "sources": SOURCES,
+    }
+
+
+@app.get("/api/vienna/history")
+async def get_history():
+    """Vienna history: Vindobona to the present (extensive section)."""
+    from vienna_life_assistant.history_data import FETCHED_ON, SOURCES, get_history_chapters, get_timeline
+
+    return {
+        "chapters": get_history_chapters(),
+        "timeline": get_timeline(),
+        "fetched_on": FETCHED_ON,
+        "sources": SOURCES,
+    }
+
+
+@app.get("/api/vienna/education")
+async def get_education():
+    """Vienna education: schools, universities, academies."""
+    from vienna_life_assistant.education_data import FETCHED_ON, SOURCES, get_education_chapters, get_institutions, get_official_urls
+
+    return {
+        "chapters": get_education_chapters(),
+        "institutions": _with_urls(get_institutions(), get_official_urls()),
+        "fetched_on": FETCHED_ON,
+        "sources": SOURCES,
+    }
+
+
+@app.get("/api/vienna/economy")
+async def get_economy():
+    """Vienna economy: employers, internationals, startups."""
+    from vienna_life_assistant.economy_data import FETCHED_ON, SOURCES, get_economy_chapters, get_official_urls, get_players
+
+    return {
+        "chapters": get_economy_chapters(),
+        "players": _with_urls(get_players(), get_official_urls()),
+        "fetched_on": FETCHED_ON,
+        "sources": SOURCES,
+    }
+
+
+@app.get("/api/vienna/politics")
+async def get_politics():
+    """Vienna politics: Bund, Stadt, Haltung."""
+    from vienna_life_assistant.politics_data import FETCHED_ON, SOURCES, get_actors, get_official_urls, get_politics_chapters
+
+    return {
+        "chapters": get_politics_chapters(),
+        "actors": _with_urls(get_actors(), get_official_urls()),
+        "fetched_on": FETCHED_ON,
+        "sources": SOURCES,
     }
 
 
