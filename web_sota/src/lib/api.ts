@@ -88,6 +88,13 @@ export const API = {
 	prompts: "/api/prompts",
 	vienna: {
 		coffee: "/api/vienna/coffee",
+		restaurants: "/api/vienna/restaurants",
+		accommodation: "/api/vienna/accommodation",
+		culture: "/api/vienna/culture",
+		history: "/api/vienna/history",
+		education: "/api/vienna/education",
+		economy: "/api/vienna/economy",
+		politics: "/api/vienna/politics",
 		music: "/api/vienna/music",
 		museums: "/api/vienna/museums",
 		transport: "/api/vienna/transport",

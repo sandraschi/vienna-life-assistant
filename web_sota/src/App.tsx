@@ -1,18 +1,23 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import AppLayout from "./AppLayout";
+import Accommodation from "./pages/Accommodation";
 import Apps from "./pages/Apps";
 import Calendar from "./pages/Calendar";
 import Chat from "./pages/Chat";
 import ConcertHall from "./pages/ConcertHall";
 import Contacts from "./pages/Contacts";
 import ControlTower from "./pages/ControlTower";
+import Culture from "./pages/Culture";
 import Dashboard from "./pages/Dashboard";
+import Economy from "./pages/Economy";
+import Education from "./pages/Education";
 import Email from "./pages/Email";
 import Expenses from "./pages/Expenses";
 import Fleet from "./pages/Fleet";
 import Goliath from "./pages/Goliath";
 import Health from "./pages/Health";
 import Help from "./pages/Help";
+import History from "./pages/History";
 import Household from "./pages/Household";
 import Journal from "./pages/Journal";
 import KaffeehausHub from "./pages/KaffeehausHub";
@@ -21,6 +26,8 @@ import MuseumGuide from "./pages/MuseumGuide";
 import News from "./pages/News";
 import Notes from "./pages/Notes";
 import Onboarding from "./pages/Onboarding";
+import Politics from "./pages/Politics";
+import Restaurants from "./pages/Restaurants";
 import Services from "./pages/Services";
 import Settings from "./pages/Settings";
 import ShoppingOffers from "./pages/ShoppingOffers";
@@ -52,6 +59,13 @@ export default function App() {
 
 				{/* Vienna Life domain */}
 				<Route path="vienna/coffee" element={<KaffeehausHub />} />
+				<Route path="vienna/restaurants" element={<Restaurants />} />
+				<Route path="vienna/accommodation" element={<Accommodation />} />
+				<Route path="vienna/culture" element={<Culture />} />
+				<Route path="vienna/history" element={<History />} />
+				<Route path="vienna/education" element={<Education />} />
+				<Route path="vienna/economy" element={<Economy />} />
+				<Route path="vienna/politics" element={<Politics />} />
 				<Route path="vienna/music" element={<ConcertHall />} />
 				<Route path="vienna/museums" element={<MuseumGuide />} />
 				<Route path="vienna/shopping" element={<ShoppingOffers />} />
