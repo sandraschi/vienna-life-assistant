@@ -28,6 +28,7 @@ import {
 	NotebookText,
 	Palette,
 	Plane,
+	Plug,
 	Receipt,
 	Scale,
 	ScrollText,
@@ -45,6 +46,7 @@ import {
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { API_BASE } from "./lib/api";
+import { useLang } from "./lib/i18n";
 import useZoom from "./lib/use-zoom";
 import { cn } from "./lib/utils";
 
@@ -219,55 +221,61 @@ export default function AppLayout() {
 		};
 	}, []);
 	const location = useLocation();
+	const { t, lang, setLang } = useLang();
 
 	const mainNav = [
-		{ title: "Home", icon: LayoutDashboard, path: "/" },
-		{ title: "Chat", icon: MessageCircle, path: "/chat" },
-		{ title: "Tools", icon: Wrench, path: "/tools" },
-		{ title: "Skills", icon: Sparkles, path: "/skills" },
-		{ title: "Logs", icon: ScrollText, path: "/logs" },
-		{ title: "Apps", icon: Grid3X3, path: "/apps" },
-		{ title: "Help", icon: BookOpen, path: "/help" },
+		{ title: t("nav.home"), icon: LayoutDashboard, path: "/" },
+		{ title: t("nav.chat"), icon: MessageCircle, path: "/chat" },
+		{ title: t("nav.tools"), icon: Wrench, path: "/tools" },
+		{ title: t("nav.skills"), icon: Sparkles, path: "/skills" },
+		{ title: t("nav.logs"), icon: ScrollText, path: "/logs" },
+		{ title: t("nav.apps"), icon: Grid3X3, path: "/apps" },
+		{ title: t("nav.help"), icon: BookOpen, path: "/help" },
 	];
 
 	const lifeNav = [
-		{ title: "Health", icon: HeartPulse, path: "/health" },
-		{ title: "Calendar", icon: Calendar, path: "/calendar" },
-		{ title: "Travel", icon: Plane, path: "/travel" },
-		{ title: "Journal", icon: NotebookPen, path: "/journal" },
-		{ title: "News", icon: Newspaper, path: "/news" },
-		{ title: "Notes", icon: NotebookText, path: "/notes" },
-		{ title: "Email", icon: Mail, path: "/email" },
-		{ title: "Contacts", icon: Users, path: "/contacts" },
-		{ title: "Household", icon: Home, path: "/household" },
-		{ title: "Expenses", icon: Receipt, path: "/expenses" },
+		{ title: t("nav.health"), icon: HeartPulse, path: "/health" },
+		{ title: t("nav.calendar"), icon: Calendar, path: "/calendar" },
+		{ title: t("nav.travel"), icon: Plane, path: "/travel" },
+		{ title: t("nav.journal"), icon: NotebookPen, path: "/journal" },
+		{ title: t("nav.news"), icon: Newspaper, path: "/news" },
+		{ title: t("nav.notes"), icon: NotebookText, path: "/notes" },
+		{ title: t("nav.email"), icon: Mail, path: "/email" },
+		{ title: t("nav.contacts"), icon: Users, path: "/contacts" },
+		{ title: t("nav.household"), icon: Home, path: "/household" },
+		{ title: t("nav.expenses"), icon: Receipt, path: "/expenses" },
 	];
 
 	const viennaLifeNav = [
 		{
-			title: "Restaurants",
+			title: t("nav.restaurants"),
 			icon: UtensilsCrossed,
 			path: "/vienna/restaurants",
 		},
-		{ title: "Coffee houses", icon: Coffee, path: "/vienna/coffee" },
-		{ title: "Kultur", icon: Clapperboard, path: "/vienna/culture" },
-		{ title: "Concert Hall", icon: Music, path: "/vienna/music" },
-		{ title: "Museums", icon: Palette, path: "/vienna/museums" },
-		{ title: "Shopping", icon: ShoppingCart, path: "/vienna/shopping" },
-		{ title: "Wohnen", icon: BedDouble, path: "/vienna/accommodation" },
-		{ title: "Geschichte", icon: ScrollText, path: "/vienna/history" },
-		{ title: "Bildung", icon: GraduationCap, path: "/vienna/education" },
-		{ title: "Wirtschaft", icon: Briefcase, path: "/vienna/economy" },
-		{ title: "Politik", icon: Scale, path: "/vienna/politics" },
-		{ title: "Verkehr", icon: Bus, path: "/vienna/transport" },
+		{ title: t("nav.coffee"), icon: Coffee, path: "/vienna/coffee" },
+		{ title: t("nav.culture"), icon: Clapperboard, path: "/vienna/culture" },
+		{ title: t("nav.concerts"), icon: Music, path: "/vienna/music" },
+		{ title: t("nav.museums"), icon: Palette, path: "/vienna/museums" },
+		{ title: t("nav.shopping"), icon: ShoppingCart, path: "/vienna/shopping" },
+		{ title: t("nav.living"), icon: BedDouble, path: "/vienna/accommodation" },
+		{ title: t("nav.history"), icon: ScrollText, path: "/vienna/history" },
+		{
+			title: t("nav.education"),
+			icon: GraduationCap,
+			path: "/vienna/education",
+		},
+		{ title: t("nav.economy"), icon: Briefcase, path: "/vienna/economy" },
+		{ title: t("nav.politics"), icon: Scale, path: "/vienna/politics" },
+		{ title: t("nav.transport"), icon: Bus, path: "/vienna/transport" },
 	];
 
 	const systemNav = [
-		{ title: "Control Tower", icon: Gauge, path: "/control-tower" },
-		{ title: "Fleet Command", icon: Anchor, path: "/fleet" },
-		{ title: "Services", icon: Server, path: "/services" },
-		{ title: "Goliath", icon: Cpu, path: "/goliath" },
-		{ title: "Settings", icon: Settings, path: "/settings" },
+		{ title: t("nav.tower"), icon: Gauge, path: "/control-tower" },
+		{ title: t("nav.fleet"), icon: Anchor, path: "/fleet" },
+		{ title: t("nav.services"), icon: Server, path: "/services" },
+		{ title: t("nav.crossconnects"), icon: Plug, path: "/crossconnects" },
+		{ title: t("nav.goliath"), icon: Cpu, path: "/goliath" },
+		{ title: t("nav.settings"), icon: Settings, path: "/settings" },
 	];
 
 	const isActive = (path: string) =>
@@ -321,7 +329,7 @@ export default function AppLayout() {
 					{isSidebarOpen ? (
 						<>
 							<NavSection
-								title="Fleet SOTA"
+								title={t("nav.group.fleet")}
 								count={mainNav.length}
 								collapsed={!!collapsedSections.main}
 								onToggle={() => toggleSection("main")}
@@ -338,7 +346,7 @@ export default function AppLayout() {
 							</NavSection>
 
 							<NavSection
-								title="Life"
+								title={t("nav.group.life")}
 								count={lifeNav.length}
 								collapsed={!!collapsedSections.life}
 								onToggle={() => toggleSection("life")}
@@ -354,7 +362,7 @@ export default function AppLayout() {
 							</NavSection>
 
 							<NavSection
-								title="Wien"
+								title={t("nav.group.wien")}
 								count={viennaLifeNav.length}
 								collapsed={!!collapsedSections.vienna}
 								onToggle={() => toggleSection("vienna")}
@@ -371,7 +379,7 @@ export default function AppLayout() {
 							</NavSection>
 
 							<NavSection
-								title="System"
+								title={t("nav.group.system")}
 								count={systemNav.length}
 								collapsed={!!collapsedSections.system}
 								onToggle={() => toggleSection("system")}
@@ -418,7 +426,7 @@ export default function AppLayout() {
 							<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 group-focus-within:text-cosmos-400 transition-colors" />
 							<input
 								type="text"
-								placeholder="Guten Morgen, Sandra. What's happening in Vienna?"
+								placeholder={t("top.search")}
 								className="w-full bg-white/[0.03] border border-white/[0.06] rounded-2xl py-3 pl-12 pr-6 text-sm font-medium focus:outline-none focus:border-cosmos-500/40 focus:bg-white/[0.05] transition-all tracking-tight"
 							/>
 						</div>
@@ -436,10 +444,22 @@ export default function AppLayout() {
 								{backendOk === null
 									? "Connecting..."
 									: backendOk
-										? "Connected"
-										: "Offline"}
+										? t("top.ok")
+										: t("top.offline")}
 							</span>
 						</div>
+
+						<select
+							value={lang}
+							onChange={(e) => setLang(e.target.value === "de" ? "de" : "en")}
+							className="px-3 py-2.5 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-slate-300 text-sm font-black uppercase tracking-widest focus:outline-none cursor-pointer"
+							aria-label="Language"
+							title="Language / Sprache"
+							data-testid="lang-select"
+						>
+							<option value="en">EN</option>
+							<option value="de">DE</option>
+						</select>
 
 						<button
 							type="button"

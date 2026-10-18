@@ -717,6 +717,9 @@ async def fleet_start_app(body: dict[str, Any]):
         "mywienerlinien": "D:\\Dev\\repos\\mywienerlinien\\start.ps1",
         "gtfs-mcp": "D:\\Dev\\repos\\gtfs-mcp\\start.ps1",
         "devices-mcp": "D:\\Dev\\repos\\devices-mcp\\start.ps1",
+        "email-mcp": "D:\\Dev\\repos\\email-mcp\\start.ps1",
+        "onenote-mcp": "D:\\Dev\\repos\\onenote-mcp\\start.ps1",
+        "aiwatcher-mcp": "D:\\Dev\\repos\\aiwatcher-mcp\\start.ps1",
     }
     name = str(body.get("name", ""))
     script = ALLOW.get(name)
@@ -740,6 +743,71 @@ async def fleet_start_app(body: dict[str, Any]):
     except Exception as e:  # noqa: BLE001
         raise HTTPException(status_code=500, detail=str(e))
     return {"ok": True, "app": name, "status": "starting"}
+
+
+@app.get("/api/vienna/crossconnects")
+async def get_crossconnects():
+    """Fleet bridges with live status: what ViLife talks to, and how to start it."""
+    import httpx
+
+    bridges = [
+        {
+            "name": "mywienerlinien",
+            "purpose": "Live-Abfahrten + Karte mit Fahrzeugpositionen",
+            "port": 11170,
+            "frontend": 10896,
+            "feeds": "Verkehr-Seite, Transit-Widget",
+        },
+        {
+            "name": "gtfs-mcp",
+            "purpose": "GTFS-Fahrplaene als Zweitquelle",
+            "port": 10913,
+            "frontend": 10912,
+            "feeds": "Verkehr-Seite (Fallback)",
+        },
+        {
+            "name": "devices-mcp",
+            "purpose": "Vienna living: Wohnungstemperatur, Fritz!Box, Kameras, Energie",
+            "port": 10717,
+            "frontend": 10716,
+            "feeds": "Environment-Widget, Dashboard",
+        },
+        {
+            "name": "email-mcp",
+            "purpose": "Mail-Gateway (Inbox, Senden, Suche)",
+            "port": 10813,
+            "frontend": None,
+            "feeds": "Email-Seite",
+        },
+        {
+            "name": "onenote-mcp",
+            "purpose": "OneNote-Gateway (Journal, Notizen)",
+            "port": 10907,
+            "frontend": None,
+            "feeds": "Notes-Seite",
+        },
+        {
+            "name": "aiwatcher-mcp",
+            "purpose": "News-Engine (Topmeldungen, Trends, Bundles)",
+            "port": 10946,
+            "frontend": None,
+            "feeds": "News-Seite",
+        },
+    ]
+    out = []
+    for b in bridges:
+        status = "offline"
+        for path in ("/health", "/"):
+            try:
+                with httpx.Client(timeout=2.0) as client:
+                    r = client.get(f"http://127.0.0.1:{b['port']}{path}")
+                    if 200 <= r.status_code < 300:
+                        status = "live"
+                        break
+            except Exception:  # noqa: BLE001
+                continue
+        out.append({**b, "status": status})
+    return {"bridges": out}
 
 
 @app.get("/api/vienna/shopping/offers", response_model=list[ShoppingOffer])

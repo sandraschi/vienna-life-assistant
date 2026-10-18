@@ -96,6 +96,7 @@ export const API = {
 		economy: "/api/vienna/economy",
 		politics: "/api/vienna/politics",
 		verkehr: "/api/vienna/verkehr",
+		crossconnects: "/api/vienna/crossconnects",
 		transport: "/api/vienna/transport",
 		music: "/api/vienna/music",
 		museums: "/api/vienna/museums",

@@ -123,6 +123,7 @@ export default function Help() {
 							{ path: "/vienna/economy", label: "Wirtschaft" },
 							{ path: "/vienna/politics", label: "Politik" },
 							{ path: "/vienna/transport", label: "Verkehr" },
+							{ path: "/crossconnects", label: "Anbindungen" },
 							{ path: "/skills", label: "Skills" },
 							{ path: "/tools", label: "Tools / capabilities" },
 							{ path: "/settings", label: "LLM settings", icon: Cpu },
