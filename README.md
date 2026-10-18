@@ -16,6 +16,26 @@
 
 A personal **AI life assistant** for Vienna (Alsergrund): owned life data (calendar, health, travel, contacts, household, journal), an agent that executes tools, journal memory (RAG), a proactive daily brief, voice, and fleet orchestration (Plex, Calibre, Wiener Linien, aiwatcher, Fritz!Box).
 
+## Install on Claude Desktop (Windows, one click, Claude-only)
+
+```powershell
+irm https://github.com/sandraschi/vienna-life-assistant/releases/latest/download/install.ps1 | iex
+```
+
+Other clients (Cursor, VS Code, Claude Code) — local checkout, no install script needed:
+
+```json
+{
+  "mcpServers": {
+    "vienna-life": {
+      "command": "uv",
+      "args": ["run", "--directory", "D:/Dev/repos/vienna-life-assistant/web_sota", "python", "-m", "vienna_life_assistant.stdio"],
+      "env": { "PYTHONPATH": "D:/Dev/repos/vienna-life-assistant/web_sota" }
+    }
+  }
+}
+```
+
 ## Quick Start
 
 ```powershell
