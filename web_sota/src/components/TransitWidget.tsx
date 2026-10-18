@@ -9,14 +9,19 @@ interface Departure {
 }
 
 interface TransitData {
-	Friedensbrücke: Departure[];
-	"Julius-Tandler-Platz": Departure[];
+	ok?: boolean;
+	mock?: boolean;
+	offline?: boolean;
+	source?: string;
+	Friedensbrücke?: Departure[];
+	"Julius-Tandler-Platz"?: Departure[];
 }
+
+const META_KEYS = ["ok", "mock", "offline", "source"];
 
 export default function TransitWidget() {
 	const [data, setData] = useState<TransitData | null>(null);
-	const [activeTab, setActiveTab] =
-		useState<keyof TransitData>("Friedensbrücke");
+	const [activeTab, setActiveTab] = useState<string>("Friedensbrücke");
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -48,7 +53,14 @@ export default function TransitWidget() {
 
 	if (!data) return null;
 
-	const currentDepartures = data[activeTab];
+	const stations = Object.keys(data).filter((k) => !META_KEYS.includes(k));
+	const currentDepartures =
+		(stations.includes(activeTab)
+			? (data[activeTab as keyof TransitData] as unknown as
+					| Departure[]
+					| undefined)
+			: undefined) ?? [];
+	const live = !data.offline && !data.mock;
 
 	return (
 		<div className="glass-card overflow-hidden flex flex-col">
@@ -58,11 +70,22 @@ export default function TransitWidget() {
 						<MapPin className="w-4 h-4" />
 					</div>
 					<div>
-						<h3 className="font-bold text-sm tracking-widest uppercase mb-0.5">
-							Transit Monitor
-						</h3>
+						<div className="flex items-center gap-2">
+							<h3 className="font-bold text-sm tracking-widest uppercase mb-0.5">
+								Transit Monitor
+							</h3>
+							<span
+								className={`px-2 py-0.5 rounded-full text-sm font-black uppercase tracking-widest border ${
+									live
+										? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+										: "bg-amber-500/10 border-amber-500/30 text-amber-400"
+								}`}
+							>
+								{live ? "Live" : "Offline"}
+							</span>
+						</div>
 						<p className="text-sm text-slate-300 font-medium">
-							9. Alsergrund Real-time
+							Wien departures
 						</p>
 					</div>
 				</div>
@@ -70,11 +93,11 @@ export default function TransitWidget() {
 
 			{/* Station Tabs */}
 			<div className="flex border-b border-white/[0.04]">
-				{Object.keys(data).map((station) => (
+				{stations.map((station) => (
 					<button
 						type="button"
 						key={station}
-						onClick={() => setActiveTab(station as keyof TransitData)}
+						onClick={() => setActiveTab(station)}
 						className={`flex-1 py-3 text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
 							activeTab === station
 								? "border-emerald-500 text-white bg-white/[0.02]"
@@ -87,6 +110,13 @@ export default function TransitWidget() {
 			</div>
 
 			<div className="divide-y divide-white/[0.04] flex-1">
+				{currentDepartures.length === 0 && (
+					<p className="px-6 py-6 text-sm text-slate-300 leading-relaxed">
+						{data.offline
+							? "Keine Live-Daten: mywienerlinien und gtfs-mcp sind offline. Start in D:\\Dev\\repos\\mywienerlinien\\start.ps1 — erfundene Zeiten gibt es hier keine."
+							: "Keine Abfahrten gefunden."}
+					</p>
+				)}
 				{currentDepartures.map((departure, idx) => (
 					<div
 						// biome-ignore lint/suspicious/noArrayIndexKey: line+dest repeats; idx disambiguates
@@ -138,7 +168,9 @@ export default function TransitWidget() {
 			<div className="p-3 bg-white/[0.02] border-t border-white/[0.06] flex items-center justify-center gap-2">
 				<AlertCircle className="w-3 h-3 text-amber-500" />
 				<span className="text-sm font-bold text-slate-300 uppercase tracking-widest">
-					Normal operation on all lines
+					{data.offline
+						? "Bridges offline"
+						: (data.source ?? "Normal operation on all lines")}
 				</span>
 			</div>
 		</div>

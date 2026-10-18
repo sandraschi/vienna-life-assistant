@@ -5,6 +5,7 @@ import {
 	Bell,
 	BookOpen,
 	Briefcase,
+	Bus,
 	Calendar,
 	ChevronDown,
 	ChevronRight,
@@ -258,6 +259,7 @@ export default function AppLayout() {
 		{ title: "Bildung", icon: GraduationCap, path: "/vienna/education" },
 		{ title: "Wirtschaft", icon: Briefcase, path: "/vienna/economy" },
 		{ title: "Politik", icon: Scale, path: "/vienna/politics" },
+		{ title: "Verkehr", icon: Bus, path: "/vienna/transport" },
 	];
 
 	const systemNav = [

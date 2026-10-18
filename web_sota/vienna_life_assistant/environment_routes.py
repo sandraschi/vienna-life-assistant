@@ -98,7 +98,12 @@ def environment_overview() -> dict[str, Any]:
 def live_departures(
     lines: list[str] | None = None, rbl: str | None = None
 ) -> dict[str, Any] | None:
-    """Real Wiener Linien departures via mywienerlinien REST (line- or stop-based)."""
+    """Real Wiener Linien departures via mywienerlinien REST (line- or stop-based).
+
+    Tries fleet backend (11170) first, then the docker port (3079), then the
+    env override. Returns None when everything is offline — callers must NOT
+    invent departures.
+    """
     params: dict[str, str] = {}
     if rbl:
         params["rbl"] = rbl
@@ -106,14 +111,40 @@ def live_departures(
         params["lines"] = ",".join(lines)
     else:
         params["lines"] = "U4,5,12,D"
-    try:
-        with httpx.Client(follow_redirects=True, timeout=_TIMEOUT) as client:
-            resp = client.get(f"{MYWIENERLINIEN_URL}/api/arrivals", params=params)
-            resp.raise_for_status()
-            return resp.json()
-    except Exception as e:  # noqa: BLE001
-        logger.warning("mywienerlinien arrivals failed: %s", e)
-        return None
+    bases = [
+        os.environ.get("MYWIENERLINIEN_URL", ""),
+        "http://127.0.0.1:11170",
+        "http://127.0.0.1:3079",
+    ]
+    for base in [b for b in bases if b]:
+        try:
+            with httpx.Client(follow_redirects=True, timeout=_TIMEOUT) as client:
+                resp = client.get(f"{base}/api/arrivals", params=params)
+                resp.raise_for_status()
+                data = resp.json()
+                data["_via"] = base
+                return data
+        except Exception as e:  # noqa: BLE001
+            logger.warning("mywienerlinien arrivals failed at %s: %s", base, e)
+    return None
+
+
+def monitor_departures(rbl: str) -> dict[str, Any] | None:
+    """Live departures for one stop via mywienerlinien /api/departures (OGD, no key).
+
+    Tries fleet backend (11170) then docker (3079). None when offline.
+    """
+    for base in ["http://127.0.0.1:11170", "http://127.0.0.1:3079"]:
+        try:
+            with httpx.Client(follow_redirects=True, timeout=_TIMEOUT) as client:
+                resp = client.get(f"{base}/api/departures", params={"rbl": rbl})
+                resp.raise_for_status()
+                data = resp.json()
+                data["_via"] = base
+                return data
+        except Exception as e:  # noqa: BLE001
+            logger.warning("mywienerlinien departures failed at %s: %s", base, e)
+    return None
 
 
 @router.get("/overview")

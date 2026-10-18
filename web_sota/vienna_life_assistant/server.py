@@ -71,6 +71,7 @@ def _with_urls(items: list[dict], official: dict) -> list[dict]:
         out.append(it)
     return out
 
+
 # MCP sub-app — built BEFORE the parent FastAPI app (STARLETTE_NO_PYDANTIC_STANDARD
 # § Mounting FastMCP's http_app: BUG-008 + BUG-038). path="/" avoids the
 # double-prefix under the /mcp mount; its lifespan is folded into the parent
@@ -456,7 +457,12 @@ async def get_coffee_houses():
 @app.get("/api/vienna/restaurants")
 async def get_restaurants():
     """Get Alsergrund/Servitenviertel restaurants (verified 2026-10-16) + live lunch menus."""
-    from vienna_life_assistant.restaurants_data import FETCHED_ON, SOURCES, get_official_urls, get_restaurants
+    from vienna_life_assistant.restaurants_data import (
+        FETCHED_ON,
+        SOURCES,
+        get_official_urls,
+        get_restaurants,
+    )
     from vienna_life_assistant.vienna_scraper import fetch_lunch_menus
 
     return {
@@ -470,7 +476,13 @@ async def get_restaurants():
 @app.get("/api/vienna/accommodation")
 async def get_accommodation():
     """Vienna accommodation: Gemeindebau paean + stay entries (researched 2026-10-16)."""
-    from vienna_life_assistant.accommodation_data import FETCHED_ON, SOURCES, get_official_urls, get_paean, get_stays
+    from vienna_life_assistant.accommodation_data import (
+        FETCHED_ON,
+        SOURCES,
+        get_official_urls,
+        get_paean,
+        get_stays,
+    )
 
     return {
         "paean": get_paean(),
@@ -483,7 +495,13 @@ async def get_accommodation():
 @app.get("/api/vienna/culture")
 async def get_culture():
     """Vienna culture: music to Schrammeln, museums, theater, film, festivals, galleries."""
-    from vienna_life_assistant.culture_data import FETCHED_ON, SOURCES, get_culture_intro, get_culture_venues, get_official_urls
+    from vienna_life_assistant.culture_data import (
+        FETCHED_ON,
+        SOURCES,
+        get_culture_intro,
+        get_culture_venues,
+        get_official_urls,
+    )
 
     return {
         "intro": get_culture_intro(),
@@ -496,7 +514,12 @@ async def get_culture():
 @app.get("/api/vienna/history")
 async def get_history():
     """Vienna history: Vindobona to the present (extensive section)."""
-    from vienna_life_assistant.history_data import FETCHED_ON, SOURCES, get_history_chapters, get_timeline
+    from vienna_life_assistant.history_data import (
+        FETCHED_ON,
+        SOURCES,
+        get_history_chapters,
+        get_timeline,
+    )
 
     return {
         "chapters": get_history_chapters(),
@@ -509,7 +532,13 @@ async def get_history():
 @app.get("/api/vienna/education")
 async def get_education():
     """Vienna education: schools, universities, academies."""
-    from vienna_life_assistant.education_data import FETCHED_ON, SOURCES, get_education_chapters, get_institutions, get_official_urls
+    from vienna_life_assistant.education_data import (
+        FETCHED_ON,
+        SOURCES,
+        get_education_chapters,
+        get_institutions,
+        get_official_urls,
+    )
 
     return {
         "chapters": get_education_chapters(),
@@ -522,7 +551,13 @@ async def get_education():
 @app.get("/api/vienna/economy")
 async def get_economy():
     """Vienna economy: employers, internationals, startups."""
-    from vienna_life_assistant.economy_data import FETCHED_ON, SOURCES, get_economy_chapters, get_official_urls, get_players
+    from vienna_life_assistant.economy_data import (
+        FETCHED_ON,
+        SOURCES,
+        get_economy_chapters,
+        get_official_urls,
+        get_players,
+    )
 
     return {
         "chapters": get_economy_chapters(),
@@ -535,11 +570,36 @@ async def get_economy():
 @app.get("/api/vienna/politics")
 async def get_politics():
     """Vienna politics: Bund, Stadt, Haltung."""
-    from vienna_life_assistant.politics_data import FETCHED_ON, SOURCES, get_actors, get_official_urls, get_politics_chapters
+    from vienna_life_assistant.politics_data import (
+        FETCHED_ON,
+        SOURCES,
+        get_actors,
+        get_official_urls,
+        get_politics_chapters,
+    )
 
     return {
         "chapters": get_politics_chapters(),
         "actors": _with_urls(get_actors(), get_official_urls()),
+        "fetched_on": FETCHED_ON,
+        "sources": SOURCES,
+    }
+
+
+@app.get("/api/vienna/verkehr")
+async def get_transport():
+    """Vienna transport: world-class Oeffis vs. car flood."""
+    from vienna_life_assistant.transport_data import (
+        FETCHED_ON,
+        SOURCES,
+        get_links,
+        get_official_urls,
+        get_transport_chapters,
+    )
+
+    return {
+        "chapters": get_transport_chapters(),
+        "links": _with_urls(get_links(), get_official_urls()),
         "fetched_on": FETCHED_ON,
         "sources": SOURCES,
     }
@@ -592,58 +652,94 @@ async def get_vienna_press():
 
 @app.get("/api/vienna/transport")
 async def get_transit_info():
-    """Real Wiener Linien departures via mywienerlinien; static reference fallback."""
-    from vienna_life_assistant.environment_routes import live_departures
+    """Real Wiener Linien departures via mywienerlinien /api/departures (OGD).
 
-    live = live_departures(lines=["U4", "5", "12", "D"])
-    if live is not None:
-        return {"ok": True, "source": "mywienerlinien (real)", **live}
-    return {
-        "ok": True,
-        "mock": True,
-        "source": "static reference — mywienerlinien/gtfs-mcp offline; start them for live departures",
-        "Friedensbrücke": [
-            {
-                "line": "U4",
-                "destination": "Heiligenstadt",
-                "time": "2 min",
-                "type": "u-bahn",
-            },
-            {
-                "line": "U4",
-                "destination": "Hütteldorf",
-                "time": "1 min",
-                "type": "u-bahn",
-            },
-            {
-                "line": "5",
-                "destination": "Praterstern",
-                "time": "4 min",
-                "type": "tram",
-            },
-            {
-                "line": "12",
-                "destination": "Hesserplatz",
-                "time": "6 min",
-                "type": "tram",
-            },
-        ],
-        "Julius-Tandler-Platz": [
-            {"line": "D", "destination": "Nußdorf", "time": "3 min", "type": "tram"},
-            {
-                "line": "D",
-                "destination": "Absberggasse",
-                "time": "5 min",
-                "type": "tram",
-            },
-            {
-                "line": "5",
-                "destination": "Praterstern",
-                "time": "4 min",
-                "type": "tram",
-            },
-        ],
+    RBLs verified: Friedensbrücke 352/385/4404/4433 (tramstations.md), Spittelau
+    121 (/api/stops/major). Offline -> empty stations with offline=True (mock
+    flag kept for the declared-mock test). Never fabricated times.
+    """
+    from vienna_life_assistant.environment_routes import monitor_departures
+
+    # RBLs verified: FB via tramstations.md + Docker-Logs; FJB via OGD-Steige-Cache
+    # (Halt 1085616162). FB nur 5+12 (U-Bahn uninteressant); FJB alle live
+    # Linien. Ein Eintrag je Station genuegt (2 Min. Takt). D-Steig am FJB
+    # (Bereich 1) hat KEINEN Monitor-RBL — D dort nicht live abfragbar.
+    stops = {
+        "Friedensbrücke": (["352", "385", "4404", "4433"], ["5", "12"]),
+        "Franz-Josefs-Bahnhof": (["353", "384", "101", "118", "5745", "5748"], None),
     }
+    result: dict[str, Any] = {}
+    via: str | None = None
+    for name, (rbls, only) in stops.items():
+        merged: list[dict[str, Any]] = []
+        for rbl in rbls:
+            live = monitor_departures(rbl)
+            if live is None:
+                return {
+                    "ok": True,
+                    "mock": True,
+                    "offline": True,
+                    "source": "mywienerlinien + gtfs-mcp offline — start D:\\Dev\\repos\\mywienerlinien\\start.ps1 for live departures",
+                    "Friedensbrücke": [],
+                    "Franz-Josefs-Bahnhof": [],
+                }
+            via = live.pop("_via", via)
+            for d in live.get("departures") or []:
+                line = str(d.get("line", "?"))
+                if line.startswith("U"):
+                    continue
+                if only is not None and line not in only:
+                    continue
+                merged.append(
+                    {
+                        "line": line,
+                        "destination": d.get("destination", "?"),
+                        "time": "jetzt"
+                        if d.get("countdown") == 0
+                        else f"{d.get('countdown')} min",
+                        "type": "tram",
+                    }
+                )
+        result[name] = merged[:1]
+    return {"ok": True, "source": f"live via {via}", **result}
+
+
+@app.post("/api/fleet/start")
+async def fleet_start_app(body: dict[str, Any]):
+    """Cross-hop starter: launches a fleet app's start.ps1 detached.
+
+    Allowlist only (mywienerlinien, gtfs-mcp, devices-mcp). Local-only by
+    design (binds 127.0.0.1, no auth — same trust zone as the dashboard).
+    """
+    import subprocess
+
+    ALLOW = {
+        "mywienerlinien": "D:\\Dev\\repos\\mywienerlinien\\start.ps1",
+        "gtfs-mcp": "D:\\Dev\\repos\\gtfs-mcp\\start.ps1",
+        "devices-mcp": "D:\\Dev\\repos\\devices-mcp\\start.ps1",
+    }
+    name = str(body.get("name", ""))
+    script = ALLOW.get(name)
+    if script is None:
+        raise HTTPException(status_code=404, detail=f"unknown app: {name}")
+    try:
+        subprocess.Popen(  # noqa: S603
+            [
+                "pwsh",
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                script,
+                "-Headless",
+            ],
+            cwd="D:\\Dev\\repos\\" + name,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(status_code=500, detail=str(e))
+    return {"ok": True, "app": name, "status": "starting"}
 
 
 @app.get("/api/vienna/shopping/offers", response_model=list[ShoppingOffer])

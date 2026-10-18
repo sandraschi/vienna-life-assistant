@@ -33,6 +33,7 @@ import Settings from "./pages/Settings";
 import ShoppingOffers from "./pages/ShoppingOffers";
 import Skills from "./pages/Skills";
 import Tools from "./pages/Tools";
+import Transport from "./pages/Transport";
 import Travel from "./pages/Travel";
 
 export default function App() {
@@ -66,6 +67,7 @@ export default function App() {
 				<Route path="vienna/education" element={<Education />} />
 				<Route path="vienna/economy" element={<Economy />} />
 				<Route path="vienna/politics" element={<Politics />} />
+				<Route path="vienna/transport" element={<Transport />} />
 				<Route path="vienna/music" element={<ConcertHall />} />
 				<Route path="vienna/museums" element={<MuseumGuide />} />
 				<Route path="vienna/shopping" element={<ShoppingOffers />} />

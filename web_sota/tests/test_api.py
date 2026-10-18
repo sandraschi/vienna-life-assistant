@@ -95,4 +95,11 @@ def test_calendar_today_returns_seeded_events(client):
 def test_vienna_static_endpoints_declare_mock(client):
     r = client.get("/api/vienna/transport")
     assert r.status_code == 200
-    assert r.json().get("mock") is True
+    body = r.json()
+    # offline: declared mock with empty stations; live: real departures, no mock flag
+    if body.get("mock") is True:
+        assert body.get("offline") is True
+        assert body.get("Friedensbrücke") == []
+    else:
+        assert "Friedensbrücke" in body
+        assert all("line" in d and "time" in d for d in body["Friedensbrücke"])
