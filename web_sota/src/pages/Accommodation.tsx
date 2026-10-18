@@ -11,6 +11,7 @@ interface Stay {
 	address: string;
 	notes?: string;
 	url?: string;
+	details?: string;
 	tags?: string[];
 	source?: string;
 	verify?: boolean;
@@ -112,6 +113,14 @@ export default function Accommodation() {
 									<ExternalLink className="w-3.5 h-3.5" />
 									Web
 								</a>
+							)}
+							{s.details && (
+								<details className="mt-3 text-sm text-slate-200">
+									<summary className="cursor-pointer uppercase tracking-widest font-black text-slate-300">
+										Details
+									</summary>
+									<p className="mt-1 leading-relaxed">{s.details}</p>
+								</details>
 							)}
 						</div>
 					))}

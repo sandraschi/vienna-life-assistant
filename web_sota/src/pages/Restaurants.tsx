@@ -24,6 +24,7 @@ interface Restaurant {
 	is_favorite?: boolean;
 	notes?: string;
 	url?: string;
+	details?: string;
 	tags?: string[];
 	source?: string;
 	verify?: boolean;
@@ -247,6 +248,14 @@ function Card({ r }: { r: Restaurant }) {
 					</ul>
 					<p className="italic mt-1">{r.karte.takeout}</p>
 				</div>
+			)}
+			{r.details && (
+				<details className="mt-3 text-sm text-slate-200">
+					<summary className="cursor-pointer uppercase tracking-widest font-black text-slate-300">
+						Details
+					</summary>
+					<p className="mt-1 leading-relaxed">{r.details}</p>
+				</details>
 			)}
 		</div>
 	);

@@ -27,6 +27,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TransitWidget from "../components/TransitWidget";
 import { API, apiGet, apiGetRetry, apiPost } from "../lib/api";
+import { useLang } from "../lib/i18n";
 
 interface ViennaTip {
 	coffee: { name: string; status: string }[];
@@ -58,15 +59,19 @@ interface LifeOverview {
 
 // Vienna discovery shortcuts — the sidebar owns life-admin + system nav,
 // so the dashboard row points at Wien content instead of duplicating it.
-const quickLinks = [
-	{ label: "Restaurants", icon: UtensilsCrossed, path: "/vienna/restaurants" },
-	{ label: "Kaffeehäuser", icon: Coffee, path: "/vienna/coffee" },
-	{ label: "Kultur", icon: Clapperboard, path: "/vienna/culture" },
-	{ label: "Wohnen", icon: BedDouble, path: "/vienna/accommodation" },
-	{ label: "Geschichte", icon: ScrollText, path: "/vienna/history" },
-	{ label: "Bildung", icon: GraduationCap, path: "/vienna/education" },
-	{ label: "Wirtschaft", icon: Briefcase, path: "/vienna/economy" },
-	{ label: "Politik", icon: Scale, path: "/vienna/politics" },
+const quickLinks = (t: (k: string) => string) => [
+	{
+		label: t("nav.restaurants"),
+		icon: UtensilsCrossed,
+		path: "/vienna/restaurants",
+	},
+	{ label: t("nav.coffee"), icon: Coffee, path: "/vienna/coffee" },
+	{ label: t("nav.culture"), icon: Clapperboard, path: "/vienna/culture" },
+	{ label: t("nav.living"), icon: BedDouble, path: "/vienna/accommodation" },
+	{ label: t("nav.history"), icon: ScrollText, path: "/vienna/history" },
+	{ label: t("nav.education"), icon: GraduationCap, path: "/vienna/education" },
+	{ label: t("nav.economy"), icon: Briefcase, path: "/vienna/economy" },
+	{ label: t("nav.politics"), icon: Scale, path: "/vienna/politics" },
 ];
 
 function useTimeGreeting() {
@@ -82,6 +87,7 @@ function useTimeGreeting() {
 
 export default function Dashboard() {
 	const navigate = useNavigate();
+	const { t } = useLang();
 	const greeting = useTimeGreeting();
 	const GreetIcon = greeting.icon;
 	const [viennaTips, setViennaTips] = useState<ViennaTip | null>(null);
@@ -220,12 +226,10 @@ export default function Dashboard() {
 						</span>
 					</div>
 					<h1 className="text-4xl md:text-5xl font-black gradient-text tracking-tighter uppercase italic leading-tight mb-3">
-						Vienna Life
+						{t("dash.title")}
 					</h1>
 					<p className="text-slate-300 text-sm max-w-xl leading-relaxed">
-						Your local layer for Vienna — transit, culture, coffee,
-						and daily logistics. All data served from your own fleet, zero cloud
-						dependence.
+						{t("dash.subtitle")}
 					</p>
 					{!onboarded && (
 						<div className="mt-6">
@@ -246,7 +250,7 @@ export default function Dashboard() {
 
 			{/* Vienna discovery shortcuts (sidebar owns life-admin + system) */}
 			<div className="flex items-center gap-3 overflow-x-auto pb-1">
-				{quickLinks.map((link) => {
+				{quickLinks(t).map((link) => {
 					const Icon = link.icon;
 					return (
 						<button
@@ -359,7 +363,7 @@ export default function Dashboard() {
 			{life && (
 				<div className="glass-card p-6">
 					<h3 className="font-black text-sm tracking-[0.3em] uppercase text-white italic mb-4 flex items-center gap-3">
-						<HeartPulse className="w-4 h-4 text-cosmos-400" /> Life Pulse
+						<HeartPulse className="w-4 h-4 text-cosmos-400" /> {t("dash.pulse")}
 					</h3>
 					<div className="grid grid-cols-2 md:grid-cols-5 gap-4">
 						<div className="rounded-xl bg-white/[0.02] border border-white/[0.05] p-4">
@@ -462,7 +466,7 @@ export default function Dashboard() {
 					<div className="glass-card p-8 flex flex-col space-y-6 border-cosmos-500/10 hover:border-cosmos-500/30 transition-all">
 						<div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
 							<h3 className="font-black text-sm tracking-[0.3em] uppercase text-white italic">
-								Vienna Today
+								{t("dash.vienna")}
 							</h3>
 							<ArrowRight className="w-4 h-4 text-slate-300" />
 						</div>
@@ -543,7 +547,7 @@ export default function Dashboard() {
 							onClick={() => navigate("/vienna/culture")}
 							className="w-full py-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] text-slate-300 hover:text-white text-sm font-black uppercase tracking-[0.2em] transition-all border border-white/[0.06] mt-2"
 						>
-							Vienna Guide
+							{t("dash.guide")}
 						</button>
 					</div>
 				)}
@@ -556,7 +560,7 @@ export default function Dashboard() {
 						<div className="flex items-center gap-3 border-b border-white/[0.06] pb-3">
 							<Newspaper className="w-4 h-4 text-cosmos-400" />
 							<h3 className="font-black text-sm tracking-[0.3em] uppercase text-white italic">
-								ORF Wien
+								{t("dash.orf")}
 							</h3>
 						</div>
 						<div className="space-y-2">
@@ -582,7 +586,7 @@ export default function Dashboard() {
 						<div className="flex items-center gap-3 border-b border-white/[0.06] pb-3">
 							<Building2 className="w-4 h-4 text-emerald-400" />
 							<h3 className="font-black text-sm tracking-[0.3em] uppercase text-white italic">
-								Stadt Wien
+								{t("dash.stadt")}
 							</h3>
 						</div>
 						<div className="space-y-2">
@@ -606,7 +610,7 @@ export default function Dashboard() {
 			{env && (
 				<div className="glass-card p-6" data-testid="environment-widget">
 					<h3 className="font-black text-sm tracking-[0.3em] uppercase text-white italic mb-4 flex items-center gap-3">
-						<Home className="w-4 h-4 text-emerald-400" /> Environment
+						<Home className="w-4 h-4 text-emerald-400" /> {t("dash.env")}
 					</h3>
 					<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 						{env.weather && (
