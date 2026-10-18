@@ -18,6 +18,8 @@ import {
 	HeartPulse,
 	Home,
 	LayoutDashboard,
+	Lock,
+	LogOut,
 	Mail,
 	Menu,
 	MessageCircle,
@@ -44,8 +46,9 @@ import {
 	Wrench,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { API_BASE } from "./lib/api";
+import { useAuth } from "./lib/auth";
 import { useLang } from "./lib/i18n";
 import useZoom from "./lib/use-zoom";
 import { cn } from "./lib/utils";
@@ -221,29 +224,31 @@ export default function AppLayout() {
 		};
 	}, []);
 	const location = useLocation();
+	const navigate = useNavigate();
 	const { t, lang, setLang } = useLang();
+	const { authed, logout } = useAuth();
 
-	const mainNav = [
+	const topNav = [
 		{ title: t("nav.home"), icon: LayoutDashboard, path: "/" },
 		{ title: t("nav.chat"), icon: MessageCircle, path: "/chat" },
-		{ title: t("nav.tools"), icon: Wrench, path: "/tools" },
-		{ title: t("nav.skills"), icon: Sparkles, path: "/skills" },
-		{ title: t("nav.logs"), icon: ScrollText, path: "/logs" },
-		{ title: t("nav.apps"), icon: Grid3X3, path: "/apps" },
-		{ title: t("nav.help"), icon: BookOpen, path: "/help" },
+	];
+	const helpNav = [{ title: t("nav.help"), icon: BookOpen, path: "/help" }];
+
+	const personalNav = [
+		{ title: t("nav.medical"), icon: HeartPulse, path: "/health" },
+		{ title: t("nav.diary"), icon: NotebookPen, path: "/journal" },
+		{ title: t("nav.shopping"), icon: ShoppingCart, path: "/vienna/shopping" },
+		{ title: t("nav.travelplans"), icon: Plane, path: "/travel" },
+		{ title: t("nav.finances"), icon: Receipt, path: "/expenses" },
 	];
 
 	const lifeNav = [
-		{ title: t("nav.health"), icon: HeartPulse, path: "/health" },
 		{ title: t("nav.calendar"), icon: Calendar, path: "/calendar" },
-		{ title: t("nav.travel"), icon: Plane, path: "/travel" },
-		{ title: t("nav.journal"), icon: NotebookPen, path: "/journal" },
 		{ title: t("nav.news"), icon: Newspaper, path: "/news" },
 		{ title: t("nav.notes"), icon: NotebookText, path: "/notes" },
 		{ title: t("nav.email"), icon: Mail, path: "/email" },
 		{ title: t("nav.contacts"), icon: Users, path: "/contacts" },
 		{ title: t("nav.household"), icon: Home, path: "/household" },
-		{ title: t("nav.expenses"), icon: Receipt, path: "/expenses" },
 	];
 
 	const viennaLifeNav = [
@@ -256,7 +261,6 @@ export default function AppLayout() {
 		{ title: t("nav.culture"), icon: Clapperboard, path: "/vienna/culture" },
 		{ title: t("nav.concerts"), icon: Music, path: "/vienna/music" },
 		{ title: t("nav.museums"), icon: Palette, path: "/vienna/museums" },
-		{ title: t("nav.shopping"), icon: ShoppingCart, path: "/vienna/shopping" },
 		{ title: t("nav.living"), icon: BedDouble, path: "/vienna/accommodation" },
 		{ title: t("nav.history"), icon: ScrollText, path: "/vienna/history" },
 		{
@@ -274,6 +278,10 @@ export default function AppLayout() {
 		{ title: t("nav.fleet"), icon: Anchor, path: "/fleet" },
 		{ title: t("nav.services"), icon: Server, path: "/services" },
 		{ title: t("nav.crossconnects"), icon: Plug, path: "/crossconnects" },
+		{ title: t("nav.tools"), icon: Wrench, path: "/tools" },
+		{ title: t("nav.skills"), icon: Sparkles, path: "/skills" },
+		{ title: t("nav.logs"), icon: ScrollText, path: "/logs" },
+		{ title: t("nav.apps"), icon: Grid3X3, path: "/apps" },
 		{ title: t("nav.goliath"), icon: Cpu, path: "/goliath" },
 		{ title: t("nav.settings"), icon: Settings, path: "/settings" },
 	];
@@ -307,7 +315,7 @@ export default function AppLayout() {
 								Vienna Life
 							</span>
 							<span className="text-sm text-slate-300 font-bold uppercase tracking-widest leading-none">
-								Assistant SOTA
+								Assistant
 							</span>
 						</div>
 					)}
@@ -328,13 +336,8 @@ export default function AppLayout() {
 				<nav className="flex-1 px-4 py-4 space-y-8 overflow-y-auto no-scrollbar">
 					{isSidebarOpen ? (
 						<>
-							<NavSection
-								title={t("nav.group.fleet")}
-								count={mainNav.length}
-								collapsed={!!collapsedSections.main}
-								onToggle={() => toggleSection("main")}
-							>
-								{mainNav.map((item) => (
+							<div className="space-y-1">
+								{topNav.map((item) => (
 									<SidebarItem
 										key={item.path}
 										item={item}
@@ -343,7 +346,7 @@ export default function AppLayout() {
 										end={item.path === "/"}
 									/>
 								))}
-							</NavSection>
+							</div>
 
 							<NavSection
 								title={t("nav.group.life")}
@@ -357,6 +360,23 @@ export default function AppLayout() {
 										item={item}
 										active={isActive(item.path)}
 										rail={false}
+									/>
+								))}
+							</NavSection>
+
+							<NavSection
+								title={t("nav.group.personal")}
+								count={personalNav.length}
+								collapsed={!!collapsedSections.personal}
+								onToggle={() => toggleSection("personal")}
+							>
+								{personalNav.map((item) => (
+									<SidebarItem
+										key={item.path}
+										item={item}
+										active={isActive(item.path)}
+										rail={false}
+										accent
 									/>
 								))}
 							</NavSection>
@@ -393,20 +413,36 @@ export default function AppLayout() {
 									/>
 								))}
 							</NavSection>
-						</>
-					) : (
-						// Icon-only rail: ignore section collapse so every page stays reachable.
-						<div className="space-y-1">
-							{[...mainNav, ...lifeNav, ...viennaLifeNav, ...systemNav].map(
-								(item) => (
+
+							<div className="space-y-1">
+								{helpNav.map((item) => (
 									<SidebarItem
 										key={item.path}
 										item={item}
 										active={isActive(item.path)}
-										rail
+										rail={false}
 									/>
-								),
-							)}
+								))}
+							</div>
+						</>
+					) : (
+						// Icon-only rail: ignore section collapse so every page stays reachable.
+						<div className="space-y-1">
+							{[
+								...topNav,
+								...personalNav,
+								...lifeNav,
+								...viennaLifeNav,
+								...systemNav,
+								...helpNav,
+							].map((item) => (
+								<SidebarItem
+									key={item.path}
+									item={item}
+									active={isActive(item.path)}
+									rail
+								/>
+							))}
 						</div>
 					)}
 				</nav>
@@ -460,6 +496,33 @@ export default function AppLayout() {
 							<option value="en">EN</option>
 							<option value="de">DE</option>
 						</select>
+
+						{authed ? (
+							<button
+								type="button"
+								onClick={() => {
+									logout();
+									navigate("/");
+								}}
+								className="p-3 rounded-2xl hover:bg-white/[0.05] text-slate-300 hover:text-white transition-all"
+								aria-label="Lock personal section"
+								title="Lock personal section"
+								data-testid="auth-lock"
+							>
+								<LogOut className="w-5 h-5" />
+							</button>
+						) : (
+							<button
+								type="button"
+								onClick={() => navigate("/login")}
+								className="p-3 rounded-2xl hover:bg-white/[0.05] text-slate-300 hover:text-white transition-all"
+								aria-label="Unlock personal section"
+								title="Unlock personal section"
+								data-testid="auth-unlock"
+							>
+								<Lock className="w-5 h-5" />
+							</button>
+						)}
 
 						<button
 							type="button"

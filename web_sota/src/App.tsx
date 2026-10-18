@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import AppLayout from "./AppLayout";
+import { AuthProvider, RequireAuth } from "./lib/auth";
 import { LanguageProvider } from "./lib/i18n";
 import Accommodation from "./pages/Accommodation";
 import Apps from "./pages/Apps";
@@ -23,6 +24,7 @@ import History from "./pages/History";
 import Household from "./pages/Household";
 import Journal from "./pages/Journal";
 import KaffeehausHub from "./pages/KaffeehausHub";
+import Login from "./pages/Login";
 import Logs from "./pages/Logs";
 import MuseumGuide from "./pages/MuseumGuide";
 import News from "./pages/News";
@@ -41,59 +43,97 @@ import Travel from "./pages/Travel";
 export default function App() {
 	return (
 		<LanguageProvider>
-			<Routes>
-				<Route element={<AppLayout />}>
-					<Route index element={<Dashboard />} />
-					<Route path="onboarding" element={<Onboarding />} />
-					<Route path="dashboard" element={<Navigate to="/" replace />} />
+			<AuthProvider>
+				<Routes>
+					<Route path="login" element={<Login />} />
+					<Route element={<AppLayout />}>
+						<Route index element={<Dashboard />} />
+						<Route path="onboarding" element={<Onboarding />} />
+						<Route path="dashboard" element={<Navigate to="/" replace />} />
 
-					{/* Fleet SOTA standard pages */}
-					<Route path="tools" element={<Tools />} />
-					<Route path="chat" element={<Chat />} />
-					<Route path="skills" element={<Skills />} />
-					<Route path="logs" element={<Logs />} />
-					<Route path="apps" element={<Apps />} />
-					<Route path="help" element={<Help />} />
-					<Route path="settings" element={<Settings />} />
+						{/* App pages */}
+						<Route path="tools" element={<Tools />} />
+						<Route path="chat" element={<Chat />} />
+						<Route path="skills" element={<Skills />} />
+						<Route path="logs" element={<Logs />} />
+						<Route path="apps" element={<Apps />} />
+						<Route path="help" element={<Help />} />
+						<Route path="settings" element={<Settings />} />
 
-					<Route path="fleet" element={<Fleet />} />
-					<Route path="control-tower" element={<ControlTower />} />
-					<Route path="services" element={<Services />} />
-					<Route path="goliath" element={<Goliath />} />
+						<Route path="fleet" element={<Fleet />} />
+						<Route path="control-tower" element={<ControlTower />} />
+						<Route path="services" element={<Services />} />
+						<Route path="goliath" element={<Goliath />} />
 
-					{/* Vienna Life domain */}
-					<Route path="vienna/coffee" element={<KaffeehausHub />} />
-					<Route path="vienna/restaurants" element={<Restaurants />} />
-					<Route path="vienna/accommodation" element={<Accommodation />} />
-					<Route path="vienna/culture" element={<Culture />} />
-					<Route path="vienna/history" element={<History />} />
-					<Route path="vienna/education" element={<Education />} />
-					<Route path="vienna/economy" element={<Economy />} />
-					<Route path="vienna/politics" element={<Politics />} />
-					<Route path="vienna/transport" element={<Transport />} />
-					<Route path="crossconnects" element={<Crossconnects />} />
-					<Route path="vienna/music" element={<ConcertHall />} />
-					<Route path="vienna/museums" element={<MuseumGuide />} />
-					<Route path="vienna/shopping" element={<ShoppingOffers />} />
+						{/* Vienna Life domain */}
+						<Route path="vienna/coffee" element={<KaffeehausHub />} />
+						<Route path="vienna/restaurants" element={<Restaurants />} />
+						<Route path="vienna/accommodation" element={<Accommodation />} />
+						<Route path="vienna/culture" element={<Culture />} />
+						<Route path="vienna/history" element={<History />} />
+						<Route path="vienna/education" element={<Education />} />
+						<Route path="vienna/economy" element={<Economy />} />
+						<Route path="vienna/politics" element={<Politics />} />
+						<Route path="vienna/transport" element={<Transport />} />
+						<Route path="crossconnects" element={<Crossconnects />} />
+						<Route path="vienna/music" element={<ConcertHall />} />
+						<Route path="vienna/museums" element={<MuseumGuide />} />
+						<Route
+							path="vienna/shopping"
+							element={
+								<RequireAuth>
+									<ShoppingOffers />
+								</RequireAuth>
+							}
+						/>
 
-					<Route
-						path="shopping"
-						element={<Navigate to="/vienna/shopping" replace />}
-					/>
-					<Route path="calendar" element={<Calendar />} />
-					<Route path="expenses" element={<Expenses />} />
-					<Route path="travel" element={<Travel />} />
-					<Route path="health" element={<Health />} />
-					<Route path="contacts" element={<Contacts />} />
-					<Route path="household" element={<Household />} />
-					<Route path="journal" element={<Journal />} />
-					<Route path="news" element={<News />} />
-					<Route path="notes" element={<Notes />} />
-					<Route path="email" element={<Email />} />
+						<Route
+							path="shopping"
+							element={<Navigate to="/vienna/shopping" replace />}
+						/>
+						<Route path="calendar" element={<Calendar />} />
+						<Route
+							path="expenses"
+							element={
+								<RequireAuth>
+									<Expenses />
+								</RequireAuth>
+							}
+						/>
+						<Route
+							path="travel"
+							element={
+								<RequireAuth>
+									<Travel />
+								</RequireAuth>
+							}
+						/>
+						<Route
+							path="health"
+							element={
+								<RequireAuth>
+									<Health />
+								</RequireAuth>
+							}
+						/>
+						<Route path="contacts" element={<Contacts />} />
+						<Route path="household" element={<Household />} />
+						<Route
+							path="journal"
+							element={
+								<RequireAuth>
+									<Journal />
+								</RequireAuth>
+							}
+						/>
+						<Route path="news" element={<News />} />
+						<Route path="notes" element={<Notes />} />
+						<Route path="email" element={<Email />} />
 
-					<Route path="*" element={<Navigate to="/" replace />} />
-				</Route>
-			</Routes>
+						<Route path="*" element={<Navigate to="/" replace />} />
+					</Route>
+				</Routes>
+			</AuthProvider>
 		</LanguageProvider>
 	);
 }

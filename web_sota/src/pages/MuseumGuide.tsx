@@ -117,7 +117,7 @@ export default function MuseumGuide() {
 						</h3>
 						<p className="text-sm text-slate-300 leading-relaxed italic pr-12 mb-8">
 							Experience the pulse of contemporary Vienna. From post-war
-							masterpieces to SOTA digital art.
+							masterpieces to digital art.
 						</p>
 						<button
 							data-testid="museum-guide-action"
