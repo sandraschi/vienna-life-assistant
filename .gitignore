@@ -31,6 +31,13 @@ dist/
 build/
 *.log
 
+# MCPB staging (derived, regenerable — only mcpb/manifest.json is source)
+mcpb/src/
+mcpb/assets/
+mcpb/README.md
+mcpb/CHANGELOG.md
+mcpb/.mcpbignore
+
 # Node
 node_modules/
 npm-debug.log*

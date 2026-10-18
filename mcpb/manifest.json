@@ -1,0 +1,34 @@
+{
+  "manifest_version": "0.2",
+  "name": "vienna-life-assistant",
+  "version": "0.1.0",
+  "description": "Vienna Life Assistant (ViLife) - life admin (calendar, health, travel, contacts, household, journal) plus a curated Vienna guide (restaurants, culture, housing, history) over MCP",
+  "author": { "name": "sandraschi" },
+  "server": {
+    "type": "python",
+    "entry_point": "src/vienna_life_assistant/stdio.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["run", "--directory", "${__dirname}", "python", "-m", "vienna_life_assistant.stdio"],
+      "env": {
+        "PYTHONPATH": "${__dirname}/src",
+        "PYTHONUNBUFFERED": "1",
+        "MCP_TRANSPORT": "stdio"
+      }
+    }
+  },
+  "tools": [
+    { "name": "vienna_life", "description": "Daily ops: calendar/todos/expenses CRUD, life brief, health summary, help" },
+    { "name": "vienna_health", "description": "Doctor visits, medications, vitals, conditions" },
+    { "name": "vienna_travel", "description": "Trips, packing lists, documents, expiring items" },
+    { "name": "vienna_contacts", "description": "People list/add/update/delete, birthdays" },
+    { "name": "vienna_household", "description": "Subscriptions, home tasks, pet care" },
+    { "name": "vienna_log", "description": "Personal journal entries, streak, on-this-day, search" },
+    { "name": "vienna_news", "description": "aiwatcher-fed Vienna news: top, trends, search, morning" },
+    { "name": "vienna_notes", "description": "Notes via OneNote gateway, journal export" },
+    { "name": "vienna_email", "description": "Email via gateway: inbox, search, send" },
+    { "name": "vienna_environment", "description": "Home/environment readings (read-only)" },
+    { "name": "vienna_tips", "description": "Curated Vienna culture tips by category" },
+    { "name": "vienna_day_plan", "description": "Prompt: build a Vienna day plan around a focus" }
+  ]
+}

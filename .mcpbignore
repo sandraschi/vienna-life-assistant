@@ -34,4 +34,3 @@ reports/
 .ruff_cache/
 .pytest_cache/
 .coverage
-assets/icon.png
