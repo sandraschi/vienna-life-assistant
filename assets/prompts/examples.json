@@ -1,60 +1,1089 @@
 [
-  {"tool": "vienna_life", "arguments": {"operation": "health"}},
-  {"tool": "vienna_life", "arguments": {"operation": "help"}},
-  {"tool": "vienna_life", "arguments": {"operation": "life_brief"}},
-  {"tool": "vienna_life", "arguments": {"operation": "calendar_today"}},
-  {"tool": "vienna_life", "arguments": {"operation": "todo_list"}},
-  {"tool": "vienna_life", "arguments": {"operation": "expense_summary"}},
-  {"tool": "vienna_life", "arguments": {"operation": "shopping_list"}},
-  {"tool": "vienna_life", "arguments": {"operation": "event_add", "date_str": "2026-08-10", "title": "Zahnarzt", "data": {"time": "14:00", "category": "health"}}},
-  {"tool": "vienna_life", "arguments": {"operation": "event_update", "row_id": 1, "data": {"time": "15:00"}}},
-  {"tool": "vienna_life", "arguments": {"operation": "event_delete", "row_id": 1}},
-  {"tool": "vienna_life", "arguments": {"operation": "todo_add", "title": "Pick up prescription", "data": {"priority": "high"}}},
-  {"tool": "vienna_life", "arguments": {"operation": "todo_toggle", "row_id": 2}},
-  {"tool": "vienna_life", "arguments": {"operation": "todo_delete", "row_id": 2}},
-  {"tool": "vienna_life", "arguments": {"operation": "expense_add", "data": {"store": "Billa", "amount_eur": 42.5, "category": "Groceries"}}},
-  {"tool": "vienna_life", "arguments": {"operation": "expense_delete", "row_id": 5}},
-  {"tool": "vienna_life", "arguments": {"operation": "fleet_overview"}},
-  {"tool": "vienna_health", "arguments": {"operation": "visits"}},
-  {"tool": "vienna_health", "arguments": {"operation": "meds"}},
-  {"tool": "vienna_health", "arguments": {"operation": "vitals"}},
-  {"tool": "vienna_health", "arguments": {"operation": "conditions"}},
-  {"tool": "vienna_health", "arguments": {"operation": "visits_add", "data": {"date": "2026-08-10", "doctor": "Dr. Musterhauser", "specialty": "Allgemeinmedizin", "reason": "Check-up", "follow_up_date": "2026-10-10"}}},
-  {"tool": "vienna_health", "arguments": {"operation": "visits_update", "row_id": 1, "data": {"diagnosis": "All values normal"}}},
-  {"tool": "vienna_health", "arguments": {"operation": "visits_delete", "row_id": 3}},
-  {"tool": "vienna_health", "arguments": {"operation": "meds_add", "data": {"name": "Vitamin D3", "dose": "2000", "unit": "IE", "frequency": "1x daily", "times": "08:00", "refill_date": "2026-09-20"}}},
-  {"tool": "vienna_health", "arguments": {"operation": "meds_update", "row_id": 1, "data": {"active": false}}},
-  {"tool": "vienna_health", "arguments": {"operation": "meds_delete", "row_id": 2}},
-  {"tool": "vienna_health", "arguments": {"operation": "vitals_add", "data": {"systolic": 118, "diastolic": 76, "pulse": 64, "weight_kg": 63.5}}},
-  {"tool": "vienna_health", "arguments": {"operation": "conditions_add", "data": {"name": "Hay fever", "status": "seasonal", "since": "2019-04-01"}}},
-  {"tool": "vienna_travel", "arguments": {"operation": "trips"}},
-  {"tool": "vienna_travel", "arguments": {"operation": "packing", "trip_id": 1}},
-  {"tool": "vienna_travel", "arguments": {"operation": "packing_toggle", "row_id": 3}},
-  {"tool": "vienna_travel", "arguments": {"operation": "packing_add", "trip_id": 1, "item": "Umbrella"}},
-  {"tool": "vienna_travel", "arguments": {"operation": "documents"}},
-  {"tool": "vienna_travel", "arguments": {"operation": "expiring"}},
-  {"tool": "vienna_travel", "arguments": {"operation": "trip_add", "data": {"title": "Berlin weekend", "start_date": "2026-09-01", "end_date": "2026-09-03", "destination": "Berlin", "mode": "train", "carrier": "ÖBB"}}},
-  {"tool": "vienna_travel", "arguments": {"operation": "trip_update", "row_id": 2, "data": {"status": "booked"}}},
-  {"tool": "vienna_travel", "arguments": {"operation": "trip_delete", "row_id": 4}},
-  {"tool": "vienna_travel", "arguments": {"operation": "document_add", "data": {"name": "Reisepass", "number": "P-123", "expiry_date": "2030-05-01"}}},
-  {"tool": "vienna_travel", "arguments": {"operation": "document_delete", "row_id": 2}},
-  {"tool": "vienna_contacts", "arguments": {"operation": "list"}},
-  {"tool": "vienna_contacts", "arguments": {"operation": "birthdays"}},
-  {"tool": "vienna_contacts", "arguments": {"operation": "add", "data": {"name": "Stefan", "phone": "+43 650 000000", "birthday": "1990-03-21", "relationship": "friend"}}},
-  {"tool": "vienna_contacts", "arguments": {"operation": "update", "row_id": 1, "data": {"favorite": true}}},
-  {"tool": "vienna_contacts", "arguments": {"operation": "delete", "row_id": 5}},
-  {"tool": "vienna_household", "arguments": {"operation": "subscriptions"}},
-  {"tool": "vienna_household", "arguments": {"operation": "subscription_add", "data": {"name": "Netflix", "category": "Media", "cost_monthly_eur": 15.49, "renewal_date": "2026-09-01"}}},
-  {"tool": "vienna_household", "arguments": {"operation": "subscription_update", "row_id": 1, "data": {"auto_renew": false}}},
-  {"tool": "vienna_household", "arguments": {"operation": "subscription_delete", "row_id": 3}},
-  {"tool": "vienna_household", "arguments": {"operation": "tasks"}},
-  {"tool": "vienna_household", "arguments": {"operation": "task_add", "data": {"name": "Water filter change", "category": "Kitchen", "due_date": "2026-08-20", "frequency_days": 90}}},
-  {"tool": "vienna_household", "arguments": {"operation": "task_toggle", "row_id": 1}},
-  {"tool": "vienna_household", "arguments": {"operation": "task_delete", "row_id": 4}},
-  {"tool": "vienna_household", "arguments": {"operation": "pet"}},
-  {"tool": "vienna_household", "arguments": {"operation": "pet_add", "data": {"event_type": "grooming", "next_due": "2026-08-15", "notes": "Fur trim + nails"}}},
-  {"tool": "vienna_life_agentic", "arguments": {"goal": "Plan my Saturday in Alsergrund"}},
-  {"tool": "vienna_tips", "arguments": {"category": "coffee"}},
-  {"tool": "vienna_tips", "arguments": {"category": "music"}},
-  {"tool": "vienna_tips", "arguments": {"category": "museum"}}
+  {
+    "name": "brief-morning",
+    "description": "Morning brief",
+    "prompt": "Good morning, what's my day?",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "life_brief"
+    }
+  },
+  {
+    "name": "cal-today",
+    "description": "Today's events",
+    "prompt": "What's on my calendar today?",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "calendar_today"
+    }
+  },
+  {
+    "name": "event-add",
+    "description": "Add event",
+    "prompt": "Dentist Friday 14:00",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "event_add",
+      "date_str": "2026-11-06",
+      "title": "Dentist",
+      "data": {
+        "time": "14:00",
+        "category": "health"
+      }
+    }
+  },
+  {
+    "name": "event-update",
+    "description": "Move event",
+    "prompt": "Move event 4 to 15:00",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "event_update",
+      "row_id": 4,
+      "data": {
+        "time": "15:00"
+      }
+    }
+  },
+  {
+    "name": "event-delete",
+    "description": "Delete event",
+    "prompt": "Delete event 9",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "event_delete",
+      "row_id": 9
+    }
+  },
+  {
+    "name": "todo-list",
+    "description": "Open todos",
+    "prompt": "What are my open todos?",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "todo_list"
+    }
+  },
+  {
+    "name": "todo-add",
+    "description": "Add todo",
+    "prompt": "Remind me to pick up the prescription",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "todo_add",
+      "title": "Pick up prescription"
+    }
+  },
+  {
+    "name": "todo-add-dated",
+    "description": "Dated todo",
+    "prompt": "Pay rent by the 5th",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "todo_add",
+      "title": "Pay rent",
+      "data": {
+        "priority": "high",
+        "due_date": "2026-11-05"
+      }
+    }
+  },
+  {
+    "name": "todo-toggle",
+    "description": "Complete todo",
+    "prompt": "Done with todo 3",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "todo_toggle",
+      "row_id": 3
+    }
+  },
+  {
+    "name": "todo-delete",
+    "description": "Delete todo",
+    "prompt": "Drop todo 7",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "todo_delete",
+      "row_id": 7
+    }
+  },
+  {
+    "name": "expense-summary",
+    "description": "Month spend",
+    "prompt": "How much did I spend this month?",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "expense_summary"
+    }
+  },
+  {
+    "name": "expense-add",
+    "description": "Log expense",
+    "prompt": "Groceries 42.50 at Spar",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "expense_add",
+      "data": {
+        "store": "Spar",
+        "amount_eur": 42.5,
+        "category": "groceries"
+      }
+    }
+  },
+  {
+    "name": "expense-delete",
+    "description": "Delete expense",
+    "prompt": "Delete expense 12",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "expense_delete",
+      "row_id": 12
+    }
+  },
+  {
+    "name": "shopping-list",
+    "description": "Shopping list",
+    "prompt": "What's on the shopping list?",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "shopping_list"
+    }
+  },
+  {
+    "name": "fleet-overview",
+    "description": "Fleet summary",
+    "prompt": "Fleet status?",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "fleet_overview"
+    }
+  },
+  {
+    "name": "life-health",
+    "description": "Tool status",
+    "prompt": "Is vienna_life healthy?",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "health"
+    }
+  },
+  {
+    "name": "life-help",
+    "description": "List operations",
+    "prompt": "What can vienna_life do?",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "help"
+    }
+  },
+  {
+    "name": "brief-friday",
+    "description": "Friday review",
+    "prompt": "Weekly review: todos and spend",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "life_brief"
+    }
+  },
+  {
+    "name": "event-validation",
+    "description": "Missing title error",
+    "prompt": "Add event tomorrow",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "event_add",
+      "date_str": "2026-11-07"
+    }
+  },
+  {
+    "name": "todo-followup",
+    "description": "Aged todos",
+    "prompt": "Any todos older than a week?",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "todo_list"
+    }
+  },
+  {
+    "name": "visits-list",
+    "description": "Visit log",
+    "prompt": "Show my doctor visits",
+    "tool": "vienna_health",
+    "arguments": {
+      "operation": "visits"
+    }
+  },
+  {
+    "name": "visit-add",
+    "description": "Log checkup",
+    "prompt": "Log checkup: all normal, follow-up October",
+    "tool": "vienna_health",
+    "arguments": {
+      "operation": "visits_add",
+      "data": {
+        "date": "2026-10-02",
+        "doctor": "Dr. Example",
+        "reason": "check-up",
+        "follow_up_date": "2027-10-02"
+      }
+    }
+  },
+  {
+    "name": "visit-update",
+    "description": "Fix visit",
+    "prompt": "Add diagnosis to visit 2",
+    "tool": "vienna_health",
+    "arguments": {
+      "operation": "visits_update",
+      "row_id": 2,
+      "data": {
+        "diagnosis": "healthy"
+      }
+    }
+  },
+  {
+    "name": "visit-delete",
+    "description": "Delete visit",
+    "prompt": "Delete visit 5",
+    "tool": "vienna_health",
+    "arguments": {
+      "operation": "visits_delete",
+      "row_id": 5
+    }
+  },
+  {
+    "name": "meds-list",
+    "description": "Active meds",
+    "prompt": "What medications am I on?",
+    "tool": "vienna_health",
+    "arguments": {
+      "operation": "meds"
+    }
+  },
+  {
+    "name": "med-add",
+    "description": "Add med",
+    "prompt": "Add Vitamin D3 1000 IE daily mornings",
+    "tool": "vienna_health",
+    "arguments": {
+      "operation": "meds_add",
+      "data": {
+        "name": "Vitamin D3",
+        "dose": "1000",
+        "unit": "IE",
+        "frequency": "daily",
+        "times": "morning"
+      }
+    }
+  },
+  {
+    "name": "med-update",
+    "description": "Change dose",
+    "prompt": "Change med 1 to evenings",
+    "tool": "vienna_health",
+    "arguments": {
+      "operation": "meds_update",
+      "row_id": 1,
+      "data": {
+        "times": "evening"
+      }
+    }
+  },
+  {
+    "name": "med-delete",
+    "description": "Stop med",
+    "prompt": "Stop med 2",
+    "tool": "vienna_health",
+    "arguments": {
+      "operation": "meds_delete",
+      "row_id": 2
+    }
+  },
+  {
+    "name": "vitals-list",
+    "description": "Readings",
+    "prompt": "Show my vitals",
+    "tool": "vienna_health",
+    "arguments": {
+      "operation": "vitals"
+    }
+  },
+  {
+    "name": "vitals-add",
+    "description": "Log vitals",
+    "prompt": "BP 120/80 pulse 68",
+    "tool": "vienna_health",
+    "arguments": {
+      "operation": "vitals_add",
+      "data": {
+        "systolic": 120,
+        "diastolic": 80,
+        "pulse": 68
+      }
+    }
+  },
+  {
+    "name": "conditions-list",
+    "description": "Conditions",
+    "prompt": "Any tracked conditions?",
+    "tool": "vienna_health",
+    "arguments": {
+      "operation": "conditions"
+    }
+  },
+  {
+    "name": "condition-add",
+    "description": "Track condition",
+    "prompt": "Track hay fever as seasonal",
+    "tool": "vienna_health",
+    "arguments": {
+      "operation": "conditions_add",
+      "data": {
+        "name": "Hay fever",
+        "status": "monitoring"
+      }
+    }
+  },
+  {
+    "name": "trips-list",
+    "description": "Upcoming trips",
+    "prompt": "Any trips coming up?",
+    "tool": "vienna_travel",
+    "arguments": {
+      "operation": "trips"
+    }
+  },
+  {
+    "name": "trip-add",
+    "description": "Add trip",
+    "prompt": "Graz next month, two nights, train",
+    "tool": "vienna_travel",
+    "arguments": {
+      "operation": "trip_add",
+      "data": {
+        "title": "Graz weekend",
+        "destination": "Graz",
+        "mode": "train"
+      }
+    }
+  },
+  {
+    "name": "trip-update",
+    "description": "Change trip",
+    "prompt": "Extend Graz by a day",
+    "tool": "vienna_travel",
+    "arguments": {
+      "operation": "trip_update",
+      "row_id": 1,
+      "data": {
+        "end_date": "2026-12-08"
+      }
+    }
+  },
+  {
+    "name": "trip-delete",
+    "description": "Cancel trip",
+    "prompt": "Cancel trip 2",
+    "tool": "vienna_travel",
+    "arguments": {
+      "operation": "trip_delete",
+      "row_id": 2
+    }
+  },
+  {
+    "name": "packing-list",
+    "description": "Packing list",
+    "prompt": "What to pack for trip 1?",
+    "tool": "vienna_travel",
+    "arguments": {
+      "operation": "packing",
+      "trip_id": 1
+    }
+  },
+  {
+    "name": "packing-add",
+    "description": "Add item",
+    "prompt": "Add charger to trip 1",
+    "tool": "vienna_travel",
+    "arguments": {
+      "operation": "packing_add",
+      "trip_id": 1,
+      "item": "charger"
+    }
+  },
+  {
+    "name": "packing-toggle",
+    "description": "Mark packed",
+    "prompt": "Packed the charger",
+    "tool": "vienna_travel",
+    "arguments": {
+      "operation": "packing_toggle",
+      "row_id": 4
+    }
+  },
+  {
+    "name": "docs-list",
+    "description": "Documents",
+    "prompt": "Show my travel documents",
+    "tool": "vienna_travel",
+    "arguments": {
+      "operation": "documents"
+    }
+  },
+  {
+    "name": "doc-add",
+    "description": "Add passport",
+    "prompt": "Passport expires 2030",
+    "tool": "vienna_travel",
+    "arguments": {
+      "operation": "document_add",
+      "data": {
+        "name": "Passport",
+        "expiry_date": "2030-05-01"
+      }
+    }
+  },
+  {
+    "name": "doc-delete",
+    "description": "Delete doc",
+    "prompt": "Delete document 3",
+    "tool": "vienna_travel",
+    "arguments": {
+      "operation": "document_delete",
+      "row_id": 3
+    }
+  },
+  {
+    "name": "expiring-docs",
+    "description": "Expiring soon",
+    "prompt": "Anything expiring?",
+    "tool": "vienna_travel",
+    "arguments": {
+      "operation": "expiring"
+    }
+  },
+  {
+    "name": "contacts-list",
+    "description": "All contacts",
+    "prompt": "List my contacts",
+    "tool": "vienna_contacts",
+    "arguments": {
+      "operation": "list"
+    }
+  },
+  {
+    "name": "contact-add",
+    "description": "Add person",
+    "prompt": "Anna Berger, birthday March 3rd",
+    "tool": "vienna_contacts",
+    "arguments": {
+      "operation": "add",
+      "data": {
+        "name": "Anna Berger",
+        "birthday": "03-03",
+        "relationship": "friend"
+      }
+    }
+  },
+  {
+    "name": "contact-update",
+    "description": "Update contact",
+    "prompt": "Anna has a new number",
+    "tool": "vienna_contacts",
+    "arguments": {
+      "operation": "update",
+      "data": {
+        "name": "Anna Berger",
+        "phone": "+43 660 000000"
+      }
+    }
+  },
+  {
+    "name": "contact-delete",
+    "description": "Delete contact",
+    "prompt": "Delete contact 6",
+    "tool": "vienna_contacts",
+    "arguments": {
+      "operation": "delete",
+      "row_id": 6
+    }
+  },
+  {
+    "name": "birthdays-soon",
+    "description": "Birthdays",
+    "prompt": "Birthdays this month?",
+    "tool": "vienna_contacts",
+    "arguments": {
+      "operation": "birthdays"
+    }
+  },
+  {
+    "name": "subs-list",
+    "description": "Subscriptions",
+    "prompt": "What am I paying monthly?",
+    "tool": "vienna_household",
+    "arguments": {
+      "operation": "subscriptions"
+    }
+  },
+  {
+    "name": "sub-add",
+    "description": "Add subscription",
+    "prompt": "New gym 29.90 monthly",
+    "tool": "vienna_household",
+    "arguments": {
+      "operation": "subscription_add",
+      "data": {
+        "name": "Gym",
+        "cost_monthly_eur": 29.9,
+        "auto_renew": true
+      }
+    }
+  },
+  {
+    "name": "sub-update",
+    "description": "Fix sub",
+    "prompt": "Gym is now 34.90",
+    "tool": "vienna_household",
+    "arguments": {
+      "operation": "subscription_update",
+      "row_id": 1,
+      "data": {
+        "cost_monthly_eur": 34.9
+      }
+    }
+  },
+  {
+    "name": "sub-delete",
+    "description": "Kill sub",
+    "prompt": "Cancel the streaming sub",
+    "tool": "vienna_household",
+    "arguments": {
+      "operation": "subscription_delete",
+      "row_id": 2
+    }
+  },
+  {
+    "name": "tasks-list",
+    "description": "Home tasks",
+    "prompt": "Open home tasks?",
+    "tool": "vienna_household",
+    "arguments": {
+      "operation": "tasks"
+    }
+  },
+  {
+    "name": "task-add",
+    "description": "Add task",
+    "prompt": "Fix the hallway light",
+    "tool": "vienna_household",
+    "arguments": {
+      "operation": "task_add",
+      "data": {
+        "title": "Fix hallway light"
+      }
+    }
+  },
+  {
+    "name": "task-toggle",
+    "description": "Done task",
+    "prompt": "Light fixed",
+    "tool": "vienna_household",
+    "arguments": {
+      "operation": "task_toggle",
+      "row_id": 3
+    }
+  },
+  {
+    "name": "task-delete",
+    "description": "Drop task",
+    "prompt": "Drop task 4",
+    "tool": "vienna_household",
+    "arguments": {
+      "operation": "task_delete",
+      "row_id": 4
+    }
+  },
+  {
+    "name": "pet-list",
+    "description": "Pet events",
+    "prompt": "Benny's vet status?",
+    "tool": "vienna_household",
+    "arguments": {
+      "operation": "pet"
+    }
+  },
+  {
+    "name": "pet-add",
+    "description": "Vet visit",
+    "prompt": "Benny vaccinated, next due next year",
+    "tool": "vienna_household",
+    "arguments": {
+      "operation": "pet_add",
+      "data": {
+        "event_type": "vaccination",
+        "date": "2026-10-01",
+        "next_due": "2027-10-01"
+      }
+    }
+  },
+  {
+    "name": "log-entries",
+    "description": "All entries",
+    "prompt": "Show my journal",
+    "tool": "vienna_log",
+    "arguments": {
+      "operation": "entries"
+    }
+  },
+  {
+    "name": "log-today",
+    "description": "Today",
+    "prompt": "What did I write today?",
+    "tool": "vienna_log",
+    "arguments": {
+      "operation": "today"
+    }
+  },
+  {
+    "name": "log-add",
+    "description": "Write entry",
+    "prompt": "Today: Prater walk with Benny, Stelze afterwards",
+    "tool": "vienna_log",
+    "arguments": {
+      "operation": "add",
+      "data": {
+        "text": "Prater walk with Benny",
+        "mood": "good",
+        "tags": [
+          "prater"
+        ]
+      }
+    }
+  },
+  {
+    "name": "log-update",
+    "description": "Fix entry",
+    "prompt": "Fix typo in entry 5",
+    "tool": "vienna_log",
+    "arguments": {
+      "operation": "update",
+      "row_id": 5,
+      "data": {
+        "text": "Prater walk"
+      }
+    }
+  },
+  {
+    "name": "log-delete",
+    "description": "Delete entry",
+    "prompt": "Delete entry 8",
+    "tool": "vienna_log",
+    "arguments": {
+      "operation": "delete",
+      "row_id": 8
+    }
+  },
+  {
+    "name": "log-streak",
+    "description": "Streak",
+    "prompt": "My journaling streak?",
+    "tool": "vienna_log",
+    "arguments": {
+      "operation": "streak"
+    }
+  },
+  {
+    "name": "log-onthisday",
+    "description": "Anniversary",
+    "prompt": "What happened a year ago?",
+    "tool": "vienna_log",
+    "arguments": {
+      "operation": "on_this_day"
+    }
+  },
+  {
+    "name": "log-search",
+    "description": "Keyword search",
+    "prompt": "What did I write about the Prater?",
+    "tool": "vienna_log",
+    "arguments": {
+      "operation": "search",
+      "query": "Prater"
+    }
+  },
+  {
+    "name": "log-semantic",
+    "description": "Vague recall",
+    "prompt": "Something about feeling tired in spring",
+    "tool": "vienna_log",
+    "arguments": {
+      "operation": "search_semantic",
+      "query": "tired spring"
+    }
+  },
+  {
+    "name": "log-reindex",
+    "description": "Rebuild index",
+    "prompt": "Rebuild the journal index",
+    "tool": "vienna_log",
+    "arguments": {
+      "operation": "reindex"
+    }
+  },
+  {
+    "name": "news-top",
+    "description": "Headlines",
+    "prompt": "Top Vienna news?",
+    "tool": "vienna_news",
+    "arguments": {
+      "operation": "top"
+    }
+  },
+  {
+    "name": "news-trends",
+    "description": "Trending tags",
+    "prompt": "What's trending?",
+    "tool": "vienna_news",
+    "arguments": {
+      "operation": "trends"
+    }
+  },
+  {
+    "name": "news-search",
+    "description": "Topic search",
+    "prompt": "News about the A23?",
+    "tool": "vienna_news",
+    "arguments": {
+      "operation": "search",
+      "query": "A23"
+    }
+  },
+  {
+    "name": "news-morning",
+    "description": "Digest",
+    "prompt": "Morning digest please",
+    "tool": "vienna_news",
+    "arguments": {
+      "operation": "morning"
+    }
+  },
+  {
+    "name": "news-overview",
+    "description": "Engine health",
+    "prompt": "News engine ok?",
+    "tool": "vienna_news",
+    "arguments": {
+      "operation": "overview"
+    }
+  },
+  {
+    "name": "news-stats",
+    "description": "Stats",
+    "prompt": "News stats?",
+    "tool": "vienna_news",
+    "arguments": {
+      "operation": "stats"
+    }
+  },
+  {
+    "name": "notes-status",
+    "description": "Bridge status",
+    "prompt": "OneNote connected?",
+    "tool": "vienna_notes",
+    "arguments": {
+      "operation": "status"
+    }
+  },
+  {
+    "name": "notes-books",
+    "description": "Notebooks",
+    "prompt": "List my notebooks",
+    "tool": "vienna_notes",
+    "arguments": {
+      "operation": "notebooks"
+    }
+  },
+  {
+    "name": "notes-search",
+    "description": "Find note",
+    "prompt": "Find notes about Benny",
+    "tool": "vienna_notes",
+    "arguments": {
+      "operation": "search",
+      "query": "Benny"
+    }
+  },
+  {
+    "name": "notes-page",
+    "description": "Read page",
+    "prompt": "Open that page",
+    "tool": "vienna_notes",
+    "arguments": {
+      "operation": "page",
+      "page_id": "abc123"
+    }
+  },
+  {
+    "name": "notes-create",
+    "description": "New note",
+    "prompt": "Note: shopping list",
+    "tool": "vienna_notes",
+    "arguments": {
+      "operation": "create",
+      "data": {
+        "title": "Shopping list",
+        "content": "Milk, bread"
+      }
+    }
+  },
+  {
+    "name": "notes-export",
+    "description": "Export journal",
+    "prompt": "Export journal entry 3 to OneNote",
+    "tool": "vienna_notes",
+    "arguments": {
+      "operation": "export_journal",
+      "entry_id": 3
+    }
+  },
+  {
+    "name": "mail-status",
+    "description": "Mail status",
+    "prompt": "Email working?",
+    "tool": "vienna_email",
+    "arguments": {
+      "operation": "status"
+    }
+  },
+  {
+    "name": "mail-inbox",
+    "description": "Inbox",
+    "prompt": "Any new mail?",
+    "tool": "vienna_email",
+    "arguments": {
+      "operation": "inbox",
+      "limit": 10
+    }
+  },
+  {
+    "name": "mail-unread",
+    "description": "Unread only",
+    "prompt": "Unread mail?",
+    "tool": "vienna_email",
+    "arguments": {
+      "operation": "inbox",
+      "unread_only": true
+    }
+  },
+  {
+    "name": "mail-get",
+    "description": "Read one",
+    "prompt": "Open that email",
+    "tool": "vienna_email",
+    "arguments": {
+      "operation": "get",
+      "message_id": "m1"
+    }
+  },
+  {
+    "name": "mail-search",
+    "description": "Find mail",
+    "prompt": "Mail about Orlik?",
+    "tool": "vienna_email",
+    "arguments": {
+      "operation": "search",
+      "query": "Orlik"
+    }
+  },
+  {
+    "name": "mail-send",
+    "description": "Send mail",
+    "prompt": "Send confirmation to the landlord",
+    "tool": "vienna_email",
+    "arguments": {
+      "operation": "send",
+      "data": {
+        "to": "landlord@example.at",
+        "subject": "Confirmed",
+        "body": "See you Friday."
+      }
+    }
+  },
+  {
+    "name": "mail-read",
+    "description": "Mark read",
+    "prompt": "Mark it read",
+    "tool": "vienna_email",
+    "arguments": {
+      "operation": "mark_read",
+      "message_id": "m1"
+    }
+  },
+  {
+    "name": "env-overview",
+    "description": "Home sensors",
+    "prompt": "Flat temperature? Anything offline?",
+    "tool": "vienna_environment",
+    "arguments": {
+      "operation": "overview"
+    }
+  },
+  {
+    "name": "tips-coffee",
+    "description": "Coffee tips",
+    "prompt": "Where for coffee?",
+    "tool": "vienna_tips",
+    "arguments": {
+      "category": "coffee"
+    }
+  },
+  {
+    "name": "tips-music",
+    "description": "Music tips",
+    "prompt": "Concerts tonight?",
+    "tool": "vienna_tips",
+    "arguments": {
+      "category": "music"
+    }
+  },
+  {
+    "name": "tips-museum",
+    "description": "Museum tips",
+    "prompt": "Which museum today?",
+    "tool": "vienna_tips",
+    "arguments": {
+      "category": "museum"
+    }
+  },
+  {
+    "name": "plan-culture",
+    "description": "Day plan",
+    "prompt": "Plan my Saturday, culture focus",
+    "tool": "vienna_day_plan",
+    "arguments": {
+      "focus": "culture"
+    }
+  },
+  {
+    "name": "plan-food",
+    "description": "Food day",
+    "prompt": "A food day in the 9th?",
+    "tool": "vienna_day_plan",
+    "arguments": {
+      "focus": "food"
+    }
+  },
+  {
+    "name": "agentic-trip",
+    "description": "Agentic prep",
+    "prompt": "Prep the Graz trip end to end",
+    "tool": "vienna_life_agentic",
+    "arguments": {
+      "goal": "Prep the Graz trip: packing list, document check, calendar block"
+    }
+  },
+  {
+    "name": "shutdown",
+    "description": "Stop server",
+    "prompt": "Stop the server",
+    "tool": "vienna_shutdown",
+    "arguments": {}
+  },
+  {
+    "name": "todo-weekly",
+    "description": "Week planning",
+    "prompt": "Plan my week: todos plus calendar",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "todo_list"
+    }
+  },
+  {
+    "name": "expense-groceries",
+    "description": "Grocery total",
+    "prompt": "Groceries total this month?",
+    "tool": "vienna_life",
+    "arguments": {
+      "operation": "expense_summary"
+    }
+  },
+  {
+    "name": "vitals-weight",
+    "description": "Weight log",
+    "prompt": "Log 82.5 kg",
+    "tool": "vienna_health",
+    "arguments": {
+      "operation": "vitals_add",
+      "data": {
+        "weight_kg": 82.5
+      }
+    }
+  },
+  {
+    "name": "trip-graz-full",
+    "description": "Full trip prep",
+    "prompt": "Graz trip: pack and check docs",
+    "tool": "vienna_life_agentic",
+    "arguments": {
+      "goal": "Prep Graz trip"
+    }
+  },
+  {
+    "name": "news-vienna-week",
+    "description": "Week in Vienna",
+    "prompt": "What happened in Vienna this week?",
+    "tool": "vienna_news",
+    "arguments": {
+      "operation": "top"
+    }
+  },
+  {
+    "name": "notes-benny",
+    "description": "Find pet notes",
+    "prompt": "Notes mentioning Benny?",
+    "tool": "vienna_notes",
+    "arguments": {
+      "operation": "search",
+      "query": "Benny"
+    }
+  },
+  {
+    "name": "mail-landlord",
+    "description": "Landlord thread",
+    "prompt": "Find the landlord emails",
+    "tool": "vienna_email",
+    "arguments": {
+      "operation": "search",
+      "query": "landlord"
+    }
+  },
+  {
+    "name": "env-fritz",
+    "description": "Fritz status",
+    "prompt": "Is the Fritz!Box ok?",
+    "tool": "vienna_environment",
+    "arguments": {
+      "operation": "overview"
+    }
+  },
+  {
+    "name": "tips-restaurant",
+    "description": "Dinner tip",
+    "prompt": "Where should we eat tonight?",
+    "tool": "vienna_tips",
+    "arguments": {
+      "category": "food"
+    }
+  },
+  {
+    "name": "plan-history-day",
+    "description": "History day",
+    "prompt": "A history day: Hofburg and KHM?",
+    "tool": "vienna_day_plan",
+    "arguments": {
+      "focus": "history"
+    }
+  }
 ]
