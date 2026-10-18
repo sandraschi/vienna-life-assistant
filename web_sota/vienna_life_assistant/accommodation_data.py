@@ -118,7 +118,7 @@ PAEAN = [
 ]
 
 STAYS: list[dict] = [
-    {"name": "Karl-Marx-Hof", "address": "Heiligenstaedter Strasse 82-92, 1190 Wien", "notes": "1927-1930, Karl Ehn; 1.272 Wohnungen (urspr. 1.382); Eroeffnung 12.10.1930; Feb-1934-Kaempfe; Waschsalon-Ausstellung 'Das Rote Wien'", "tags": ["gemeindebau", "denkmal"], "source": "cityabc.at + stadtfilm-wien.at"},
+    {"name": "Karl-Marx-Hof", "address": "Heiligenstaedter Strasse 82-92, 1190 Wien", "notes": "1927-1930, Karl Ehn; 1.272 Wohnungen (urspr. 1.382); Eroeffnung 12.10.1930; Feb-1934-Kaempfe; Waschsalon-Ausstellung 'Das Rote Wien'", "tags": ["gemeindebau", "denkmal"], "source": "cityabc.at + stadtfilm-wien.at + dasrotewien-waschsalon.at", "details": "Waschsalon Nr. 2 (Halteraugasse) seit 1.5.2010: 4 Themen (Rotes Wien 1919-34, Wohnbau, Bildung/Kultur); 'Neues Wien' als Gesellschaftsexperiment ueber alle Lebensbereiche. Beschilderung: nicht verifiziert (kleines Haus — deutsch sicher, englisch fraglich; vor Ort pruefen)."},
     {"name": "Gemeindebau-Bestand (Wiener Wohnen)", "address": "cityweit (~1.800 Bauten)", "notes": "220.000 Wohnungen (Stand 2016); 65.000 im Roten Wien; Neubau-Roesslergasse Liesing 2004; wohnberatung-wien Vergabe", "tags": ["gemeindebau"], "source": "SPOE Wien + Die Presse"},
     {"name": "Seestadt Aspern", "address": "22. Bezirk, Donaustadt", "notes": "240 ha, seit 2014; 25.000+ Bewohner, 20.000+ Arbeitsplaetze; Masterplan Tovatt", "tags": ["neubau", "stadtentwicklung"], "source": "wien.gv.at + aspern-seestadt.at"},
     {"name": "Sonnwendviertel", "address": "10. Bezirk (Hauptbahnhof)", "notes": "Neubau-Quartier mit Mischnutzung (vgl. Bauwelt: Seestadt + Sonnwendviertel Ost)", "tags": ["neubau", "stadtentwicklung"], "source": "bauwelt.de"},
