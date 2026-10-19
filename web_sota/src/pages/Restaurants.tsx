@@ -25,6 +25,7 @@ interface Restaurant {
 	notes?: string;
 	url?: string;
 	details?: string;
+	district?: string;
 	tags?: string[];
 	source?: string;
 	verify?: boolean;
@@ -51,7 +52,11 @@ interface RestaurantsResponse {
 	sources: Record<string, string>;
 }
 
-const SECTIONS: { title: string; match: (r: Restaurant) => boolean }[] = [
+const SECTIONS: {
+	title: string;
+	match: (r: Restaurant) => boolean;
+	groupBy?: "district";
+}[] = [
 	{
 		title: "Servitenviertel Mains",
 		match: (r) =>
@@ -146,6 +151,7 @@ const SECTIONS: { title: string; match: (r: Restaurant) => boolean }[] = [
 		title: "Cafes & Konditorei",
 		match: (r) =>
 			(r.tags ?? []).some((t) => ["cafe", "konditorei"].includes(t)),
+		groupBy: "district",
 	},
 	{
 		title: "Bars & Cocktail",
@@ -374,16 +380,37 @@ export default function Restaurants() {
 					(r) => sec.match(r) && r.name !== "Gasthaus Orlik",
 				);
 				if (items.length === 0) return null;
+				const groups: { key: string; items: typeof items }[] = sec.groupBy
+					? Object.entries(
+							items.reduce<Record<string, typeof items>>((acc, r) => {
+								const k = r.district || "?";
+								if (!acc[k]) acc[k] = [];
+								acc[k].push(r);
+								return acc;
+							}, {}),
+						)
+							.sort(([a], [b]) => a.localeCompare(b))
+							.map(([key, groupItems]) => ({ key, items: groupItems }))
+					: [{ key: "", items }];
 				return (
 					<div key={sec.title}>
 						<h2 className="text-xl font-black text-white uppercase tracking-tight mb-3">
 							{sec.title} ({items.length})
 						</h2>
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-							{items.map((r) => (
-								<Card key={r.name} r={r} />
-							))}
-						</div>
+						{groups.map((g) => (
+							<div key={g.key || sec.title} className="mb-6 last:mb-0">
+								{g.key && (
+									<h3 className="text-sm font-black text-slate-300 uppercase tracking-[0.2em] mb-2">
+										{g.key === "cityweit" ? "Cityweit" : `${g.key} Wien`}
+									</h3>
+								)}
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+									{g.items.map((r) => (
+										<Card key={r.name} r={r} />
+									))}
+								</div>
+							</div>
+						))}
 					</div>
 				);
 			})}
