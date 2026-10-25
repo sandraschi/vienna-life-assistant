@@ -1,0 +1,230 @@
+# Vienna Life Assistant — Full Reference
+
+## Overview
+ViLife is a personal life management webapp and MCP server for Vienna-based life
+admin. Provides AI chat, calendar, todos, expense tracking, travel planning,
+**health tracking (doctor visits, medications, vitals)**, contacts with birthdays,
+and household management (subscriptions, home tasks, pet care). All life data is
+stored locally in SQLite — no cloud.
+
+## Architecture
+- **Backend**: Python 3.11+, FastAPI, FastMCP 3.4.4, SQLAlchemy 2 + SQLite, uvicorn
+- **Frontend**: React 19, Vite 7, TailwindCSS 3, Radix UI, Lucide icons
+- **Desktop**: Tauri 2.0 + NSIS installer
+- **Scraping**: Playwright headless Chromium (JS SPA), httpx + BeautifulSoup (server-rendered HTML)
+- **Build**: uv, just, npm
+
+## Ports
+| Service | Port |
+|---------|------|
+| Backend + MCP HTTP | 10922 |
+| Frontend (Vite dev) | 10931 |
+
+## Data store
+SQLite at `web_sota/data/vilife.db` (override with `VILIFE_DB_PATH`). First run
+seeds realistic demo content; everything afterwards is user data. Schema:
+`vienna_life_assistant/models.py` — calendar_events, todos, expenses,
+doctor_visits, medical_conditions, medications, vitals, trips, packing_items,
+travel_documents, contacts, pet_care_events, subscriptions, home_tasks.
+
+### PA engine (the assistant layer)
+- `POST /api/pa/chat` — agent chat: LLM + tool execution over life data
+  (24 curated vienna_* tools + fleet orchestration; trace returned per message)
+- **Fleet orchestration (ednaficator-style)**: the agent can call any allowlisted
+  fleet MCP server over streamable HTTP — `fleet_tools(server)` to discover,
+  `fleet_call(server, tool, arguments)` to invoke, `fritz_status()` for the
+  Fritz!Box probe via devices-mcp. Registry: plex-mcp (10740), calibre-mcp
+  (10720), gtfs-mcp (10913), aiwatcher-mcp (10946). Allowlist via
+  FLEET_MCP_ALLOWLIST (default all); offline servers return graceful errors.
+- `POST /api/pa/brief`-style refresh: `POST /api/pa/refresh` — LLM morning brief
+  over real context + rule-based alerts, persisted to data/pa_state.json
+- `GET /api/pa/state` — today's brief + alerts (Dashboard widget)
+- `GET /api/pa/alerts` — rule-based alert list (refills, follow-ups, renewals,
+  document expiry, birthdays, overdue tasks, events today)
+- `GET /api/pa/context` — life snapshot (calendar, todos, meds, visits, trips,
+  birthdays, renewals, expenses, journal streak)
+- `POST /api/pa/ask` — NL question over life context, grounded with **journal
+  memory** (semantic hits injected when the question matches the log)
+- `GET /api/pa/rag/search?q=` / `POST /api/pa/rag/reindex` — journal semantic
+  search (Ollama /v1/embeddings, RAG_EMBED_MODEL, stored in SQLite)
+- Daily scheduler regenerates the brief at server start + once per day
+  (PA_AUTOBRIEF=0 disables; PA_STATE_FILE overrides the state path)
+- **Proactive email**: PA_BRIEF_EMAIL=1 + PA_BRIEF_RECIPIENT sends the daily
+  brief via the email-mcp gateway after regeneration
+
+### Voice
+- Chat has Web Speech mic input (STT) + per-message read-aloud (TTS):
+  `src/common/speech.ts`, `components/MicButton.tsx`, `SpeakButton.tsx`
+
+## MCP Tools (portmanteaus)
+
+### `vienna_life(operation)` — daily life ops
+- `calendar_today`, `event_add(date_str, title, data)`, `event_update(row_id, data)`, `event_delete(row_id)`
+- `todo_list`, `todo_add(title, data)`, `todo_toggle(row_id)`, `todo_delete(row_id)`
+- `expense_summary`, `expense_add(data)`, `expense_delete(row_id)`
+- `shopping_list` (static seed, marked mock)
+- `life_brief` — calendar + todos + expenses + meds + next visit + next trip + birthdays + renewals
+- `fleet_overview`, `health`, `help`
+
+### `vienna_health(operation)` — medical status
+- `visits` / `visits_add` / `visits_update` / `visits_delete` — doctor visit log
+- `meds` / `meds_add` / `meds_update` / `meds_delete` — active medications, refill dates
+- `vitals` / `vitals_add` — blood pressure, pulse, weight
+- `conditions` / `conditions_add` — medical status (active/monitoring/seasonal)
+
+### `vienna_travel(operation)` — travel schedule and prep
+- `trips` / `trip_add` / `trip_update` / `trip_delete` — trips with countdown
+- `packing(trip_id)` / `packing_add(item, trip_id)` / `packing_toggle(row_id)`
+- `documents` / `document_add` / `document_delete` — passport, insurance, expiry
+- `expiring` — documents expiring within 120 days
+
+### `vienna_contacts(operation)` — people
+- `list`, `add(data={name, phone, email, birthday, relationship})`, `update`, `delete`
+- `birthdays` — next 30 days with days_until + age_turning
+
+### `vienna_household(operation)` — recurring life obligations
+- `subscriptions` (with monthly total) / `subscription_add` / `subscription_update` / `subscription_delete`
+- `tasks` / `task_add` / `task_toggle` / `task_delete` — home maintenance with frequency
+- `pet` / `pet_add` — pet care events with next-due dates
+
+### `vienna_log(operation)` — personal journal
+- `entries` / `today` / `add` / `update` / `delete` — daily entries (title, body, mood 1-10, tags)
+- `streak` — consecutive journaling days (today or yesterday anchored)
+- `on_this_day` — entries from previous years on today's month-day
+- `search(query)` — full-text over title, body, tags
+
+### `vienna_news(operation)` — personal news site (aiwatcher-fed)
+- `top(hours, limit)` — urgency-scored stories from the fleet aiwatcher engine (:10946)
+- `trends` — weekly trending tags
+- `search(query)` — across 12k+ indexed items
+- `morning` — the aiwatcher morning digest
+- `stats` / `overview` — feed/item health + top + trends
+
+### `vienna_notes(operation)` — OneNote (onenote-mcp gateway, :10907)
+- `status` — reachability + Graph auth state
+- `notebooks` — list notebooks
+- `search(query)` — search OneNote pages
+- `page(page_id)` — fetch a page
+- `create(data={notebook_id, title, content})` — new page
+- `export_journal(entry_id)` — push a ViLife journal entry as a OneNote page
+  (Graph token stays inside onenote-mcp)
+
+### `vienna_email(operation)` — email (email-mcp gateway, :10813)
+- `status` — reachability + payload
+- `inbox(limit, unread_only)` — recent mail
+- `get(message_id)` — email detail
+- `search(query)` — search mail
+- `mark_read(message_id)` — flip read state
+- `send(data={to, subject, body, cc?})` — send via email-mcp
+- `stats` — unread/total counters
+  (IMAP/SMTP/Graph credentials stay inside email-mcp; Basic auth via
+  EMAIL_MCP_USER/PASSWORD)
+
+### Other
+- `vienna_environment(operation="overview")` — home environment via devices-mcp (:10717)
+- `vienna_life_agentic(goal, ctx)` — multi-step planning via MCP sampling
+- `vienna_tips(category)` — Vienna culture tips (coffee, music, museum)
+- `vienna_shutdown()` — graceful backend stop (mirrors POST /api/shutdown)
+
+## REST API
+### System
+- `GET /health` — server health
+- `GET /api/capabilities` — tools, prompts, resources, skills
+- `GET /api/v1/diagnostics` — tool list, system info (CUA-NSIS)
+- `POST /api/shutdown` — graceful server termination
+- `GET /api/dashboard` — DB-backed KPI stats
+
+### Life data (generic CRUD: GET list / POST add / PUT update / DELETE)
+- `GET /api/life/overview` — dashboard life pulse (events, meds, visits, birthdays, trips, renewals, tasks)
+- `/api/life/calendar` — calendar events (+ `/today`)
+- `/api/life/todos` — todos
+- `/api/life/expenses` — expenses (+ `/summary`, `/recent`)
+- `/api/life/health/visits`, `/health/medications`, `/health/vitals`, `/health/conditions`
+- `/api/life/travel/trips`, `/travel/packing`, `/travel/documents`
+- `/api/life/contacts`
+- `/api/life/pet`
+- `/api/life/subscriptions`
+- `/api/life/home-tasks`
+- `/api/life/logs` — journal entries (+ `/today`, `/streak`, `/on-this-day`, `/search`)
+
+### News (aiwatcher bridge)
+- `GET /api/news/overview` — stats + top + trends + morning in one call
+- `GET /api/news/top` / `trends` / `search?q=` / `morning` — proxied from aiwatcher :10946
+
+### Notes (onenote-mcp bridge)
+- `GET /api/notes/status` — reachability + Graph auth state
+- `GET /api/notes/notebooks` / `search?q=` / `page/{id}`
+- `POST /api/notes/pages` — create page {notebook_id, title, content}
+- `POST /api/notes/export-journal` — {entry_id} journal entry → OneNote page
+- `ONENOTE_MCP_URL` — onenote-mcp base URL (default http://127.0.0.1:10907)
+
+### Email (email-mcp bridge)
+- `GET /api/email/status` — reachability
+- `GET /api/email/inbox?limit=&unread_only=` / `message/{id}` / `search?q=` / `stats`
+- `POST /api/email/message/{id}/mark-read` / `unread`
+- `POST /api/email/send` — {to, subject, body, cc?} via email-mcp
+- `EMAIL_MCP_URL` / `EMAIL_MCP_USER` / `EMAIL_MCP_PASSWORD` — gateway creds
+
+### LLM
+- `GET /api/llm/providers`, `GET /api/llm/status`, `GET /api/llm/models`, `POST /api/llm/chat`
+
+### Vienna Cultural Data
+- `GET /api/vienna/music` — Burgtheater + Staatsoper (live scraped)
+- `GET /api/vienna/museums` — Belvedere exhibitions (live scraped)
+- `GET /api/vienna/news` / `GET /api/vienna/press` — ORF + Stadt Wien
+- `GET /api/vienna/coffee` — reference guide (static)
+- `GET /api/vienna/restaurants` — restaurant list + Orlik lunch menu (scraped)
+- `GET /api/vienna/transport` — static reference, `"mock": true` (use mywienerlinien/gtfs-mcp for live)
+- `GET /api/vienna/shopping/offers` — static reference, `"mock": true`
+
+## Scraper Sources
+| Source | Method | Cache | Data |
+|--------|--------|-------|------|
+| burgtheater.at/spielplan | httpx + BeautifulSoup | 30 min | plays with dates |
+| wiener-staatsoper.at/kalender | Playwright Chromium (JS SPA) | 30 min | operas/concerts |
+| belvedere.at/en/exhibitions | httpx + BeautifulSoup | 2 hours | exhibitions |
+| gasthaus-orlik.at/mittagmenues.html | httpx + BeautifulSoup | 1 hour | lunch menu |
+| wien.orf.at / presse.wien.gv.at | httpx + BeautifulSoup | 10 min | news headlines |
+
+## Skills (6)
+`vienna-life`, `vienna-alsergrund`, `vienna-transit`, `vienna-kaffeehaus`, `vienna-kultur`, `vienna-shopping`
+
+## Prompts (6)
+`life_brief_request`, `vienna_day_plan`, `alsergrund_morning`, `spar_shopping_run`, `wien_transit_check`, `kultur_abend`
+
+## Resources (2)
+`resource://vienna-life/capabilities`, `resource://vienna-life/quickstart`
+
+## Environment
+Copy `.env.example` to `.env` and configure:
+- `OLLAMA_URL` — local LLM endpoint (default http://127.0.0.1:11434); `OLLAMA_MODEL`
+- `LMSTUDIO_URL` / `LMSTUDIO_MODEL` — LM Studio OpenAI-compatible endpoint
+- `OPENAI_API_KEY` / `OPENAI_BASE_URL` / `OPENAI_MODEL` — cloud fallback
+- `VILIFE_DB_PATH` — optional SQLite path override
+- `AIWATCHER_URL` / `AIWATCHER_TIMEOUT` — news bridge (default :10946)
+- `ONENOTE_MCP_URL` / `ONENOTE_MCP_TIMEOUT` — OneNote gateway (default :10907)
+- `EMAIL_MCP_URL` / `EMAIL_MCP_USER` / `EMAIL_MCP_PASSWORD` / `EMAIL_MCP_TIMEOUT` — mail gateway (:10813)
+- `FLEET_MCP_ALLOWLIST` — fleet orchestration servers (default all: plex, calibre, gtfs, aiwatcher)
+- `DEVICES_MCP_URL` — Fritz!Box probe endpoint (default :10717)
+- `PA_BRIEF_EMAIL` / `PA_BRIEF_RECIPIENT` — proactive brief-by-email
+- `PA_AUTOBRIEF` — daily scheduler flag (0 disables); `PA_STATE_FILE` — brief state path
+- `RAG_EMBED_MODEL` — journal embedding model (default nomic-embed-text)
+
+## LLM Providers
+- **Ollama** (auto-detect port 11434)
+- **LM Studio** (auto-detect port 1234)
+- **OpenAI** (manual API key)
+
+## Testing
+- `uv run pytest tests/` — 80 tests, coverage gate 45% (suite takes ~80 s
+  with no local Ollama running; test_pa.py ~65 s on embedding waits)
+- `npx playwright test` — fleet-audit e2e (backend health, diagnostics, page renders, journal round-trip, zero console errors)
+
+## Session context injection
+`.claude-plugin/` (Claude Code), `.cursorrules` + `.windsurfrules` (Cursor/Windsurf),
+`.github/copilot-instructions.md` (Copilot), `.opencode/skills/session-context/`
+(OpenCode), `.agents/skills/` (Antigravity).
+
+## News bridge
+- AIWATCHER_URL — aiwatcher-mcp base URL (default http://127.0.0.1:10946); AIWATCHER_TIMEOUT (s)
+- \/api/news/*\ proxies stats/items/trends/search/morning from aiwatcher
