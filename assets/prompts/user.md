@@ -162,7 +162,7 @@ sampling is unavailable it returns a step plan you execute visibly.
 > offline bridge, retry later.
 > "News is empty." → `overview`/`stats`; aiwatcher-mcp may be down.
 > "No departures." → offline shape with starter hint; start
-> mywienerlinien, never fake times.
+> publictransport-mcp, never fake times.
 > "Wrong timezone." → All dates Europe/Vienna, ISO format; check the
 > caller's clock, not the data.
 > "Example IDs don't work." → IDs come from list results in this session;

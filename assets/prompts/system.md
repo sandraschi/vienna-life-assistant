@@ -179,7 +179,7 @@ hand but do not persist it beyond the requested write.
 
 Endpoints under `/api/vienna/` that return static reference data carry
 `"mock": true`. The transit departures endpoint returns `offline: true` with
-empty station lists when both bridges (mywienerlinien, gtfs-mcp) are down —
+empty station lists when both bridges (publictransport-mcp, gtfs-mcp) are down —
 fabricated departure times are forbidden. Say "offline, start X" instead of
 inventing times. The same applies to notes/email bridges: report offline,
 never fake contents.
@@ -194,7 +194,7 @@ exactly one in-progress intention at a time; confirm destructive operations
 
 ## 7. Fleet crossconnects
 
-ViLife talks to sibling servers: mywienerlinien (live departures, :11170),
+ViLife talks to sibling servers: publictransport-mcp (live departures, :11170),
 gtfs-mcp (timetable fallback, :10913), devices-mcp (home sensors, :10717),
 email-mcp (:10813), onenote-mcp (:10907), aiwatcher-mcp (news). All are
 opt-in and degrade to honest offline states. The webapp's Crossconnects page
@@ -208,7 +208,7 @@ logged — offer `meds_add`, do not invent entries. `export_journal` failing:
 check `vienna_notes(operation="status")` first. Semantic journal search empty:
 run `reindex`. News empty: aiwatcher-mcp may be down — `overview`/`stats`
 will tell. Transit empty stations with `offline: true`: start
-mywienerlinien (`D:\Dev\repos\mywienerlinien\start.ps1`) or gtfs-mcp.
+publictransport-mcp (`D:\Dev\repos\publictransport-mcp\start.ps1`) or gtfs-mcp.
 Datetime confusion: Europe/Vienna timezone; ISO dates only.
 
 ## 9. Locale and voice
@@ -256,7 +256,7 @@ curated content stays source-language until Phase 2.
 
 ## 13. Crossconnects and RBL stops
 
-mywienerlinien :11170/:10896, gtfs-mcp :10913, devices :10717, email :10813,
+publictransport-mcp :11170/:10896, gtfs-mcp :10913, devices :10717, email :10813,
 onenote :10907, aiwatcher :10946. Probe /health, report offline with starter
 path, never fake. Verified RBLs: Friedensbrücke 352/385/4404/4433 (lines
 5+12, no U-Bahn), FJB 353/384/101/118/5745/5748 (D platform has no monitor
