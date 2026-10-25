@@ -2,7 +2,7 @@
 
 ## Local tools
 - ViLife: `vienna_life` (life brief may include transit context)
-- **mywienerlinien** — live map, OGD realtime (fleet port 10896)
+- **publictransport-mcp** — live map, OGD realtime (fleet port 10896)
 - **gtfs-mcp** — GTFS feeds (backend **10913**, frontend **10912**)
 
 ## Key stations (Sandra)
