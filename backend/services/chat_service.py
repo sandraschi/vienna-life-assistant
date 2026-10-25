@@ -970,7 +970,7 @@ Enhanced prompt that encourages systematic reasoning:"""
                 query = parameters.get("query", "")
                 # Try to call Wiener Linien service
                 try:
-                    # Check if MyWienerLinien app is running on port 3079
+                    # Check if PublicTransport app is running on port 3079
                     import httpx
 
                     async with httpx.AsyncClient(timeout=5.0) as client:
@@ -996,7 +996,7 @@ Enhanced prompt that encourages systematic reasoning:"""
                         else:
                             return "Wiener Linien service not available"
                 except Exception:
-                    return "Wiener Linien service not running (start MyWienerLinien app on port 3079)"
+                    return "Wiener Linien service not running (start PublicTransport app on port 3079)"
 
             # Japanese Language Learning Tools
             elif tool_name == "practice_kanji":
