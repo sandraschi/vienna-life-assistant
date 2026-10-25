@@ -42,7 +42,7 @@ export default function Transport() {
 				await fetch("/api/fleet/start", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ name: "mywienerlinien" }),
+					body: JSON.stringify({ name: "publictransport-mcp" }),
 				});
 				setAppMsg("Startet — in ~1 Minute erneut klicken.");
 			} catch {

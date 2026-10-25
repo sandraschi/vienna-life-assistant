@@ -652,7 +652,7 @@ async def get_vienna_press():
 
 @app.get("/api/vienna/transport")
 async def get_transit_info():
-    """Real Wiener Linien departures via mywienerlinien /api/departures (OGD).
+    """Real Wiener Linien departures via publictransport-mcp /api/departures (OGD).
 
     RBLs verified: Friedensbrücke 352/385/4404/4433 (tramstations.md), Spittelau
     121 (/api/stops/major). Offline -> empty stations with offline=True (mock
@@ -679,7 +679,7 @@ async def get_transit_info():
                     "ok": True,
                     "mock": True,
                     "offline": True,
-                    "source": "mywienerlinien + gtfs-mcp offline — start D:\\Dev\\repos\\mywienerlinien\\start.ps1 for live departures",
+                    "source": "publictransport-mcp + gtfs-mcp offline — start D:\\Dev\\repos\\publictransport-mcp\\start.ps1 for live departures",
                     "Friedensbrücke": [],
                     "Franz-Josefs-Bahnhof": [],
                 }
@@ -708,13 +708,14 @@ async def get_transit_info():
 async def fleet_start_app(body: dict[str, Any]):
     """Cross-hop starter: launches a fleet app's start.ps1 detached.
 
-    Allowlist only (mywienerlinien, gtfs-mcp, devices-mcp). Local-only by
+    Allowlist only (publictransport-mcp, gtfs-mcp, devices-mcp). Local-only by
     design (binds 127.0.0.1, no auth — same trust zone as the dashboard).
     """
     import subprocess
 
     ALLOW = {
-        "mywienerlinien": "D:\\Dev\\repos\\mywienerlinien\\start.ps1",
+        "publictransport-mcp": "D:\\Dev\\repos\\publictransport-mcp\\start.ps1",
+        "publictransport-mcp": "D:\\Dev\\repos\\publictransport-mcp\\start.ps1",
         "gtfs-mcp": "D:\\Dev\\repos\\gtfs-mcp\\start.ps1",
         "devices-mcp": "D:\\Dev\\repos\\devices-mcp\\start.ps1",
         "email-mcp": "D:\\Dev\\repos\\email-mcp\\start.ps1",
@@ -752,7 +753,7 @@ async def get_crossconnects():
 
     bridges = [
         {
-            "name": "mywienerlinien",
+            "name": "publictransport-mcp",
             "purpose": "Live-Abfahrten + Karte mit Fahrzeugpositionen",
             "port": 11170,
             "frontend": 10896,

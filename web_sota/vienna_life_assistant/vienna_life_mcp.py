@@ -196,7 +196,7 @@ def wien_transit_check(station: str = "Friedensbrücke") -> str:
     """Preprompt for Wiener Linien departure planning."""
     return (
         f"Using station {station}, outline best U4/tram options now. "
-        "Mention mywienerlinien (10896) and gtfs-mcp (10913) as fleet bridges."
+        "Mention publictransport-mcp (10896) and gtfs-mcp (10913) as fleet bridges."
     )
 
 

@@ -113,7 +113,7 @@ export default function TransitWidget() {
 				{currentDepartures.length === 0 && (
 					<p className="px-6 py-6 text-sm text-slate-300 leading-relaxed">
 						{data.offline
-							? "Keine Live-Daten: mywienerlinien und gtfs-mcp sind offline. Start in D:\\Dev\\repos\\mywienerlinien\\start.ps1 — erfundene Zeiten gibt es hier keine."
+							? "Keine Live-Daten: publictransport-mcp und gtfs-mcp sind offline. Start in D:\\Dev\\repos\\publictransport-mcp\\start.ps1 — erfundene Zeiten gibt es hier keine."
 							: "Keine Abfahrten gefunden."}
 					</p>
 				)}

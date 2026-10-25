@@ -4,7 +4,7 @@ devices-mcp is the fleet's environment hub (cameras, energy, weather/netatmo,
 sensors, lighting, Fritz!Box). Its MCP surface is not HTTP-exposed, so ViLife
 bridges its REST endpoints directly. Every source degrades gracefully.
 
-Also hosts the transit bridge: mywienerlinien REST (real Wiener Linien
+Also hosts the transit bridge: publictransport-mcp REST (real Wiener Linien
 departures, line-based) with the static reference as fallback.
 """
 
@@ -98,7 +98,7 @@ def environment_overview() -> dict[str, Any]:
 def live_departures(
     lines: list[str] | None = None, rbl: str | None = None
 ) -> dict[str, Any] | None:
-    """Real Wiener Linien departures via mywienerlinien REST (line- or stop-based).
+    """Real Wiener Linien departures via publictransport-mcp REST (line- or stop-based).
 
     Tries fleet backend (11170) first, then the docker port (3079), then the
     env override. Returns None when everything is offline — callers must NOT
@@ -112,7 +112,8 @@ def live_departures(
     else:
         params["lines"] = "U4,5,12,D"
     bases = [
-        os.environ.get("MYWIENERLINIEN_URL", ""),
+        os.environ.get("PUBLICTRANSPORT_URL")
+        or os.environ.get("MYWIENERLINIEN_URL", ""),
         "http://127.0.0.1:11170",
         "http://127.0.0.1:3079",
     ]
@@ -125,12 +126,12 @@ def live_departures(
                 data["_via"] = base
                 return data
         except Exception as e:  # noqa: BLE001
-            logger.warning("mywienerlinien arrivals failed at %s: %s", base, e)
+            logger.warning("publictransport-mcp arrivals failed at %s: %s", base, e)
     return None
 
 
 def monitor_departures(rbl: str) -> dict[str, Any] | None:
-    """Live departures for one stop via mywienerlinien /api/departures (OGD, no key).
+    """Live departures for one stop via publictransport-mcp /api/departures (OGD, no key).
 
     Tries fleet backend (11170) then docker (3079). None when offline.
     """
@@ -143,7 +144,7 @@ def monitor_departures(rbl: str) -> dict[str, Any] | None:
                 data["_via"] = base
                 return data
         except Exception as e:  # noqa: BLE001
-            logger.warning("mywienerlinien departures failed at %s: %s", base, e)
+            logger.warning("publictransport-mcp departures failed at %s: %s", base, e)
     return None
 
 
