@@ -370,7 +370,7 @@ docker compose logs -f frontend
 - **Plex MCP** - Media server (50k anime/movies)
 - **Calibre MCP** - Ebook library (15k books)
 - **Immich MCP** - Photo memories
-- **MyWienerLinien** - Vienna public transport
+- **PublicTransport** - Vienna public transport
 
 ##  Database
 
@@ -791,7 +791,7 @@ nssm set ViennaLifeDocker AppDirectory "D:\Dev\repos\vienna-life-assistant"
 - **Backend API**: 7334 (Docker)
 - **PostgreSQL**: 7335 (Docker, mapped from 5432)
 - **Redis**: 7336 (Docker, mapped from 6379)
-- **MyWienerLinien**: 3079 (if running)
+- **PublicTransport**: 3079 (if running)
 - **Ollama**: 11434 (if running)
 - **Plex**: 32400 (if running)
 - **Calibre**: 8080 (if running)

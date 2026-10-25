@@ -241,7 +241,7 @@ Bot: "Lights turned off"
 - "U4 departures"
 - "how do i get to Schönbrunn"
 
-**Requires:** MyWienerLinien app running on port 3079
+**Requires:** PublicTransport app running on port 3079
 
 **Returns:** Station search, line info, departures
 
@@ -305,7 +305,7 @@ Expected: Calls Tapo MCP, shows Vienna weather
 ### 5. Test Transit
 ```
 Message: "when's next U6"
-Expected: Calls MyWienerLinien API, shows departures
+Expected: Calls PublicTransport API, shows departures
 ```
 
 ## 🔧 Technical Architecture
@@ -424,7 +424,7 @@ CREATE TABLE messages (
 ## 🐛 Known Issues
 
 1. **Tapo MCP**: Untested! May need OAuth setup for Nest/Ring
-2. **Wiener Linien**: Requires MyWienerLinien running on port 3079
+2. **Wiener Linien**: Requires PublicTransport running on port 3079
 3. **Tool detection**: Pattern matching is simple, may miss complex queries
 4. **MCP timeouts**: Long operations (search, note creation) may timeout
 
@@ -485,7 +485,7 @@ Issues? Check:
 **What's untested:**
 - ⚠️ Tapo MCP (weather, lights, cameras, Ring)
 - ⚠️ Advanced Memory MCP (needs knowledge base setup)
-- ⚠️ Wiener Linien (needs MyWienerLinien running)
+- ⚠️ Wiener Linien (needs PublicTransport running)
 - ⚠️ Plex/Calibre MCP (needs server setup)
 
 ---

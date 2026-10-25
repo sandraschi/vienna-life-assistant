@@ -174,7 +174,7 @@ travel_documents, contacts, pet_care_events, subscriptions, home_tasks.
 - `GET /api/vienna/news` / `GET /api/vienna/press` — ORF + Stadt Wien
 - `GET /api/vienna/coffee` — reference guide (static)
 - `GET /api/vienna/restaurants` — restaurant list + Orlik lunch menu (scraped)
-- `GET /api/vienna/transport` — static reference, `"mock": true` (use mywienerlinien/gtfs-mcp for live)
+- `GET /api/vienna/transport` — static reference, `"mock": true` (use publictransport-mcp/gtfs-mcp for live)
 - `GET /api/vienna/shopping/offers` — static reference, `"mock": true`
 
 ## Scraper Sources
