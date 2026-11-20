@@ -13,11 +13,11 @@ $venvPath = Join-Path $backendPath "venv\Scripts\Activate.ps1"
 # Build backend command - activate venv if it exists, otherwise use python -m uvicorn
 if (Test-Path $venvPath) {
     Write-Host "  Found virtual environment, activating..." -ForegroundColor Gray
-    $backendCommand = "Set-Location '$backendPath'; `$env:PYTHONPATH='$backendPath'; & '$venvPath'; uvicorn api.main:app --reload --host 0.0.0.0 --port 9001"
+    $backendCommand = "Set-Location '$backendPath'; `$env:PYTHONPATH='$backendPath'; & '$venvPath'; uvicorn api.main:app --reload --host 127.0.0.1 --port 9001"
 } else {
     Write-Host "  No virtual environment found, using system Python..." -ForegroundColor Gray
     # Ensure backend directory is in Python path
-    $backendCommand = "Set-Location '$backendPath'; `$env:PYTHONPATH='$backendPath'; `$env:PYTHONUNBUFFERED='1'; python -m uvicorn api.main:app --reload --host 0.0.0.0 --port 9001"
+    $backendCommand = "Set-Location '$backendPath'; `$env:PYTHONPATH='$backendPath'; `$env:PYTHONUNBUFFERED='1'; python -m uvicorn api.main:app --reload --host 127.0.0.1 --port 9001"
 }
 Start-Process powershell -ArgumentList "-NoExit", "-Command", $backendCommand
 

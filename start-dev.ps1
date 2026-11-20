@@ -1,4 +1,4 @@
-# Vienna Life Assistant - Development Startup Script
+﻿# Vienna Life Assistant - Development Startup Script
 # PowerShell script to start all development services
 
 Write-Host "🚀 Starting Vienna Life Assistant..." -ForegroundColor Cyan
@@ -43,7 +43,7 @@ Write-Host "`n📝 Next steps:" -ForegroundColor Cyan
 Write-Host "  1. Open a new terminal and run:" -ForegroundColor White
 Write-Host "     cd D:\Dev\repos\vienna-life-assistant\backend" -ForegroundColor Gray
 Write-Host "     .\venv\Scripts\Activate.ps1" -ForegroundColor Gray
-Write-Host "     uvicorn api.main:app --reload --host 0.0.0.0 --port 9001" -ForegroundColor Gray
+Write-Host "     uvicorn api.main:app --reload --host 127.0.0.1 --port 9001" -ForegroundColor Gray
 Write-Host ""
 Write-Host "  2. Open another terminal and run:" -ForegroundColor White
 Write-Host "     cd D:\Dev\repos\vienna-life-assistant\frontend" -ForegroundColor Gray
